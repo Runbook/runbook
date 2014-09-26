@@ -1,0 +1,126 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+      {% if data['edit'] %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Manage Reaction</h1>
+      {% else %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Add Reaction</h1>
+      {% endif %}
+      </div>
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            StatHat Stats
+          </div>
+          </div>
+          <div class="panel-body">
+            <form action="{{ data['url'] }}" method="post" name="enotify" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+
+            {% include 'reactions/base.html' %}
+            {% include 'reactions/callon.html' %}
+            <hr>
+
+                <div class="form-group">
+                <label for="Stat Name" class="col-sm-4 control-label">Stat Name</label>
+            <div class="col-sm-8">
+              {% if data['edit'] %}
+              {{ form.stat_name(class_="form-control", value=data['reaction']['data']['stat_name']) }}
+              {% else %}
+              {{ form.stat_name(class_="form-control", placeholder="Stat Name") }}
+              {% endif %}
+            </div>
+              </div>  
+
+                <div class="form-group">
+                <label for="EZ Key" class="col-sm-4 control-label">EZ Key</label>
+            <div class="col-sm-8">
+              {% if data['edit'] %}
+              {{ form.ez_key(class_="form-control", value=data['reaction']['data']['ez_key']) }}
+              {% else %}
+              {{ form.ez_key(class_="form-control", placeholder="EZ Key") }}
+              {% endif %}
+            </div>
+              </div>  
+
+                <div class="form-group">
+                <label for="Stat Type" class="col-sm-4 control-label">Stat Type</label>
+            <div class="col-sm-8">
+              {% if data['edit'] %}
+              {{ form.stat_type(class_="select", value=data['reaction']['data']['stat_type']) }}
+              {% else %}
+              {{ form.stat_type(class_="select", placeholder="Stat Type") }}
+              {% endif %}
+            </div>
+              </div>  
+
+              <div class="col-sm-4">
+              </div>
+              <div class="col-sm-8">
+                    <p class="help-block">If you want to track the number of times a monitor is unhealthy select a "counter" stat type and put a value of 1.</p>
+              </div>
+
+                <div class="form-group">
+                <label for="Value" class="col-sm-4 control-label">Value</label>
+            <div class="col-sm-8">
+              {% if data['edit'] %}
+              {{ form.value(class_="form-control", value=data['reaction']['data']['value']) }}
+              {% else %}
+              {{ form.value(class_="form-control", placeholder="Value") }}
+              {% endif %}
+            </div>
+              </div>  
+
+                <div class="form-group">
+                <label for="Continuous" class="col-sm-4 control-label">Continuous</label>
+            <div class="col-sm-8">
+              {% if data['edit'] %}
+              {{ form.continuous(class_="select", value=data['reaction']['data']['continuous']) }}
+              {% else %}
+              {{ form.continuous(class_="select", placeholder="Continuous") }}
+              {% endif %}
+            </div>
+              </div>  
+            
+              <div class="col-sm-4">
+              </div>
+              <div class="col-sm-8">
+                    <p class="help-block">Select Yes for the stat to be called every time a health check is performed or select No to only call this stat when the monitor changes status.</p>
+              </div>
+
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      <div class="panel-group" id="accordion">
+    {% include 'reactions/docs/stathat-details.html' %}
+
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}

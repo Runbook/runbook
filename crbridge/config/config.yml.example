@@ -1,0 +1,28 @@
+## Bridge Configuration
+stathat_key: {{ config['stathat_key'] }}
+envname: {{ config['envname'] }}
+dbqueue: {{ config['dbqueue'] }}
+sleep: 30
+## Redis Config
+redis_host: {{ config['redis_host'] }}
+redis_port: {{ config['redis_port'] }}
+redis_db: {{ config['redis_db'] }}
+redis_password: {{ config['redis_password'] }}
+## Rethink Config
+rethink_host: {{ config['rethink_host'] }} 
+rethink_port: {{ config['rethink_port'] }}
+rethink_authkey: {{ config['rethink_authkey'] }}
+rethink_db: {{ config['rethink_db'] }}
+## Sink Config
+sink_ip: 127.0.0.1
+sink_port: {{ config['sink_port'] }}
+default_actions:
+  - logit-monitor
+  - logit-events
+  - chstatus
+  - timetracking
+reaction_meta:
+  - logit-reaction
+  - update-lastrun
+## History Retention
+history_retention: 18000

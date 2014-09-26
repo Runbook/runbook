@@ -1,0 +1,106 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+      {% if data['edit'] %}
+        <h1><i class="fa fa-eye-slash fa-1x"></i> Manage Monitor</h1>
+      {% else %}
+        <h1><i class="fa fa-eye-slash fa-1x"></i> Add Monitor</h1>
+      {% endif %}
+      </div>
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <div class="panel-title">
+            HTTP GET: Status Code
+            </div>
+          </div>
+          <div class="panel-body">
+            <form action="{{ data['url'] }}" method="post" name="tcp-check" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+
+            {% include 'monitors/base.html' %}
+            {% include 'monitors/timer.html' %}
+            {% include 'monitors/datacenter.html' %}
+            <hr>
+                
+                <div class="form-group">
+                <label for="URL" class="col-sm-4 control-label">URL</label>
+            <div class="col-sm-8">
+              {% if data['edit'] %}
+              {{ form.url(class_="form-control", value=data['monitor']['data']['url']) }}
+              {% else %}
+              {{ form.url(class_="form-control", placeholder="http://url") }}
+              {% endif %}
+            </div>
+              </div>  
+              <div class="col-sm-4">
+              </div>
+              <div class="col-sm-8">
+                    <p class="help-block">Enter the target HTTP/S url including the page to request (example: http://127.0.0.1/status).</p>
+              </div>
+                
+                <div class="form-group">
+                <label for="Host" class="col-sm-4 control-label">Domain to request</label>
+            <div class="col-sm-8">
+              {% if data['edit'] %}
+              {{ form.host(class_="form-control", value=data['monitor']['data']['host']) }}
+              {% else %}
+              {{ form.host(class_="form-control", placeholder="example.com") }}
+              {% endif %}
+            </div>
+              </div>  
+
+              <div class="col-sm-4">
+              </div>
+              <div class="col-sm-8">
+                    <p class="help-block">Specify the domain name to request (example: cloudrout.es).</p>
+              </div>
+
+             <div class="form-group">
+                <label for="Codes" class="col-sm-4 control-label">Expected response codes</label>
+            <div class="col-sm-8">
+              {{ form.codes(class_="multiselect", multiple="multiple", placeholder="Expected/Healthy HTTP Codes") }}
+            </div>
+              </div>
+
+              <div class="col-sm-4">
+              </div>
+              <div class="col-sm-8">
+                    <p class="help-block">Select expected HTTP Status Codes</p>
+              </div>
+
+                
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      <div class="panel-group" id="accordion">
+    {% include 'monitors/docs/http-get-statuscode-details.html' %}
+    {% include 'monitors/docs/url-details.html' %}
+
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}

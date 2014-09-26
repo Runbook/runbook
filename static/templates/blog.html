@@ -1,0 +1,58 @@
+{% include 'blog-header.html' %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+    <div class="page-header">
+    <h2>
+    <a href="{{ data['siteurl'] }}{{ data['url'] }}">{{ data['title'] }}</a>
+    </h2>
+    <span class="text-muted">
+    <i class="fa fa-linux"></i> Written by <a href="https://twitter.com/madflojo" target="_blank">{{ data['author'] }}</a> | 
+    <i class="fa fa-calendar"></i> {{ data['date'] }}
+    {% if data['cats'] %}
+     | <i class="fa fa-folder"></i> 
+    {% for item in data['cats'] %}
+    <span class="label label-default">{{ item }}</span>
+    {% endfor %}
+    {% endif %}
+    </span>
+    </div>
+    <!-- Post Content -->
+    {{ data['data'] }}
+    <!-- End Data -->
+    </div>
+    <div class="col-md-4">
+    <h3>About CloudRoutes</h3>
+    <p>CloudRoutes is a cloud based application and server monitoring service that allows you to automate the resolution and mitigation of incidents. While it may sound complicated the gist of it is, we give you the tools to perform automated actions when your applications or servers are in trouble.</p>
+    <p>Our platform allows you to automate your way out of being called in the middle of the night.</p>
+    <a class="btn-sm btn-primary" href="http://cloudrout.es/signup">Start Automating Incident Response with CloudRoutes</a>
+
+    <h3>Navigate</h3>
+    <ul class="list-inline">
+    {% if data['prevp'] != None %}
+    <li><a href="{{ data['siteurl'] }}{{ data['prevp'] }}"><i class="fa fa-caret-left"></i> Previous</a></li>
+    {% endif %}
+    <li><a href="{{ data['siteurl'] }}/archive.html"><i class="fa fa-book"></i> Archive</a></li>
+    {% if data['nextp'] != None %}
+    <li><a href="{{ data['siteurl'] }}{{ data['nextp'] }}"><i class="fa fa-caret-right"></i> Next</a></li>
+    {% endif %}
+    </ul>
+
+    <h3>Follow</h3>
+    <ul class="list-inline">
+    <li><a href="http://feed.cloudrout.es"><i class="fa fa-rss fa-lg"></i> RSS</a></li>
+    <li><a href="https://twitter.com/cloudroutes"><i class="fa fa-twitter fa-lg"></i> Twitter</a></li>
+    </ul>
+
+    <h3>Share</h3>
+    <div class='shareaholic-canvas' data-app='share_buttons' data-app-id='7064605'></div>
+    
+
+    </div> <!-- col-md-2 -->
+    <hr>
+    {% include 'disqus.html' %}
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'base-footer.html' %}

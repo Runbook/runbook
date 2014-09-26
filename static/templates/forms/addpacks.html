@@ -1,0 +1,18 @@
+          <div class="well">
+          <p class="lead">Need more Monitors? You can add additional monitors by purchasing Monitor Pack Subscriptions. You can add multiple Packs by specifying the number below, each pack will add 100 Monitors and 500 Reactions to your account limits for <b>a monthly charge of $19.99 each</b>.</p>
+            <form action="/dashboard/mod-subscription" method="post" id="subscribe-form" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+                <div class="form-group">
+            <div class="col-sm-8">
+              <div class="input-group">
+              {% set subplans = data['subplans'] - 1 %}
+              {{ form.add_packs(class_="form-control", value=subplans) }}
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary">Purchase</button>
+              </span>
+              </div>
+            </div>
+              </div>  
+            </form>
+        <p class="text-center">Questions? Contact us at <a href="mailto:support@cloudrout.es">support@cloudrout.es</a>.</p>
+      </div>

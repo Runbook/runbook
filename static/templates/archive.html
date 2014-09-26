@@ -1,0 +1,42 @@
+{% include 'blog-header.html' %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+       <div class="panel-heading">
+       <div class="panel-title">
+          {{ data['rowtitle'] }}
+        </div>
+        </div>
+        <table class="table table-striped table-hover">
+          <thead>
+          <tr>
+            <th class="span4"></th>
+            <th class="span9">Title:</th>
+            <th class="span2">Posted On:</th>
+          </tr>
+          </thead>
+          <tbody>
+
+          {% for item in data['rpids'] %}
+          <tr>
+            {% if data['rowitems'][item]['lastpost'] %}
+            <td><center><span class="label label-success">Latest</span></center></td>
+            {% elif data['rowitems'][item]['popularity'] %}
+            <td><center><span class="label label-info">Popular</span></center></td>
+            {% else %}
+            <td><center></center></td>
+            {% endif %}
+            <td><a href="{{ data['siteurl'] }}{{ data['rowitems'][item]['url'] }}">{{ data['rowitems'][item]['title'] }}</a></td>
+            <td>{{ data['rowitems'][item]['date'] }}</td>
+          </tr>
+          {% endfor %}
+
+          </tbody>
+        </table>
+
+    </div> <!-- col-md-2 -->
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'base-footer.html' %}
