@@ -1,0 +1,50 @@
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <div class="panel-title">
+          <i class="fa fa-eye-slash fa-1x"></i> Datadog Alerts: Webhook Integration <a data-toggle="collapse" class="pull-right" data-parent="#accordion" href="#DataDogCollapse"><i class="fa fa-expand"></i></a>
+          </div>
+          </div>
+          <div id="DataDogCollapse" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <h3>Overview</h3>
+            <p>Within Datadog you can setup an <a href="http://docs.datadoghq.com/integrations/webhooks/" target="_blank">integration for webhook requests</a>. The Datadog Alerts: Webhook Integration monitor is designed to allow you to integrate Datadog metric alerts with CloudRoutes.</p>
+            <p>This integration allows you to add CloudRoutes Reactions to your existing monitoring solution.</p>
+
+            <h3>Monitor Details</h3>
+            {% if data['monitor'] %}
+            {% set apiid = data['monitor']['cid'] %}
+            {% set apikey = data['monitor']['url'] %}
+            {% else %}
+            {% set apiid = "example-api-id" %}
+            {% set apikey = "example-api-key" %}
+            {% endif %}
+            <p>This monitor is very similar to our general purpose API. For this monitor you will require two key pieces of information, the monitors unique <code>url</code> and <code>check_key</code>.</p>
+            <p>The <code>url</code> is simply an address to send requests to. This address is unique to each monitor and should not be reused.</p>
+            <p>The <code>check_key</code> is essentially a unique key generated for each monitor. This key is unique and should be treated the same as any API Key, as it is used in conjunction with the unique <code>url</code> to authorize the request.</p>
+
+            <h4>URL and Key</h4>
+            <p>
+            <b>url:</b> <code>https://dash.cloudrout.es/api/datadog-webhook/{{ apiid }}</code></br>
+            <b>check_key:</b> <code>{{ apikey }}</code>
+            </p>
+
+            {% if data['monitor'] %}
+            <p class="text-primary">The details above and below are unique to this monitor</p>
+            {% else %}
+            <p class="text-warning">When you create or edit a monitor these details will show the monitors unique information</p>
+            {% endif %}
+          
+            <h4>Custom Payload</h4>
+        
+            <p>When using Datadog's webhook integration you will need to specify a custom payload. This payload must include the <code>check_key</code> and <code>title</code> attributes at minimum. Additional details can be included however they are not used for processing the monitor data.</p>
+
+            <h5>Minimum Custom Payload</h5>
+            <pre>
+{ 
+"check_key": "{{ apikey }}",
+"title" : "$EVENT_TITLE"
+}
+            </pre>
+          </div>
+          </div>
+        </div>

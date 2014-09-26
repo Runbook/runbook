@@ -1,0 +1,126 @@
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <div class="panel-title">
+          <i class="fa fa-code fa-1x"></i> CloudRoutes API Details <a data-toggle="collapse" class="pull-right" data-parent="#accordion" href="#ApiCollapse"><i class="fa fa-expand"></i></a>
+          </div>
+          </div>
+          <div id="ApiCollapse" class="panel-collapse collapse">
+          <div class="panel-body">
+            {% if data['monitor'] %}
+            {% set apiid = data['monitor']['cid'] %}
+            {% set apikey = data['monitor']['url'] %}
+            {% else %}
+            {% set apiid = "example-api-id" %}
+            {% set apikey = "example-api-key" %}
+            {% endif %}
+            <h3>Overview</h3>
+            <p>The CloudRoutes API can be used with any type of monitor. The documentation below describes how to query and change the status of a monitor using the CloudRoutes API.</p>
+
+            <h3>API Details</h3>
+
+            <p>With the API there is 2 key pieces of required information, the <code>url</code> and the <code>check_key</code>.</p> 
+            <p>The <code>url</code> is simply an address to send requests to. This address is unique to each monitor and should not be reused.</p>
+            <p>The <code>check_key</code> is essentially a unique key generated for each monitor. This key is unique and should be treated the same as any API Key, as it is used in conjunction with the unique <code>url</code> to authorize the request.</p>
+
+            <h4>URL and Key</h4>
+            <p>
+            <b>url:</b> <code>https://dash.cloudrout.es/api/cr-api/{{ apiid }}</code></br>
+            <b>check_key:</b> <code>{{ apikey }}</code>
+            </p>
+
+            {% if data['monitor'] %}
+            <p class="text-primary">The details above and below are unique to this monitor</p>
+            {% else %}
+            <p class="text-warning">When you create or edit a monitor these details will show the monitors unique information</p>
+            {% endif %}
+
+            <h4>Status Code</h4>
+
+            <p>As the API is web based each request will be replied to with a json message and an HTTP status code. A successful request will return a <code>200</code> any other status could should be considered a failed request.</p>
+          
+            <h4>Check Status</h4>
+        
+            <p>You can query the status of a monitor using the following json request. Replies will either be <code>healthy</code> for healthy monitors, <code>failed</code> for failed monitors or <code>web-failed</code> for monitors that have been failed either via the dashboard or the web API.</p>
+
+
+            <h5>Request</h5>
+            <pre>
+{
+"check_key" : "{{ apikey }}",
+"action" : "status"
+}
+            </pre>
+            <h5>Reply</h5>
+<pre>
+{
+  "result": "success",
+  "status": "healthy"
+}
+</pre>
+            <h5>Example</h5>
+
+            <p class="text-default">Setting the <code>Content-type: application/json</code> header is required when sending the json request.</p>
+
+            <pre>
+curl -X POST -H "Content-type: application/json" -d '{
+"check_key" : "{{ apikey }}",
+"action" : "status"
+}' -k https://dash.cloudrout.es/api/cr-api/{{ apiid }}
+            </pre>
+
+
+            <h4>Change to Failed</h4>
+
+            <p>To "fail" a monitor you can do so by sending the following json request. When we receive this request we will mark the monitor as <code>web-failed</code>. If this monitor is an automatic check such as a our TCP monitor this monitor will remain <code>web-failed</code> even if the automatic TCP monitor returns healthy. To return a <code>web-failed</code> monitor to <code>healthy</code> status, a second API request must be made or you must manually mark the monitor healthy via the CloudRoutes dashboard.</p>
+
+            <h5>Request</h5>
+            <pre>
+{
+"check_key" : "{{ apikey }}",
+"action" : "failed"
+}
+</pre>
+            <h5>Reply</h5>
+<pre>
+{
+  "result": "success"
+}
+</pre>
+            <h5>Example</h5>
+            <p class="text-default">Setting the <code>Content-type: application/json</code> header is required when sending the json request.</p>
+            <pre>
+curl -X POST -H "Content-type: application/json" -d '{
+"check_key" : "{{ apikey }}",
+"action" : "failed"
+}' -k https://dash.cloudrout.es/api/cr-api/{{ apiid }}
+</pre>
+
+            <h4>Change to Healthy</h4>
+
+            <p>To mark a monitor <code>healthy</code> you can use the following json request. When a monitor is marked <code>healthy</code> any automatic health checks will start performing normally. If this monitor is actually unhealthy the next automatic check performed will mark the monitor as <code>failed</code> again causing each associated reaction to be executed.</p>
+
+            <h5>Request</h5>
+            <pre>
+{
+"check_key" : "{{ apikey }}",
+"action" : "healthy"
+}
+</pre>
+            <h5>Reply</h5>
+<pre>
+{
+  "result": "success"
+}
+</pre>
+            <h5>Example</h5>
+            <p class="text-default">Setting the <code>Content-type: application/json</code> header is required when sending the json request.</p>
+            <pre>
+curl -X POST -H "Content-type: application/json" -d '{
+"check_key" : "{{ apikey }}",
+"action" : "healthy"
+}' -k https://dash.cloudrout.es/api/cr-api/{{ apiid }}
+</pre>
+
+            </div>
+          </div>
+        </div>

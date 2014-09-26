@@ -1,0 +1,36 @@
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <div class="panel-title">
+          <i class="fa fa-cogs fa-1x"></i> General Reaction Details <a data-toggle="collapse" class="pull-right" data-parent="#accordion" href="#GenericReactCollapse"><i class="fa fa-expand"></i></a>
+          </div>
+          </div>
+          <div id="GenericReactCollapse" class="panel-collapse collapse">
+          <div class="panel-body">
+            <h3>General Reaction Options </h3>
+            
+            <p></p>
+            <h4>Name</h4>
+            <p>The name field is a required field that must be unique within your account. The name field should contain Alphanumeric input and does allow for special characters.</p>
+            <p></p>
+
+            <h4>Trigger</h4>
+            <p>The Trigger field allows you to specify how many failures must occur before a specific reaction is executed.</p>
+            <p>As an example, one could setup an Email Notification reaction to occur after the 2nd instance of a failure by setting the reactions trigger to 2.</p>
+            <p>It is important to note that Triggers are for both Healthy and Failed monitors. When a monitor changes from Failed to Healthy a counter is zeroed; any healthy reactions will not be executed until the monitors counter has reached the reactions defined trigger.</p>
+            <p></p>
+
+            <h4>Frequency</h4>
+            <p>The Frequency field allows you to specify in seconds how often a reaction is executed. This can be used to reduce or increase the frequency a reaction is executed. For example, if a monitor runs every 5 minutes and the frequency of the reaction is set to <code>600</code> seconds the reaction will only execute every 10 minutes.</p>
+            <p></p>
+
+            <h4>Call On</h4>
+
+            <p>The "Call On" field is used for reactions that do not necessarily have a intuitive action for both "Failed" and "Healthy" monitors. For example, the <a href="https://dash.cloudrout.es/dashboard/reactions/enotify">Email Notification</a> reaction has both a "Failed" step and a "Healthy" step. That reaction will notify the specified email address of a failure, and when the monitor returns healthy it will notify the email address of the return to healthy status.</p>
+            <p>While developing new reactions we have found that some tasks however, do not have secondary action. These reactions should only be called once, either during a "Failed" monitor or during a "Healthy" monitor. If you wanted to use the same reaction but with different values for "Failed" and "Healthy" you can accomplish that by creating two reactions. The first reaction would have a "Call On" value of "Failed Monitors" and execute the required steps during failures. The second reaction would have a "Call On" value of "Healthy Monitors" and execute the required steps during healthy instances.</p>
+            <p></p>
+
+
+
+          </div>
+          </div>
+        </div>

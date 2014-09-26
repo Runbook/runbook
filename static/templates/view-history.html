@@ -1,0 +1,117 @@
+{% include 'base-header.html' %}
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+        <h1><i class="fa fa-book fa-1x"></i> Monitor History</h1>
+      </div>
+        <div class="row">
+        <div class="pull-right">
+          <ul class="pagination pagination-sm">
+            <li><a href="/dashboard/view-history/{{ data['monitor']['cid'] }}/0/200">&laquo;</a></li>
+            {% if data['monitor-history-paging-start'] == 0 %}
+            <li class="active"><a href="/dashboard/view-history/{{ data['monitor']['cid'] }}/0/200">1</a></li>
+            {% else %}
+            <li><a href="/dashboard/view-history/{{ data['monitor']['cid'] }}/0/200">1</a></li>
+            {% endif %}
+            {% set cur = 2 %}
+            {% for start in data['monitor-history-paging'] %}
+              {% if data['monitor-history-paging-start'] == start %}
+            <li class="active"><a href="/dashboard/view-history/{{ data['monitor']['cid'] }}/{{ start }}/200">{{ cur }}</a></li>
+              {% else %}
+            <li><a href="/dashboard/view-history/{{ data['monitor']['cid'] }}/{{ start }}/200">{{ cur }}</a></li>
+              {% endif %}
+            {% set cur = cur + 1 %}
+            {% endfor %}
+            {% set endstart = data['monitor-history-count'] - 200 %}
+            {% if endstart > 200 %}
+            <li><a href="/dashboard/view-history/{{ data['monitor']['cid'] }}/{{ endstart }}/200">&raquo;</a></li>
+            {% endif %}
+          </ul>
+        </div>
+        </div>
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            {{ data['monitor']['name'] }}
+          </div>
+          </div>
+          {% if data['monitor-history-count'] > 0 %}
+          <table width="100%" border="0" class="table table-condensed">
+            <tr class="active">
+              <td></td>
+              <td><h5>Time</h5></td>
+              <td><h5>Method</h5></td>
+              <td><h5>Monitoring Zone</h5></td>
+              <td><h5>Count</h5></td>
+              <td></td>
+            </tr>
+            {% for monitor in data['monitor-history'] %}
+            {%- if "healthy" in monitor['status'] -%}
+            <tr class="success">
+              <td><i class="fa fa-check-circle"></i> <span class="label label-success">Healthy</span></td>
+            {%- elif "failed" in monitor['status'] -%}
+            <tr class="danger">
+              <td><i class="fa fa-exclamation-triangle"></i> <span class="label label-danger">Failed</span></td>
+            {%- else -%}
+            <tr class="warning">
+              <td><i class="fa fa-circle"></i> <span class="label label-warning">{{ monitor['status'] }}</span></td>
+            {%- endif -%} 
+              <td>{{ monitor['starttime'] }}</td>
+              <td>{{ monitor['method'] }}</td>
+              <td>{{ monitor['zone'] }}</td>
+              <td>{{ monitor['failcount'] }}</td>
+              <td><a href="/dashboard/detail-history/{{ monitor['cid'] }}/{{ monitor['id'] }}" class="btn btn-default btn-xs" role="button">Details</a></td>
+            </tr>
+              {% for react in monitor['reactions'] %}
+              <tr class="active">
+                <td></td>
+                <td><i class="fa fa-gear"></i> <span class="label label-default">Reaction</span></td>
+                <td>{{ react['name'] }}</td>
+                <td>{{ react['time'] }}</td>
+                <td>{{ react['rstatus'] }} {{ react['cacheonly'] }}</td>
+                <td></td>
+              </tr>
+              {% endfor %}
+            {% endfor %}
+          </table>
+          {% else %}
+          <div class="panel-body">Sorry, No history to display</div>
+          {% endif %}
+        </div>
+        <div class="row">
+        <div class="pull-right">
+          <ul class="pagination pagination-sm">
+            <li><a href="/dashboard/view-history/{{ data['monitor']['cid'] }}/0/200">&laquo;</a></li>
+            {% if data['monitor-history-paging-start'] == 0 %}
+            <li class="active"><a href="/dashboard/view-history/{{ data['monitor']['cid'] }}/0/200">1</a></li>
+            {% else %}
+            <li><a href="/dashboard/view-history/{{ data['monitor']['cid'] }}/0/200">1</a></li>
+            {% endif %}
+            {% set cur = 2 %}
+            {% for start in data['monitor-history-paging'] %}
+              {% if data['monitor-history-paging-start'] == start %}
+            <li class="active"><a href="/dashboard/view-history/{{ data['monitor']['cid'] }}/{{ start }}/200">{{ cur }}</a></li>
+              {% else %}
+            <li><a href="/dashboard/view-history/{{ data['monitor']['cid'] }}/{{ start }}/200">{{ cur }}</a></li>
+              {% endif %}
+            {% set cur = cur + 1 %}
+            {% endfor %}
+            {% set endstart = data['monitor-history-count'] - 200 %}
+            {% if endstart > 200 %}
+            <li><a href="/dashboard/view-history/{{ data['monitor']['cid'] }}/{{ endstart }}/200">&raquo;</a></li>
+            {% endif %}
+          </ul>
+        </div>
+        </div>
+        
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}
