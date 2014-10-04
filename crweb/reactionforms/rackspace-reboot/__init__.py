@@ -25,7 +25,7 @@ class ReactForm(BaseReactForm):
     ('SYD', 'SYD'),
     ('HKG', 'HKG')]
 
-  username = TextField("Username", validator=[DataRequired(message='Username is a required field')])
+  username = TextField("Username", validators=[DataRequired(message='Username is a required field')])
   apikey = TextField("API Key", validators=[DataRequired(message='API Key is a required field')])
   serverid = TextField("Server ID#", validators=[DataRequired(message='Server ID# is a required field')])
   region = SelectField("Region", choices=region_choices, validators=[DataRequired(message="Select a Region")])

@@ -47,11 +47,16 @@
                 <div class="form-group">
                 <label for="Username" class="col-sm-4 control-label">Username</label>
             <div class="col-sm-8">
+              <div class="input-group">
+                <span class="input-group-btn">
+                <button type="button" id="rackspace-reboot-username" class="btn btn-default" rel="popover" data-content="Enter your Rackspace username. Required for API Authentication." title="Rackspace Username"><i class="fa fa-question"></i></button>
+              </span>
               {% if data['edit'] %}
               {{ form.username(class_="form-control", value=data['reaction']['data']['username']) }}
               {% else %}
               {{ form.username(class_="form-control", placeholder="Username") }}
               {% endif %}
+            </div>
             </div>
               </div>  
                 
@@ -59,44 +64,64 @@
                 <div class="form-group">
                 <label for="API Key" class="col-sm-4 control-label">API Key</label>
             <div class="col-sm-8">
+              <div class="input-group">
+                <span class="input-group-btn">
+                <button type="button" id="rackspace-reboot-apikey" class="btn btn-default" rel="popover" data-content="The Rackspace API key can be found in your Account Settings menu. This field is required for API Authentication" title="Rackspace API Key"><i class="fa fa-question"></i></button>
+              </span>
               {% if data['edit'] %}
               {{ form.apikey(class_="form-control", value=data['reaction']['data']['apikey']) }}
               {% else %}
               {{ form.apikey(class_="form-control", placeholder="API Key") }}
               {% endif %}
             </div>
+            </div>
               </div>  
                 
                 <div class="form-group">
                 <label for="Server ID" class="col-sm-4 control-label">Server ID</label>
             <div class="col-sm-8">
+              <div class="input-group">
+                <span class="input-group-btn">
+                <button type="button" id="rackspace-reboot-serverid" class="btn btn-default" rel="popover" data-content="The Rackspace Server ID can be found on the Server Details page." title="Cloud Server ID"><i class="fa fa-question"></i></button>
+              </span>
               {% if data['edit'] %}
               {{ form.serverid(class_="form-control", value=data['reaction']['data']['serverid']) }}
               {% else %}
               {{ form.serverid(class_="form-control", placeholder="Server ID") }}
               {% endif %}
             </div>
+            </div>
               </div>  
 
                 <div class="form-group">
                 <label for="Region" class="col-sm-4 control-label">Region</label>
             <div class="col-sm-8">
+              <div class="input-group">
+                <span class="input-group-btn">
+                <button type="button" id="rackspace-reboot-region" class="btn btn-default" rel="popover" data-content="The Rackspace Region can be found on the Server Details page." title="Cloud Server Region"><i class="fa fa-question"></i></button>
+              </span>
               {% if data['edit'] %}
               {{ form.region(class_="select", value=data['reaction']['data']['region']) }}
               {% else %}
               {{ form.region(class_="select", placeholder="Region") }}
               {% endif %}
             </div>
+            </div>
               </div>  
 
                 <div class="form-group">
                 <label for="Server Type" class="col-sm-4 control-label">Server Type</label>
             <div class="col-sm-8">
+              <div class="input-group">
+                <span class="input-group-btn">
+                <button type="button" id="rackspace-reboot-resourcetype" class="btn btn-default" rel="popover" data-content="The Server Type can be found on the Server Details page. Most newer servers are Next Generation Cloud Servers" title="Cloud Server Region"><i class="fa fa-question"></i></button>
+              </span>
               {% if data['edit'] %}
               {{ form.resource_type(class_="select", value=data['reaction']['data']['resource_type']) }}
               {% else %}
               {{ form.resource_type(class_="select", placeholder="Server Type") }}
               {% endif %}
+            </div>
             </div>
               </div>  
 
@@ -105,10 +130,6 @@
             </form>
           </div>
         </div>
-      <div class="panel-group" id="accordion">
-    {% include 'reactions/docs/digitalocean-reboot-details.html' %}
-
-      </div>
     </div>
   </div> <!-- row -->
 </div> <!-- container -->
