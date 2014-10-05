@@ -62,7 +62,7 @@ def callDO(redata, jdata):
           "name": redata['data']['snapname'] }
   payload = json.dumps(msg)
   try:
-    req = requests.post(url, timeoute=3.0, data=payload, headers=headers, verify=True)
+    req = requests.post(url, timeout=3.0, data=payload, headers=headers, verify=True)
   except:
     return False
   if req.status_code >= 200 and req.status_code < 300:
