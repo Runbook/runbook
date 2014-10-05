@@ -6,13 +6,17 @@
 
 import json
 
-def webCheck(request, monitor, cid, atype, rdb):
+def webCheck(request, monitor, urldata, rdb):
   ''' Process the webbased api call '''
   replydata = { 
     'headers': { 'Content-type' : 'application/json' }
     }
   rdata = {}
   jdata = request.json
+
+  # Adding this because i'm lazy and didn't feel like modifying all the references
+  cid = urldata['cid']
+  atype = urldata['atype']
    
   ## Delete the Monitor
   monitor.get(cid, rdb)

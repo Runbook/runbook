@@ -6,7 +6,7 @@
 
 import json
 
-def webCheck(request, monitor, cid, atype, rdb):
+def webCheck(request, monitor, urldata, rdb):
   ''' Process the webbased api call '''
   replydata = { 
     'headers': { 'Content-type' : 'application/json' }
@@ -14,7 +14,11 @@ def webCheck(request, monitor, cid, atype, rdb):
   rdata = {}
   jdata = request.json
    
-  ## Delete the Monitor
+  # Adding this because i'm lazy and didn't feel like modifying all the references
+  cid = urldata['cid']
+  atype = urldata['atype']
+  
+  ## Process API Request
   print("cr-api: looking up monitor id %s") % cid
   monitor.get(cid, rdb)
   print("cr-api: Monitor %s is - %s") % (cid, monitor.name)
