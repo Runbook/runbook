@@ -22,9 +22,14 @@
             {% endif %}
 
             <p>
-            <b>Unique Failed URL:</b> <code>https://dash.cloudrout.es/api/logentries-webhook/{{ apiid }}/failed</code></br>
-            <b>Unique Healthy URL:</b> <code>https://dash.cloudrout.es/api/logentries-webhook/{{ apiid }}/healthy</code></br>
+            <b>Unique Failed URL:</b>
             </p>
+             <pre>https://dash.cloudrout.es/api/logentries-webhook/{{ apiid }}/{{ apikey }}/failed</pre>
+
+            <p>
+            <b>Unique Healthy URL:</b>
+            </p>
+             <pre>https://dash.cloudrout.es/api/logentries-webhook/{{ apiid }}/{{ apikey }}/healthy</pre>
 
             {% if data['monitor'] %}
             <p class="text-primary">The details above and below are unique to this monitor</p>

@@ -619,14 +619,21 @@ def delcheck_page(cid):
 
 
 ## Web Checks
-@app.route('/api/<atype>/<cid>', methods=['POST'], defaults={'action': 'failed'})
-@app.route('/api/<atype>/<cid>/<action>', methods=['POST'])
-def checkapi_page(atype, cid, action):
+@app.route('/api/<atype>/<cid>', methods=['POST'], defaults={'check_key': None, 'action': None})
+@app.route('/api/<atype>/<cid>/<check_key>', methods=['POST'], defaults={'action': None})
+@app.route('/api/<atype>/<cid>/<check_key>/<action>', methods=['POST'])
+def checkapi_page(atype, cid, check_key, action):
   ''' Web based API for various health checks '''
   monitor = Monitor(cid)
+  urldata = {
+    'cid' : cid,
+    'atype' : atype,
+    'check_key' : check_key,
+    'action' : action
+  }
   try:
     webapi = __import__("monitorapis." + atype, globals(), locals(), ['webCheck'], -1)
-    replydata = webapi.webCheck(request, monitor, cid, atype, action, g.rdb_conn)
+    replydata = webapi.webCheck(request, monitor, urldata, g.rdb_conn)
   except:
     print("/api/%s - webCheck action") % atype
     replydata = {
