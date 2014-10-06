@@ -80,6 +80,12 @@ def startData(user=None):
       data['rlimit'] = 50
       data['dataret'] = 86400
       data['acttype'] = "Lite"
+    elif user.acttype == "lite-v2" :
+      data['choices'] = [('30mincheck', 'Every 30 Minutes'), ('5mincheck', 'Every 5 Minutes')]
+      data['limit'] = 2
+      data['rlimit'] = 4
+      data['dataret'] = 86400
+      data['acttype'] = "Lite"
     elif user.acttype == "enterprise" :
       data['choices'] = [('30mincheck', 'Every 30 Minutes'), ('5mincheck', 'Every 5 Minutes'), ('2mincheck', 'Every 2 Minutes'), ('30seccheck', 'Every 30 Seconds')]
       data['limit'] = user.subplans * 100
@@ -89,8 +95,8 @@ def startData(user=None):
       data['acttype'] = "Enterprise"
     else:
       data['choices'] = [('30mincheck', 'Every 30 Minutes'), ('5mincheck', 'Every 5 Minutes'), ('2mincheck', 'Every 2 Minutes'), ('30seccheck', 'Every 30 Seconds')]
-      data['limit'] = user.subplans * 100
-      data['rlimit'] = user.subplans * 500
+      data['limit'] = user.subplans * 20
+      data['rlimit'] = user.subplans * 40
       data['subplancost'] = float(user.subplans - 1) * 19.99
       data['dataret'] = 604800
       data['acttype'] = "Pro"

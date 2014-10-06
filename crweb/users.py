@@ -36,7 +36,7 @@ class User(object):
     jsondata['email'] = userdata['email']
     jsondata['status'] = 'active'
     jsondata['company'] = userdata['company']
-    jsondata['acttype'] = 'lite' 
+    jsondata['acttype'] = 'lite-v2' 
     jsondata['contact'] = userdata['contact']
     jsondata['stripe'] = self.stripe
     jsondata['stripeid'] = self.stripeid
