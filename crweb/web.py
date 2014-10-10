@@ -23,6 +23,7 @@
 import sys
 import json
 import time
+import requests
 
 ## Flask modules
 from flask import Flask
@@ -80,30 +81,37 @@ def startData(user=None):
       data['rlimit'] = 50
       data['dataret'] = 86400
       data['acttype'] = "Lite"
+      data['cost'] = "Free"
     elif user.acttype == "lite-v2" :
       data['choices'] = [('30mincheck', 'Every 30 Minutes'), ('5mincheck', 'Every 5 Minutes')]
-      data['limit'] = 2
-      data['rlimit'] = 4
+      data['limit'] = user.subplans
+      data['rlimit'] = user.subplans * 2
       data['dataret'] = 86400
       data['acttype'] = "Lite"
+      data['cost'] = "Free"
     elif user.acttype == "enterprise" :
       data['choices'] = [('30mincheck', 'Every 30 Minutes'), ('5mincheck', 'Every 5 Minutes'), ('2mincheck', 'Every 2 Minutes'), ('30seccheck', 'Every 30 Seconds')]
-      data['limit'] = user.subplans * 100
-      data['rlimit'] = user.subplans * 500
-      data['subplancost'] = float(user.subplans - 1) * 49.99
+      data['limit'] = user.subplans
+      data['rlimit'] = user.subplans * 2
+      data['cost'] = float(user.subplans) * 6.00
       data['dataret'] = 16070400
       data['acttype'] = "Enterprise"
     else:
       data['choices'] = [('30mincheck', 'Every 30 Minutes'), ('5mincheck', 'Every 5 Minutes'), ('2mincheck', 'Every 2 Minutes'), ('30seccheck', 'Every 30 Seconds')]
-      data['limit'] = user.subplans * 20
-      data['rlimit'] = user.subplans * 40
-      data['subplancost'] = float(user.subplans - 1) * 19.99
+      data['limit'] = user.subplans
+      data['rlimit'] = user.subplans * 2
+      if "yearly" in user.subscription:
+        permon = .75 * 12.00
+      else:
+        permon = 1.00
+      data['cost'] = float(user.subplans) * permon
       data['dataret'] = 604800
       data['acttype'] = "Pro"
   data['js_bottom'] = []
   data['js_header'] = []
   data['stripe_pubkey'] = app.config['STRIPE_PUBKEY']
   data['subplans'] = user.subplans
+  data['subscription'] = user.subscription
   return data
 
 
@@ -999,58 +1007,104 @@ def modsub_page():
     tmpl = 'mod-subscription.html'
     data['js_bottom'].append('forms/subscribe.js')
     form = []
-    import stripe
-    stripe.api_key = app.config['STRIPE_SECRETKEY']
+    headers = {
+      "content-type" : "application/json",
+      "Authorization" : app.config['ASSEMBLY_PRIVATE_KEY']
+    }
     from generalforms import subscribe
     if data['acttype'] == "Lite":
-      if request.method == "POST" and "stripeToken" in request.form:
+      ## Upgrade Users
+      if request.method == "POST" and "stripeToken" in request.form and "plan" in request.form:
         stripeToken = request.form['stripeToken']
+        plan = request.form['plan']
         if stripeToken:
-          quantity=1
           result = None
+          monitor = Monitor()
+          payload = {
+            'email' : user.email,
+            'quantity' : monitor.count(user.uid, g.rdb_conn),
+            'card' : stripeToken,
+            'plan' : plan
+          }
+          json_payload = json.dumps(payload)
+          url = app.config['ASSEMBLY_PAYMENTS_URL'] + "/customers"
+          print ("Making request to %s") % url
           try:
-            result = stripe.Customer.create(card=stripeToken, plan="pro_monthly", email=user.email, quantity=quantity)
+            ## Send Request to Assembly to create user and subscribe them to desired plan
+            result = requests.post(url=url, headers=headers, data=json_payload, verify=True)
           except:
+            print("Critical Error making request to ASM Payments")
             data['msg'] = "There was an error processing your card details"
             data['error'] = True
-          if result:
-            user.stripeid = result.id
+          print("Got %d status code from Assembly") % result.status_code
+          if result.status_code >= 200 and result.status_code <= 299:
+            rdata = json.loads(result.text)
+            user.stripeid = rdata['id']
             user.stripe = stripeToken
-            user.subplans = quantity
+            user.subplans = payload['quantity']
+            user.subscription = payload['plan']
             user.acttype = "pro"
             print("Setting UID %s Subscription to: %s") % (user.uid, user.acttype)
             subres = user.setSubscription(g.rdb_conn)
+            stathat.ez_count(app.config['STATHAT_EZ_KEY'], app.config['ENVNAME'] + ' User Upgrades', 1)
             if subres:
               newdata = startData(user)
               data['limit'] = newdata['limit']
+              data['rlimit'] = newdata['rlimit']
               data['acttype'] = newdata['acttype']
               data['subplans'] = newdata['subplans']
+              data['cost'] = newdata['cost']
+              data['subscription'] = newdata['subscription']
               data['msg'] = "Subscription successfully created"
               data['error'] = False
             else:
               data['msg'] = "Subscription not successfully created"
               data['error'] = True
+    ## Increase subscription
     if data['acttype'] != "Lite":
       form = subscribe.AddPackForm(request.form)
       if request.method == "POST" and "stripeToken" not in request.form:
         if form.validate():
-          add_packs = int(form.add_packs.data) + 1
+          add_packs = int(form.add_packs.data)
+          ## Set subscription quantity to desired monitor count
+          payload = { 'quantity' : add_packs }
+          json_payload = json.dumps(payload)
+          url = app.config['ASSEMBLY_PAYMENTS_URL'] + "/customers/" + user.stripeid
+          print("Making request to %s") % url
           try:
-            customer = stripe.Customer.retrieve(user.stripeid)
-            subsc = customer.subscriptions.retrieve(customer['subscriptions']['data'][0]['id'])
-            subsc.quantity = add_packs
-            result = subsc.save()
+            ## Get Subscription ID
+            result = requests.get(url=url, headers=headers, verify=True)
+            if result == 200:
+              rdata = json.loads(result.text)
+              subsid = rdata['subscriptions']['data'][0]['id']
+              url = url + "/subscriptions/" + subsid
+              ## Set Quantity
+              try:
+                result = requests.put(url=url, headers=headers, data=json_payload, verify=True)
+              except:
+                data['msg'] = "An error occured while processing the form"
+                data['error'] = True
+                print("Critical Error making request to ASM Payments")
+            else:
+              data['msg'] = "An error occured while processing the form"
+              data['error'] = True
           except:
             data['msg'] = "An error occured while processing the form"
             data['error'] = True
-          if result:
+            print("Critical Error making request to ASM Payments")
+          print("Got %d status code from Assembly") % result.status_code
+          if result.status_code >= 200 and result.status_code <= 299:
             user.subplans = add_packs
+            ## Save user config
+            print("Setting subscription count to %d for user %s") % (add_packs, user.uid)
             subres = user.setSubscription(g.rdb_conn)
             if subres:
               newdata = startData(user)
               data['limit'] = newdata['limit']
+              data['rlimit'] = newdata['rlimit']
               data['acttype'] = newdata['acttype']
               data['subplans'] = newdata['subplans']
+              data['cost'] = newdata['cost']
               data['msg'] = "Subscription successfully modified"
               data['error'] = False
             else:

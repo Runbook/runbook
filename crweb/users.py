@@ -25,7 +25,8 @@ class User(object):
     self.acttype = None
     self.stripe = None
     self.stripeid = None
-    self.subplans = 1
+    self.subplans = 2 
+    self.subscription = 'Free'
 
 
   def createUser(self, userdata, rdb):
@@ -41,6 +42,7 @@ class User(object):
     jsondata['stripe'] = self.stripe
     jsondata['stripeid'] = self.stripeid
     jsondata['subplans'] = self.subplans
+    jsondata['subscription'] = self.subscription
     jsondata['creation_time'] = time.time()
 
     if self.is_active(userdata['username'], rdb):
@@ -101,6 +103,7 @@ class User(object):
       self.stripeid = results['stripeid']
       self.stripe = results['stripe']
       self.subplans = results['subplans']
+      self.subscription = results['subscription']
       return self
     else:
       return None
@@ -169,13 +172,14 @@ class User(object):
   def setSubscription(self, rdb):
     ''' This will set a users subscription to the specified subscription plan '''
     ## Get User id
-    results = r.table('users').get(self.uid).update({ 'acttype': self.acttype, 'stripeid': self.stripeid, 'stripe': self.stripe, 'subplans': self.subplans}).run(rdb)
+    results = r.table('users').get(self.uid).update({ 'acttype': self.acttype, 'stripeid': self.stripeid, 'stripe': self.stripe, 'subscription': self.subscription, 'subplans': self.subplans}).run(rdb)
     if results:
       loginfo = {}
       loginfo['type'] = "setSubscription"
       loginfo['uid'] = self.uid
       loginfo['acttype'] = self.acttype
       loginfo['subplans'] = self.subplans
+      loginfo['subscription'] = self.subscription
       loginfo['time'] = time.time()
       logresult = r.table('subscription_history').insert(loginfo).run(rdb)
       return True

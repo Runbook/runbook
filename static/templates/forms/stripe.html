@@ -1,18 +1,36 @@
 <div class="well">
-<p class="lead">Upgrade to our Pro subscription and get 20 Monitors, 40 Reactions and the ability to run monitors every 2 minutes and every 30 seconds.</p>
+<p class="lead">Need more monitors? Upgrade your account and you can add additional monitors to your account for only $1 per monitor with our monthly subscription plan. You also get the ability to run monitors every 2 minutes and 30 seconds.</p>
 <div align="center">
 <form action="/dashboard/mod-subscription" method="post" id="subscribe-form" target="_self" class="form-horizontal" role="form">
-  <script
-    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-    data-key="{{ data['stripe_pubkey'] }}"
-    data-image="/static/img/cloudroutes-logo.png"
-    data-panel-label="Upgrade your Subscription"
-    data-label="Upgrade your Subscription"
-    data-allow-remember-me=false
-    data-name="CloudRoutes"
-    data-description="Upgrade to Pro ($19.99)"
-    data-amount="1999">
-  </script>
+<div class="form-group">
+<div class="input-group">
+  <select class="plan-select" id="plan" name="plan">
+    <option value="cloudroutes_cr_yearly" selected>Annual Subscription</option>
+    <option value="cloudroutes_cr_monthly">Monthly Subscription</option>
+  </select>
+  <button class="btn btn-primary btn-sm" id="customButton">Upgrade</button>
+</div>
+</div>
 </form>
+<p class="info">Annual subscribers only pay $0.75 per monitor each month, billed at $9 each year.</p>
 </div>
 </div>
+ <script src="https://checkout.stripe.com/v2/checkout.js"></script>
+<script>
+    $('#customButton').click(function(){
+      var token = function(res){
+        var $input = $('<input type=hidden name=stripeToken />').val(res.id);
+        $('form').append($input).submit();
+      };
+
+      StripeCheckout.open({
+        key:         '{{ data['stripe_pubkey'] }}',
+        name:        'CloudRoutes',
+        description: 'Upgrade to Pro',
+        panelLabel:  'Upgrade',
+        token:       token
+      });
+
+      return false;
+    });
+  </script>

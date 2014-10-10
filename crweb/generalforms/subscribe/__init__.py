@@ -5,13 +5,13 @@
 ######################################################################
 
 from wtforms import Form
-from wtforms import TextField, HiddenField
+from wtforms import TextField, HiddenField, SelectField
 from wtforms.validators import DataRequired, ValidationError, NumberRange
 
 class SubscribeForm(Form):
   ''' Class that creates signup form fields and validation '''
 #  stripeToken = HiddenField("stripeToken", validators=[DataRequired(message='Uh Oh, something went wrong.')])
-stripeToken = HiddenField("stripeToken")
+  stripeToken = HiddenField("stripeToken")
 ##  ccnum = TextField("Card Number")
 ##  cvc = TextField("CVC")
 ##  exp_month = TextField("MM")
