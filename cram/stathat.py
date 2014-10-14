@@ -16,7 +16,8 @@ except ImportError:
         try:
             from django.utils import simplejson as json
         except ImportError:
-            raise ImportError('You need something for json encoding! simplejson, Django, or Python >= 2.6')
+            raise ImportError(
+                'You need something for json encoding! simplejson, Django, or Python >= 2.6')
 try:
     from gevent import monkey
     from gevent.pool import Group
@@ -33,13 +34,14 @@ except ImportError:
     HAS_GEVENT = False
 
 __all__ = ('StatHat', 'StatHatEZ', 'StatHatError',
-    'ez_count', 'ez_value', 'classic_count', 'classic_value')
+           'ez_count', 'ez_value', 'classic_count', 'classic_value')
 
 # We like security. :)
 STATHAT_ENDPOINT = 'https://api.stathat.com'
 
 
 class StatHatError(Exception):
+
     """Generic StatHat error."""
 
 
@@ -83,7 +85,7 @@ class _StatHatBase(object):
         payload = self._auth.copy()
         payload.update(data)
 
-        if HAS_GEVENT and async != False:
+        if HAS_GEVENT and async is not False:
             # Async request should be completely silent and ignore any
             # errors that may be thrown.
             async_group.spawn(self._send_inner, endpoint, payload, silent=True)
@@ -120,6 +122,7 @@ class _StatHatBase(object):
 
 
 class StatHat(_StatHatBase):
+
     def __init__(self, user_key, stat_key):
         """Implements the Classic API <http://www.stathat.com/docs/api>
 
@@ -156,6 +159,7 @@ def ez_count(ezkey, stat_name, count=1, async=True):
     stats = StatHatEZ(ezkey, stat_name)
     return stats.count(count, async=async)
 
+
 def ez_value(ezkey, stat_name, value, async=True):
     """Convenience function for sending one off "value" calls to the EZ api.
 
@@ -168,6 +172,7 @@ def ez_value(ezkey, stat_name, value, async=True):
     stats = StatHatEZ(ezkey, stat_name)
     return stats.value(value, async=async)
 
+
 def classic_count(user_key, stat_key, count=1, async=True):
     """Convenience function for sending one off "count" calls to the Classic api.
 
@@ -179,6 +184,7 @@ def classic_count(user_key, stat_key, count=1, async=True):
 
     stats = StatHat(user_key, stat_key)
     return stats.count(count, async=async)
+
 
 def classic_value(user_key, stat_key, value, async=True):
     """Convenience function for sending one off "value" calls to the Classic api.
