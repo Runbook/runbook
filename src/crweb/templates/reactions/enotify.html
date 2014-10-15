@@ -1,0 +1,89 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+      {% if data['edit'] %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Manage Reaction</h1>
+      {% else %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Add Reaction</h1>
+      {% endif %}
+      </div>
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            Email Notification
+          </div>
+          </div>
+          <div class="panel-body">
+            <form action="{{ data['url'] }}" method="post" name="enotify" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+
+            {% include 'reactions/base.html' %}
+                
+                <div class="form-group">
+                <label for="Email" class="col-sm-4 control-label">Email</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="enotify-email" class="btn btn-default" rel="popover" data-content="Enter an email that you would like email notifications to go to." title="Email"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.email(class_="form-control", value=data['reaction']['data']['email']) }}
+              {% else %}
+              {{ form.email(class_="form-control", placeholder="Email Address") }}
+              {% endif %}
+            </div>
+            </div>
+              </div>  
+
+                <div class="form-group">
+                <label for="Send When Healthy" class="col-sm-4 control-label">Send Email When Healthy?</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="enotify-sendhealthy" class="btn btn-default" rel="popover" data-content="Select whether to send notification emails when the reaction returns healthy. By default this reaction will send email on the first instance of a healthy monitor." title="Send on healthy"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.send_healthy(class_="form-control", value=data['reaction']['data']['send_healthy']) }}
+              {% else %}
+              {{ form.send_healthy(class_="form-control", placeholder="Send Email When Healthy?") }}
+              {% endif %}
+            </div>
+            </div>
+              </div>  
+            
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      <div class="panel-group" id="accordion">
+    {% include 'reactions/docs/enotify-details.html' %}
+
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}

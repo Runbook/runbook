@@ -1,0 +1,116 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+      {% if data['edit'] %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Manage Reaction</h1>
+      {% else %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Add Reaction</h1>
+      {% endif %}
+      </div>
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            SaltStack: Initiate a Highstate
+          </div>
+          </div>
+          <div class="panel-body">
+            <form action="{{ data['url'] }}" method="post" name="saltstack-services" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+
+            {% include 'reactions/base.html' %}
+            {% include 'reactions/callon.html' %}
+
+            <hr>
+
+                <div class="form-group">
+                <label for="URL" class="col-sm-4 control-label">Salt-API URL</label>
+            <div class="col-sm-8">
+              {% if data['edit'] %}
+              {{ form.url(class_="form-control", value=data['reaction']['data']['url']) }}
+              {% else %}
+              {{ form.url(class_="form-control", placeholder="http://example.com/hook") }}
+              {% endif %}
+            </div>
+              </div>  
+                
+                
+                <div class="form-group">
+                <label for="Secret Key" class="col-sm-4 control-label">Secret Key</label>
+            <div class="col-sm-8">
+              {% if data['edit'] %}
+              {{ form.secretkey(class_="form-control", value=data['reaction']['data']['secretkey']) }}
+              {% else %}
+              {{ form.secretkey(class_="form-control", placeholder="Secret Key") }}
+              {% endif %}
+            </div>
+              </div>  
+                
+                <div class="form-group">
+                <label for="Target" class="col-sm-4 control-label">Target</label>
+            <div class="col-sm-8">
+              {% if data['edit'] %}
+              {{ form.tgt(class_="form-control", value=data['reaction']['data']['tgt']) }}
+              {% else %}
+              {{ form.tgt(class_="form-control", placeholder="Target") }}
+              {% endif %}
+            </div>
+              </div>  
+
+              <div class="col-sm-4">
+              </div>
+              <div class="col-sm-8">
+                    <p class="help-block">Target accepts <code>glob</code>, <code>grain</code>, <code>ipcidr</code> and other matchers. Ensure that you select the appropriate matcher for the specified target.</p>
+              </div>
+
+                <div class="form-group">
+                <label for="Matcher" class="col-sm-4 control-label">Matcher (Target Expression Format)</label>
+            <div class="col-sm-8">
+              {% if data['edit'] %}
+              {{ form.matcher(class_="select", value=data['reaction']['data']['matcher']) }}
+              {% else %}
+              {{ form.matcher(class_="select", placeholder="Matching Expression") }}
+              {% endif %}
+            </div>
+              </div>  
+            
+              <div class="col-sm-4">
+              </div>
+              <div class="col-sm-8">
+                    <p class="help-block">The service name specified must match the format of the service command. <b>Misspellings</b> or <b>Capitalization</b> may produce unexpected results.</p>
+              </div>
+
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      <div class="panel-group" id="accordion">
+    {% include 'reactions/docs/saltstack-highstate-details.html' %}
+
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}

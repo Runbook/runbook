@@ -1,0 +1,93 @@
+{% if data['reaction'] %}
+{% set postdata_url = data['reaction']['data']['url'] %}
+{% set postdata_secretkey = data['reaction']['data']['secretkey'] %}
+{% set postdata_tgt = data['reaction']['data']['tgt'] %}
+{% set postdata_matcher = data['reaction']['data']['matcher'] %}
+{% set postdata_args = data['reaction']['data']['args'] %}
+{% else %}
+{% set postdata_url = "https://example.com/hook" %}
+{% set postdata_secretkey = "example-secret-key" %}
+{% set postdata_tgt = "example-target" %}
+{% set postdata_matcher = "example-matcher" %}
+{% set postdata_args = "example-args" %}
+{% endif %}
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <div class="panel-title">
+          <i class="fa fa-cogs fa-1x"></i> SaltStack: Execute a Command<a data-toggle="collapse" class="pull-right" data-parent="#accordion" href="#main-react-Collapse"><i class="fa fa-expand"></i></a>
+          </div>
+          </div>
+          <div id="main-react-Collapse" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <h3>Overview</h3>
+            <p>The SaltStack - Execute a Command reaction is designed to allow you to execute arbitrary commands across your infrastructure. While this reaction is designed to be very generic, it is up to you to secure your salt-api instance to prevent others from running unauthorized commands.</p>
+
+  <p></p>
+           <h3>Requires: salt-api</h3>
+
+            <p>This reaction utilizes SaltStack's salt-api service; since salt-api requires some <a href="http://bencane.com/2014/07/17/integrating-saltstack-with-other-services-via-salt-api/" target="_blank">setup and configuration</a> we have provided some starter configurations to use in our <a href="https://github.com/CloudRoutes/integrations" target="_blank">integrations repository on GitHub</a>. You can utilize this reaction with very few changes to the configurations within our repository.</p>
+ 
+            <p></p>
+            <h3>Reaction Actions</h3>
+
+            <p>This reaction will only perform a single reaction, this reaction can be configured to occur on "Failed Monitors" or "Healthy Monitors" but is not designed to be executed on both. In order to setup this reaction to have an action for "Healthy Monitors" and a different action for "Failed Monitors" you can create two reactions and attach them to the same Monitor.</p>
+
+            <p></p>
+            <h4>Failed Monitors</h4>
+            <p><b>If this reaction's Call On field is set to "Failed Monitors".</b></p>
+            <p>When this reaction receives a "Failed Monitor" the reaction will send a POST request to the URL specified, this post request will contain the following data fields.</p>
+            <pre>
+url: {{ postdata_url }}
+secretkey: {{ postdata_secretkey }}
+tgt: {{ postdata_tgt }}
+matcher: {{ postdata_matcher }}
+args: {{ postdata_args }}
+</pre>
+            <p><b>If this reaction's Call On field is set to "Healthy Monitors".</b></p>
+            <p>This reaction will perform no tasks when it receives a "Failed Monitor"</p>
+
+
+            <p></p>
+            <h4>Healthy Monitors</h4>
+
+            <p><b>If this reaction's Call On field is set to "Healthy Monitors".</b></p>
+            <p>When this reaction receives a "Healthy Monitor" the reaction will send a POST request to the URL specified, this post request will contain the following data fields.</p>
+            <pre>
+url: {{ postdata_url }}
+secretkey: {{ postdata_secretkey }}
+tgt: {{ postdata_tgt }}
+matcher: {{ postdata_matcher }}
+args: {{ postdata_args }}
+</pre>
+            <p><b>If this reaction's Call On field is set to "Failed Monitors".</b></p>
+            <p>This reaction will perform no tasks when it receives a "Healthy Monitor"</p>
+
+            <p></p>
+            <h3>Reaction Form Details</h3>
+
+            <h4>URL</h4>
+            <p>The URL field should contain the URL of your salt-api instance. While technically our system will send the POST request to both HTTP and HTTPS URL's it is not recommended to use unencrypted HTTP for your salt-api instance.</p>
+<p></p>
+
+            <h4>Secret Key</h4>
+            <p>The Secret Key field should contain the secret key for authenticating with your salt-api instance.</p>
+<p></p>
+
+            <h4>Target</h4>
+            <p>The Target field allows you to specify a target for execution, for example if you wanted to run this reaction on all webservers with a hostname of web-## you could specify <code>web-*</code>. The target can accept any format that is listed in the Matcher field.</p>
+<p></p>
+
+            <h4>Matcher</h4>
+            <p>The Matcher selection field allows you to specify the format of the Target field, if you use a Perl Compatible Regular Expression (PCRE) for the hostname you should select <code>Hostname PCRE</code> if you use another format you should select the appropriate format.</p>
+<p></p>
+
+            <h4>Command</h4>
+            <p>The Command field is should include the command you want to execute. The format of this command should be the same as if you were to run the command from commandline, you can utilize Pipes and Redirects however commands that expect input will not run appropriately.</p>
+<p></p>
+
+            <p></p>
+
+          </div>
+          </div>
+        </div>
