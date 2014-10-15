@@ -79,8 +79,7 @@ def call_action(redata, jdata):
                 if catalog['name'] == redata['data']['resource_type']:
                     for endpoint in catalog['endpoints']:
                         if endpoint['region'] == redata['data']['region']:
-                            url = endpoint[
-                                'publicURL'] + "/servers/" + redata['data']['serverid'] + "/action"
+                            url = endpoint['publicURL'] + "/servers/" + redata['data']['serverid'] + "/action"
             # Send Reboot Request
             headers = {
                 "X-Auth-Token": token,
@@ -94,29 +93,25 @@ def call_action(redata, jdata):
             payload = json.dumps(msg)
             try:
                 req = requests.post(
-                    url, timeout=10.0, data=payload, headers=headers, verify=True)
+                    url, timeout=10.0, data=payload,
+                    headers=headers, verify=True)
             except:
-                line = "rackspace-powercycle: Failed Rackspace API Call for reaction %s" % (
-                    redata['id'])
+                line = "rackspace-powercycle: Failed Rackspace API Call for reaction %s" % (redata['id'])
                 syslog.syslog(syslog.LOG_INFO, line)
                 return False
         else:
-            line = "rackspace-powercycle: Failed Rackspace Authenticaiton for reaction %s" % (
-                redata['id'])
+            line = "rackspace-powercycle: Failed Rackspace Authenticaiton for reaction %s" % (redata['id'])
             syslog.syslog(syslog.LOG_INFO, line)
             return False
     except:
-        line = "rackspace-powercycle: Failed Rackspace Authenticaiton for reaction %s" % (
-            redata['id'])
+        line = "rackspace-powercycle: Failed Rackspace Authenticaiton for reaction %s" % (redata['id'])
         syslog.syslog(syslog.LOG_INFO, line)
         return False
     if req.status_code == 202:
-        line = "rackspace-powercycle: Reqeust to %s sent for monitor %s - Successful" % (
-            url, jdata['cid'])
+        line = "rackspace-powercycle: Reqeust to %s sent for monitor %s - Successful" % (url, jdata['cid'])
         syslog.syslog(syslog.LOG_INFO, line)
         return True
     else:
-        line = "rackspace-powercycle: Request to %s sent for monitor %s - Failed" % (
-            url, jdata['cid'])
+        line = "rackspace-powercycle: Request to %s sent for monitor %s - Failed" % (url, jdata['cid'])
         syslog.syslog(syslog.LOG_INFO, line)
         return False

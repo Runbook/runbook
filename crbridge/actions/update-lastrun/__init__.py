@@ -13,7 +13,7 @@ import syslog
 
 def failed(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has failed '''
-    if redata['reaction_return'] == True:
+    if redata['reaction_return'] is True:
         chlastrun(redata['id'], rdb, r_server)
         return True
     else:
@@ -22,7 +22,7 @@ def failed(redata, jdata, rdb, r_server):
 
 def healthy(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
-    if redata['reaction_return'] == True:
+    if redata['reaction_return'] is True:
         chlastrun(redata['id'], rdb, r_server)
         return True
     else:
@@ -40,8 +40,7 @@ def chlastrun(rid, rdb, r_server):
         results = r.table('reactions').get(
             rid).update({'lastrun': lastrun}).run(rdb)
         if results['replaced'] == 1:
-            line = "update-lastrun: RethinkDB lastrun for %s is now set to: %r" % (
-                rid, lastrun)
+            line = "update-lastrun: RethinkDB lastrun for %s is now set to: %r" % (rid, lastrun)
             syslog.syslog(syslog.LOG_INFO, line)
             success = True
         else:

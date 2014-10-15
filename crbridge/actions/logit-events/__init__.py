@@ -8,7 +8,6 @@
 import rethinkdb as r
 from rethinkdb.errors import RqlRuntimeError, RqlDriverError
 import syslog
-import redis
 import time
 import datetime
 import json

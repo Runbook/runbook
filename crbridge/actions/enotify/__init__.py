@@ -5,7 +5,6 @@
 # Actions Module
 ######################################################################
 
-import rethinkdb as r
 import smtplib
 import jinja2
 import syslog
@@ -32,8 +31,7 @@ def failed(redata, jdata, rdb, r_server):
             syslog.syslog(syslog.LOG_INFO, line)
             return True
         else:
-            line = "enotify: Failed to send %s email notification for monitor %s" % (
-                jdata['check']['status'], jdata['cid'])
+            line = "enotify: Failed to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_ERR, line)
             return False
     else:
@@ -61,8 +59,7 @@ def healthy(redata, jdata, rdb, r_server):
             syslog.syslog(syslog.LOG_INFO, line)
             return True
         else:
-            line = "enotify: Failed to send %s email notification for monitor %s" % (
-                jdata['check']['status'], jdata['cid'])
+            line = "enotify: Failed to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_ERR, line)
             return False
     else:
@@ -73,7 +70,9 @@ def healthy(redata, jdata, rdb, r_server):
 
 
 def emailNotify(redata, jdata, tfile):
-    ''' This method will be called to notify a user via email of status changes '''
+    '''
+    This method will be called to notify a user via email of status changes
+    '''
     data = {}
     templateLoader = jinja2.FileSystemLoader(
         searchpath="/data/crbridge/templates/")

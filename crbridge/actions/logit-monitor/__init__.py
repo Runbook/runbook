@@ -8,7 +8,6 @@
 import rethinkdb as r
 from rethinkdb.errors import RqlRuntimeError, RqlDriverError
 import syslog
-import redis
 import time
 import json
 
@@ -55,8 +54,7 @@ def logit(jdata, rdb, r_server):
     except (RqlDriverError, RqlRuntimeError) as e:
         success = False
         cacheonly = True
-        line = "logit-monitor: RethinkDB is inaccessible cannot log %s, sending to redis" % jdata[
-            'cid']
+        line = "logit-monitor: RethinkDB is inaccessible cannot log %s, sending to redis" % jdata['cid']
         syslog.syslog(syslog.LOG_INFO, line)
         line = "logit-monitor: RethinkDB Error: %s" % e.message
         syslog.syslog(syslog.LOG_INFO, line)
@@ -66,8 +64,7 @@ def logit(jdata, rdb, r_server):
             r_server.sadd("history", ldata)
             success = True
         except:
-            line = "logit-monitor: Redis is inaccessible cannot log %s, via redis" % jdata[
-                'cid']
+            line = "logit-monitor: Redis is inaccessible cannot log %s, via redis" % jdata['cid']
             syslog.syslog(syslog.LOG_INFO, line)
             success = False
     return success

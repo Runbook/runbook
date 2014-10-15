@@ -8,7 +8,6 @@
 import rethinkdb as r
 from rethinkdb.errors import RqlRuntimeError, RqlDriverError
 import syslog
-import redis
 import time
 import json
 
@@ -46,11 +45,11 @@ def logit(redata, jdata, rdb, r_server):
     }
     success = False
     cacheonly = False
-    if redata['reaction_return'] == True:
+    if redata['reaction_return'] is True:
         transaction['rstatus'] = 'Executed'
-    elif redata['reaction_return'] == None:
+    elif redata['reaction_return'] is None:
         transaction['rstatus'] = 'Skipped'
-    elif redata['reaction_return'] == False:
+    elif redata['reaction_return'] is False:
         transaction['rstatus'] = 'Failed'
     else:
         transaction['rstatus'] = 'Unknown'
@@ -66,8 +65,7 @@ def logit(redata, jdata, rdb, r_server):
     except (RqlDriverError, RqlRuntimeError) as e:
         success = False
         cacheonly = True
-        line = "logit-reaction: RethinkDB is inaccessible cannot log %s, sending to redis" % jdata[
-            'cid']
+        line = "logit-reaction: RethinkDB is inaccessible cannot log %s, sending to redis" % jdata['cid']
         syslog.syslog(syslog.LOG_INFO, line)
         line = "logit-reaction: RethinkDB Error: %s" % e.message
         syslog.syslog(syslog.LOG_INFO, line)
@@ -77,8 +75,7 @@ def logit(redata, jdata, rdb, r_server):
             r_server.sadd("history", ldata)
             success = True
         except:
-            line = "logit-reaction: Redis is inaccessible cannot log %s, via redis" % jdata[
-                'cid']
+            line = "logit-reaction: Redis is inaccessible cannot log %s, via redis" % jdata['cid']
             syslog.syslog(syslog.LOG_INFO, line)
             success = False
     return success

@@ -61,12 +61,10 @@ def callSalt(redata, jdata):
     except:
         return False
     if req.status_code == 200:
-        line = "saltstack-cmdscript: Reqeust to %s sent for monitor %s - Successful" % (
-            url, jdata['cid'])
+        line = "saltstack-cmdscript: Reqeust to %s sent for monitor %s - Successful" % (url, jdata['cid'])
         syslog.syslog(syslog.LOG_INFO, line)
         return True
     else:
-        line = "saltstack-cmdscript: Request to %s sent for monitor %s - Failed" % (
-            url, jdata['cid'])
+        line = "saltstack-cmdscript: Request to %s sent for monitor %s - Failed" % (url, jdata['cid'])
         syslog.syslog(syslog.LOG_INFO, line)
         return False

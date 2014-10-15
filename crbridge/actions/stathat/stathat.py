@@ -51,7 +51,10 @@ class _StatHatBase(object):
 
     @staticmethod
     def has_async():
-        """Check if async support is available. Returns True if gevent is installed."""
+        """
+        Check if async support is available.
+        Returns True if gevent is installed.
+        """
 
         return HAS_GEVENT
 
@@ -64,7 +67,8 @@ class _StatHatBase(object):
         return self.count(async=async)
 
     def count(self, count=1, async=True):
-        """Request to track a counter. Returns True on success or raises a :class:`StatHatError`.
+        """
+        Request to track a counter. Returns True on success or raises a :class:`StatHatError`.
 
         :param count: Optional argument, Number you want to count, default=1.
         :param async: Optional argument to override the async behavior if gevent is available.
@@ -73,7 +77,8 @@ class _StatHatBase(object):
         return self._send(self.COUNT_PATH, {'count': count}, async=async)
 
     def value(self, value, async=True):
-        """Request to track a specific value. Returns True on success or raises a :class:`StatHatError`.
+        """
+        Request to track a specific value. Returns True on success or raises a :class:`StatHatError`.
 
         :param value: Value you want to track.
         :param async: Optional argument to override the async behavior if gevent is available.
@@ -85,7 +90,7 @@ class _StatHatBase(object):
         payload = self._auth.copy()
         payload.update(data)
 
-        if HAS_GEVENT and async != False:
+        if HAS_GEVENT and async is not False:
             # Async request should be completely silent and ignore any
             # errors that may be thrown.
             async_group.spawn(self._send_inner, endpoint, payload, silent=True)

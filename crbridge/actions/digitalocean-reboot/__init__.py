@@ -67,12 +67,10 @@ def callDO(redata, jdata):
     except:
         return False
     if req.status_code >= 200 and req.status_code < 300:
-        line = "digitalocean-reboot: Reqeust to %s sent for monitor %s - Successful" % (
-            url, jdata['cid'])
+        line = "digitalocean-reboot: Reqeust to %s sent for monitor %s - Successful" % (url, jdata['cid'])
         syslog.syslog(syslog.LOG_INFO, line)
         return True
     else:
-        line = "digitalocean-reboot: Request to %s sent for monitor %s - Failed" % (
-            url, jdata['cid'])
+        line = "digitalocean-reboot: Request to %s sent for monitor %s - Failed" % (url, jdata['cid'])
         syslog.syslog(syslog.LOG_INFO, line)
         return False

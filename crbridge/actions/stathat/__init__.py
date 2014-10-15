@@ -34,8 +34,7 @@ def failed(redata, jdata, rdb, r_server):
                 callStathat(redata, jdata)
                 return True
             else:
-                line = "stathat: Skipping stathat call as monitor %s was previously failed" % jdata[
-                    'cid']
+                line = "stathat: Skipping stathat call as monitor %s was previously failed" % jdata['cid']
                 syslog.syslog(syslog.LOG_INFO, line)
                 return None
     else:
@@ -66,8 +65,7 @@ def healthy(redata, jdata, rdb, r_server):
                 callStathat(redata, jdata)
                 return True
             else:
-                line = "stathat: Skipping stathat call as monitor %s was previously healthy" % jdata[
-                    'cid']
+                line = "stathat: Skipping stathat call as monitor %s was previously healthy" % jdata['cid']
                 syslog.syslog(syslog.LOG_INFO, line)
                 return None
     else:
@@ -80,12 +78,14 @@ def callStathat(redata, jdata):
     ''' Actually perform the stathat call '''
     if redata['data']['stat_type'] == "count":
         stathat.ez_count(
-            redata['data']['ez_key'], redata['data']['stat_name'], redata['data']['value'])
+            redata['data']['ez_key'],
+            redata['data']['stat_name'], redata['data']['value'])
         line = "stathat: Sent stathat counter for monitor %s" % jdata['cid']
         syslog.syslog(syslog.LOG_INFO, line)
     elif redata['data']['stat_type'] == "value":
         stathat.ez_value(
-            redata['data']['ez_key'], redata['data']['stat_name'], redata['data']['value'])
+            redata['data']['ez_key'],
+            redata['data']['stat_name'], redata['data']['value'])
         line = "stathat: Sent stathat value for monitor %s" % jdata['cid']
         syslog.syslog(syslog.LOG_INFO, line)
     else:
