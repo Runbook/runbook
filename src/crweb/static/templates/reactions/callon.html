@@ -1,0 +1,15 @@
+                <div class="form-group">
+                <label for="Call On" class="col-sm-4 control-label">Call On</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="base-callon" class="btn btn-default" rel="popover" data-content="Select whether this reaction should be triggered during Healthy or Failed monitors" title="Call on healthy or failed"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.call_on(class_="select", value=data['reaction']['data']['call_on']) }}
+              {% else %}
+              {{ form.call_on(class_="select", placeholder="Call On") }}
+              {% endif %}
+              </div>
+            </div>
+              </div>  

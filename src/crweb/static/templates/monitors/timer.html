@@ -1,0 +1,15 @@
+                <div class="form-group">
+                <label for="Interval" class="col-sm-4 control-label">Time Interval</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="base-timer" class="btn btn-default" rel="popover" data-content="Specifies which monitoring queue to place this monitor in. Each queue has it's own timer for initiating monitors." title="Monitor Intervals"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.timer(class_="select", value=data['monitor']['data']['timer']) }}
+              {% else %}
+              {{ form.timer(class_="select", placeholder="Time Interval") }}
+              {% endif %}
+            </div>
+            </div>
+              </div>  

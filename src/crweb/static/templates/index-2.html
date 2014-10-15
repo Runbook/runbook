@@ -1,0 +1,50 @@
+{%- include 'base-header.html' -%}
+<div class="jumbotron">
+<div class="container">
+        <h1>Fix DevOps alerts automagically</h1>
+        <img src="/static/img/cloudroutes-mini-super.png" width="50%" height="50%" align="right">
+        <p></p><p>CloudRoutes does more than just let you know your application is in trouble. We take Action.</p>
+    <p><a href="https://dash.cloudrout.es/signup" class="btn btn-lg btn-primary" role="button">Start resolving issues automatically</a></p>
+</div>
+</div>
+<div class="container">
+<div class="row featurette">
+<div class="col-md-12">
+  <h2>What is CloudRoutes?</h2>
+  <p class="lead">CloudRoutes is an application and server monitoring service that allows you to automate the resolution and mitigation of incidents. While it may sound complicated the gist of it is, we give you the tools to perform automated actions when your applications or servers are in trouble. Giving you the ability to reduce or even eliminating on call escalations.</p>
+  <p class="lead">Our system is made up of two parts, <a href="/monitors">Monitors</a> and <a href="/reactions">Reactions</a>. Monitors are used to check the status of your environment and Reactions are automated tasks that are called when monitors fail. We are working hard to give you the ability to automatically react to errors within your environment, without having to wake someone up.</p>
+  <div class="row">
+    <div class="col-md-4">
+      <center><i class="fa fa-cloud fa-5x"></i></center>
+      <h3>Integrates with existing services</h3>
+      <p>Using our system doesn't mean completely replacing your existing monitoring tools. We can integrate with existing monitoring tools like Datadog or New Relic. We also provide a simple to use API that can be used to integrate any custom monitoring tools.</p>
+    </div>
+    <div class="col-md-4">
+      <center><i class="fa fa-cogs fa-5x"></i></center>
+      <h3>Turn off your phone at night</h3>
+      <p>Our Reactions can be used to change DNS via CloudFlare's API, send an email, or even Restart apache with SaltStack's salt-api. Our system lets you build automated responses that let you leave those late night alerts for the morning.</p>
+    </div>
+    <div class="col-md-4">
+      <center><i class="fa fa-code-fork fa-5x"></i></center>
+      <h3>Open Source</h3>
+      <p>CloudRoutes is released under the AGPL3 license and is created using the Assembly platform. If you have great ideas or feature requests you can join our team by opening a bounty or contributing code.</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <p align="right"><a href="/monitors" role="button" class="btn btn-primary btn-sm btn-block">View the full list of Monitors</a></p>
+    </div>
+    <div class="col-md-4">
+      <p align="right"><a href="/reactions" role="button" class="btn btn-primary btn-sm btn-block">View the full list of Reactions</a></p>
+    </div>
+    <div class="col-md-4">
+      <p align="right"><a href="https://assembly.com/cloudroutes" role="button" class="btn btn-primary btn-sm btn-block">Join our team</a></p>
+    </div>
+  </div>
+  <p></p>
+</div>
+</div>
+{% include 'plans.html' %}
+<center><a href="https://dash.cloudrout.es/signup" class="btn btn-lg btn-primary" role="button">Start resolving issues automatically</a></center>
+</div>
+{% include 'base-footer.html' %}

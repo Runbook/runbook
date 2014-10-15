@@ -1,0 +1,277 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+        <h1><i class="fa fa-cogs fa-1x"></i> Create Reactions</h1>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/cloudflare-150.png" class="img-responsive"></center>
+            <h4>Remove an IP <small>via CloudFlare DNS</small></h4>
+            <p>Removes a specified IP from DNS via CloudFlare's API.</p>
+            <a href="/dashboard/reactions/cloudflare-ip-remove" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/cloudflare-150.png" class="img-responsive"></center>
+            <h4>Replace an IP <small>via CloudFlare DNS</small></h4>
+            <p>Replaces a specified IP with another in DNS via CloudFlare's API.</p>
+            <a href="/dashboard/reactions/cloudflare-ip-replace" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/saltstack-150.png" class="img-responsive"></center>
+            <h4>Manage Services<small> via SaltStack</small></h4>
+            <p>Allows you to reload, restart, start and stop services using SaltStack and salt-api.</p>
+            <a href="/dashboard/reactions/saltstack-services" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/saltstack-150.png" class="img-responsive"></center>
+            <h4>Manage Minion Keys<small> via SaltStack</small></h4>
+            <p>Allows you to accepts, delete or reject minion keys using SaltStack's salt-api.</p>
+            <a href="/dashboard/reactions/saltstack-keys" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/saltstack-150.png" class="img-responsive"></center>
+            <h4>Execute a Command<small> via SaltStack</small></h4>
+            <p>Allows you to run an arbitrary command on any SaltStack minions with salt-api.</p>
+            <a href="/dashboard/reactions/saltstack-cmdrun" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/digitalocean-150.png" class="img-responsive"></center>
+            <h4>Power Cycle Droplet<small> via DigitalOcean</small></h4>
+            <p>Allows you to power cycle a DigitalOcean Cloud Server</p>
+            <a href="/dashboard/reactions/digitalocean-powercycle" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/digitalocean-150.png" class="img-responsive"></center>
+            <h4>Power On Droplet<small> via DigitalOcean</small></h4>
+            <p>Allows you to power on a DigitalOcean Cloud Server</p>
+            <a href="/dashboard/reactions/digitalocean-poweron" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/digitalocean-150.png" class="img-responsive"></center>
+            <h4>Snapshot Droplet<small> via DigitalOcean</small></h4>
+            <p>Allows you to snapshot a DigitalOcean Cloud Server</p>
+            <a href="/dashboard/reactions/digitalocean-snapshot" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/aws-150.png" class="img-responsive"></center>
+            <h4>Start Instance<small> via AWS</small></h4>
+            <p>Allows you to Start an AWS Cloud Server</p>
+            <a href="/dashboard/reactions/aws-ec2start" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/rackspace-150.png" class="img-responsive"></center>
+            <h4>Reboot Cloud Server<small> via Rackspace</small></h4>
+            <p>Allows you to Reboot a Rackspace Cloud Server</p>
+            <a href="/dashboard/reactions/rackspace-reboot" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/rackspace-150.png" class="img-responsive"></center>
+            <h4>Power Cycle Cloud Server<small> via Rackspace</small></h4>
+            <p>Allows you to Power Cycle a Rackspace Cloud Server</p>
+            <a href="/dashboard/reactions/rackspace-powercycle" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/heroku-150.png" class="img-responsive"></center>
+            <h4>Scale Out<small> via Heroku</small></h4>
+            <p>Allows you to automatically scale out Heroku Dyno's</p>
+            <a href="/dashboard/reactions/heroku-scale-out" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/heroku-150.png" class="img-responsive"></center>
+            <h4>Scale Up<small> via Heroku</small></h4>
+            <p>Allows you to automatically scale up Heroku Dyno's (increase size from 1X to 2X etc.)</p>
+            <a href="/dashboard/reactions/heroku-scale-up" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+
+        </div>
+        <div class="col-md-6">
+
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/email-150.png" class="img-responsive"></center>
+            <h4>Email Notification</h4>
+            <p>Send an email notification to any specified email address.</p>
+            <a href="/dashboard/reactions/enotify" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/stathat-150.png" class="img-responsive"></center>
+            <h4>StatHat Statistics</h4>
+            <p>Uses the StatHat API to track custom statistics.</p>
+            <a href="/dashboard/reactions/stathat" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/saltstack-150.png" class="img-responsive"></center>
+            <h4>Highstate<small> via SaltStack</small></h4>
+            <p>Allows you to initiate a SaltStack highstate via salt-api.</p>
+            <a href="/dashboard/reactions/saltstack-highstate" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/saltstack-150.png" class="img-responsive"></center>
+            <h4>Run a Script<small> via SaltStack</small></h4>
+            <p>Allows you to run a script from remote sources on any SaltStack minion/s with salt-api.</p>
+            <a href="/dashboard/reactions/saltstack-cmdscript" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/saltstack-150.png" class="img-responsive"></center>
+            <h4>Execute a Module<small> via SaltStack</small></h4>
+            <p>Allows you to run any SaltStack module with salt-api.</p>
+            <a href="/dashboard/reactions/saltstack-generic" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/digitalocean-150.png" class="img-responsive"></center>
+            <h4>Reboot Droplet<small> via DigitalOcean</small></h4>
+            <p>Allows you to reboot a DigitalOcean Cloud Server</p>
+            <a href="/dashboard/reactions/digitalocean-reboot" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/digitalocean-150.png" class="img-responsive"></center>
+            <h4>Power Off Droplet<small> via DigitalOcean</small></h4>
+            <p>Allows you to power off a DigitalOcean Cloud Server</p>
+            <a href="/dashboard/reactions/digitalocean-poweroff" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/digitalocean-150.png" class="img-responsive"></center>
+            <h4>Shutdown Droplet<small> via DigitalOcean</small></h4>
+            <p>Allows you to shutdown a DigitalOcean Cloud Server</p>
+            <a href="/dashboard/reactions/digitalocean-shutdown" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/aws-150.png" class="img-responsive"></center>
+            <h4>Restart Instance<small> via AWS</small></h4>
+            <p>Allows you to reboot an AWS Cloud Server</p>
+            <a href="/dashboard/reactions/aws-ec2restart" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/aws-150.png" class="img-responsive"></center>
+            <h4>Stop Instance<small> via AWS</small></h4>
+            <p>Allows you to Stop an AWS Cloud Server</p>
+            <a href="/dashboard/reactions/aws-ec2stop" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/heroku-150.png" class="img-responsive"></center>
+            <h4>Create One-Off Dyno<small> via Heroku</small></h4>
+            <p>Allows you to create a one off Heroku Dyno</p>
+            <a href="/dashboard/reactions/heroku-create-dyno" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/heroku-150.png" class="img-responsive"></center>
+            <h4>Scale In<small> via Heroku</small></h4>
+            <p>Allows you to automatically scale in Heroku Dyno's</p>
+            <a href="/dashboard/reactions/heroku-scale-in" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+          <!-- Begin Reaction -->
+          <div class="well">
+            <center><img src="/static/img/buttons/heroku-150.png" class="img-responsive"></center>
+            <h4>Scale Down<small> via Heroku</small></h4>
+            <p>Allows you to automatically scale down Heroku Dyno's (decrease size from 2X to 1X etc.)</p>
+            <a href="/dashboard/reactions/heroku-scale-down" class="btn btn-primary btn-md btn-block" role="button">Create</a>
+          </div>
+          <!-- End Reaction -->
+
+
+        </div>
+        <div class="col-md-6">
+
+        </div>
+       </div>
+
+
+    </div> <!-- col-md-8 -->
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}
