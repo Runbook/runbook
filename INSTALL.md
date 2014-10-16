@@ -41,7 +41,9 @@ localhost:29015> set auth <auth_key>
 
 Boom!
 
-## Redis Seetings
+## Redis Settings
+
+Need to show!
 
 ## Test
 
