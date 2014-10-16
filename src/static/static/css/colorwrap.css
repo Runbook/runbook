@@ -1,0 +1,40 @@
+.colorwrap {
+  background-color: #000000;
+  color: #eeeeee;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  padding: 20px;
+}
+
+.h-colorwrap {
+  color: #428bca;
+}
+
+.h4-colorwrap {
+  color: #eeeeee;
+}
+.navbar {
+    margin-bottom:0;
+}
+.jumbotron {
+      padding-top: 48px;
+      padding-bottom: 48px;
+      margin-bottom:0;
+      margin-top:0;
+}
+.nav-tabs {
+      margin-bottom:5px;
+}
+body {
+font-family:"Lato","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.42857143;
+}
+h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
+font-family:inherit;
+font-weight:300;
+line-height:1.1;
+color:inherit
+}
+.btn-danger{background-color:#EC1D25;}
+table {
+  font-size: 15px;
+}

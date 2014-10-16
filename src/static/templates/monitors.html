@@ -1,0 +1,75 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- content -->
+    <div class="col-md-12">
+      <div class="page-header">
+        <h1><i class="fa fa-eye-slash fa-1x"></i> Available Monitors</h1>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/tcpip-150.png" class="img-responsive"></center>
+            <h4>TCP <small>Custom Port</small></h4>
+            <p>This monitor connects to a specified address and port to validate connectivity.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/http-150.png" class="img-responsive"></center>
+            <h4>HTTP/S <small>GET Status Code</small></h4>
+            <p>This monitor will perform a HTTP or HTTPS GET request and validate the status code is expected.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/ping-150.png" class="img-responsive"></center>
+            <h4>Ping <small>ICMP Ping</small></h4>
+            <p>This monitor will perform a single ICMP ping request and validate the host responds.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+        </div>
+        <div class="col-md-6">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/api-150.png" class="img-responsive"></center>
+            <h4>Webhook <small>CloudRoutes API</small></h4>
+            <p>Integrate with outside services using our simple REST API.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/datadog-150.png" class="img-responsive"></center>
+            <h4>Datadog Alerts <small>Webhooks Integration</small></h4>
+            <p>Use Datadog's webhook integration and metric alerts to trigger reactions.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/http-150.png" class="img-responsive"></center>
+            <h4>HTTP GET <small>Keyword Search</small></h4>
+            <p>This monitor will perform a HTTP or HTTPS GET request and search for the specified text or regular expression.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/logentries-150.png" class="img-responsive"></center>
+            <h4>Logentries Alerts <small>Webhooks</small></h4>
+            <p>Use Logentries Alerts and Tags to trigger CloudRoutes reactions.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+        </div>
+       </div>
+
+<center><a href="https://dash.cloudrout.es/signup" class="btn btn-lg btn-primary" role="button">Start resolving issues automatically today</a></center>
+
+    </div> <!-- col-md-8 -->
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'base-footer.html' %}

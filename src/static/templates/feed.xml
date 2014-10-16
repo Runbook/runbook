@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+<channel>
+<title>{{ data['sitename'] }}</title>
+<atom:link href="http://feed.cloudrout.es" rel="self" type="application/rss+xml"/>
+<link>{{ data['siteurl'] }}</link>
+<description>{{ data['description'] }}</description>
+<language>en-US</language>
+<generator>bcLogGenerator v0.1</generator>
+{% for item in data['rpids'] %}
+<item>
+<title>{{ data['rowitems'][item]['title'] }}</title>
+<link>{{ data['siteurl'] }}{{ data['rowitems'][item]['url'] }}</link>
+<comments>{{ data['siteurl'] }}{{ data['rowitems'][item]['url'] }}/#comments</comments>
+<dc:creator>{{ data['rowitems'][item]['author'] }}</dc:creator>
+{% if data['rowitems'][item]['pubdate'] %}
+<pubDate>{{ data['rowitems'][item]['pubdate'] }}</pubDate>
+{% endif %}
+{% for cat in data['rowitems'][item]['cats'] %}
+<category><![CDATA[{{ cat }}]]></category>
+{% endfor %}
+<description><![CDATA[{{ data['rowitems'][item]['description'] }} <br>Originally Posted on CloudRout.es: <a href="{{ data['siteurl'] }}{{ data['rowitems'][item]['url'] }}" target="_blank">Full Article</a>]]></description>
+<content:encoded><![CDATA[{{ data['rowitems'][item]['data'] }} <br>Originally Posted on CloudRout.es: <a href="{{ data['siteurl'] }}{{ data['rowitems'][item]['url'] }}" target="_blank">Go To Article</a>]]></content:encoded>
+</item>
+{% endfor %}
+        </channel>
+</rss>
+

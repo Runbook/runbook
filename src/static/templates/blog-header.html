@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Stuffz -->
+    {% if data['pagetype'] == "article" %}
+      <title>{{ data['sitetitle'] }}</title>
+      <meta name="description" content="{{ data['sitedescription'] }}">
+      <meta name="keywords" content="{% for item in data['cats'] %}{{ item }}, {% endfor %}{% for item in data['tags'] %}{{ item }}, {% endfor %}">
+      <meta name="author" content="{{ data['author'] }}">
+      <meta property="og:type" content="{{ data['pagetype'] }}"/>
+      <meta property="og:title" content="{{ data['sitetitle'] }}"/>
+      {% if data['pagetype'] == "article" %}
+        <meta property="og:url" content="{{ data['siteurl'] }}{{ data['url'] }}"/>
+      {% endif %}
+      <meta property="og:description" content="{{ data['description'] }}"/>
+      <meta property="og:site_name" content="{{ data['sitename'] }}"/>
+      {% if data['thumbnail'] %}
+        <meta property="og:image" content="{{ data['thumbnail'] }}"/>
+      {% endif %}
+    {% else %}
+
+      <title>CloudRoutes Blog</title>
+      <meta name="description" content="Engineering and Announcements Blog from CloudRoutes">
+      <meta name="keywords" content="CloudFlare DNS, CloudFlare, CloudRoutes, DNS Failover, Engineering Blog, Startup Blog, Cloud DNS, High Availability, Static IP, Load Balancing, Domain Name, DNS, Nagios, BMC, Zenoss, Datadog, Cloud Monitoring, Monitoring Automation, Cloud Servers, Cloud Services, Server, App Developers, Server Monitoring">
+      <meta property="og:type" content="website"/>
+      <meta property="og:title" content="CloudRoutes Blog"/>
+      <meta property="og:description" content="Engineering and Announcements Blog from CloudRoutes"/>
+      <meta property="og:site_name" content="CloudRoutes Blog"/>
+      <meta property="og:image" content="http://cloudrout.es/static/img/cloudroutes-mini-super.png"/>
+    {% endif %}
+
+    <!-- Bootstrap core CSS -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/colorwrap.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+
+    <!--Shareaholic-->
+    <script type="text/javascript">
+//<![CDATA[
+  (function() {
+    var shr = document.createElement('script');
+    shr.setAttribute('data-cfasync', 'false');
+    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
+    shr.type = 'text/javascript'; shr.async = 'true';
+    shr.onload = shr.onreadystatechange = function() {
+      var rs = this.readyState;
+      if (rs && rs != 'complete' && rs != 'loaded') return;
+      var site_id = '6c77a167db67c0b0cee2224db9817bfe';
+      try { Shareaholic.init(site_id); } catch (e) {}
+    };
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(shr, s);
+  })();
+//]]>
+    </script>
+
+  </head>
+
+<body>
+
+  <div class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="navbar-header">
+ 	      <img src="/static/img/white-header.png" width="310" height="50" alt="CloudRoutes">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+       </div>
+       <div class="navbar-collapse navbar-right collapse">
+         <ul class="nav navbar-nav">
+          {% if data['active'] == '/' %}
+           <li class="active"><a href="https://cloudrout.es"><i class="fa fa-home"></i> Home</a></li>
+          {% else %}
+           <li><a href="https://cloudrout.es"><i class="fa fa-home"></i> Home</a></li>
+          {% endif %}
+          {% if data['active'] == 'signup' %}
+           <li class="active"><a href="https://dash.cloudrout.es/signup"><i class="fa fa-pencil"></i> Sign up</a></li>
+          {% else %}
+           <li><a href="https://dash.cloudrout.es/signup"><i class="fa fa-pencil"></i> Sign up</a></li>
+          {% endif %}
+          {% if data['active'] == 'login' %}
+           <li class="active"><a href="https://dash.cloudrout.es/login"><i class="fa fa-sign-in"></i> Login</a></li>
+          {% else %}
+           <li><a href="https://dash.cloudrout.es/login"><i class="fa fa-sign-in"></i> Login</a></li>
+          {% endif %}
+        </ul>
+      </div>
+  </div>
+
