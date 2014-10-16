@@ -16,7 +16,7 @@ Update the variables with the string "update_me!" in the `instance/crweb_sample.
 
 We use [rethinkDB](http://www.rethinkdb.com/) for persistence. New to rethink? [Install](http://www.rethinkdb.com/docs/install/), then check out the [Quickstart](http://www.rethinkdb.com/docs/quickstart/).
 
-> **NOTE**: Make sure the version of rethinkDB matches the rethinkDB driver version, which you can fine in the `requirements.txt` file.
+> **NOTE**: Make sure the version of rethinkDB matches the rethinkDB driver version, which you can find in the `requirements.txt` file.
 
 Once installed, create the database from the Python shell:
 
@@ -26,7 +26,7 @@ Once installed, create the database from the Python shell:
 >>> r.db_create('crdb').run(conn)
 ```
 
-Next, start the server:
+Next, start the server in a new terminal window:
 
 ```sh
 $ rethinkdb
