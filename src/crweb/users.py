@@ -27,6 +27,7 @@ class User(object):
         self.stripeid = None
         self.subplans = 2
         self.subscription = 'Free'
+        self.subscribed_to_newsletter = False
 
     def createUser(self, userdata, rdb):
         ''' Create a new user in the RethinkDB '''
@@ -42,6 +43,7 @@ class User(object):
         jsondata['stripeid'] = self.stripeid
         jsondata['subplans'] = self.subplans
         jsondata['subscription'] = self.subscription
+        jsondata['subscribed_to_newsletter'] = self.subscribed_to_newsletter
         jsondata['creation_time'] = time.time()
 
         if self.is_active(userdata['username'], rdb):
