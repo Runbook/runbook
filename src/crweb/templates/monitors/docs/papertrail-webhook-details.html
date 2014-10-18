@@ -1,0 +1,44 @@
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <div class="panel-title">
+          <i class="fa fa-eye-slash fa-1x"></i> PaperTrail: Webhook Integration <a data-toggle="collapse" class="pull-right" data-parent="#accordion" href="#DetailsCollapse"><i class="fa fa-expand"></i></a>
+          </div>
+          </div>
+          <div id="DetailsCollapse" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <h3>Overview</h3>
+            <p>Users of PaperTrail can define unique [Alerts](http://help.papertrailapp.com/kb/how-it-works/alerts/) that call outside services such as Email, PagerDuty or even a generic Webhook. This monitor will create a unique webhook endpoint that you can configure PaperTrail to call when it detects an Alert. This integration allows you to combine CloudRoutes Reactions with PaperTrail alerts.</p>
+
+            <h3>Monitor Details</h3>
+
+            <p>Upon creation the below URLs will be unique for the created monitor. You can use these unique URLs as the webhook URLs for PaperTrail.</p>
+
+            {% if data['monitor'] %}
+            {% set apiid = data['monitor']['cid'] %}
+            {% set apikey = data['monitor']['url'] %}
+            {% else %}
+            {% set apiid = "example-api-id" %}
+            {% set apikey = "example-api-key" %}
+            {% endif %}
+
+            <p>
+            <b>Unique Failed URL:</b>
+            </p>
+             <pre>https://dash.cloudrout.es/api/papertrail-webhook/{{ apiid }}/{{ apikey }}/failed</pre>
+
+            <p>
+            <b>Unique Healthy URL:</b>
+            </p>
+             <pre>https://dash.cloudrout.es/api/papertrail-webhook/{{ apiid }}/{{ apikey }}/healthy</pre>
+
+            {% if data['monitor'] %}
+            <p class="text-primary">The details above and below are unique to this monitor</p>
+            {% else %}
+            <p class="text-warning">When you create or edit a monitor these details will show the monitors unique information</p>
+            {% endif %}
+
+            <p>Since PaperTrail does not send healthy webhook events this monitor has two URLs, one for failed alerts and another for healthy alerts. Once a monitor is marked failed it will not be marked healthy until the healthy URL is also called. It is best practice for every failed alert in PaperTrail to create a second alert for healthy states.</p>
+          
+          </div>
+          </div>
+        </div>
