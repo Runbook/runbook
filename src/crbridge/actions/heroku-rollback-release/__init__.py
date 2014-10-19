@@ -181,6 +181,7 @@ def action(redata, jdata, r_server):
                     # If everything is good set the rollback release
                     # into redis with an expiring key
                     r_server.setex(rkey, new_release, "14400")
+                    r_server.expire(rkey, "14400")
                     return True
                 else:
                     line = ("heroku-rollback-release: Reaction %s got %s "
