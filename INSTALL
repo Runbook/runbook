@@ -29,7 +29,7 @@ Once installed, start the server in a new terminal window:
 $ rethinkdb
 ```
 
-Create the database and required tables from the Python shell:
+Create the database and required tables **(before setting authentication)** from the Python shell:
 
 ```sh
 $ python create_db.py
