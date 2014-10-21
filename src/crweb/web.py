@@ -1159,10 +1159,11 @@ def modsub_page():
                         # Get Subscription ID
                         result = requests.get(
                             url=url, headers=headers, verify=True)
-                        if result == 200:
+                        if result.status_code == 200:
                             rdata = json.loads(result.text)
                             subsid = rdata['subscriptions']['data'][0]['id']
                             url = url + "/subscriptions/" + subsid
+                            print("Making request to %s") % url
                             # Set Quantity
                             try:
                                 result = requests.put(
