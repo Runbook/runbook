@@ -128,6 +128,7 @@ class Reaction(object):
             self.uid = results['uid']
             self.trigger = results['trigger']
             self.frequency = results['frequency']
+            self.lastrun = results['lastrun']
             self.data = results['data']
             return self
         else:

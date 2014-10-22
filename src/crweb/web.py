@@ -939,6 +939,7 @@ def editreact_page(rname, rid):
                     reaction2.name = form.name.data
                     reaction2.trigger = form.trigger.data
                     reaction2.frequency = form.frequency.data
+                    reaction2.lastrun = reaction.lastrun
                     reaction2.uid = user.uid
                     reaction2.rtype = reaction.rtype
                     tmpdata = {}
