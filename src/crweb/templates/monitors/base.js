@@ -1,26 +1,10 @@
 <script type="text/javascript">
   $(document).ready(function() {
-    $("#base-name").popover({
+    $('button[rel="popover"]').popover({
         placement : 'auto bottom',
         container: 'body',
-        trigger: 'click focus',
+        trigger: 'focus',
     });
-    $("#base-reactions").popover({
-        placement : 'auto bottom',
-        container: 'body',
-        trigger: 'click focus',
-    });
-    $("#base-timer").popover({
-        placement : 'auto bottom',
-        container: 'body',
-        trigger: 'click focus',
-    });
-    $("#base-monzone").popover({
-        placement : 'auto bottom',
-        container: 'body',
-        trigger: 'click focus',
-    });
-
   });
 
 </script>
