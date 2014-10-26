@@ -18,8 +18,14 @@
         {% endif %}
         {% endwith %}
         {% if data['welcome'] %}
-          <p class="lead">Welcome! Getting paged in the middle of the night sucks. To get on a better sleep schedule you should first add a few <a href="/dashboard/reactions">reactions</a> then add a few <a href="/dashboard/monitors">monitors</a> to trigger them.</p>
-          <p class="lead">Then you can rest easy knowing that our system is keeping a watchful eye on your servers and applications, and if we see something wrong we will take care of it for you.</p>
+          <p class="lead">Getting paged in the middle of the night sucks. To start creating a self healing environment you should first add a few <a href="/dashboard/reactions">Reactions</a> to resolve issues; and a few <a href="/dashboard/monitors">Monitors</a> to trigger when to run them.</p>
+          <p class="lead">Then you can rest easy knowing that our system is keeping a watchful eye on your servers and applications, and if we see something wrong we will take care of it.</p>
+          <h2>Monitors:</h2>
+          <hr>
+          {% include 'monitors/monitors.html' %}
+          <h2>Reactions:</h2>
+          <hr>
+          {% include 'reactions/reactions.html' %}
         {% endif %}
 
 
