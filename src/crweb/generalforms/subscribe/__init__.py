@@ -12,12 +12,7 @@ from wtforms.validators import NumberRange
 class SubscribeForm(Form):
 
     ''' Class that creates signup form fields and validation '''
-#  stripeToken = HiddenField("stripeToken", validators=[DataRequired(message='Uh Oh, something went wrong.')])
     stripeToken = HiddenField("stripeToken")
-##  ccnum = TextField("Card Number")
-##  cvc = TextField("CVC")
-##  exp_month = TextField("MM")
-##  exp_year = TextField("YYYY")
 
 
 class AddPackForm(Form):

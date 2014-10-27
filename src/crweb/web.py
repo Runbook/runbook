@@ -939,6 +939,7 @@ def editreact_page(rname, rid):
                     reaction2.name = form.name.data
                     reaction2.trigger = form.trigger.data
                     reaction2.frequency = form.frequency.data
+                    reaction2.lastrun = reaction.lastrun
                     reaction2.uid = user.uid
                     reaction2.rtype = reaction.rtype
                     tmpdata = {}
@@ -1159,10 +1160,11 @@ def modsub_page():
                         # Get Subscription ID
                         result = requests.get(
                             url=url, headers=headers, verify=True)
-                        if result == 200:
+                        if result.status_code == 200:
                             rdata = json.loads(result.text)
                             subsid = rdata['subscriptions']['data'][0]['id']
                             url = url + "/subscriptions/" + subsid
+                            print("Making request to %s") % url
                             # Set Quantity
                             try:
                                 result = requests.put(
