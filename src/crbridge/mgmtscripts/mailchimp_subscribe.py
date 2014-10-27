@@ -28,9 +28,9 @@ import json
 # Load Configuration
 # ------------------------------------------------------------------
 
-if len(sys.argv) != 2:
+if len(sys.argv) < 2:
     print("Hey, thats not how you launch this...")
-    print("%s <config file>") % sys.argv[0]
+    print("%s <config file> [--refresh]") % sys.argv[0]
     sys.exit(1)
 
 # Open Config File and Parse Config Data
@@ -38,6 +38,10 @@ configfile = sys.argv[1]
 cfh = open(configfile, "r")
 config = yaml.safe_load(cfh)
 cfh.close()
+
+# Parse command line option
+# Refresh will set all users subscribed_to_newsletter = False
+refresh_users = (len(sys.argv) > 2 and sys.argv[2] == "--refresh")
 
 # Open External Connections
 # ------------------------------------------------------------------
@@ -63,15 +67,21 @@ except RqlDriverError:
 # ------------------------------------------------------------------
 
 emails_to_subscribe = []
-results = r.table('users').filter({subscribed_to_newsletter: False}).run(rdb_server)
+
+# If the command option --refresh is added,
+# then re-subscribe all users to Mailchimp
+if refresh_users:
+  r.table('users').update({"subscribed_to_newsletter": False}).run(rdb_server)
+
+results = r.table('users').filter({"subscribed_to_newsletter": False}).run(rdb_server)
 for user in results:
     print("Found new user: %s") % user['email']
     emails_to_subscribe.append(user['email'])
 if len(emails_to_subscribe) > 0:
-    print("Subscribing %s emails to MailChimp...") % len(emails_to_subscribe)
+    print("Subscribing %s email(s) to MailChimp...") % len(emails_to_subscribe)
     data = json.dumps({
       "apikey": config['mailchimp_api_key'], # in the form XXX-us2
-      "id": config['mailchimp_api_key'], # in the form a23o9af0f
+      "id": config['mailchimp_list_id'], # in the form a23o9af0f
       "batch": [{"email": {"email": email}} for email in emails_to_subscribe]
     })
     resp = post(
@@ -81,8 +91,8 @@ if len(emails_to_subscribe) > 0:
     ).json()
     if "add_count" in resp:
       print("%s email(s) successfully subscribed!") % resp["add_count"]
-      # For each user successfully subscribed,
-      # update the user with subscribed_to_newsletter = True
+      for subscribed in resp["adds"]:
+        r.table("users").filter({"email": subscribed["email"]}).update({"subscribed_to_newsletter": True}).run(rdb_server)
     else:
       print resp
 else:
