@@ -1,0 +1,155 @@
+/* Overwrite defaults */
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+body {
+	background-color: #fff;
+  font-family: "Open Sans", "Helvetica", sans-serif;
+  font-weight: 400;
+}
+
+.container {
+	max-width: 1003px !important;
+}
+
+/* Header customizations */
+.navigation-menu {
+	background-color: transparent;
+  padding: 20px 0px;
+}
+
+.navigation-menu .header-logo {
+	max-width: 250px;
+	display: inline-block;
+	padding-top: 5px;
+}
+
+.navigation-menu .header-logo img {
+	width: 100%;
+	display: block;
+}
+
+.navigation-nav li.active a {
+	background-color: transparent !important;
+	font-weight: bold;
+}
+
+.navigation-nav li a:hover {
+	background-color: transparent !important;
+	text-decoration: underline;
+}
+
+.navigation-nav li a.text-danger:hover {
+  color: #a94442;
+}
+
+/* Hero customizations */
+.hero-section {
+  height: 700px;
+	padding: 20px 0px;
+	padding-top: 220px;
+	background: url('/static/img/header_bg.png');
+	background-size: cover;
+}
+
+.hero-section .hero-vp {
+  text-align: center;
+  font-weight: 700;
+  font-size: 380%;
+  color: #fff;
+}
+
+.hero-section .hero-explain {
+  text-align: center;
+  font-weight: 300 !important;
+  font-size: 170%;
+  color: #fff;
+}
+
+.hero-section .btn.hero-call-to-action {
+  color: #fff;
+  font-size: 280% !important;
+  padding: 20px 80px !important;
+  display: table;
+  margin: 40px auto;
+  box-shadow: 0px 4px 10px 3px rgba(0,0,0,0.4) !important;
+  border-radius: 15px;
+  -webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	-o-border-radius: 15px;
+}
+
+.btn.btn-action {
+	padding: 8px 15px;
+	margin: 5px;
+	font-size: 100%;
+	background-color: rgba(8, 174, 234, 1) !important;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	box-shadow: 0px 1px 3px rgba(0,0,0,0.25) !important;
+}
+
+.btn.btn-action:hover, .btn.btn-action:focus {
+	background-color: rgba(8, 174, 234, 0.95) !important;
+	text-decoration: none;
+}
+
+/* Explain Section */
+.explain-section {
+  padding: 30px 0px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #707070;
+  font-size: 230%;
+  font-weight: 300;
+  padding-bottom: 40px;
+}
+
+.sub-section {
+  display: block;
+  padding: 20px 0px;
+}
+
+.sub-section .description {
+  margin: 20px 0px;
+  max-width: 410px;
+  padding: 10px;
+}
+
+.sub-section .description h3 {
+  font-size: 220%;
+  font-weight: 400;
+  color: #707070;
+}
+
+.sub-section .description {
+  float: left;
+}
+
+.sub-section .description .more {
+  vertical-align: middle;
+}
+
+.sub-section .description .more .btn.btn-action {
+  color: #fff !important;
+}
+
+.sub-section.left img {
+  float: left;
+}
+
+.sub-section.right img {
+  float: right;
+}
+
+.sub-section.left .description {
+  margin-left: 40px;
+  text-align: left;
+}
+
+.sub-section.right .description {
+  margin-left: 40px;
+  text-align: right;
+}
