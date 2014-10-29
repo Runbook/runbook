@@ -12,8 +12,12 @@ body {
 
 /* Header customizations */
 .navigation-menu {
-	background-color: transparent;
+	background-color: rgba(255,255,255,0.3);
   padding: 20px 0px;
+}
+
+.navigation-menu.clear {
+  background-color: transparent;
 }
 
 .navigation-menu .header-logo {
@@ -46,6 +50,7 @@ body {
   height: 700px;
 	padding: 20px 0px;
 	padding-top: 220px;
+  margin-top: -90px;
 	background: url('/static/img/header_bg.png');
 	background-size: cover;
 }
