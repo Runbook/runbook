@@ -12,7 +12,7 @@ body {
 
 /* Header customizations */
 .navigation-menu {
-	background-color: rgba(255,255,255,0.3);
+	background-color: rgba(0,0,0,0.7);
   padding: 20px 0px;
 }
 
@@ -99,9 +99,26 @@ body {
 	text-decoration: none;
 }
 
-/* Explain Section */
-.explain-section {
+.section {
   padding: 30px 0px;
+  background-color: transparent;
+}
+
+.explain-section {
+  background-color: transparent;
+}
+
+.diagram-section {
+  background-color: rgba(32, 109, 179, 1);
+}
+
+.diagram {
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+
+.diagram-section .subtitle {
+  color: #fff;
 }
 
 .subtitle {
@@ -157,4 +174,119 @@ body {
 .sub-section.right .description {
   margin-left: 40px;
   text-align: right;
+}
+
+.quote-section {
+}
+
+.quote-block {
+  display: block;
+  padding: 50px 0px;
+  vertical-align: middle;
+}
+
+.quote-block .author-thumb {
+  max-width: 250px;
+  float: left;
+}
+
+.quote-block .quote-info {
+  float: left;
+  max-width: 600px;
+  margin-left: 60px;
+}
+
+.quote-info .quote-text {
+  font-size: 180%;
+  font-weight: 300;
+  text-align: left;
+  color: #707070;
+}
+
+.quote-info .quote-divisor {
+  max-width: 200px;
+  display: block;
+  height: 5px;
+  background-color: rgba(32, 109, 179, 1);
+}
+
+.quote-info .quote-author {
+  font-size: 100%;
+  font-weight: 300;
+  text-transform: uppercase;
+  text-align: left;
+  color: #707070;
+}
+
+.quote-info .quote-position {
+  font-size: 100%;
+  font-weight: 300;
+  text-align: left;
+  color: #707070;
+}
+
+.footer-action-section {
+  height: 230px;
+	padding: 20px 0px;
+	background: url('/static/img/footer-action.png');
+	background-size: cover;
+}
+
+.footer-action-section h4 {
+  font-size: 130%;
+  font-weight: 300;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0px 1px 2px rgba(0,0,0,0.8);
+}
+
+.footer-action-section .call-to-action {
+  color: #fff;
+  font-size: 200% !important;
+  padding: 10px 80px !important;
+  display: table;
+  margin: 40px auto;
+  box-shadow: 0px 4px 10px 3px rgba(0,0,0,0.4) !important;
+  border-radius: 15px;
+  -webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	-o-border-radius: 15px;
+}
+
+.footer-action-section h5 {
+  color: #fff;
+  text-align: center;
+  text-shadow: 0px 1px 2px rgba(0,0,0,0.8);
+}
+
+.footer-action-section h5 a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.footer {
+  background-color: rgba(32, 109, 179, 1);
+  text-align: center;
+  padding: 20px 0px;
+}
+
+.footer ul {
+  display: inline;
+  margin: 0px;
+  padding: 0px;
+}
+
+.footer ul li {
+  display: inline;
+  padding: 0px 20px;
+}
+
+.footer ul li a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.footer ul li a:hover {
+  color: #fff;
+  text-decoration: none;
 }
