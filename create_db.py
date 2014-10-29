@@ -4,7 +4,7 @@ from rethinkdb.errors import RqlDriverError, RqlRuntimeError
 
 def connect():
     try:
-        conn = r.connect("localhost", 28015).repl()
+        conn = r.connect("localhost", 28015, auth_key="somereallylongkey").repl()
         r.db_create('crdb').run(conn)
         r.db('crdb').table_create('monitors').run(conn)
         r.db('crdb').table_create('reactions').run(conn)
