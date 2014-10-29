@@ -164,6 +164,7 @@ def index_redirect():
     ''' User login page: This is a basic login page'''
     data = {
         'active': '/',
+        'clean_header': True,
         'loggedin': False
     }
 

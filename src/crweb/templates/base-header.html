@@ -24,8 +24,10 @@
     <link rel="stylesheet" href="/static/css/colorwrap.css">
 		<link rel="stylesheet" href="/static/css/c3.css">
 
-		<!-- Custom CSS load -->
-		<link rel="stylesheet" href="/static/css/home.css">
+    <!-- Custom CSS load -->
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
 {% for item in data['js_header'] %}
@@ -55,10 +57,10 @@
   </head>
 
 <body>
-  <div class="navbar navbar-default navbar-static-top navigation-menu clear" role="navigation">
+  <div class="navbar navbar-default navbar-static-top navigation-menu {{ 'clear' if data['clean_header'] }}" role="navigation">
     <div class="container">
       <div class="navbar-header">
-        <a href="https://cloudrout.es" class="header-logo">
+        <a href="/" class="header-logo">
           <img src="/static/img/white-header.png" width="100%" alt="CloudRoutes">
         </a>
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -81,10 +83,10 @@
               <a href="#">Help</a>
             </li> 
             <li>
-              <a href="https://dash.cloudrout.es/login" class="btn btn-action">Sign In</a>
+              <a href="/login" class="btn btn-action">Sign In</a>
             </li>
             <li>
-              <a href="https://dash.cloudrout.es/signup" class="btn btn-action">Sign Up</a>
+              <a href="/signup" class="btn btn-action">Sign Up</a>
             </li>
           {% else %}
             <li class="{{ 'active' if data['active'] == 'dashboard' }}">
