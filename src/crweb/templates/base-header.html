@@ -22,7 +22,12 @@
     <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/bootstrap-multiselect.css">
     <link rel="stylesheet" href="/static/css/colorwrap.css">
-    <link rel="stylesheet" href="/static/css/c3.css">
+		<link rel="stylesheet" href="/static/css/c3.css">
+
+    <!-- Custom CSS load -->
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
 {% for item in data['js_header'] %}
@@ -52,10 +57,12 @@
   </head>
 
 <body>
-  <div class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="navbar navbar-default navbar-static-top navigation-menu {{ 'clear' if data['clean_header'] }}" role="navigation">
+    <div class="container">
       <div class="navbar-header">
-<!--        <div class="navbar-brand">CloudRoutes</div> -->
- 	      <img src="/static/img/white-header.png" width="310" height="50" alt="CloudRoutes">
+        <a href="/" class="header-logo">
+          <img src="/static/img/white-header.png" width="100%" alt="CloudRoutes">
+        </a>
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
@@ -64,35 +71,32 @@
         </button>
        </div>
        <div class="navbar-collapse navbar-right collapse">
-         <ul class="nav navbar-nav">
-          {% if data['active'] == '/' %}
-           <li class="active"><a href="https://cloudrout.es"><i class="fa fa-home"></i> Home</a></li>
+         <ul class="nav navbar-nav navigation-nav">
+          {% if data['loggedin'] == False %}
+            <li class="{{ 'active' if data['active'] == 'pricing' }}">
+              <a href="#">Pricing</a>
+            </li>
+            <li class="{{ 'active' if data['active'] == 'features' }}">
+              <a href="#">Features</a>
+              </li>
+            <li class="{{ 'active' if data['active'] == 'help' }}">
+              <a href="#">Help</a>
+            </li> 
+            <li>
+              <a href="/login" class="btn btn-action">Sign In</a>
+            </li>
+            <li>
+              <a href="/signup" class="btn btn-action">Sign Up</a>
+            </li>
           {% else %}
-           <li><a href="https://cloudrout.es"><i class="fa fa-home"></i> Home</a></li>
+            <li class="{{ 'active' if data['active'] == 'dashboard' }}">
+              <a href="https://dash.cloudrout.es/dashboard">Dashboard</a>
+            </li>
+            <li>
+              <a href="https://dash.cloudrout.es/logout" class="text-danger">Logout</a>
+            </li>
           {% endif %}
-{% if data['loggedin'] == False %}
-          {% if data['active'] == 'signup' %}
-           <li class="active"><a href="https://dash.cloudrout.es/signup"><i class="fa fa-pencil"></i> Sign up</a></li>
-          {% else %}
-           <li><a href="https://dash.cloudrout.es/signup"><i class="fa fa-pencil"></i> Sign up</a></li>
-          {% endif %}
-          {% if data['active'] == 'login' %}
-           <li class="active"><a href="https://dash.cloudrout.es/login"><i class="fa fa-sign-in"></i> Login</a></li>
-          {% else %}
-           <li><a href="https://dash.cloudrout.es/login"><i class="fa fa-sign-in"></i> Login</a></li>
-          {% endif %}
-{% else %}
-          {% if data['active'] == 'dashboard' %}
-           <li class="active"><a href="https://dash.cloudrout.es/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-          {% else %}
-           <li><a href="https://dash.cloudrout.es/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-          {% endif %}
-          {% if data['active'] == 'logout' %}
-           <li class="active"><a href="https://dash.cloudrout.es/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
-          {% else %}
-           <li><a href="https://dash.cloudrout.es/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
-          {% endif %}
-{% endif %}
         </ul>
-      </div>
+			</div>
+		</div>
   </div>
