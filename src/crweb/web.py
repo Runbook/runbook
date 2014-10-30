@@ -161,9 +161,15 @@ def teardown_request(exception):
 # Index
 @app.route('/')
 def index_redirect():
-    ''' This will redirect index page requests if they come here '''
-    return redirect(url_for('login_page'))
+    ''' User login page: This is a basic login page'''
+    data = {
+        'active': '/',
+        'clean_header': True,
+        'loggedin': False
+    }
 
+    # Return Home Page
+    return render_template('index.html', data=data)
 
 # User Management
 
