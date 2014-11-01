@@ -1,0 +1,101 @@
+.pricing-hero {
+  width: 100%;
+  padding: 50px 0px;
+  background: url("/static/img/pricing-hero.jpg");
+  background-position: center center;
+  background-size: cover;
+}
+
+.pricing-hero .panel {
+  margin: 0px;
+  border-radius: 10px;
+  background-color: rgba(240,240,240,0.95);
+  border: none;
+  box-shadow: 0px 2px 2px rgba(50,50,50,0.3);
+}
+
+.pricing-hero .panel .panel-heading {
+  border-radius: 10px 10px 0px 0px;
+  border: 1px solid #333;
+  box-shadow: 0px 1px 0px rgba(50,50,50,0.3);
+}
+
+.pricing-hero .panel .panel-heading h3 {
+  font-size: 140%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.pricing-hero .panel-primary .panel-heading {
+  border-color: rgba(8, 174, 234, 1);
+  background-color: rgba(8, 174, 234, 1);
+}
+
+.pricing-hero .panel-default .panel-heading {
+  border-color: rgba(240,240,240,1);
+  background-color: rgba(240,240,240,1);
+}
+
+.pricing-hero .panel .panel-body .table td {
+  border: none;
+}
+
+.pricing-hero .panel .panel-body .table h4 {
+  text-align: center;
+  font-size: 160%;
+  color: rgba(8, 174, 234, 1);
+  font-weight: bold;
+}
+
+.pricing-hero .panel .panel-body .table h4 small {
+  color: rgb(100,100,100);
+  font-size: 60%;
+}
+
+.pricing-hero .panel .panel-body .table h5 {
+  text-align: center;
+  font-size: 110%;
+  color: rgba(0, 140, 200, 1);
+}
+
+.pricing-hero .panel .panel-body .table h5 small {
+  color: rgb(100,100,100);
+  font-size: 90%;
+}
+
+.pricing-hero .panel .panel-body .table h6 {
+  text-align: center;
+  font-size: 100%;
+  color: rgb(130,130,130);
+}
+
+.pricing-hero .panel .panel-body .table h6.green {
+  color: rgba(0, 180, 50, 1);
+}
+
+.pricing-hero .panel .panel-body .table h6.red {
+  color: rgba(180, 0, 50, 1);
+}
+
+.pricing-hero .panel .panel-body .table .divider {
+  background-color: rgba(220,220,220,1);
+  margin-top: 20px;
+}
+
+.pricing-hero .panel .panel-body .table .divider h2 {
+  text-align: center;
+  font-size: 100%;
+  color: #666;
+  margin: 0px;
+  padding: 0px;
+}
+
+
+.pricing-offer {
+  color: #6f6f6f;
+  font-size: 140%;
+  font-weight: 300;
+  text-align: center;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
