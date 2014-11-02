@@ -29,17 +29,17 @@ Once installed, start the server in a new terminal window:
 $ rethinkdb
 ```
 
-Create the database and required tables **(before setting authentication)** from the Python shell:
-
-```sh
-$ python create_db.py
-```
-
-Finally, let's set the authentication key, which you can find in the `instance/crweb.cfg` file:
+Now let's set the authentication key, which you can find in the `instance/crweb.cfg` file:
 
 ```sh
 $ rethinkdb admin --join localhost:29015
 localhost:29015> set auth <auth_key>
+```
+
+Create the database and required tables from the Python shell:
+
+```sh
+$ python create_db.py
 ```
 
 ## Redis Setup

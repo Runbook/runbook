@@ -1,19 +1,23 @@
 import rethinkdb as r
 from rethinkdb.errors import RqlDriverError, RqlRuntimeError
 
+# todo: I don't know another easy way to parse a flask config
+execfile("instance/crweb.cfg")
+# now params like DBHOST, DATABASE, DBAUTHKEY are global variables
+
 
 def connect():
     try:
-        conn = r.connect("localhost", 28015, auth_key="somereallylongkey").repl()
-        r.db_create('crdb').run(conn)
-        r.db('crdb').table_create('monitors').run(conn)
-        r.db('crdb').table_create('reactions').run(conn)
-        r.db('crdb').table_create('users').run(conn)
-        r.db('crdb').table_create('history').run(conn)
-        r.db('crdb').table_create('events').run(conn)
-        r.db('crdb').table_create('subscription_history').run(conn)
-        r.db('crdb').table_create('dc1queue').run(conn)
-        r.db('crdb').table_create('dc2queue').run(conn)
+        conn = r.connect(DBHOST, 28015, auth_key=DBAUTHKEY).repl()
+        r.db_create(DATABASE).run(conn)
+        r.db(DATABASE).table_create('monitors').run(conn)
+        r.db(DATABASE).table_create('reactions').run(conn)
+        r.db(DATABASE).table_create('users').run(conn)
+        r.db(DATABASE).table_create('history').run(conn)
+        r.db(DATABASE).table_create('events').run(conn)
+        r.db(DATABASE).table_create('subscription_history').run(conn)
+        r.db(DATABASE).table_create('dc1queue').run(conn)
+        r.db(DATABASE).table_create('dc2queue').run(conn)
         return "Done!"
     except RqlDriverError, e:
         return e
