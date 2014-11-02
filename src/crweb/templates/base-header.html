@@ -27,6 +27,7 @@
     <!-- Custom CSS load -->
     <link rel="stylesheet" href="/static/css/custom.css">
     <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/pricing.css">
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
@@ -74,7 +75,7 @@
          <ul class="nav navbar-nav navigation-nav">
           {% if data['loggedin'] == False %}
             <li class="{{ 'active' if data['active'] == 'pricing' }}">
-              <a href="#">Pricing</a>
+              <a href="/pages/pricing">Pricing</a>
             </li>
             <li class="{{ 'active' if data['active'] == 'features' }}">
               <a href="#">Features</a>
