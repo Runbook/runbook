@@ -1,0 +1,23 @@
+.faq .question-block {
+  padding-bottom: 30px;
+}
+
+.faq h3 {
+  font-size: 220%;
+  color: rgb(70,70,70);
+  margin: 0px;
+  padding: 0px;
+  margin-top: 21px;
+  margin-bottom: 20px;
+}
+
+.faq h3 strong {
+  font-weight: normal;
+  color: rgb(40,40,40);
+}
+
+.faq p {
+  font-size: 115%;
+  line-height: 1.6;
+  color: rgb(120,120,120);
+}
