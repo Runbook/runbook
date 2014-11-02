@@ -7,10 +7,10 @@
 # Pull newly created users from the database and automatically
 # subscribe them to the MailChimp mailing list.
 # ------------------------------------------------------------------
-# Version: Alpha.20140813
-# Original Author: Benjamin J. Cane - madflojo@cloudrout.es
-# Contributors:
+# Original Author: Paul Deardorff (themetric)
+# Maintainers:
 # - Paul Deardorff (themetric)
+# - Benjamin Cane (madflojo)
 #####################################################################
 
 
@@ -71,7 +71,7 @@ emails_to_subscribe = []
 # If the command option --refresh is added,
 # then re-subscribe all users to Mailchimp
 if refresh_users:
-  r.table('users').update({"subscribed_to_newsletter": False}).run(rdb_server)
+    r.table('users').update({"subscribed_to_newsletter": False}).run(rdb_server)
 
 results = r.table('users').filter({"subscribed_to_newsletter": False}).run(rdb_server)
 for user in results:
@@ -80,20 +80,24 @@ for user in results:
 if len(emails_to_subscribe) > 0:
     print("Subscribing %s email(s) to MailChimp...") % len(emails_to_subscribe)
     data = json.dumps({
-      "apikey": config['mailchimp_api_key'], # in the form XXX-us2
-      "id": config['mailchimp_list_id'], # in the form a23o9af0f
-      "batch": [{"email": {"email": email}} for email in emails_to_subscribe]
+        "apikey": config['mailchimp_api_key'], # in the form XXX-us2
+        "id": config['mailchimp_list_id'], # in the form a23o9af0f
+        "batch": [{"email": {"email": email}} for email in emails_to_subscribe]
     })
+    url = config['mailchimp_api_url'] + "/lists/batch-subscribe"
     resp = post(
-      "https://us2.api.mailchimp.com/2.0/lists/batch-subscribe",
-      data=data,
-      headers={'Content-type': 'application/json'}
+        url=url,
+        data=data,
+        headers={'Content-type': 'application/json'}
     ).json()
     if "add_count" in resp:
-      print("%s email(s) successfully subscribed!") % resp["add_count"]
-      for subscribed in resp["adds"]:
-        r.table("users").filter({"email": subscribed["email"]}).update({"subscribed_to_newsletter": True}).run(rdb_server)
+        print("%s email(s) successfully subscribed!") % resp["add_count"]
+        print("%s email(s) failed subscription!") % resp["error_count"]
+        for subscribed in resp["adds"]:
+            r.table("users").filter({"email": subscribed["email"]}).update({"subscribed_to_newsletter": True}).run(rdb_server)
+        if int(resp["add_count"]) == 0 and int(resp["error_count"]) > 1:
+            sys.exit(1)
     else:
-      print resp
+        print resp
 else:
     print("No email(s) to send to MailChimp list.")
