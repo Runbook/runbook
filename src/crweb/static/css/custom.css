@@ -1,3 +1,30 @@
 .featurette {
   padding: 30px 0px;
 }
+
+.footer {
+  background-color: rgba(32, 109, 179, 1);
+  text-align: center;
+  padding: 20px 0px;
+}
+
+.footer ul {
+  display: block;
+  margin: 0px;
+  padding: 0px;
+}
+
+.footer ul li {
+  display: inline;
+  padding: 0px 20px;
+}
+
+.footer ul li a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.footer ul li a:hover {
+  color: #fff;
+  text-decoration: none;
+}
