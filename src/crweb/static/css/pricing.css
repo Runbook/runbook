@@ -38,6 +38,10 @@
   background-color: rgba(70,70,70,1);
 }
 
+.pricing-hero .panel .panel-body .table > tbody > tr:first-child {
+	border-bottom: 1px solid rgba(0,0,0,0.02);
+}
+
 .pricing-hero .panel .panel-body .table td {
   border: none;
 }
@@ -81,7 +85,6 @@
 
 .pricing-hero .panel .panel-body .table .divider {
   background-color: rgba(220,220,220,1);
-  margin-top: 20px;
 }
 
 .pricing-hero .panel .panel-body .table .divider h2 {
@@ -92,6 +95,17 @@
   padding: 0px;
 }
 
+.pricing-hero .btn-action {
+	font-size: 200%;
+	display: table;
+	padding: 20px 80px;
+	margin: 40px auto 0px;
+	box-shadow: 0px 4px 10px 3px rgba(0,0,0,0.4);
+	border-radius: 15px;
+	-webkit-border-radus: 15px;
+	-moz-border-radius: 15px;
+	-o-border-radius: 15px;
+}
 
 .pricing-offer {
   color: #6f6f6f;
