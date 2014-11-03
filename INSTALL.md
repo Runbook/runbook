@@ -35,7 +35,7 @@ Create the database and required tables **(before setting authentication)** from
 $ python create_db.py
 ```
 
-Finally, let's set the authentication key, which you can find in the `instance/crweb_sample.cfg` file:
+Finally, let's set the authentication key, which you can find in the `instance/crweb.cfg` file:
 
 ```sh
 $ rethinkdb admin --join localhost:29015
