@@ -62,17 +62,17 @@
               <a href="/#features">Features</a>
             </li>
             <li>
-              <a href="/login" class="btn btn-action">Sign In</a>
+              <a href="https://dash.runbook.io/login" class="btn btn-action">Sign In</a>
             </li>
             <li>
-              <a href="/signup" class="btn btn-action">Sign Up</a>
+              <a href="https://dash.runbook.io/signup" class="btn btn-action">Sign Up</a>
             </li>
           {% else %}
             <li class="{{ 'active' if data['active'] == 'dashboard' }}">
-              <a href="https://dash.cloudrout.es/dashboard">Dashboard</a>
+              <a href="/dashboard">Dashboard</a>
             </li>
             <li>
-              <a href="https://dash.cloudrout.es/logout" class="text-danger">Logout</a>
+              <a href="/logout" class="text-danger">Logout</a>
             </li>
           {% endif %}
         </ul>
