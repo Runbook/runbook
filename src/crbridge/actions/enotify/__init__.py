@@ -83,7 +83,7 @@ def emailNotify(redata, jdata, tfile):
     data['name'] = jdata['name']
     msg = template.render(data)
 
-    sender = 'noreply@cloudrout.es'
+    sender = 'noreply@runbook.io'
     receivers = [data['email']]
 
     try:
