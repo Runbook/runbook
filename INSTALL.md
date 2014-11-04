@@ -55,3 +55,9 @@ $ redis-server
 ```sh
 $ python src/crweb/web.py
 ```
+
+Now you can launch your browser and point it to `http://localhost:8000/signup`.
+
+### Note: Relative vs Absolute URLs
+
+When this is deployed in production static pages such as `/`, `/pages/tos` and `/pages/pricing` are prefetched and saved as HTML files. Since the static pages in production are `https://runbook.io` and the web app runs as `https://dash.runbook.io` the **login** and **signup** links are always absolute URLs. All other links should be kept as relative URLs. To get started with your local instance simply point your browser to `http://localhost:8000/signup`
