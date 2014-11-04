@@ -7,7 +7,7 @@
           <div id="DetailsCollapse" class="panel-collapse collapse in">
           <div class="panel-body">
             <h3>Overview</h3>
-            <p>Users of Logentries can define unique Alerts and Tags that call outside services such as Email, Hipchat, PagerDuty or even a generic Webhook. This monitor will create a unique webhook endpoint that you can <a href="https://logentries.com/doc/tagsalerts/" target="_blank">configure Logentries to call</a> when Logentries detects an alert. This integration allows you to combine CloudRoutes Reactions with Logentries alerts.
+            <p>Users of Logentries can define unique Alerts and Tags that call outside services such as Email, Hipchat, PagerDuty or even a generic Webhook. This monitor will create a unique webhook endpoint that you can <a href="https://logentries.com/doc/tagsalerts/" target="_blank">configure Logentries to call</a> when Logentries detects an alert. This integration allows you to combine Runbook Reactions with Logentries alerts.
 
             <h3>Monitor Details</h3>
 
@@ -24,12 +24,12 @@
             <p>
             <b>Unique Failed URL:</b>
             </p>
-             <pre>https://dash.cloudrout.es/api/logentries-webhook/{{ apiid }}/{{ apikey }}/failed</pre>
+             <pre>https://dash.runbook.io/api/logentries-webhook/{{ apiid }}/{{ apikey }}/failed</pre>
 
             <p>
             <b>Unique Healthy URL:</b>
             </p>
-             <pre>https://dash.cloudrout.es/api/logentries-webhook/{{ apiid }}/{{ apikey }}/healthy</pre>
+             <pre>https://dash.runbook.io/api/logentries-webhook/{{ apiid }}/{{ apikey }}/healthy</pre>
 
             {% if data['monitor'] %}
             <p class="text-primary">The details above and below are unique to this monitor</p>

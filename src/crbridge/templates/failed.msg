@@ -1,4 +1,4 @@
-From: CloudRoutes Notification <noreply@cloudrout.es>
+From: Runbook Notification <noreply@runbook.io>
 To: {{ email }}
 Subject: Failed Monitor - {{ name }}
 
@@ -8,7 +8,7 @@ This is an automated notification that the monitor {{ name }} has returned faile
 
 Just a heads up, we rate limit failure emails to a minimum of 15 minutes. You can decrease the frequency of failure emails by changing the frequency value of this reaction.
 
-- CloudRoutes
+- Runbook
 
-https://cloudrout.es
+https://runbook.io
 https://twitter.com/cloudroutes
