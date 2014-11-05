@@ -7,7 +7,7 @@
           <div id="DetailsCollapse" class="panel-collapse collapse in">
           <div class="panel-body">
             <h3>Overview</h3>
-            <p>Users of PaperTrail can define unique [Alerts](http://help.papertrailapp.com/kb/how-it-works/alerts/) that call outside services such as Email, PagerDuty or even a generic Webhook. This monitor will create a unique webhook endpoint that you can configure PaperTrail to call when it detects an Alert. This integration allows you to combine CloudRoutes Reactions with PaperTrail alerts.</p>
+            <p>Users of PaperTrail can define unique [Alerts](http://help.papertrailapp.com/kb/how-it-works/alerts/) that call outside services such as Email, PagerDuty or even a generic Webhook. This monitor will create a unique webhook endpoint that you can configure PaperTrail to call when it detects an Alert. This integration allows you to combine Runbook Reactions with PaperTrail alerts.</p>
 
             <h3>Monitor Details</h3>
 
@@ -24,12 +24,12 @@
             <p>
             <b>Unique Failed URL:</b>
             </p>
-             <pre>https://dash.cloudrout.es/api/papertrail-webhook/{{ apiid }}/{{ apikey }}/failed</pre>
+             <pre>https://dash.runbook.io/api/papertrail-webhook/{{ apiid }}/{{ apikey }}/failed</pre>
 
             <p>
             <b>Unique Healthy URL:</b>
             </p>
-             <pre>https://dash.cloudrout.es/api/papertrail-webhook/{{ apiid }}/{{ apikey }}/healthy</pre>
+             <pre>https://dash.runbook.io/api/papertrail-webhook/{{ apiid }}/{{ apikey }}/healthy</pre>
 
             {% if data['monitor'] %}
             <p class="text-primary">The details above and below are unique to this monitor</p>

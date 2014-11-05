@@ -1,4 +1,4 @@
-From: CloudRoutes Notification <noreply@cloudrout.es>
+From: Runbook Notification <noreply@runbook.io>
 To: {{ email }}
 Subject: Healthy Monitor - {{ name }}
 
@@ -6,7 +6,7 @@ Howdie,
 
 This is an automated notification that {{ name }} has returned to a healthy state.
 
-- CloudRoutes
+- Runbook
 
-https://cloudrout.es
+https://runbook.io
 https://twitter.com/cloudroutes

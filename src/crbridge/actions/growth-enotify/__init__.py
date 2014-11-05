@@ -24,18 +24,18 @@ def failed(redata, jdata, rdb, r_server):
         run = False
 
     if run:
-        result = emailNotify(redata, jdata, "failed.msg")
+        result = emailNotify(redata, jdata, "growth-failed.msg")
         if result:
-            line = "enotify: Sent %s email notification for monitor %s" % (
+            line = "growth-enotify: Sent %s email notification for monitor %s" % (
                 jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_INFO, line)
             return True
         else:
-            line = "enotify: Failed to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
+            line = "growth-enotify: Failed to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_ERR, line)
             return False
     else:
-        line = "enotify: Skipping %s email notification for monitor %s" % (
+        line = "growth-enotify: Skipping %s email notification for monitor %s" % (
             jdata['check']['status'], jdata['cid'])
         syslog.syslog(syslog.LOG_ERR, line)
         return None
@@ -52,18 +52,18 @@ def healthy(redata, jdata, rdb, r_server):
             run = False
 
     if run:
-        result = emailNotify(redata, jdata, "healthy.msg")
+        result = emailNotify(redata, jdata, "growth-healthy.msg")
         if result:
-            line = "enotify: Sent %s email notification for monitor %s" % (
+            line = "growth-enotify: Sent %s email notification for monitor %s" % (
                 jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_INFO, line)
             return True
         else:
-            line = "enotify: Failed to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
+            line = "growth-enotify: Failed to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_ERR, line)
             return False
     else:
-        line = "enotify: Skipping %s email notification for monitor %s" % (
+        line = "growth-enotify: Skipping %s email notification for monitor %s" % (
             jdata['check']['status'], jdata['cid'])
         syslog.syslog(syslog.LOG_INFO, line)
         return None
