@@ -1,7 +1,3 @@
-From: Runbook Notification <noreply@runbook.io>
-To: {{ email }}
-Subject: Failed Monitor - {{ name }}
-
 Howdie,
 
 This is an automated notification that the monitor {{ name }} has returned failed.

@@ -68,27 +68,52 @@ def healthy(redata, jdata, rdb, r_server):
         syslog.syslog(syslog.LOG_INFO, line)
         return None
 
-
 def emailNotify(redata, jdata, tfile):
     '''
     This method will be called to notify a user via email of status changes
     '''
+    import yaml
+    import requests
+    import json
+    # TODO: I hate reading the config file in should look at reaction failed/healthy
+    # definitions to find a better way of doing this
+    configfile = "config/config.yml"
+    cfh = open(configfile, "r")
+    config = yaml.safe_load(cfh)
+    cfh.close()
+
     data = {}
     templateLoader = jinja2.FileSystemLoader(
         searchpath="/data/crbridge/templates/")
     templateEnv = jinja2.Environment(loader=templateLoader)
     template = templateEnv.get_template(tfile)
 
-    data['email'] = redata['data']['email']
     data['name'] = jdata['name']
     msg = template.render(data)
 
-    sender = 'noreply@runbook.io'
-    receivers = [data['email']]
+    mandrill_data = {
+        "key": config['mandrill_api_key'],
+        "message": {
+            "text": msg,
+            "from_email": "noreply@runbook.io",
+            "from_name" : "Runbook Notifications",
+            "subject" : "Heads up! %s is down" % jdata['name'],
+            "to" : [
+                { "email": redata['data']['email'] }
+            ]
+        },
+        "async" : True
+    }
 
+    payload = json.dumps(mandrill_data)
+    url = config['mandrill_api_url'] + "/messages/send.json"
     try:
-        smtp = smtplib.SMTP(host='post01.snxdesigns.com', port=587)
-        smtp.sendmail(sender, receivers, msg)
-        return True
+        result = requests.post(url=url, data=payload, timeout=1.0, verify=True)
     except:
         return False
+    if result.status_code >= 200 and result.status_code <= 299:
+      return True
+    else:
+      line = "enotify: Got status code %d from mandrill for monitor %s" % (
+            result.status_code, jdata['cid'])
+      return False

@@ -1,7 +1,3 @@
-From: Runbook Notification <noreply@runbook.io>
-To: {{ email }}
-Subject: Your site is down - {{ name }}
-
 Howdie,
 
 This is an automated notification our monitor for {{ name }} indicates failure for more than 10 minutes.
