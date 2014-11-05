@@ -20,6 +20,7 @@
 # ------------------------------------------------------------------
 
 # Misc. Python goodies
+import os
 import json
 import time
 import requests
@@ -51,9 +52,9 @@ import cookies
 # Application Configuration
 # ------------------------------------------------------------------
 
-app = Flask(__name__, instance_relative_config=True)
+app = Flask(__name__)
 # Config files are located in the instance directory
-app.config.from_pyfile('crweb.cfg')
+app.config.from_pyfile(os.path.join('instance', 'crweb.cfg'))
 
 
 # Common Functions
