@@ -1,7 +1,3 @@
-From: Runbook Notification <noreply@runbook.io>
-To: {{ email }}
-Subject: Your site is back! - {{ name }}
-
 Howdie,
 
 This is an automated notification our monitor for {{ name }} indicated failure but it's back now! yay!
