@@ -8,10 +8,9 @@
 # the messages will tell the sink wether the health check is a
 # successful or unsuccessful.
 # ------------------------------------------------------------------
-# Version: Alpha.20140424
-# Original Author: Benjamin J. Cane - madflojo@cloudrout.es
+# Original Author: Benjamin J. Cane - @madflojo
 # Contributors:
-# - your name here
+# - Benjamin Cane - @madflojo
 #####################################################################
 
 
@@ -29,6 +28,7 @@ import signal
 import syslog
 import zmq
 import json
+import time
 
 # Load Configuration
 # ------------------------------------------------------------------
@@ -83,9 +83,11 @@ except (RqlDriverError, RqlRuntimeError, socket.error) as e:
 # Start ZeroMQ listener
 context = zmq.Context()
 zsink = context.socket(zmq.PULL)
-bindaddress = "tcp://%s:%d" % (config['sink_ip'], config['sink_port'])
-zsink.bind(bindaddress)
-line = "Bound to %s" % bindaddress
+connectline = "tcp://%s:%d" % (config['sink_ip'], config['sink_worker_port'])
+line = "Connecting to Broker at %s" % connectline
+syslog.syslog(syslog.LOG_INFO, line)
+zsink.connect(connectline)
+line = "Connection to Broker established"
 syslog.syslog(syslog.LOG_INFO, line)
 
 
@@ -243,6 +245,11 @@ while True:
     jdata = json.loads(msg)
     line = "Got message for health check: %s" % jdata['cid']
     syslog.syslog(syslog.LOG_INFO, line)
+
+    checktime = time.time() - jdata['time_tracking']['control']
+    if checktime > float(config['max_monitor_time']):
+      line = "CRITICAL ERROR: monitor %s is beyond %d second execution time" % (jdata['cid'], config['max_monitor_time'])
+      syslog.syslog(syslog.LOG_CRIT, line)
 
     results = getMonitor(jdata['cid'])
     jdata['cacheonly'] = results['cacheonly']
