@@ -16,6 +16,9 @@ rethink_db: "crdb"
 ## Sink Config
 sink_ip: 127.0.0.1
 sink_port: "update_me!"
+sink_worker_port: "update_me!"
+## Maximum time for monitor execution
+max_monitor_time: 600
 default_actions:
   - logit-monitor
   - logit-events

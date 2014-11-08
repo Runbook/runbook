@@ -9,10 +9,9 @@
 # send a failure json message to the sink, on success it sends a
 # successful message.
 # ------------------------------------------------------------------
-# Version: Alpha.20140424
-# Original Author: Benjamin J. Cane - madflojo@cloudrout.es
-# Contributors:
-# - your name here
+# Original Author: Benjamin J. Cane - @madflojo
+# Maintainers:
+# - Benjamin Cane - @madflojo
 #####################################################################
 
 
@@ -116,6 +115,7 @@ while True:
         syslog.syslog(syslog.LOG_INFO, line)
         jdata['check'] = {'status': 'healthy',
                           'method': 'automatic'}
+        jdata['time_tracking']['worker'] = time.time()
         # Send success to sink
         ztext = json.dumps(jdata)
     elif result is None:

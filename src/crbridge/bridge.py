@@ -9,10 +9,9 @@
 # This will gather queue tasks from rethinkdb and create/delete
 # the appropriate monitor in cram.
 # ------------------------------------------------------------------
-# Version: Alpha.20140306
-# Original Author: Benjamin J. Cane - madflojo@cloudrout.es
-# Contributors:
-# - your name here
+# Original Author: Benjamin J. Cane - @madflojo
+# Maintainers:
+# - Benjamin Cane - @madflojo
 #####################################################################
 
 
