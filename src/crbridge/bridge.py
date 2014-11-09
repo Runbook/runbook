@@ -25,7 +25,7 @@ import rethinkdb as r
 from rethinkdb.errors import RqlDriverError
 import redis
 import signal
-import syslog
+import logconfig
 import time
 import zmq
 import json
@@ -49,19 +49,17 @@ cfh.close()
 # Open External Connections
 # ------------------------------------------------------------------
 
-# Open Syslog
-syslog.openlog(logoption=syslog.LOG_PID, facility=syslog.LOG_LOCAL0)
+# Init logger
+logger = logconfig.getLogger('crbridge.bridge')
 
 # Redis Server
 try:
     r_server = redis.Redis(
         host=config['redis_host'], port=config['redis_port'],
         db=config['redis_db'], password=config['redis_password'])
-    line = "Connecting to redis"
-    syslog.syslog(syslog.LOG_INFO, line)
+    logger.info("Connecting to redis")
 except:
-    line = "Cannot connect to redis, shutting down"
-    syslog.syslog(syslog.LOG_ERR, line)
+    logger.error("Cannot connect to redis, shutting down")
     sys.exit(1)
 
 # RethinkDB Server
@@ -69,19 +67,16 @@ try:
     rdb_server = r.connect(
         host=config['rethink_host'], port=config['rethink_port'],
         auth_key=config['rethink_authkey'], db=config['rethink_db'])
-    line = "Connecting to RethinkDB"
-    syslog.syslog(syslog.LOG_INFO, line)
+    logger.info("Connecting to RethinkDB")
 except RqlDriverError:
-    line = "Cannot connect to rethinkdb, shutting down"
-    syslog.syslog(syslog.LOG_ERR, line)
+    logger.error("Cannot connect to rethinkdb, shutting down")
     sys.exit(1)
 
 # Sink
 context = zmq.Context()
 zsend = context.socket(zmq.PUSH)
 connectline = "tcp://%s:%d" % (config['sink_ip'], config['sink_port'])
-line = "Connecting to Sink at %s" % connectline
-syslog.syslog(syslog.LOG_INFO, line)
+logger.info("Connecting to Sink at %s" % connectline)
 zsend.connect(connectline)
 
 
@@ -90,11 +85,9 @@ zsend.connect(connectline)
 
 def killhandle(signum, frame):
     ''' This will close connections cleanly '''
-    line = "SIGTERM detected, shutting down"
-    syslog.syslog(syslog.LOG_INFO, line)
+    logger.info("SIGTERM detected, shutting down")
     rdb_server.close()
     zsend.close()
-    syslog.closelog()
     sys.exit(0)
 
 signal.signal(signal.SIGTERM, killhandle)
@@ -176,8 +169,7 @@ for item in r_server.smembers("history"):
     if success:
         r_server.srem("history", item)
         recount = recount + 1
-line = "Imported %d history records from cache to rethinkDB" % recount
-syslog.syslog(syslog.LOG_INFO, line)
+logger.info("Imported %d history records from cache to rethinkDB" % recount)
 
 # On Startup Synchronize event logs
 recount = 0
@@ -192,94 +184,79 @@ for item in r_server.smembers("events"):
     if success:
         r_server.srem("events", item)
         recount = recount + 1
-line = "Imported %d events records from cache to rethinkDB" % recount
-syslog.syslog(syslog.LOG_INFO, line)
-
+logger.info("Imported %d events records from cache to rethinkDB" % recount)
 
 # Run the queue watcher
 while True:
     results = r.table(config['dbqueue']).run(rdb_server)
 
     for qitem in results:
-        line = "Starting to work on queue item %s" % qitem['id']
-        syslog.syslog(syslog.LOG_DEBUG, line)
+        logger.debug("Starting to work on queue item %s" % qitem['id'])
         if qitem['type'] == "monitor":
             keyid = "monitor:" + qitem['item']['cid']
 
             # Delete
             # if Edit this will delete
             if qitem['action'] == "delete" or qitem['action'] == "edit":
-                line = "Initiating Monitor deletion for monitor id: %s" % qitem[
-                    'item']['cid']
-                syslog.syslog(syslog.LOG_DEBUG, line)
+                logger.debug("Initiating Monitor deletion for monitor id: %s" % qitem[
+                    'item']['cid'])
                 result = decimateRedis(keyid, qitem['item'])
                 if result:
-                    line = "Monitor %s removed redis queue" % qitem[
-                        'item']['cid']
-                    syslog.syslog(syslog.LOG_INFO, line)
+                    logger.info("Monitor %s removed redis queue" % qitem[
+                        'item']['cid'])
                     if qitem['action'] == "delete":
                         delete = r.table(config['dbqueue']).get(
                             qitem['id']).delete().run(rdb_server)
                         if delete['deleted'] == 1:
-                            line = "Queue entry %s removed from RethinkDB queue" % qitem['id']
-                            syslog.syslog(syslog.LOG_DEBUG, line)
+                            logger.debug("Queue entry %s removed from RethinkDB queue" % qitem['id'])
 
             # Create
             # if Edit this will create
             if qitem['action'] == "create" or qitem['action'] == "edit":
                 if "datacenter" not in qitem['item']['data']:
-                    line = "Initiating Monitor creation for monitor id: %s - no datacenter" % qitem['item']['cid']
+                    msg_format = "Initiating Monitor creation for monitor id: %s - no datacenter"
                     result = populateRedis(keyid, qitem['item'])
                 else:
                     if config['dbqueue'] in qitem['item']['data']['datacenter']:
-                        line = "Initiating Monitor creation for monitor id: %s - local" % qitem['item']['cid']
+                        msg_format = "Initiating Monitor creation for monitor id: %s - local"
                         result = populateRedis(
                             keyid, qitem['item'], local=True)
                     else:
-                        line = "Initiating Monitor creation for monitor id: %s - notify" % qitem['item']['cid']
+                        msg_format = "Initiating Monitor creation for monitor id: %s - notify"
                         result = populateRedis(keyid, qitem['item'])
-                syslog.syslog(syslog.LOG_DEBUG, line)
+                logger.debug(msg_format % qitem['item']['cid'])
                 if result:
-                    line = "Monitor %s added to redis queue" % qitem[
-                        'item']['cid']
-                    syslog.syslog(syslog.LOG_INFO, line)
+                    logger.info("Monitor %s added to redis queue" % qitem[
+                        'item']['cid'])
                     delete = r.table(config['dbqueue']).get(
                         qitem['id']).delete().run(rdb_server)
                     if delete['deleted'] == 1:
-                        line = "Queue entry %s removed from RethinkDB queue" % qitem['id']
-                        syslog.syslog(syslog.LOG_DEBUG, line)
+                        logger.debug("Queue entry %s removed from RethinkDB queue" % qitem['id'])
                         status = r.table(
                             'monitors').get(qitem['item']['cid']).update(
                                 {'status': 'monitored'}).run(rdb_server)
                         if status['replaced'] == 1:
-                            line = "Monitor %s status changed in RethinkDB" % qitem['item']['cid']
-                            syslog.syslog(syslog.LOG_DEBUG, line)
+                            logger.debug("Monitor %s status changed in RethinkDB" % qitem['item']['cid'])
                         else:
-                            line = "Failed to change monitor %s status in RethinkDB" % qitem['item']['cid']
-                            syslog.syslog(syslog.LOG_DEBUG, line)
+                            logger.debug("Failed to change monitor %s status in RethinkDB" % qitem['item']['cid'])
                 else:
-                    line = "Skipping Monitor creation as it did not match datacenter checks: %s" % qitem['item']['cid']
-                    syslog.syslog(syslog.LOG_DEBUG, line)
+                    logger.debug("Skipping Monitor creation as it did not match datacenter checks: %s" % qitem['item']['cid'])
                     delete = r.table(config['dbqueue']).get(
                         qitem['id']).delete().run(rdb_server)
                     if delete['deleted'] == 1:
-                        line = "Queue entry %s removed from RethinkDB queue" % qitem['id']
-                        syslog.syslog(syslog.LOG_DEBUG, line)
+                        logger.debug("Queue entry %s removed from RethinkDB queue" % qitem['id'])
 
             # Sink messages
             # if Sink this will shoot a message to the actioner
             if qitem['action'] == "sink":
-                line = "Got a web based health check from the queue, sending to sink"
-                syslog.syslog(syslog.LOG_INFO, line)
+                logger.info("Got a web based health check from the queue, sending to sink")
                 result = sendtoSink(qitem['item'])
                 if result:
-                    line = "Monitor %s sent to sink" % qitem['item']['cid']
-                    syslog.syslog(syslog.LOG_INFO, line)
+                    logger.info("Monitor %s sent to sink" % qitem['item']['cid'])
                     delete = r.table(config['dbqueue']).get(
                         qitem['id']).delete().run(rdb_server)
                     if delete['deleted'] == 1:
-                        line = "Queue entry %s removed from RethinkDB queue" % qitem['id']
-                        syslog.syslog(syslog.LOG_DEBUG, line)
+                        logger.debug("Queue entry %s removed from RethinkDB queue" % qitem['id'])
 
         # If Reaction
         if qitem['type'] == "reaction":
@@ -288,33 +265,26 @@ while True:
             # Delete
             # if Edit this will delete
             if qitem['action'] == "delete" or qitem['action'] == "edit":
-                line = "Initiating Reaction deletion for reaction id: %s" % qitem['item']['rid']
-                syslog.syslog(syslog.LOG_DEBUG, line)
+                logger.debug("Initiating Reaction deletion for reaction id: %s" % qitem['item']['rid'])
                 result = decimateRedis(keyid, qitem['item'])
                 if result:
-                    line = "Reaction %s removed from redis" % qitem[
-                        'item']['rid']
-                    syslog.syslog(syslog.LOG_INFO, line)
+                    logger.info("Reaction %s removed from redis" % qitem['item']['rid'])
                     delete = r.table(config['dbqueue']).get(
                         qitem['id']).delete().run(rdb_server)
                     if delete['deleted'] == 1:
-                        line = "Queue entry %s removed from RethinkDB queue" % qitem['id']
-                        syslog.syslog(syslog.LOG_DEBUG, line)
+                        logger.debug("Queue entry %s removed from RethinkDB queue" % qitem['id'])
 
             # Create
             # if Edit this will create
             if qitem['action'] == "create" or qitem['action'] == "edit":
-                line = "Initiating Reaction creation for reaction id: %s" % qitem['item']['rid']
-                syslog.syslog(syslog.LOG_DEBUG, line)
+                logger.debug("Initiating Reaction creation for reaction id: %s" % qitem['item']['rid'])
                 result = populateRedis(keyid, qitem['item'])
                 if result:
-                    line = "Reaction %s added to redis" % qitem['item']['rid']
-                    syslog.syslog(syslog.LOG_INFO, line)
+                    logger.info("Reaction %s added to redis" % qitem['item']['rid'])
                     delete = r.table(config['dbqueue']).get(
                         qitem['id']).delete().run(rdb_server)
                     if delete['deleted'] == 1:
-                        line = "Queue entry %s removed from RethinkDB queue" % qitem['id']
-                        syslog.syslog(syslog.LOG_DEBUG, line)
+                        logger.debug("Queue entry %s removed from RethinkDB queue" % qitem['id'])
 
     # Sleep for 10 seconds
     time.sleep(config['sleep'])
