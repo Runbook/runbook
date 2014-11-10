@@ -48,7 +48,7 @@ cfh.close()
 # ------------------------------------------------------------------
 
 # Init logger
-logger = logconfig.getLogger('cram.worker')
+logger = logconfig.getLogger('cram.worker', config['use_syslog'])
 
 # Startup ZeroMQ client
 context = zmq.Context()

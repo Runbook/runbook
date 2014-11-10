@@ -46,7 +46,7 @@ cfh.close()
 # ------------------------------------------------------------------
 
 # Init logger
-logger = logconfig.getLogger('cram.control')
+logger = logconfig.getLogger('cram.control', config['use_syslog'])
 
 # Redis Server
 try:

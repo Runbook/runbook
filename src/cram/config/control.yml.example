@@ -14,3 +14,5 @@ redis_host: 127.0.0.1
 redis_port: {{ redcluster['master_port'] }}
 redis_db: {{ redcluster['master_db'] }}
 redis_password: {{ redcluster['master_password'] }}
+## Logging
+use_syslog: true

@@ -44,7 +44,7 @@ cfh.close()
 # ------------------------------------------------------------------
 
 # Init logger
-logger = logconfig.getLogger('cram.broker')
+logger = logconfig.getLogger('cram.broker', config['use_syslog'])
 
 # Start ZeroMQ listener for control
 context = zmq.Context()

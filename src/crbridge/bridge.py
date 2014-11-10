@@ -50,7 +50,7 @@ cfh.close()
 # ------------------------------------------------------------------
 
 # Init logger
-logger = logconfig.getLogger('crbridge.bridge')
+logger = logconfig.getLogger('crbridge.bridge', config['use_syslog'])
 
 # Redis Server
 try:

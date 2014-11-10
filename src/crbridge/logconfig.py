@@ -2,7 +2,7 @@ import syslog
 import logging
 import logging.handlers
 
-def getLogger(logger_name):
+def getLogger(logger_name, use_syslog):
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.DEBUG)
 
@@ -12,11 +12,13 @@ def getLogger(logger_name):
     ch.setFormatter(cf)
     logger.addHandler(ch)
 
-    sh = logging.handlers.SysLogHandler(facility=syslog.LOG_LOCAL0)
-    sh.setLevel(logging.DEBUG)
-    sf = logging.Formatter("%(filename)s:%(name)s[%(process)d] - %(levelname)s - %(message)s")
-    sh.setFormatter(sf)
-    logger.addHandler(sh)
+    if use_syslog:
+        sh = logging.handlers.SysLogHandler(facility=syslog.LOG_LOCAL0)
+        sh.setLevel(logging.DEBUG)
+        sf = logging.Formatter("%(name)s[%(process)d] - %(levelname)s - %(message)s")
+        sh.setFormatter(sf)
+        logger.debug("configured writing to syslog")
+        logger.addHandler(sh)
 
     return logger
 

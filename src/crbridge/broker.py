@@ -43,7 +43,7 @@ cfh.close()
 # ------------------------------------------------------------------
 
 # Init logger
-logger = logconfig.getLogger('crbridge.broker')
+logger = logconfig.getLogger('crbridge.broker', config['use_syslog'])
 
 # Start ZeroMQ listener for control
 context = zmq.Context()
