@@ -25,7 +25,7 @@ from rethinkdb.errors import RqlRuntimeError, RqlDriverError
 import socket
 import redis
 import signal
-import syslog
+import logconfig
 import zmq
 import json
 import time
@@ -48,19 +48,17 @@ cfh.close()
 # Open External Connections
 # ------------------------------------------------------------------
 
-# Open Syslog
-syslog.openlog(logoption=syslog.LOG_PID, facility=syslog.LOG_LOCAL0)
+# Init logger
+logger = logconfig.getLogger('crbridge.actioner', config['use_syslog'])
 
 # Redis Server
 try:
     r_server = redis.Redis(
         host=config['redis_host'], port=config['redis_port'],
         db=config['redis_db'], password=config['redis_password'])
-    line = "Connected to Redis on port %s" % config['redis_port']
-    syslog.syslog(syslog.LOG_INFO, line)
+    logger.info("Connected to Redis on port %s" % config['redis_port'])
 except:
-    line = "Cannot connect to redis, shutting down"
-    syslog.syslog(syslog.LOG_ERR, line)
+    logger.error("Cannot connect to redis, shutting down")
     sys.exit(1)
 
 # RethinkDB Server
@@ -68,14 +66,11 @@ try:
     rdb_server = r.connect(
         host=config['rethink_host'], port=config['rethink_port'],
         auth_key=config['rethink_authkey'], db=config['rethink_db'])
-    line = "Connected to Rethinkdb on port %s" % config['rethink_port']
-    syslog.syslog(syslog.LOG_INFO, line)
+    logger.info("Connected to Rethinkdb on port %s" % config['rethink_port'])
     cacheonly = False
 except (RqlDriverError, RqlRuntimeError, socket.error) as e:
-    line = "Cannot connect to rethinkdb, going into cacheonly mode"
-    syslog.syslog(syslog.LOG_CRIT, line)
-    line = "RethinkDB: %s" % e.message
-    syslog.syslog(syslog.LOG_CRIT, line)
+    logger.critical("Cannot connect to rethinkdb, going into cacheonly mode")
+    logger.critical("RethinkDB: %s" % e.message)
     cacheonly = True
     rdb_server = None
 
@@ -84,11 +79,9 @@ except (RqlDriverError, RqlRuntimeError, socket.error) as e:
 context = zmq.Context()
 zsink = context.socket(zmq.PULL)
 connectline = "tcp://%s:%d" % (config['sink_ip'], config['sink_worker_port'])
-line = "Connecting to Broker at %s" % connectline
-syslog.syslog(syslog.LOG_INFO, line)
+logger.info("Connecting to Broker at %s" % connectline)
 zsink.connect(connectline)
-line = "Connection to Broker established"
-syslog.syslog(syslog.LOG_INFO, line)
+logger.info("Connection to Broker established")
 
 
 # Handle Kill Signals Cleanly
@@ -96,10 +89,8 @@ syslog.syslog(syslog.LOG_INFO, line)
 
 def killhandle(signum, frame):
     ''' This will close connections cleanly '''
-    line = "SIGTERM detected, shutting down"
-    syslog.syslog(syslog.LOG_INFO, line)
+    logger.info("SIGTERM detected, shutting down")
     rdb_server.close()
-    syslog.closelog()
     zsink.close()
     sys.exit(0)
 
@@ -116,43 +107,36 @@ def runAction(redata, jdata):
             "actions." + redata['rtype'], globals(), locals(), ['failed'], -1)
         react = reaction.failed(redata, jdata, rdb_server, r_server)
         if react is True:
-            line = "Successfully processed failed reaction type %s for monitor %s" % (
-                redata['rtype'], jdata['cid'])
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info("Successfully processed failed reaction type %s for monitor %s" % (
+                redata['rtype'], jdata['cid']))
             return True
         elif react is None:
-            line = "Skipped failed reaction type %s for monitor %s" % (
-                redata['rtype'], jdata['cid'])
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info("Skipped failed reaction type %s for monitor %s" % (
+                redata['rtype'], jdata['cid']))
             return None
         else:
-            line = "Processing reaction type %s for monitor %s did not occur" % (
-                redata['rtype'], jdata['cid'])
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info("Processing reaction type %s for monitor %s did not occur" % (
+                redata['rtype'], jdata['cid']))
             return False
     elif "healthy" in jdata['check']['status']:
         reaction = __import__(
             "actions." + redata['rtype'], globals(), locals(), ['healthy'], -1)
         react = reaction.healthy(redata, jdata, rdb_server, r_server)
         if react:
-            line = "Successfully processed healthy reaction type %s for monitor %s" % (
-                redata['rtype'], jdata['cid'])
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info("Successfully processed healthy reaction type %s for monitor %s" % (
+                redata['rtype'], jdata['cid']))
             return True
         elif react is None:
-            line = "Skipped healthy reaction type %s for monitor %s" % (
-                redata['rtype'], jdata['cid'])
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info("Skipped healthy reaction type %s for monitor %s" % (
+                redata['rtype'], jdata['cid']))
             return None
         else:
-            line = "Error while processing healthy reaction type %s for monitor %s" % (
-                redata['rtype'], jdata['cid'])
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info("Error while processing healthy reaction type %s for monitor %s" % (
+                redata['rtype'], jdata['cid']))
             return False
     else:
-        line = "Got an unknown status for health check %s: %s" % (
-            jdata['cid'], jdata['status'])
-        syslog.syslog(syslog.LOG_ERR, line)
+        logger.error("Got an unknown status for health check %s: %s" % (
+            jdata['cid'], jdata['status']))
         return False
 
 
@@ -196,10 +180,8 @@ def getMonitor(cid):
     except (RqlDriverError, RqlRuntimeError, socket.error) as e:
         results = cache
         results['cacheonly'] = True
-        line = "RethinkDB is unaccessible, monitor %s was pulled from cache" % cid
-        syslog.syslog(syslog.LOG_CRIT, line)
-        line = "RethinkDB Error: %s" % e.message
-        syslog.syslog(syslog.LOG_CRIT, line)
+        logger.critical("RethinkDB is unaccessible, monitor %s was pulled from cache" % cid)
+        logger.critical("RethinkDB Error: %s" % e.message)
     return results
 
 
@@ -228,10 +210,8 @@ def getReaction(rid):
     except (RqlDriverError, RqlRuntimeError, socket.error) as e:
         results = cache
         results['cacheonly'] = True
-        line = "RethinkDB is unaccessible, reaction %s was pulled from cache" % rid
-        syslog.syslog(syslog.LOG_CRIT, line)
-        line = "RethinkDB Error: %s" % e.message
-        syslog.syslog(syslog.LOG_CRIT, line)
+        logger.critical("RethinkDB is unaccessible, reaction %s was pulled from cache" % rid)
+        logger.critical("RethinkDB Error: %s" % e.message)
     return results
 
 # Run For Loop
@@ -239,17 +219,14 @@ def getReaction(rid):
 
 while True:
     msg = zsink.recv()
-    line = "Got message %s" % msg
-    syslog.syslog(syslog.LOG_DEBUG, line)
+    logger.debug("Got message %s" % msg)
 
     jdata = json.loads(msg)
-    line = "Got message for health check: %s" % jdata['cid']
-    syslog.syslog(syslog.LOG_INFO, line)
+    logger.info("Got message for health check: %s" % jdata['cid'])
 
     checktime = time.time() - jdata['time_tracking']['control']
     if checktime > float(config['max_monitor_time']):
-      line = "CRITICAL ERROR: monitor %s is beyond %d second execution time" % (jdata['cid'], config['max_monitor_time'])
-      syslog.syslog(syslog.LOG_CRIT, line)
+      logger.critical("CRITICAL ERROR: monitor %s is beyond %d second execution time" % (jdata['cid'], config['max_monitor_time']))
 
     results = getMonitor(jdata['cid'])
     jdata['cacheonly'] = results['cacheonly']
@@ -292,16 +269,12 @@ while True:
             runAction(redata, jdata)
 
     if cacheonly is True:
-        line = "Process is in cacheonly mode: attempting reconnect"
-        syslog.syslog(syslog.LOG_CRIT, line)
+        logger.critical("Process is in cacheonly mode: attempting reconnect")
         try:
             rdb_server.reconnect()
-            line = "Connected to Rethinkdb on port %s" % config['rethink_port']
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info("Connected to Rethinkdb on port %s" % config['rethink_port'])
             cacheonly = False
         except (RqlDriverError, RqlRuntimeError) as e:
-            line = "RethinkDB Error: %s" % e.message
-            syslog.syslog(syslog.LOG_CRIT, line)
+            logger.critical("RethinkDB Error: %s" % e.message)
         except:
-            line = "Got non-RethinkDB Error... I should be restarted when RethinkDB is up"
-            syslog.syslog(syslog.LOG_CRIT, line)
+            logger.critical("Got non-RethinkDB Error... I should be restarted when RethinkDB is up")
