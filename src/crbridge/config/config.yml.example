@@ -36,3 +36,5 @@ mailchimp_api_url: "update_me!"
 ## Mandrill
 mandrill_api_url: "https://mandrillapp.com/api/1.0/"
 mandrill_api_key: "update_me!"
+## Logging
+use_syslog: true

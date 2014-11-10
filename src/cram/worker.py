@@ -22,7 +22,7 @@
 import sys
 import zmq
 from datetime import datetime
-import syslog
+import logconfig
 import stathat
 import yaml
 import signal
@@ -47,24 +47,22 @@ cfh.close()
 # Make Connections
 # ------------------------------------------------------------------
 
-# Open Syslog
-syslog.openlog(logoption=syslog.LOG_PID, facility=syslog.LOG_LOCAL0)
+# Init logger
+logger = logconfig.getLogger('cram.worker', config['use_syslog'])
 
 # Startup ZeroMQ client
 context = zmq.Context()
 zrecv = context.socket(zmq.PULL)
 connectline = "tcp://%s:%d" % (config['broker_ip'],
                                config['broker_worker_port'])
-line = "Connecting to Broker at %s" % connectline
-syslog.syslog(syslog.LOG_INFO, line)
+logger.info("Connecting to Broker at %s" % connectline)
 zrecv.connect(connectline)
 
 # Startup ZeroMQ push client
 context2 = zmq.Context()
 zsend = context2.socket(zmq.PUSH)
 connectline = "tcp://%s:%d" % (config['sink_ip'], config['sink_port'])
-line = "Connecting to Sink at %s" % connectline
-syslog.syslog(syslog.LOG_INFO, line)
+logger.info("Connecting to Sink at %s" % connectline)
 zsend.connect(connectline)
 
 # Handle Kill Signals Cleanly
@@ -73,9 +71,7 @@ zsend.connect(connectline)
 
 def killhandle(signum, frame):
     ''' This will close connections cleanly '''
-    line = "SIGTERM detected, shutting down"
-    syslog.syslog(syslog.LOG_INFO, line)
-    syslog.closelog()
+    logger.info("SIGTERM detected, shutting down")
     sys.exit(0)
 
 signal.signal(signal.SIGTERM, killhandle)
@@ -100,8 +96,7 @@ while True:
     # Log that we got a message
     stat = "[%s] Checks received by workers" % config['envname']
     stathat.ez_count(config['stathat_ez_key'], stat, 1)
-    line = "Got message for monitor %s from broker" % jdata['cid']
-    syslog.syslog(syslog.LOG_DEBUG, line)
+    logger.debug("Got message for monitor %s from broker" % jdata['cid'])
     # Load health check module and run it
     monitor = __import__(
         "checks." + jdata['ctype'], globals(), locals(), ['check'], -1)
@@ -110,25 +105,22 @@ while True:
         # Log it
         stat = "[%s] Healthy Checks" % config['envname']
         stathat.ez_count(config['stathat_ez_key'], stat, 1)
-        line = "Health check %s for monitor %s is Healthy" % (
-            jdata['ctype'], jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info("Health check %s for monitor %s is Healthy" % (
+            jdata['ctype'], jdata['cid']))
         jdata['check'] = {'status': 'healthy',
                           'method': 'automatic'}
         jdata['time_tracking']['worker'] = time.time()
         # Send success to sink
         ztext = json.dumps(jdata)
     elif result is None:
-        line = "Health check %s was unable to execute" % (jdata['cid'])
-        syslog.syslog(syslog.LOG_ERR, line)
+        logger.error("Health check %s was unable to execute" % (jdata['cid']))
         ztext = None
     else:
         # Log it
         stat = "[%s] Failed Checks" % config['envname']
         stathat.ez_count(config['stathat_ez_key'], stat, 1)
-        line = "Health check %s for monitor %s is Failed" % (
-            jdata['ctype'], jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info("Health check %s for monitor %s is Failed" % (
+            jdata['ctype'], jdata['cid']))
         jdata['check'] = {'status': 'failed',
                           'method': 'automatic'}
         jdata['time_tracking']['worker'] = time.time()
@@ -140,5 +132,4 @@ while True:
         zsend.send(ztext)
         stat = "[%s] Checks sent to sink from workers" % config['envname']
         stathat.ez_count(config['stathat_ez_key'], stat, 1)
-        line = "Health check %s sent to sink" % jdata['cid']
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info("Health check %s sent to sink" % jdata['cid'])

@@ -23,7 +23,7 @@ import zmq
 import time
 import yaml
 import signal
-import syslog
+import logconfig
 
 # Load Configuration
 # ------------------------------------------------------------------
@@ -43,26 +43,24 @@ cfh.close()
 # Make Connections
 # ------------------------------------------------------------------
 
-# Open Syslog
-syslog.openlog(logoption=syslog.LOG_PID, facility=syslog.LOG_LOCAL0)
+# Init logger
+logger = logconfig.getLogger('cram.broker', config['use_syslog'])
 
 # Start ZeroMQ listener for control
 context = zmq.Context()
 zrecv = context.socket(zmq.PULL)
-bindaddress = "tcp://%s:%d" % (config['broker_ip'],
+bindaddress_pull = "tcp://%s:%d" % (config['broker_ip'],
                                config['broker_control_port'])
-zrecv.bind(bindaddress)
-line = "Attempting to bind to %s" % bindaddress
-syslog.syslog(syslog.LOG_INFO, line)
+zrecv.bind(bindaddress_pull)
+logger.info("Attempting to bind to %s for pulling" % bindaddress_pull)
 
 # Start ZeroMQ listener for workers
 context2 = zmq.Context()
 zsend = context2.socket(zmq.PUSH)
-bindaddress = "tcp://%s:%d" % (config['broker_ip'],
+bindaddress_push = "tcp://%s:%d" % (config['broker_ip'],
                                config['broker_worker_port'])
-zsend.bind(bindaddress)
-line = "Attempting to bind to %s" % bindaddress
-syslog.syslog(syslog.LOG_INFO, line)
+zsend.bind(bindaddress_push)
+logger.info("Attempting to bind to %s for pushing" % bindaddress_push)
 
 
 # Handle Kill Signals Cleanly
@@ -70,9 +68,7 @@ syslog.syslog(syslog.LOG_INFO, line)
 
 def killhandle(signum, frame):
     ''' This will close connections cleanly '''
-    line = "SIGTERM detected, shutting down"
-    syslog.syslog(syslog.LOG_INFO, line)
-    syslog.closelog()
+    logger.info("SIGTERM detected, shutting down")
     zsend.close()
     zrecv.close()
     sys.exit(0)
@@ -90,12 +86,11 @@ time.sleep(20)
 while True:
     # Get list of members to check from queue
     msg = zrecv.recv()
-    line = "Got the following message and sent it off %s" % msg
-    syslog.syslog(syslog.LOG_DEBUG, line)
+    logger.debug("Got message from %s, sending it to %s, %s" % (
+        bindaddress_pull, bindaddress_push, msg))
     zsend.send(msg)
 
     # The following should be disabled unless it is times of distress
     #import json
     #jdata = json.loads(msg)
-    #line = "Sent health check %s to workers" % jdata['cid']
-    #syslog.syslog(syslog.LOG_DEBUG, line)
+    #logger.debug("Sent health check %s to workers" % jdata['cid'])

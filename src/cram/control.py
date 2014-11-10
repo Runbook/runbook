@@ -24,8 +24,8 @@ import zmq
 import time
 import yaml
 import signal
-import syslog
 import json
+import logconfig
 
 # Load Configuration
 # ------------------------------------------------------------------
@@ -45,9 +45,8 @@ cfh.close()
 # Make Connections
 # ------------------------------------------------------------------
 
-# Open Syslog
-syslog.openlog(ident=sys.argv[0] + "-" + config['control_appname'],
-               logoption=syslog.LOG_PID, facility=syslog.LOG_LOCAL0)
+# Init logger
+logger = logconfig.getLogger('cram.control', config['use_syslog'])
 
 # Redis Server
 try:
@@ -55,8 +54,7 @@ try:
         host=config['redis_host'], port=config['redis_port'],
         db=config['redis_db'], password=config['redis_password'])
 except:
-    line = "Cannot connect to redis, shutting down"
-    syslog.syslog(syslog.LOG_ERR, line)
+    logger.error("Cannot connect to redis, shutting down")
     sys.exit(1)
 
 # Start ZeroMQ listener
@@ -65,8 +63,7 @@ zsend = context.socket(zmq.PUSH)
 connaddress = "tcp://%s:%d" % (config['broker_ip'],
                                config['broker_control_port'])
 zsend.connect(connaddress)
-line = "Connecting to broker at %s" % connaddress
-syslog.syslog(syslog.LOG_INFO, line)
+logger.info("Connecting to broker at %s" % connaddress)
 
 
 # Handle Kill Signals Cleanly
@@ -74,9 +71,7 @@ syslog.syslog(syslog.LOG_INFO, line)
 
 def killhandle(signum, frame):
     ''' This will close connections cleanly '''
-    line = "SIGTERM detected, shutting down"
-    syslog.syslog(syslog.LOG_INFO, line)
-    syslog.closelog()
+    logger.info("SIGTERM detected, shutting down")
     sys.exit(0)
 
 signal.signal(signal.SIGTERM, killhandle)
@@ -124,7 +119,6 @@ while True:
         zsend.send(jdata)
         count = count + 1
 
-    line = "Sent %d health checks from queue %s" % (count, config['queue'])
-    syslog.syslog(syslog.LOG_DEBUG, line)
+    logger.debug("Sent %d health checks from queue %s" % (count, config['queue']))
     # Sleep for x seconds
     time.sleep(config['sleep'])
