@@ -48,18 +48,18 @@ logger = logconfig.getLogger('crbridge.broker', config['use_syslog'])
 # Start ZeroMQ listener for control
 context = zmq.Context()
 zrecv = context.socket(zmq.PULL)
-bindaddress = "tcp://%s:%d" % (config['sink_ip'],
+bindaddress_pull = "tcp://%s:%d" % (config['sink_ip'],
                                config['sink_port'])
-zrecv.bind(bindaddress)
-logger.info("Attempting to bind to %s" % bindaddress)
+zrecv.bind(bindaddress_pull)
+logger.info("Attempting to bind to %s for pulling" % bindaddress_pull)
 
 # Start ZeroMQ listener for workers
 context2 = zmq.Context()
 zsend = context2.socket(zmq.PUSH)
-bindaddress = "tcp://%s:%d" % (config['sink_ip'],
+bindaddress_push = "tcp://%s:%d" % (config['sink_ip'],
                                config['sink_worker_port'])
-zsend.bind(bindaddress)
-logger.info("Attempting to bind to %s" % bindaddress)
+zsend.bind(bindaddress_push)
+logger.info("Attempting to bind to %s for pushing" % bindaddress_push)
 
 
 # Handle Kill Signals Cleanly
@@ -85,7 +85,8 @@ time.sleep(20)
 while True:
     # Get list of members to check from queue
     msg = zrecv.recv()
-    logger.debug("Got the following message and sent it off %s" % msg)
+    logger.debug("Got message from %s, sending it to %s, %s" % (
+        bindaddress_pull, bindaddress_push, msg))
     zsend.send(msg)
 
     # The following should be disabled unless it is times of distress
