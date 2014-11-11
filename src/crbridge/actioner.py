@@ -226,55 +226,55 @@ while True:
 
     checktime = time.time() - jdata['time_tracking']['control']
     if checktime > float(config['max_monitor_time']):
-      logger.critical("CRITICAL ERROR: monitor %s is beyond %d second execution time" % (jdata['cid'], config['max_monitor_time']))
-
-    results = getMonitor(jdata['cid'])
-    jdata['cacheonly'] = results['cacheonly']
-    jdata['check']['prev_status'] = results['status']
-
-    # Check if status is changing and reset counter
-    if jdata['check']['prev_status'] in jdata['check']['status']:
-        jdata['failcount'] = results['failcount']
+        logger.critical("CRITICAL ERROR: monitor %s is beyond %d second execution time. SKIPPING" % (jdata['cid'], config['max_monitor_time']))
     else:
-        jdata['prev_failcount'] = results['failcount']
-        jdata['failcount'] = 0
-
-    # Ensure reactions run on manual failures
-    if jdata['check']['method'] == "manual" and jdata['check']['status'] == "web-failed":
-        jdata['failcount'] = 9999
-
-    if results['status'] != "web-failed" or jdata['check']['method'] == "manual":
-
-        # Start running through normal reactions
-        for reactid in jdata['data']['reactions']:
-            results = getReaction(reactid)
-            if results:
-                results['default'] = False
-                run = runAction(results, jdata)
-                for meta in config['reaction_meta']:
-                    results['rtype'] = meta
-                    results['lastrun'] = 0
-                    results['trigger'] = 0
-                    results['frequency'] = 0
-                    results['reaction_return'] = run
-                    runAction(results, jdata)
-
-        # Always perform the default actions
-        for always in config['default_actions']:
-            redata = {'rtype': always,
-                      'trigger': 0,
-                      'frequency': 0,
-                      'lastrun': 0,
-                      'default': True}
-            runAction(redata, jdata)
-
-    if cacheonly is True:
-        logger.critical("Process is in cacheonly mode: attempting reconnect")
-        try:
-            rdb_server.reconnect()
-            logger.info("Connected to Rethinkdb on port %s" % config['rethink_port'])
-            cacheonly = False
-        except (RqlDriverError, RqlRuntimeError) as e:
-            logger.critical("RethinkDB Error: %s" % e.message)
-        except:
-            logger.critical("Got non-RethinkDB Error... I should be restarted when RethinkDB is up")
+        results = getMonitor(jdata['cid'])
+        jdata['cacheonly'] = results['cacheonly']
+        jdata['check']['prev_status'] = results['status']
+    
+        # Check if status is changing and reset counter
+        if jdata['check']['prev_status'] in jdata['check']['status']:
+            jdata['failcount'] = results['failcount']
+        else:
+            jdata['prev_failcount'] = results['failcount']
+            jdata['failcount'] = 0
+    
+        # Ensure reactions run on manual failures
+        if jdata['check']['method'] == "manual" and jdata['check']['status'] == "web-failed":
+            jdata['failcount'] = 9999
+    
+        if results['status'] != "web-failed" or jdata['check']['method'] == "manual":
+    
+            # Start running through normal reactions
+            for reactid in jdata['data']['reactions']:
+                results = getReaction(reactid)
+                if results:
+                    results['default'] = False
+                    run = runAction(results, jdata)
+                    for meta in config['reaction_meta']:
+                        results['rtype'] = meta
+                        results['lastrun'] = 0
+                        results['trigger'] = 0
+                        results['frequency'] = 0
+                        results['reaction_return'] = run
+                        runAction(results, jdata)
+    
+            # Always perform the default actions
+            for always in config['default_actions']:
+                redata = {'rtype': always,
+                          'trigger': 0,
+                          'frequency': 0,
+                          'lastrun': 0,
+                          'default': True}
+                runAction(redata, jdata)
+    
+        if cacheonly is True:
+            logger.critical("Process is in cacheonly mode: attempting reconnect")
+            try:
+                rdb_server.reconnect()
+                logger.info("Connected to Rethinkdb on port %s" % config['rethink_port'])
+                cacheonly = False
+            except (RqlDriverError, RqlRuntimeError) as e:
+                logger.critical("RethinkDB Error: %s" % e.message)
+            except:
+                logger.critical("Got non-RethinkDB Error... I should be restarted when RethinkDB is up")
