@@ -195,13 +195,16 @@ body {
 
 .quote-block .author-thumb {
   max-width: 250px;
+  margin-top: -20px;
   float: left;
+  vertical-align: middle;
 }
 
 .quote-block .quote-info {
   float: left;
   max-width: 600px;
   margin-left: 60px;
+  vertical-align: middle;
 }
 
 .quote-info .quote-text {
