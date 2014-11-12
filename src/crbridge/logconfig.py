@@ -1,5 +1,6 @@
 import logging
 import logging.handlers
+import sys
 
 def getLogger(logger_name, use_syslog):
     logger = logging.getLogger(logger_name)
@@ -12,8 +13,11 @@ def getLogger(logger_name, use_syslog):
     logger.addHandler(ch)
 
     if use_syslog:
-        # Address is /dev/log on Ubuntu, might be different on others
-        sh = logging.handlers.SysLogHandler(address="/dev/log", facility="local0")
+        if sys.platform == 'linux2':
+            # Address is /dev/log on ubuntu, might be different on others
+            sh = logging.handlers.SysLogHandler(address="/dev/log", facility="local0")
+        else:
+            sh = logging.handlers.SysLogHandler(facility="local0")
         sh.setLevel(logging.DEBUG)
         sf = logging.Formatter("%(name)s[%(process)d] - %(levelname)s - %(message)s")
         sh.setFormatter(sf)
