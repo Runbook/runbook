@@ -76,13 +76,14 @@ body {
   color: #fff;
   font-size: 280% !important;
   padding: 20px 80px !important;
-  display: table;
+  display: block;
+  max-width: 500px;
   margin: 40px auto;
   box-shadow: 0px 4px 10px 3px rgba(0,0,0,0.4) !important;
-  border-radius: 15px;
-  -webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	-o-border-radius: 15px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-o-border-radius: 10px;
 }
 
 .btn.btn-action {
@@ -242,13 +243,14 @@ body {
   color: #fff;
   font-size: 200% !important;
   padding: 10px 80px !important;
-  display: table;
+  display: block;
+  max-width: 400px;
   margin: 40px auto;
   box-shadow: 0px 4px 10px 3px rgba(0,0,0,0.4) !important;
-  border-radius: 15px;
-  -webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	-o-border-radius: 15px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-o-border-radius: 10px;
 }
 
 .footer-action-section h5 {
