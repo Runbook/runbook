@@ -20,10 +20,6 @@ body {
 	background-color: rgba(0,0,0,0.7);
 }
 
-.navigation-menu.clear {
-  /* background-color: transparent; */
-}
-
 .navigation-menu .header-logo {
 	max-width: 120px;
 	display: inline-block;
@@ -140,6 +136,7 @@ body {
 .sub-section {
   display: block;
   padding: 20px 0px;
+  text-align: center;
 }
 
 .sub-section .description {
@@ -155,7 +152,8 @@ body {
 }
 
 .sub-section .description {
-  float: left;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .sub-section .description .more {
@@ -166,25 +164,14 @@ body {
   color: #fff !important;
 }
 
-.sub-section.left img {
-  float: left;
-}
-
-.sub-section.right img {
-  float: right;
-}
-
 .sub-section.left .description {
-  margin-left: 40px;
+  margin-left: 80px;
   text-align: left;
 }
 
 .sub-section.right .description {
-  margin-left: 40px;
+  margin-right: 80px;
   text-align: right;
-}
-
-.quote-section {
 }
 
 .quote-block {
