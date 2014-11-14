@@ -20,6 +20,7 @@
 # ------------------------------------------------------------------
 
 # Misc. Python goodies
+import os
 import json
 import time
 import requests
@@ -51,9 +52,9 @@ import cookies
 # Application Configuration
 # ------------------------------------------------------------------
 
-app = Flask(__name__, instance_relative_config=True)
+app = Flask(__name__)
 # Config files are located in the instance directory
-app.config.from_pyfile('crweb.cfg')
+app.config.from_pyfile(os.path.join('instance', 'crweb.cfg'))
 
 
 # Common Functions
@@ -170,6 +171,27 @@ def index_redirect():
 
     # Return Home Page
     return render_template('index.html', data=data)
+
+
+# Static Pages
+@app.route("/pages/<pagename>", methods=['GET'])
+def static_pages(pagename):
+    ''' Generate static pages if they are defined '''
+    rendpage = '404.html'
+    status_code = 404
+    for page in app.config['STATIC_PAGES'].keys():
+        # This is less efficent but it lessens the chance
+        # of users rendering templates they shouldn't
+        if pagename == page:
+            rendpage = app.config['STATIC_PAGES'][page]
+            status_code = 200
+
+    data = {
+        'active': pagename,
+        'loggedin' : False
+    }
+    return render_template(rendpage, data=data), status_code
+
 
 # User Management
 

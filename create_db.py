@@ -1,27 +1,24 @@
 import rethinkdb as r
 from rethinkdb.errors import RqlDriverError, RqlRuntimeError
 
+from flask import Flask
+app = Flask("createdb")
+if app.config.from_pyfile("src/crweb/instance/crweb.cfg"):
+    host = app.config['DBHOST']
+    database = app.config['DATABASE']
+    auth_key = app.config['DBAUTHKEY']
+    conn = r.connect(host, 28015, auth_key=auth_key).repl()
 
-def connect():
-    try:
-        conn = r.connect("localhost", 28015, auth_key="somereallylongkey").repl()
-        r.db_create('crdb').run(conn)
-        r.db('crdb').table_create('monitors').run(conn)
-        r.db('crdb').table_create('reactions').run(conn)
-        r.db('crdb').table_create('users').run(conn)
-        r.db('crdb').table_create('history').run(conn)
-        r.db('crdb').table_create('events').run(conn)
-        r.db('crdb').table_create('subscription_history').run(conn)
-        r.db('crdb').table_create('dc1queue').run(conn)
-        r.db('crdb').table_create('dc2queue').run(conn)
-        return "Done!"
-    except RqlDriverError, e:
-        return e
-    except RqlRuntimeError, e:
-        return e
-
-
-print connect()
+    r.db_create(database).run(conn)
+    r.db(database).table_create('monitors').run(conn)
+    r.db(database).table_create('reactions').run(conn)
+    r.db(database).table_create('users').run(conn)
+    r.db(database).table_create('history').run(conn)
+    r.db(database).table_create('events').run(conn)
+    r.db(database).table_create('subscription_history').run(conn)
+    r.db(database).table_create('dc1queue').run(conn)
+    r.db(database).table_create('dc2queue').run(conn)
+    print "Done!"
 
 
 #######################

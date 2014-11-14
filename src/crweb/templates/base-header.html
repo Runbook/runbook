@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- SEO Stuffz -->
-      <title>CloudRoutes - Fix DevOps alerts automagically</title>
-      <meta name="description" content="Automate incident response and let your Devops team sleep at night">
-      <meta name="keywords" content="CloudFlare DNS, CloudFlare, CloudRoutes, DNS Failover, Cloud DNS, High Availability, Static IP, Load Balancing, Domain Name, DNS, Nagios, BMC, Zenoss, Datadog, Cloud Monitoring, Monitoring Automation, Cloud Servers, Cloud Services, Server, App Developers, Server Monitoring">
+      <title>Runbook - DevOps, automated</title>
+      <meta name="description" content="Solve problems in your sleep with IFTTT-style mitigation of alerts">
+      <meta name="keywords" content="CloudFlare DNS, CloudFlare, Runbook, Heroku Autoscaling, DNS Failover, Cloud DNS, High Availability, Static IP, Load Balancing, Domain Name, DNS, Nagios, BMC, Zenoss, Datadog, Cloud Monitoring, Monitoring Automation, Cloud Servers, Cloud Services, Server, App Developers, Server Monitoring">
       <meta property="og:type" content="website"/>
-      <meta property="og:title" content="CloudRoutes - Automated Incident Response"/>
-      <meta property="og:description" content="Automate incident response and let your Devops team sleep at night"/>
-      <meta property="og:site_name" content="CloudRoutes"/>
-      <meta property="og:image" content="http://cloudrout.es/static/img/cloudroutes-mini-super.png"/>
+      <meta property="og:title" content="Runbook - DevOps, automated"/>
+      <meta property="og:description" content="Solve problems in your sleep with IFTTT-style mitigation of alerts"/>
+      <meta property="og:site_name" content="Runbook"/>
+      <meta property="og:image" content="http://runbook.io/static/img/logos/png/runbook_logo_sleep_color_on_white.png"/>
 
     <!-- Bootstrap core CSS -->
    <!-- <link rel="stylesheet" href="/static/css/bootstrap.css">
@@ -27,6 +27,8 @@
     <!-- Custom CSS load -->
     <link rel="stylesheet" href="/static/css/custom.css">
     <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/pricing.css">
+    <link rel="stylesheet" href="/static/css/faq.css">
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
@@ -34,34 +36,14 @@
     {% include item %}
 {% endfor %}
 
-    <!--Shareaholic-->
-    <script type="text/javascript">
-//<![CDATA[
-  (function() {
-    var shr = document.createElement('script');
-    shr.setAttribute('data-cfasync', 'false');
-    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
-    shr.type = 'text/javascript'; shr.async = 'true';
-    shr.onload = shr.onreadystatechange = function() {
-      var rs = this.readyState;
-      if (rs && rs != 'complete' && rs != 'loaded') return;
-      var site_id = '6c77a167db67c0b0cee2224db9817bfe';
-      try { Shareaholic.init(site_id); } catch (e) {}
-    };
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(shr, s);
-  })();
-//]]>
-    </script>
-
   </head>
 
 <body>
   <div class="navbar navbar-default navbar-static-top navigation-menu {{ 'clear' if data['clean_header'] }}" role="navigation">
-    <div class="container">
+    <div class="container header">
       <div class="navbar-header">
         <a href="/" class="header-logo">
-          <img src="/static/img/white-header.png" width="100%" alt="CloudRoutes">
+          <img src="/static/img/logos/svg/runbook_white_logo_color_on_white.svg" width="100%" alt="Runbook">
         </a>
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="sr-only">Toggle navigation</span>
@@ -74,26 +56,23 @@
          <ul class="nav navbar-nav navigation-nav">
           {% if data['loggedin'] == False %}
             <li class="{{ 'active' if data['active'] == 'pricing' }}">
-              <a href="#">Pricing</a>
+              <a href="/pages/pricing">Pricing</a>
             </li>
             <li class="{{ 'active' if data['active'] == 'features' }}">
-              <a href="#">Features</a>
-              </li>
-            <li class="{{ 'active' if data['active'] == 'help' }}">
-              <a href="#">Help</a>
-            </li> 
-            <li>
-              <a href="/login" class="btn btn-action">Sign In</a>
+              <a href="/#features">Features</a>
             </li>
             <li>
-              <a href="/signup" class="btn btn-action">Sign Up</a>
+              <a href="https://dash.runbook.io/login" class="btn btn-action">Sign In</a>
+            </li>
+            <li>
+              <a href="https://dash.runbook.io/signup" class="btn btn-action">Sign Up</a>
             </li>
           {% else %}
             <li class="{{ 'active' if data['active'] == 'dashboard' }}">
-              <a href="https://dash.cloudrout.es/dashboard">Dashboard</a>
+              <a href="/dashboard">Dashboard</a>
             </li>
             <li>
-              <a href="https://dash.cloudrout.es/logout" class="text-danger">Logout</a>
+              <a href="/logout" class="text-danger">Logout</a>
             </li>
           {% endif %}
         </ul>

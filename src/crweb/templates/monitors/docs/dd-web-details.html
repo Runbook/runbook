@@ -7,8 +7,8 @@
           <div id="DataDogCollapse" class="panel-collapse collapse in">
           <div class="panel-body">
             <h3>Overview</h3>
-            <p>Within Datadog you can setup an <a href="http://docs.datadoghq.com/integrations/webhooks/" target="_blank">integration for webhook requests</a>. The Datadog Alerts: Webhook Integration monitor is designed to allow you to integrate Datadog metric alerts with CloudRoutes.</p>
-            <p>This integration allows you to add CloudRoutes Reactions to your existing monitoring solution.</p>
+            <p>Within Datadog you can setup an <a href="http://docs.datadoghq.com/integrations/webhooks/" target="_blank">integration for webhook requests</a>. The Datadog Alerts: Webhook Integration monitor is designed to allow you to integrate Datadog metric alerts with Runbook.</p>
+            <p>This integration allows you to add Runbook Reactions to your existing monitoring solution.</p>
 
             <h3>Monitor Details</h3>
             {% if data['monitor'] %}
@@ -24,7 +24,7 @@
 
             <h4>URL and Key</h4>
             <p>
-            <b>url:</b> <code>https://dash.cloudrout.es/api/datadog-webhook/{{ apiid }}</code></br>
+            <b>url:</b> <code>https://dash.runbook.io/api/datadog-webhook/{{ apiid }}</code></br>
             <b>check_key:</b> <code>{{ apikey }}</code>
             </p>
 

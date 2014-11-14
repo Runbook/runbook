@@ -6,29 +6,32 @@ body {
   font-weight: 400;
 }
 
-.container {
+.container.header {
 	max-width: 1003px !important;
+  vertical-align: middle;
+}
+
+.navbar-header {
+  vertical-align: middle;
 }
 
 /* Header customizations */
 .navigation-menu {
 	background-color: rgba(0,0,0,0.7);
-  padding: 20px 0px;
-}
-
-.navigation-menu.clear {
-  background-color: transparent;
 }
 
 .navigation-menu .header-logo {
-	max-width: 250px;
+	max-width: 120px;
 	display: inline-block;
-	padding-top: 5px;
 }
 
 .navigation-menu .header-logo img {
 	width: 100%;
 	display: block;
+}
+
+.navigation-nav {
+	padding-top: 25px;
 }
 
 .navigation-nav li.active a {
@@ -50,7 +53,7 @@ body {
   height: 700px;
 	padding: 20px 0px;
 	padding-top: 220px;
-  margin-top: -90px;
+  margin-top: -95px;
 	background: url('/static/img/header_bg.png');
 	background-size: cover;
 }
@@ -73,19 +76,21 @@ body {
   color: #fff;
   font-size: 280% !important;
   padding: 20px 80px !important;
-  display: table;
+  display: block;
+  max-width: 500px;
   margin: 40px auto;
   box-shadow: 0px 4px 10px 3px rgba(0,0,0,0.4) !important;
-  border-radius: 15px;
-  -webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	-o-border-radius: 15px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-o-border-radius: 10px;
 }
 
 .btn.btn-action {
 	padding: 8px 15px;
 	margin: 5px;
 	font-size: 100%;
+  color: #fff;
 	background-color: rgba(8, 174, 234, 1) !important;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
@@ -114,11 +119,23 @@ body {
 
 .diagram {
   max-width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .diagram-section .subtitle {
   color: #fff;
+}
+
+.diagram-section .diagram-subtitle {
+  color: #fff;
+  font-size: 120%;
+  font-style: italic;
+  text-align: center;
+}
+
+.diagram-subtitle a {
+  color: #fff;
+  text-decoration: underline;
 }
 
 .subtitle {
@@ -132,6 +149,7 @@ body {
 .sub-section {
   display: block;
   padding: 20px 0px;
+  text-align: center;
 }
 
 .sub-section .description {
@@ -147,7 +165,8 @@ body {
 }
 
 .sub-section .description {
-  float: left;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .sub-section .description .more {
@@ -158,42 +177,38 @@ body {
   color: #fff !important;
 }
 
-.sub-section.left img {
-  float: left;
-}
-
-.sub-section.right img {
-  float: right;
-}
-
 .sub-section.left .description {
-  margin-left: 40px;
+  margin-left: 80px;
   text-align: left;
 }
 
 .sub-section.right .description {
-  margin-left: 40px;
+  margin-right: 80px;
   text-align: right;
-}
-
-.quote-section {
 }
 
 .quote-block {
   display: block;
   padding: 50px 0px;
-  vertical-align: middle;
+}
+
+.quote-block .quote-block-info {
+  display: table;
+  margin: 0px auto;
 }
 
 .quote-block .author-thumb {
   max-width: 250px;
+  margin-top: -20px;
   float: left;
+  vertical-align: middle;
 }
 
 .quote-block .quote-info {
   float: left;
   max-width: 600px;
   margin-left: 60px;
+  vertical-align: middle;
 }
 
 .quote-info .quote-text {
@@ -244,13 +259,14 @@ body {
   color: #fff;
   font-size: 200% !important;
   padding: 10px 80px !important;
-  display: table;
+  display: block;
+  max-width: 400px;
   margin: 40px auto;
   box-shadow: 0px 4px 10px 3px rgba(0,0,0,0.4) !important;
-  border-radius: 15px;
-  -webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	-o-border-radius: 15px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-o-border-radius: 10px;
 }
 
 .footer-action-section h5 {
@@ -259,34 +275,11 @@ body {
   text-shadow: 0px 1px 2px rgba(0,0,0,0.8);
 }
 
+.footer-action-section h5 a {
+  color: #4FC6ED;
+}
+
 .footer-action-section h5 a:hover {
   color: #fff;
   text-decoration: underline;
-}
-
-.footer {
-  background-color: rgba(32, 109, 179, 1);
-  text-align: center;
-  padding: 20px 0px;
-}
-
-.footer ul {
-  display: inline;
-  margin: 0px;
-  padding: 0px;
-}
-
-.footer ul li {
-  display: inline;
-  padding: 0px 20px;
-}
-
-.footer ul li a {
-  color: #fff;
-  text-decoration: underline;
-}
-
-.footer ul li a:hover {
-  color: #fff;
-  text-decoration: none;
 }
