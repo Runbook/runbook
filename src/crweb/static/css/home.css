@@ -119,11 +119,23 @@ body {
 
 .diagram {
   max-width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .diagram-section .subtitle {
   color: #fff;
+}
+
+.diagram-section .diagram-subtitle {
+  color: #fff;
+  font-size: 120%;
+  font-style: italic;
+  text-align: center;
+}
+
+.diagram-subtitle a {
+  color: #fff;
+  text-decoration: underline;
 }
 
 .subtitle {
@@ -178,7 +190,11 @@ body {
 .quote-block {
   display: block;
   padding: 50px 0px;
-  vertical-align: middle;
+}
+
+.quote-block .quote-block-info {
+  display: table;
+  margin: 0px auto;
 }
 
 .quote-block .author-thumb {
