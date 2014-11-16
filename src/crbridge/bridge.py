@@ -52,6 +52,8 @@ cfh.close()
 # Init logger
 logger = logconfig.getLogger('crbridge.bridge', config['use_syslog'])
 
+logger.info("Using config %s" % configfile)
+
 # Redis Server
 try:
     r_server = redis.Redis(
