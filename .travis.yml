@@ -2,21 +2,23 @@ language: python
 python:
   - 2.7
 
+services:
+  - redis-server
+
 install:
   - pip install -r src/crweb/requirements.txt
   - pip install -r src/crbridge/requirements.txt
   - pip install -r src/cram/requirements.txt
-
-services:
-  - redis-server
+  - sudo add-apt-repository ppa:rethinkdb/ppa -y
+  - sudo apt-get update -q
+  - sudo apt-get install rethinkdb --force-yes
 
 before_script:
-  - sudo add-apt-repository ppa:rethinkdb/ppa --force-yes -y
-  - sudo apt-get update -q
-  - sudo apt-get install rethinkdb
-  - rethinkdb
+  - rethinkdb &
   - rethinkdb admin set auth cloudroutes
-  - python src/crweb/web.py instance/crweb.cfg.default
+  - cp src/crweb/instance/crweb.cfg.default src/crweb/instance/crweb.cfg
+  - python create_db.py
+  - python src/crweb/web.py &
 
 script:
   - python src/crweb/tests.py
