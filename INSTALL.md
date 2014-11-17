@@ -62,7 +62,7 @@ Application has 4 configuration file types, which are used by 7 types of process
 **_(EASY)_** Here is a list of configuration files, that can be used for the first time to run a minimal working application locally:
 
  - crweb/instance/crweb.cfg.default - used by Web (crweb/web.py) process
- - cram/config/control.yml.default - used by cram/control.py process
+ - cram/config/control.yml.5min.default - used by cram/control.py process
  - cram/config/main.yml.default - used by cram/broker.py and cram/worker.py processes
  - crbridge/config/config.yml.default - used by crbridge/bridge.py, crbridge/broker.py and crbridge/actioner.py processes
 
@@ -93,7 +93,7 @@ $ python src/crweb/web.py instance/crweb.cfg.default
 **_(EASY)_** run control:
 
 ```sh
-$ python src/cram/control.py config/control.yml.default
+$ python src/cram/control.py config/control.yml.5min.default
 ```
 
 3) Run broker and worker (src/cram/broker.py and src/cram/worker.py)
