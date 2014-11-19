@@ -41,8 +41,7 @@ localhost:29015> set auth <auth_key>
 **_(EASY)_** you may want to choose `cloudroutes` key, which will match to what is set in `*.default` configuration files:
 
 ```sh
-$ rethinkdb admin --join localhost:29015
-localhost:29015> set auth cloudroutes
+$ rethinkdb admin set auth cloudroutes
 ```
 
 
