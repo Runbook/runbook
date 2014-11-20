@@ -1,9 +1,19 @@
+import sys
+import os
+
 import rethinkdb as r
 from rethinkdb.errors import RqlDriverError, RqlRuntimeError
 
 from flask import Flask
+
+configfile = os.path.join('src', 'crweb', 'instance', 'crweb.cfg')
+if len(sys.argv) > 1:
+    configfile = sys.argv[1]
+print("Using config %s" % configfile)
+
+
 app = Flask("createdb")
-if app.config.from_pyfile("src/crweb/instance/crweb.cfg"):
+if app.config.from_pyfile(configfile):
     host = app.config['DBHOST']
     database = app.config['DATABASE']
     auth_key = app.config['DBAUTHKEY']

@@ -1,0 +1,13 @@
+## Worker Configuration
+## zMQ
+broker_ip: 127.0.0.1
+broker_control_port: 40101
+broker_worker_port: 40201
+## Sink Config
+sink_ip: 127.0.0.1
+sink_port: 40301
+## StatHat EZ Key
+stathat_ez_key: update_me!
+envname: [Alpha]
+## Logging
+use_syslog: true
