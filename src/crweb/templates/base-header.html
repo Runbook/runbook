@@ -33,7 +33,7 @@
     {% block css %}{% endblock %}
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
     {% for item in data['js_header'] %}
         {% include item %}
     {% endfor %}
