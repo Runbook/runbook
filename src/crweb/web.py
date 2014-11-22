@@ -43,7 +43,7 @@ import rethinkdb as r
 from rethinkdb.errors import RqlDriverError
 
 # Custom Classes
-from forms import SignupForm, LoginForm, ChangePassForm
+from forms import ChangePassForm
 from users import User
 from monitors import Monitor
 from reactions import Reaction
@@ -60,6 +60,13 @@ if len(sys.argv) > 1:
     configfile = sys.argv[1]
 print("Using config %s" % configfile)
 app.config.from_pyfile(configfile)
+
+
+# Blueprints
+# ------------------------------------------------------------------
+
+from user.views import user_blueprint
+app.register_blueprint(user_blueprint)
 
 
 # Common Functions
@@ -198,138 +205,6 @@ def static_pages(pagename):
     return render_template(rendpage, data=data), status_code
 
 
-# User Management
-
-# Signup
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    '''
-    User Sign up page: Very basic email + password
-    sign up form that will also login users.
-    '''
-    # Data is used throughout for the jinja2 templates
-    data = {
-        'active': "signup",  # Sets the current page
-        'loggedin': False  # Don't show the logout link
-    }
-
-    # Define the SignupForm
-    form = SignupForm(request.form)
-    # Validate and then create userdata
-    if request.method == "POST":
-        if form.validate():
-            # Take form data
-            email = form.email.data
-            password = form.password.data
-            company = form.company.data
-            contact = form.contact.data
-            userdata = {
-                'username': email,
-                'email': email,
-                'password': password,
-                'company': company,
-                'contact': contact
-            }
-
-            # Create user
-            user = User()
-            result = user.createUser(userdata, g.rdb_conn)
-            # Check results for success or failure
-            if result == "exists":
-                data['error'] = True
-                data['msg'] = 'User already exists'
-            elif result is not False:
-                stathat.ez_count(
-                    app.config['STATHAT_EZ_KEY'],
-                    app.config['ENVNAME'] + ' User Signup', 1)
-                print("/signup - New user created")
-                cdata = cookies.genCdata(result, app.config['SECRET_KEY'])
-                data['loggedin'] = True
-                data['msg'] = 'You are signed up'
-                data['error'] = False
-                # Build response
-                resp = make_response(redirect(url_for('dashboard_page')))
-                timeout = int(time.time()) + int(app.config['COOKIE_TIMEOUT'])
-                # Set the cookie secure as best as possible
-                resp.set_cookie(
-                    'loggedin', cdata, expires=timeout, httponly=True)
-                return resp
-        else:
-            stathat.ez_count(
-                app.config['STATHAT_EZ_KEY'],
-                app.config['ENVNAME'] + ' Failed User Signup', 1)
-            print("/signup - Failed user creation")
-            data['msg'] = 'Form is not valid'
-            data['error'] = True
-
-    # Return Signup Page
-    return render_template('signup.html', data=data, form=form)
-
-
-# Login
-@app.route('/login', methods=['GET', 'POST'])
-def login_page():
-    ''' User login page: This is a basic login page'''
-    data = {
-        'active': 'login',
-        'loggedin': False
-    }
-
-    # Define and Validate the form
-    form = LoginForm(request.form)
-    if request.method == "POST":
-        if form.validate():
-            email = form.email.data
-            password = form.password.data
-
-            # Start user definition
-            user = User()
-            if user.get('username', email, g.rdb_conn):
-                result = user.checkPass(password, g.rdb_conn)
-                if result is True:
-                    data['loggedin'] = True
-                    data['msg'] = 'You are logged in'
-                    data['error'] = False
-                    print("/login - User login successful")
-                    # Start building response
-                    resp = make_response(redirect(url_for('dashboard_page')))
-                    cdata = cookies.genCdata(
-                        user.uid, app.config['SECRET_KEY'])
-                    timeout = int(time.time()) + \
-                        int(app.config['COOKIE_TIMEOUT'])
-                    # Set cookie as securely as possible
-                    resp.set_cookie(
-                        'loggedin', cdata, expires=timeout, httponly=True)
-                    print("Setting cookie")
-                    return resp
-                else:
-                    data['msg'] = 'Password does not seem valid'
-                    data['error'] = True
-                    print("/login - User login error: wrong password")
-            else:
-                data['msg'] = 'Uhh... User not found'
-                print("/login - User login error: invalid user")
-                data['error'] = True
-        else:
-            data['msg'] = 'Form is not valid'
-            print("/login - User login error: invalid form")
-            data['error'] = True
-
-    # Return Login Page
-    page = render_template('login.html', data=data, form=form)
-    return page
-
-
-# Logout
-@app.route('/logout')
-def logout_page():
-    ''' User logout page: This will unset the cookie '''
-    resp = make_response(redirect(url_for('login_page')))
-    resp.set_cookie('loggedin', 'null', max_age=0)
-    print("/logout - User logout")
-    return resp
-
-
 # Dashboard
 
 
@@ -390,7 +265,7 @@ def dashboard_page():
             page = render_template('screen-o-death.html', data=data, form=form)
         return page
     else:
-        return redirect(url_for('login_page'))
+        return redirect(url_for('user.login_page'))
 
 
 # Monitors
@@ -489,7 +364,7 @@ def addcheck_page(cname):
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
-        return redirect(url_for('login_page'))
+        return redirect(url_for('user.login_page'))
 
 
 # Edit a Monitor
@@ -613,7 +488,7 @@ def editcheck_page(cname, cid):
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
-        return redirect(url_for('login_page'))
+        return redirect(url_for('user.login_page'))
 
 
 # Monitors Index
@@ -637,7 +512,7 @@ def monitors_page():
         page = render_template(tmpl, data=data)
         return page
     else:
-        return redirect(url_for('login_page'))
+        return redirect(url_for('user.login_page'))
 
 
 # Manual Checks
@@ -793,7 +668,7 @@ def viewhistory_page(cid, start, limit):
         page = render_template(tmpl, data=data)
         return page
     else:
-        return redirect(url_for('login_page'))
+        return redirect(url_for('user.login_page'))
 
 
 # Detail Monitor History
@@ -832,7 +707,7 @@ def detailhistory_page(cid, hid):
         page = render_template(tmpl, data=data)
         return page
     else:
-        return redirect(url_for('login_page'))
+        return redirect(url_for('user.login_page'))
 
 
 # Reactions
@@ -919,7 +794,7 @@ def addreaction_page(rname):
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
-        return redirect(url_for('login_page'))
+        return redirect(url_for('user.login_page'))
 
 
 # Edit an existing reaction
@@ -1034,7 +909,7 @@ def editreact_page(rname, rid):
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
-        return redirect(url_for('login_page'))
+        return redirect(url_for('user.login_page'))
 
 
 # Reaction Index
@@ -1058,7 +933,7 @@ def reactions_page():
         page = render_template(tmpl, data=data)
         return page
     else:
-        return redirect(url_for('login_page'))
+        return redirect(url_for('user.login_page'))
 
 
 # Delete Reaction
@@ -1237,7 +1112,7 @@ def modsub_page():
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
-        return redirect(url_for('login_page'))
+        return redirect(url_for('user.login_page'))
 
 
 # User-Preferences
@@ -1277,7 +1152,7 @@ def userpref_page():
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
-        return redirect(url_for('login_page'))
+        return redirect(url_for('user.login_page'))
 
 
 # Initiate the Application
