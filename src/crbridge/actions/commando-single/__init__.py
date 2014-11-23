@@ -61,16 +61,17 @@ def call(redata, jdata):
         'halt_on_stderr' : redata['data']['halt_on_stderr'],
         'notes' : 'Execution called by runbook.io'
     }
-    json_payload = json.dumps(payload)    
     try:
-        req = requests.post(url, data=json_payload, auth=(redata['data']['user'], redata['data']['apikey']), timeout=3.0, verify=False)
+        req = requests.post(url, data=payload, auth=(redata['data']['user'], redata['data']['apikey']), timeout=3.0, verify=False)
     except:
         return False
     if req.status_code == 202:
-        line = "commando-single: Reqeust to %s sent for monitor %s - Successful" % (url, jdata['cid'])
+        line = "commando-single: Reqeust to %s sent for monitor %s - Successful - %d" % (url, jdata['cid'], req.status_code)
         syslog.syslog(syslog.LOG_INFO, line)
         return True
     else:
-        line = "commando-single: Request to %s sent for monitor %s - Failed" % (url, jdata['cid'])
+        line = "commando-single: Request to %s sent for monitor %s - Failed - %d" % (url, jdata['cid'], req.status_code)
         syslog.syslog(syslog.LOG_INFO, line)
+        line = "commando-single: Debug Reply: %s" % req.text
+        syslog.syslog(syslog.LOG_DEBUG, line)
         return False

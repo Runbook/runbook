@@ -31,7 +31,7 @@
         <div class="panel panel-primary">
           <div class="panel-heading">
           <div class="panel-title">
-            Commando: Execute Recipe by Group
+            Commando: Execute Recipe (Group of Servers)
           </div>
           </div>
           <div class="panel-body">
@@ -59,16 +59,16 @@
               </div>  
 
                 <div class="form-group">
-                <label for="User Name" class="col-sm-4 control-label">User Name</label>
+                <label for="User Name" class="col-sm-4 control-label">Account Alias</label>
             <div class="col-sm-8">
               <div class="input-group">
               <span class="input-group-btn">
-                <button type="button" id="commando-user" class="btn btn-default" rel="popover" data-content="This field should contain your Commando user name" title="Commando User Name"><i class="fa fa-question"></i></button>
+                <button type="button" id="commando-user" class="btn btn-default" rel="popover" data-content="This field should contain your Commando account alias" title="Commando Account Alias"><i class="fa fa-question"></i></button>
               </span>
               {% if data['edit'] %}
               {{ form.user(class_="form-control", value=data['reaction']['data']['user']) }}
               {% else %}
-              {{ form.user(class_="form-control", placeholder="Commando User Name") }}
+              {{ form.user(class_="form-control", placeholder="Commando Account Alias") }}
               {% endif %}
             </div>
             </div>
@@ -101,7 +101,7 @@
               {% if data['edit'] %}
               {{ form.recipe_id(class_="form-control", value=data['reaction']['data']['recipe_id']) }}
               {% else %}
-              {{ form.recipe_id(class_="form-control", placeholder="Recipe ID") }}
+              {{ form.recipe_id(class_="form-control", placeholder="Commando Recipe ID") }}
               {% endif %}
             </div>
             </div>
