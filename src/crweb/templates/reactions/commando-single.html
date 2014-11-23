@@ -1,0 +1,138 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+      {% if data['edit'] %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Manage Reaction</h1>
+      {% else %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Add Reaction</h1>
+      {% endif %}
+      </div>
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            Commando: Execute Recipe (Single Server)
+          </div>
+          </div>
+          <div class="panel-body">
+            <form action="{{ data['url'] }}" method="post" name="reaction-form" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+
+            {% include 'reactions/base.html' %}
+            {% include 'reactions/callon.html' %}
+
+            <hr>
+               <div class="form-group">
+                <label for="API Key" class="col-sm-4 control-label">API Key</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="commando-apikey" class="btn btn-default" rel="popover" data-content="This field should contain the API Key for Commando" title="Commando API Key"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.apikey(class_="form-control", value=data['reaction']['data']['apikey']) }}
+              {% else %}
+              {{ form.apikey(class_="form-control", placeholder="Commando API Key") }}
+              {% endif %}
+            </div>
+            </div>
+              </div>  
+
+
+                <div class="form-group">
+                <label for="User Name" class="col-sm-4 control-label">Account Alias</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="commando-user" class="btn btn-default" rel="popover" data-content="This field should contain your Commando account alias" title="Commando Account Alias"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.user(class_="form-control", value=data['reaction']['data']['user']) }}
+              {% else %}
+              {{ form.user(class_="form-control", placeholder="Commando Account Alias") }}
+              {% endif %}
+            </div>
+            </div>
+              </div>  
+
+
+                <div class="form-group">
+                <label for="Server ID" class="col-sm-4 control-label">Server ID</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="commando-single-serverid" class="btn btn-default" rel="popover" data-content="This field should contain the server id to execute the recipe on" title="Commando Server ID"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.server_id(class_="form-control", value=data['reaction']['data']['server_id']) }}
+              {% else %}
+              {{ form.server_id(class_="form-control", placeholder="Commando Server ID") }}
+              {% endif %}
+            </div>
+            </div>
+              </div>  
+
+
+                <div class="form-group">
+                <label for="Recipe ID" class="col-sm-4 control-label">Recipe ID</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="commando-single-recipeid" class="btn btn-default" rel="popover" data-content="This field should contain the id of the recipe to execute." title="Commando Recipe ID"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.recipe_id(class_="form-control", value=data['reaction']['data']['recipe_id']) }}
+              {% else %}
+              {{ form.recipe_id(class_="form-control", placeholder="Commando Recipe ID") }}
+              {% endif %}
+            </div>
+            </div>
+              </div>  
+
+                <div class="form-group">
+                <label for="Halt on Error" class="col-sm-4 control-label">Halt on Error</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="commando-single-haltonstderr" class="btn btn-default" rel="popover" data-content="Select whether or not to stop the recipe execution if any server experiences an error." title="Halt on Error"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.halt_on_stderr(class_="select", value=data['reaction']['data']['halt_on_stderr']) }}
+              {% else %}
+              {{ form.halt_on_stderr(class_="select", placeholder="Select Value") }}
+              {% endif %}
+              </div>
+            </div>
+              </div>  
+
+
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}
