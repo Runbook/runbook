@@ -169,7 +169,7 @@ def login_page():
 @user_blueprint.route('/logout')
 def logout_page():
     ''' User logout page: This will unset the cookie '''
-    resp = make_response(redirect(url_for('login_page')))
+    resp = make_response(redirect(url_for('user.login_page')))
     resp.set_cookie('loggedin', 'null', max_age=0)
     print("/logout - User logout")
     return resp
