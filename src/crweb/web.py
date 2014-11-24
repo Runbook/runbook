@@ -1155,6 +1155,37 @@ def userpref_page():
         return redirect(url_for('user.login_page'))
 
 
+# Error handler
+# ------------------------------------------------------------------
+
+@app.errorhandler(403)
+def forbidden_page(error):
+    data = {
+        'active': "403",  # Sets the current page
+        'loggedin': False  # Don't show the logout link
+    }
+    return render_template("errors/403.html", data=data), 403
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    # Data is used throughout for the jinja2 templates
+    data = {
+        'active': "404",  # Sets the current page
+        'loggedin': False  # Don't show the logout link
+    }
+    return render_template("errors/404.html", data=data), 404
+
+
+@app.errorhandler(500)
+def server_error_page(error):
+    data = {
+        'active': "500",  # Sets the current page
+        'loggedin': False  # Don't show the logout link
+    }
+    return render_template("errors/500.html", data=data), 500
+
+
 # Initiate the Application
 # ------------------------------------------------------------------
 
