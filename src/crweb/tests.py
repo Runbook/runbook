@@ -122,6 +122,12 @@ class FunctionalTests(BaseTestCase):
             response = self.client.get('/logout', follow_redirects=True)
             self.assertIn('Login', response.data)
 
+    def test_404_behaves_correctly(self):
+        # Ensure 404 error handlers behaves correctly
+        response = self.client.get('/not_a_real_page', follow_redirects=True)
+        self.assertEqual(response.status_code, 404)
+        self.assertIn('404', response.data)
+
 
 class TestLoginForm(BaseTestCase):
 
