@@ -1,45 +1,46 @@
-<div class="container">
-  <div class="row">
-   <div class="col-lg-12">
-    <hr>
-     <p class="text-muted credit text-right">Runbook &copy; is a <a href="https://assembly.com/runbook" target="_blank">Assembly</a> project, All Rights Reserved.</p>
+  <div class="container">
+    <div class="row">
+     <div class="col-lg-12">
+      <hr>
+       <p class="text-muted credit text-right">Runbook &copy; is a <a href="https://assembly.com/runbook" target="_blank">Assembly</a> project, All Rights Reserved.</p>
+    </div>
+   </div>
   </div>
- </div>
-</div>
   <!-- Bootstrap core JavaScript
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
-  <script src="/static/js/bootstrap-multiselect.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('.multiselect').multiselect({
-      enableCaseInsensitiveFiltering: true,
-      filterBehavior: 'both',
-      filterPlaceholder: 'Search',
-      buttonClass: 'form-control',
-      numberDisplayed: 1,
-      maxHeight: 400,
+  <script src="{{url_for('static', filename='js/bootstrap-multiselect.js')}}" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.multiselect').multiselect({
+        enableCaseInsensitiveFiltering: true,
+        filterBehavior: 'both',
+        filterPlaceholder: 'Search',
+        buttonClass: 'form-control',
+        numberDisplayed: 1,
+        maxHeight: 400,
+      });
+
+      $('.select').multiselect({
+        buttonClass: 'form-control',
+        enableCaseInsensitiveFiltering: true,
+        filterBehavior: 'both',
+        filterPlaceholder: 'Search',
+        maxHeight: 400,
+      });
+
+      $('.plan-select').multiselect({
+        buttonClass: 'form-control',
+        maxHeight: 400,
+      });
+
+
     });
 
-    $('.select').multiselect({
-      buttonClass: 'form-control',
-      enableCaseInsensitiveFiltering: true,
-      filterBehavior: 'both',
-      filterPlaceholder: 'Search',
-      maxHeight: 400,
-    });
-
-    $('.plan-select').multiselect({
-      buttonClass: 'form-control',
-      maxHeight: 400,
-    });
-
-
-  });
-
-</script>
-{% for item in data['js_bottom'] %}
-  {% include item %}
-{% endfor %}
-</body>
+  </script>
+  {% for item in data['js_bottom'] %}
+    {% include item %}
+  {% endfor %}
+  {% block js %}{% endblock %}
+  </body>
 </html>
