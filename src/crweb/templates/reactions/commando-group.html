@@ -79,7 +79,7 @@
             <div class="col-sm-8">
               <div class="input-group">
               <span class="input-group-btn">
-                <button type="button" id="commando-single-groupid" class="btn btn-default" rel="popover" data-content="This field should contain the group id of the server groups to execute the recipe on" title="Commando Group ID"><i class="fa fa-question"></i></button>
+                <button type="button" id="commando-single-groupid" class="btn btn-default" rel="popover" data-content="This field should contain a comma seperated list of Group IDs. Example: grp_12345,grp_23456" title="Commando Group ID"><i class="fa fa-question"></i></button>
               </span>
               {% if data['edit'] %}
               {{ form.group_id(class_="form-control", value=data['reaction']['data']['group_id']) }}
