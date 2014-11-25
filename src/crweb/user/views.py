@@ -93,7 +93,7 @@ def signup():
                 data['msg'] = 'You are signed up'
                 data['error'] = False
                 # Build response
-                resp = make_response(redirect(url_for('dashboard_page')))
+                resp = make_response(redirect(url_for('public.dashboard_page')))
                 timeout = int(time.time()) + int(app.config['COOKIE_TIMEOUT'])
                 # Set the cookie secure as best as possible
                 resp.set_cookie(
@@ -137,7 +137,7 @@ def login_page():
                     data['error'] = False
                     print("/login - User login successful")
                     # Start building response
-                    resp = make_response(redirect(url_for('dashboard_page')))
+                    resp = make_response(redirect(url_for('public.dashboard_page')))
                     cdata = cookies.genCdata(
                         user.uid, app.config['SECRET_KEY'])
                     timeout = int(time.time()) + \
