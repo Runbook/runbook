@@ -8,7 +8,7 @@ import unittest
 import rethinkdb as r
 from rethinkdb.errors import RqlDriverError
 
-from flask import g, abort
+from flask import g, abort, url_for
 from flask.ext.testing import TestCase
 
 from web import app
@@ -64,6 +64,19 @@ class FunctionalTests(BaseTestCase):
         response = self.client.get('/', content_type='html/text')
         self.assertEqual(response.status_code, 200)
         self.assertIn('DevOps, automated', response.data)
+
+    def test_index_url_for(self):
+        # Ensure that public blueprint works correctly
+        response = self.client.get(
+            url_for('public.index_redirect'), content_type='html/text')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('DevOps, automated', response.data)
+
+    def test_static_pages_route(self):
+        # Ensure that /pages/<pagename> works correctly
+        response = self.client.get('/pages/pricing', content_type='html/text')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Pricing', response.data)
 
     def test_dashboard_route_login(self):
         # Ensure that /dashboard requires user login
