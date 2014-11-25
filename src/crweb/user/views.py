@@ -137,7 +137,8 @@ def login_page():
                     data['error'] = False
                     print("/login - User login successful")
                     # Start building response
-                    resp = make_response(redirect(url_for('public.dashboard_page')))
+                    resp = make_response(
+                        redirect(url_for('public.dashboard_page')))
                     cdata = cookies.genCdata(
                         user.uid, app.config['SECRET_KEY'])
                     timeout = int(time.time()) + \
