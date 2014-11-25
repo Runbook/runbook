@@ -16,7 +16,7 @@
 # - your name here
 #####################################################################
 
-# Imports
+# Imports (pre-app creation)
 # ------------------------------------------------------------------
 
 # Misc. Python goodies
@@ -25,6 +25,7 @@ import json
 import time
 import requests
 import sys
+import cookies
 
 # Flask modules
 from flask import Flask
@@ -33,7 +34,6 @@ from flask import request
 from flask import abort, flash
 from flask import g
 from flask import redirect, url_for
-from flask import make_response
 
 # Gather Stats
 import stathat
@@ -47,7 +47,6 @@ from forms import ChangePassForm
 from users import User
 from monitors import Monitor
 from reactions import Reaction
-import cookies
 
 
 # Application Configuration
@@ -60,13 +59,6 @@ if len(sys.argv) > 1:
     configfile = sys.argv[1]
 print("Using config %s" % configfile)
 app.config.from_pyfile(configfile)
-
-
-# Blueprints
-# ------------------------------------------------------------------
-
-from user.views import user_blueprint
-app.register_blueprint(user_blueprint)
 
 
 # Common Functions
@@ -139,6 +131,19 @@ def startData(user=None):
     data['subscription'] = user.subscription
     return data
 
+# Imports (post-app creation)
+# ------------------------------------------------------------------
+
+from public.views import public_blueprint
+from user.views import user_blueprint
+
+
+# Blueprints
+# ------------------------------------------------------------------
+
+app.register_blueprint(public_blueprint)
+app.register_blueprint(user_blueprint)
+
 
 # Downstream Connections
 # ------------------------------------------------------------------
@@ -166,43 +171,6 @@ def teardown_request(exception):
     except AttributeError:
         # Who cares?
         pass
-
-
-# Application Views
-# ------------------------------------------------------------------
-
-# Index
-@app.route('/')
-def index_redirect():
-    ''' User login page: This is a basic login page'''
-    data = {
-        'active': '/',
-        'clean_header': True,
-        'loggedin': False
-    }
-
-    # Return Home Page
-    return render_template('index.html', data=data)
-
-
-# Static Pages
-@app.route("/pages/<pagename>", methods=['GET'])
-def static_pages(pagename):
-    ''' Generate static pages if they are defined '''
-    rendpage = '404.html'
-    status_code = 404
-    for page in app.config['STATIC_PAGES'].keys():
-        # This is less efficent but it lessens the chance
-        # of users rendering templates they shouldn't
-        if pagename == page:
-            rendpage = app.config['STATIC_PAGES'][page]
-            status_code = 200
-
-    data = {
-        'active': pagename,
-        'loggedin' : False
-    }
-    return render_template(rendpage, data=data), status_code
 
 
 # Dashboard
