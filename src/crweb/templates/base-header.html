@@ -71,7 +71,7 @@
               </li>
             {% else %}
               <li class="{{ 'active' if data['active'] == 'dashboard' }}">
-                <a href="{{ url_for('dashboard_page') }}">Dashboard</a>
+                <a href="{{ url_for('public.dashboard_page') }}">Dashboard</a>
               </li>
               <li>
                 <a href="{{ url_for('user.logout_page') }}" class="text-danger">Logout</a>
