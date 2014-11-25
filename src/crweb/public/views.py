@@ -50,7 +50,7 @@ def index_redirect():
     }
 
     # Return Home Page
-    return render_template('index.html', data=data)
+    return render_template('public/index.html', data=data)
 
 
 # Static Pages
@@ -70,7 +70,7 @@ def static_pages(pagename):
         'active': pagename,
         'loggedin': False
     }
-    return render_template(rendpage, data=data), status_code
+    return render_template('public/'+rendpage, data=data), status_code
 
 
 # Dashboard Home
@@ -85,8 +85,8 @@ def dashboard_page():
         data = startData(user)
         data['active'] = 'dashboard'
         data['url'] = '/dashboard'
-        data['js_bottom'].append("screen-o-death.js")
-        data['js_bottom'].append("screen-o-death-chart.js")
+        data['js_bottom'].append("public/screen-o-death.js")
+        data['js_bottom'].append("public/screen-o-death-chart.js")
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
             page = render_template('mod-subscription.html', data=data)
@@ -127,7 +127,8 @@ def dashboard_page():
 
             from generalforms import subscribe
             form = subscribe.AddPackForm(request.form)
-            page = render_template('screen-o-death.html', data=data, form=form)
+            page = render_template(
+                'public/screen-o-death.html', data=data, form=form)
         return page
     else:
         return redirect(url_for('user.login_page'))

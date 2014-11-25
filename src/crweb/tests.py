@@ -72,12 +72,6 @@ class FunctionalTests(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('DevOps, automated', response.data)
 
-    def test_static_pages_route(self):
-        # Ensure that /pages/<pagename> works correctly
-        response = self.client.get('/pages/pricing', content_type='html/text')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('Pricing', response.data)
-
     def test_dashboard_route_login(self):
         # Ensure that /dashboard requires user login
         response = self.client.get('/dashboard', follow_redirects=True)
@@ -146,6 +140,27 @@ class FunctionalTests(BaseTestCase):
         response = self.client.get('/not_a_real_page', follow_redirects=True)
         self.assertEqual(response.status_code, 404)
         self.assertIn('404', response.data)
+
+
+class FunctionalStaticPagesTests(BaseTestCase):
+
+    def test_static_pages_pricing_route(self):
+        # Ensure that /pages/pricig works correctly
+        response = self.client.get('/pages/pricing', content_type='html/text')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Pricing', response.data)
+
+    def test_static_pages_faq_route(self):
+        # Ensure that /pages/faq works correctly
+        response = self.client.get('/pages/faq', content_type='html/text')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('What is <strong>runbook.io</strong>?', response.data)
+
+    def test_static_pages_tos_route(self):
+        # Ensure that /pages/tos works correctly
+        response = self.client.get('/pages/tos', content_type='html/text')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Runbook Terms of Service ("Agreement")', response.data)
 
 
 class TestLoginForm(BaseTestCase):
