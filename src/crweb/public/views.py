@@ -89,7 +89,7 @@ def dashboard_page():
         data['js_bottom'].append("public/screen-o-death-chart.js")
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
-            page = render_template('mod-subscription.html', data=data)
+            page = render_template('monitors/mod-subscription.html', data=data)
         else:
 
             data['monitors'] = user.getMonitors(g.rdb_conn)

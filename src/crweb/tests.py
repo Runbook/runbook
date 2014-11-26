@@ -110,6 +110,19 @@ class FunctionalTests(BaseTestCase):
             self.assertTrue(response.status_code == 200)
             self.assertIn('User Preferences', response.data)
 
+    def test_dashboard_monitor_route(self):
+        # Ensure registered user can access dashboard/monitor route.
+        with self.client:
+            self.client.post(
+                '/login',
+                data=dict(email="test@tester.com", password="password456"),
+                follow_redirects=True
+            )
+            response = self.client.get(
+                '/dashboard/monitors', follow_redirects=True)
+            self.assertTrue(response.status_code == 200)
+            self.assertIn('Create Monitors', response.data)
+
     def test_correct_login(self):
         # Ensure login behaves correctly with correct credentials
         with self.client:
@@ -161,6 +174,18 @@ class FunctionalStaticPagesTests(BaseTestCase):
         response = self.client.get('/pages/tos', content_type='html/text')
         self.assertEqual(response.status_code, 200)
         self.assertIn('Runbook Terms of Service ("Agreement")', response.data)
+
+    def test_static_pages_monitors_route(self):
+        # Ensure that /pages/monitors works correctly
+        response = self.client.get('/pages/monitors', content_type='html/text')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Available Monitors', response.data)
+
+    def test_static_pages_reactions_route(self):
+        # Ensure that /pages/reactions works correctly
+        response = self.client.get('/pages/reactions', content_type='html/text')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Available Reactions', response.data)
 
 
 class TestLoginForm(BaseTestCase):
@@ -244,7 +269,6 @@ class TestUser(BaseTestCase):
                 email='test@tester.com', password='foo_bar'
             ), follow_redirects=True)
         self.assertIn('Password does not seem valid', response.data)
-
 
 if __name__ == '__main__':
     unittest.main()
