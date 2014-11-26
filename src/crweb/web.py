@@ -166,7 +166,7 @@ def teardown_request(exception):
         pass
 
 
-# Error handler
+# Error handlers
 # ------------------------------------------------------------------
 
 @app.errorhandler(403)

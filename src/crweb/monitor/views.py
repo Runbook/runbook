@@ -303,7 +303,7 @@ def checkaction_page(cid, action):
                 print("/dashboard/action-checks - Manual monitor action failed: do not own")
                 flash('It does not appear you own this health check', 'danger')
 
-    return redirect(url_for('public.dashboard_page'))
+    return redirect(url_for('member.dashboard_page'))
 
 
 # Delete Checks
@@ -332,7 +332,7 @@ def delcheck_page(cid):
             else:
                 print("/dashboard/delete-checks - Delete failed")
                 flash('Health Check was not deleted', 'danger')
-    return redirect(url_for('public.dashboard_page'))
+    return redirect(url_for('member.dashboard_page'))
 
 
 # Web Checks

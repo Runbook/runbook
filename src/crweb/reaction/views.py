@@ -297,4 +297,4 @@ def delreaction_page(rid):
                     flash('Reaction was not deleted', 'danger')
             else:
                 flash('You must first detach this reaction from all monitors before deleting', 'danger')
-    return redirect(url_for('public.dashboard_page'))
+    return redirect(url_for('member.dashboard_page'))
