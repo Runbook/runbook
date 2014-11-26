@@ -4,14 +4,11 @@
 import rethinkdb as r
 from rethinkdb.errors import RqlDriverError
 
-from flask import g, abort, Blueprint, render_template, request, \
-    url_for, redirect
-
-from users import User
+from flask import g, abort, Blueprint, render_template
 
 public_blueprint = Blueprint('public', __name__,)
 
-from web import app, verifyLogin, startData
+from web import app
 
 
 @public_blueprint.before_request
@@ -71,64 +68,3 @@ def static_pages(pagename):
         'loggedin': False
     }
     return render_template('public/'+rendpage, data=data), status_code
-
-
-# Dashboard Home
-@public_blueprint.route('/dashboard')
-def dashboard_page():
-    ''' Dashboard: Generate the Welcome/Status page for the dashboard '''
-    verify = verifyLogin(
-        app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
-    if verify:
-        user = User()
-        user.get('uid', verify, g.rdb_conn)
-        data = startData(user)
-        data['active'] = 'dashboard'
-        data['url'] = '/dashboard'
-        data['js_bottom'].append("public/screen-o-death.js")
-        data['js_bottom'].append("public/screen-o-death-chart.js")
-        if user.status != "active":
-            data['url'] = '/dashboard/mod-subscription'
-            page = render_template('member/mod-subscription.html', data=data)
-        else:
-
-            data['monitors'] = user.getMonitors(g.rdb_conn)
-            data['reactions'] = user.getReactions(g.rdb_conn)
-            data['monevents'] = user.getEvents(g.rdb_conn)
-            data['moneventsnum'] = len(data['monevents'])
-            data['monstats'] = {'healthy': 0,
-                                'unknown': 0,
-                                'failed': 0}
-            for key in data['monitors'].keys():
-                if "healthy" in data['monitors'][key]['status']:
-                    data['monstats']['healthy'] = data[
-                        'monstats']['healthy'] + 1
-                elif "failed" in data['monitors'][key]['status']:
-                    data['monstats']['failed'] = data['monstats']['failed'] + 1
-                else:
-                    data['monstats']['unknown'] = data[
-                        'monstats']['unknown'] + 1
-
-            # If there are no monitors print a welcome message
-            if len(data['monitors']) < 1 and len(data['reactions']) < 1:
-                data['welcome'] = True
-            else:
-                data['welcome'] = False
-
-            if len(data['monitors']) < 1:
-                data['mons'] = False
-            else:
-                data['mons'] = True
-
-            if len(data['reactions']) < 1:
-                data['reacts'] = False
-            else:
-                data['reacts'] = True
-
-            from generalforms import subscribe
-            form = subscribe.AddPackForm(request.form)
-            page = render_template(
-                'public/screen-o-death.html', data=data, form=form)
-        return page
-    else:
-        return redirect(url_for('user.login_page'))
