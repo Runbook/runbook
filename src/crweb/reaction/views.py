@@ -58,7 +58,7 @@ def addreaction_page(rname):
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
-            tmpl = 'monitors/mod-subscription.html'
+            tmpl = 'member/mod-subscription.html'
         else:
 
             reform = __import__(
@@ -143,7 +143,7 @@ def editreact_page(rname, rid):
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
-            tmpl = 'monitors/mod-subscription.html'
+            tmpl = 'member/mod-subscription.html'
         else:
             reform = __import__(
                 "reactionforms." + rname, globals(),
@@ -255,7 +255,7 @@ def reactions_page():
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
-            tmpl = 'monitors/mod-subscription.html'
+            tmpl = 'member/mod-subscription.html'
         else:
             pass
         page = render_template(tmpl, data=data)

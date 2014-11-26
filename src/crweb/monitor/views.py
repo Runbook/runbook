@@ -34,7 +34,7 @@ def addcheck_page(cname):
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
-            tmpl = 'monitors/mod-subscription.html'
+            tmpl = 'member/mod-subscription.html'
         else:
             # Get list of reactions and validate that there are some
             data['reactions'] = user.getReactions(g.rdb_conn)
@@ -131,7 +131,7 @@ def editcheck_page(cname, cid):
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
-            tmpl = 'monitors/mod-subscription.html'
+            tmpl = 'member/mod-subscription.html'
         else:
             # Get list of reactions and validate that there are some
             data['reactions'] = user.getReactions(g.rdb_conn)
@@ -253,7 +253,7 @@ def monitors_page():
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
-            tmpl = 'monitors/mod-subscription.html'
+            tmpl = 'member/mod-subscription.html'
         else:
             pass
         page = render_template(tmpl, data=data)
@@ -384,7 +384,7 @@ def viewhistory_page(cid, start, limit):
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
-            tmpl = 'monitors/mod-subscription.html'
+            tmpl = 'member/mod-subscription.html'
         else:
             monitor = Monitor()
             monitor.get(cid, g.rdb_conn)
@@ -433,7 +433,7 @@ def detailhistory_page(cid, hid):
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
-            tmpl = 'monitors/mod-subscription.html'
+            tmpl = 'member/mod-subscription.html'
         else:
             monitor = Monitor()
             monitor.get(cid, g.rdb_conn)
