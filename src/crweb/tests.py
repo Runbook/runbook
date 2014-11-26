@@ -123,6 +123,19 @@ class FunctionalTests(BaseTestCase):
             self.assertTrue(response.status_code == 200)
             self.assertIn('Create Monitors', response.data)
 
+    def test_dashboard_reaction_route(self):
+        # Ensure registered user can access dashboard/reaction route.
+        with self.client:
+            self.client.post(
+                '/login',
+                data=dict(email="test@tester.com", password="password456"),
+                follow_redirects=True
+            )
+            response = self.client.get(
+                '/dashboard/reactions', follow_redirects=True)
+            self.assertTrue(response.status_code == 200)
+            self.assertIn('Create Reactions', response.data)
+
     def test_correct_login(self):
         # Ensure login behaves correctly with correct credentials
         with self.client:
