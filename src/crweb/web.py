@@ -27,12 +27,6 @@ import cookies
 # Flask modules
 from flask import Flask
 from flask import render_template
-from flask import abort
-from flask import g
-
-# Scalable Database
-import rethinkdb as r
-from rethinkdb.errors import RqlDriverError
 
 
 # Application Configuration
@@ -117,7 +111,8 @@ def startData(user=None):
     data['subscription'] = user.subscription
     return data
 
-# Imports (post-app creation)
+
+# Blueprints
 # ------------------------------------------------------------------
 
 
@@ -127,43 +122,11 @@ from public.views import public_blueprint
 from reaction.views import reaction_blueprint
 from user.views import user_blueprint
 
-
-# Blueprints
-# ------------------------------------------------------------------
-
 app.register_blueprint(member_blueprint)
 app.register_blueprint(monitor_blueprint)
 app.register_blueprint(public_blueprint)
 app.register_blueprint(reaction_blueprint)
 app.register_blueprint(user_blueprint)
-
-
-# Downstream Connections
-# ------------------------------------------------------------------
-
-@app.before_request
-def before_request():
-    '''
-    This function establishes a connection
-    to the rethinkDB before each connection
-    '''
-    try:
-        g.rdb_conn = r.connect(
-            host=app.config['DBHOST'], port=app.config['DBPORT'],
-            auth_key=app.config['DBAUTHKEY'], db=app.config['DATABASE'])
-    except RqlDriverError:
-        # If no connection possible throw 503 error
-        abort(503, "No Database Connection Could be Established.")
-
-
-@app.teardown_request
-def teardown_request(exception):
-    ''' This function closes the database connection when done '''
-    try:
-        g.rdb_conn.close()
-    except AttributeError:
-        # Who cares?
-        pass
 
 
 # Error handlers

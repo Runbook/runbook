@@ -20,7 +20,7 @@ user_blueprint = Blueprint('user', __name__,)
 from web import app
 
 
-@user_blueprint.before_request
+@user_blueprint.before_app_request
 def before_request():
     '''
     This function establishes a connection
@@ -35,7 +35,7 @@ def before_request():
         abort(503, "No Database Connection Could be Established.")
 
 
-@user_blueprint.teardown_request
+@user_blueprint.teardown_app_request
 def teardown_request(exception):
     ''' This function closes the database connection when done '''
     try:
