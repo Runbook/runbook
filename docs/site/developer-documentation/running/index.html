@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Running - Runbook</title>
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script>
+
+  <style>
+    body {font-size: 90%;}
+    pre, code {font-size: 100%;}
+    h3, h4, h5, h6 {color: #2980b9; font-weight: 300}
+  </style> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Runbook</a>
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+      <ul class="current">
+    
+        
+        <span>User Guide</span>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../../user-guide/quick-start">Quick Start</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../../user-guide/monitors">Monitors</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../../user-guide/reactions">Reactions</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../../user-guide/community-tutorials">Community Tutorials</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../../user-guide/api">API</a>
+                    
+                </li>
+            
+        
+
+    
+        
+        <span>Developer Documentation</span>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../quick-start">Quick Start</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../architecture-overview">Architecture Overview</a>
+                    
+                </li>
+            
+                <li class="toctree-l1 current">
+                    <a class="current" href=".">Running</a>
+                    
+                        <ul>
+                        
+                            <li class="toctree-l2"><a href="#installation-guide">Installation Guide</a></li>
+                            
+                                <li><a class="toctree-l3" href="#easy-setup-route">Easy setup route</a></li>
+                            
+                                <li><a class="toctree-l3" href="#basics">Basics</a></li>
+                            
+                                <li><a class="toctree-l3" href="#rethinkdb-setup">RethinkDB setup</a></li>
+                            
+                                <li><a class="toctree-l3" href="#redis-setup">Redis setup</a></li>
+                            
+                                <li><a class="toctree-l3" href="#configuration">Configuration</a></li>
+                            
+                                <li><a class="toctree-l3" href="#initialize-the-database">Initialize the database</a></li>
+                            
+                                <li><a class="toctree-l3" href="#running-for-the-first-time">Running for the first time</a></li>
+                            
+                                <li><a class="toctree-l3" href="#note-relative-vs-absolute-urls">Note: Relative vs absolute URLs</a></li>
+                            
+                                <li><a class="toctree-l3" href="#run-tests">Run tests</a></li>
+                            
+                                <li><a class="toctree-l3" href="#once-everything-is-working-correctly">Once everything is working correctly</a></li>
+                            
+                        
+                        </ul>
+                    
+                </li>
+            
+                <li class="toctree-l1 ">
+                    <a class="" href="../developing">Developing</a>
+                    
+                </li>
+            
+        
+
+    
+</ul>
+
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="icon icon-reorder"></i>
+        <a href="../.."></a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    <li>Running</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              <h1 id="installation-guide">Installation Guide</h1>
+<p>This installation guide will help you with your initial setup of <a href="https://runbook.io">Runbook</a>.</p>
+<hr />
+<h2 id="easy-setup-route">Easy setup route</h2>
+<p>Some steps provide easy setup default values, which you may want to use if doing a first-time setup to speed things up. Using easy setup options leads you through an installation happy path (easy setup route). Such options are marked as <strong><em>(EASY)</em></strong>.</p>
+<h2 id="basics">Basics</h2>
+<ol>
+<li>Clone the repo</li>
+<li>Create and activate a virtualenv</li>
+<li>Install the requirements: <code>sh build.sh</code></li>
+</ol>
+<h2 id="rethinkdb-setup">RethinkDB setup</h2>
+<p>We use <a href="http://www.rethinkdb.com/">RethinkDB</a> for persistence. New to RethinkDB? <a href="http://www.rethinkdb.com/docs/install/">Install</a>, then check out the <a href="http://www.rethinkdb.com/docs/quickstart/">quickstart</a>.</p>
+<p><em>Make sure to follow these rules regarding the server vs. driver versions:</em></p>
+<ul>
+<li>IF driver &lt; 1.13 THEN use server &lt; 1.13</li>
+<li>IF driver &gt;= 1.13 THEN use server &gt; 1.13</li>
+</ul>
+<p>Once installed, start the server in a new terminal window:</p>
+<pre><code class="sh">$ rethinkdb
+</code></pre>
+
+<p>Choose authentication key for RethinkDB and set it:</p>
+<pre><code class="sh">$ rethinkdb admin --join localhost:29015
+localhost:29015&gt; set auth &lt;auth_key&gt;
+</code></pre>
+
+<p><strong><em>(EASY)</em></strong> you may want to choose <code>cloudroutes</code> key, which will match to what is set in <code>*.default</code> configuration files:</p>
+<pre><code class="sh">$ rethinkdb admin set auth cloudroutes
+</code></pre>
+
+<h2 id="redis-setup">Redis setup</h2>
+<p>Download <a href="http://redis.io/download">Redis</a> (if necessary), then fire up the server in a new terminal window:</p>
+<pre><code class="sh">$ redis-server
+</code></pre>
+
+<h2 id="configuration">Configuration</h2>
+<p>An application has 4 configuration file types, which are used by 7 types of processes. This is because having different processes of the same type requires different configurations (ports, data shards, etc.). A minimal application will have exactly 7 processes and 4 configuration files.</p>
+<p><strong><em>(EASY)</em></strong> Here is a list of configuration files, that can be used for the first time to run a minimal working application locally:</p>
+<ul>
+<li>crweb/instance/crweb.cfg.default - used by Web (crweb/web.py) process</li>
+<li>cram/config/control.yml.5min.default - used by cram/control.py process</li>
+<li>cram/config/main.yml.default - used by cram/broker.py and cram/worker.py processes</li>
+<li>crbridge/config/config.yml.default - used by crbridge/bridge.py, crbridge/broker.py and crbridge/actioner.py processes</li>
+</ul>
+<h2 id="initialize-the-database">Initialize the database</h2>
+<p>There is a <code>create_db.py</code> script for initializing RethinkDB.</p>
+<p><strong><em>(EASY)</em></strong> Create the database and required tables from the Python shell:</p>
+<pre><code class="sh">$ python create_db.py src/crweb/instance/crweb.cfg.default
+</code></pre>
+
+<h2 id="running-for-the-first-time">Running for the first time</h2>
+<p>1) Run web processes (src/crweb/web.py)</p>
+<p><strong><em>(EASY)</em></strong> run web:</p>
+<pre><code class="sh">$ python src/crweb/web.py instance/crweb.cfg.default
+</code></pre>
+
+<p>2) Run control process (src/cram/control.py)</p>
+<p><strong><em>(EASY)</em></strong> run control:</p>
+<pre><code class="sh">$ python src/cram/control.py config/control.yml.5min.default
+</code></pre>
+
+<p>3) Run broker and worker (src/cram/broker.py and src/cram/worker.py)</p>
+<p><strong><em>(EASY)</em></strong> run broker:</p>
+<pre><code class="sh">$ python src/cram/broker.py config/main.yml.default
+</code></pre>
+
+<p><strong><em>(EASY)</em></strong> run worker:</p>
+<pre><code class="sh">$ python src/cram/worker.py config/main.yml.default
+</code></pre>
+
+<p>4) Run bridge, broker, and actioner (src/crbridge/bridge.py, src/crbridge/broker.py, src/crbridge/acrioner.py)</p>
+<p><strong><em>(EASY)</em></strong> run bridge:</p>
+<pre><code class="sh">$ python src/crbridge/bridge.py config/config.yml.default
+</code></pre>
+
+<p><strong><em>(EASY)</em></strong> run broker:</p>
+<pre><code class="sh">$ python src/crbridge/broker.py config/config.yml.default
+</code></pre>
+
+<p><strong><em>(EASY)</em></strong> run actioner:</p>
+<pre><code class="sh">$ python src/crbridge/actioner.py config/config.yml.default
+</code></pre>
+
+<p>Now you can launch your browser and point it to <code>http://localhost:8000/signup</code>. Sign up, create a monitor and a reaction, and watch them being executed.</p>
+<h2 id="note-relative-vs-absolute-urls">Note: Relative vs absolute URLs</h2>
+<p>When deployed in production, static pages such as <code>/</code>, <code>/pages/tos</code>, and <code>/pages/pricing</code> are prefetched and saved as HTML files. Since the static pages in production are <code>https://runbook.io</code> and the web app runs as <code>https://dash.runbook.io</code>, the <strong>login</strong> and <strong>signup</strong> links are always absolute URLs. All other links should be kept as relative URLs. To get started with your local instance, simply point your browser to <code>http://localhost:8000/signup</code></p>
+<h2 id="run-tests">Run tests</h2>
+<pre><code class="sh">$ python src/crweb/tests.py
+</code></pre>
+
+<h2 id="once-everything-is-working-correctly">Once everything is working correctly</h2>
+<p>You can now use these 3 tmux scripts which run databases and other 7 processes with default settings with panes split.</p>
+<p><strong><em>(EASY)</em></strong> yes, these scripts only work if you follow the easy setup route</p>
+<p>You should have <a href="http://tmux.sourceforge.net">tmux</a> installed for these to work.</p>
+<p>run databases and web:</p>
+<pre><code class="sh">$ ./tmux_1_web_and_databases.sh
+</code></pre>
+
+<p>run all cram processes:</p>
+<pre><code class="sh">$ ./tmux_2_cram.sh
+</code></pre>
+
+<p>run all crbridge processes:</p>
+<pre><code class="sh">$ ./tmux_3_crbridge.sh
+</code></pre>
+
+<hr />
+
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../developing" class="btn btn-neutral float-right" title="Developing"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../architecture-overview" class="btn btn-neutral" title="Architecture Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+    <!-- Copyright etc -->
+    </p>
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        
+      <span><a href="../architecture-overview" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      <span style="margin-left: 15px"><a href="../developing" style="color: #fcfcfc">Next &raquo;</a></span>
+    </span>
+</div>
+</body>
+</html>
