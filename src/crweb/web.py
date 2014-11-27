@@ -58,57 +58,24 @@ def startData(user=None):
         data['status'] = user.status
         data['company'] = user.company
         data['loggedin'] = True
-        if user.acttype == "lite" or user.acttype == "free":
-            data['choices'] = [
-                ('30mincheck', 'Every 30 Minutes'),
-                ('5mincheck', 'Every 5 Minutes')]
-            data['limit'] = 10
-            data['rlimit'] = 50
-            data['dataret'] = 86400
-            data['acttype'] = "Lite"
-            data['cost'] = "Free"
-        elif user.acttype == "lite-v2":
-            data['choices'] = [
-                ('30mincheck', 'Every 30 Minutes'),
-                ('5mincheck', 'Every 5 Minutes')]
-            data['limit'] = user.subplans
-            data['rlimit'] = user.subplans * 2
-            data['dataret'] = 86400
-            data['acttype'] = "Lite"
-            data['cost'] = "Free"
-        elif user.acttype == "enterprise":
-            data['choices'] = [
-                ('30mincheck', 'Every 30 Minutes'),
-                ('5mincheck', 'Every 5 Minutes'),
-                ('2mincheck', 'Every 2 Minutes'),
-                ('30seccheck', 'Every 30 Seconds')
-            ]
-            data['limit'] = user.subplans
-            data['rlimit'] = user.subplans * 2
-            data['cost'] = float(user.subplans) * 6.00
-            data['dataret'] = 16070400
-            data['acttype'] = "Enterprise"
-        else:
-            data['choices'] = [
-                ('30mincheck', 'Every 30 Minutes'),
-                ('5mincheck', 'Every 5 Minutes'),
-                ('2mincheck', 'Every 2 Minutes'),
-                ('30seccheck', 'Every 30 Seconds')
-            ]
-            data['limit'] = user.subplans
-            data['rlimit'] = user.subplans * 2
+        data['choices'] = app.config['PACKAGES'][user.acttype]['choices']
+        data['limit'] = user.subplans
+        data['rlimit'] = user.subplans * app.config['PACKAGES'][user.acttype]['reaction_multiplier']
+        data['dataret'] = app.config['PACKAGES'][user.acttype]['data_retention']
+        data['acttype'] = app.config['PACKAGES'][user.acttype]['acttype']
+        data['upgraded'] = app.config['PACKAGES'][user.acttype]['upgraded']
+        if data['upgraded'] == True:
             if "yearly" in user.subscription:
-                permon = .75 * 12.00
+                data['cost'] = app.config['PACKAGES'][user.acttype]['cost_yearly'] * user.subplans
             else:
-                permon = 1.00
-            data['cost'] = float(user.subplans) * permon
-            data['dataret'] = 604800
-            data['acttype'] = "Pro"
+                data['cost'] = app.config['PACKAGES'][user.acttype]['cost_monthly'] * user.subplans
+        else:
+            data['cost'] = 'Free'
+        data['stripe_pubkey'] = app.config['STRIPE_PUBKEY']
+        data['subplans'] = user.subplans
+        data['subscription'] = user.subscription
     data['js_bottom'] = []
     data['js_header'] = []
-    data['stripe_pubkey'] = app.config['STRIPE_PUBKEY']
-    data['subplans'] = user.subplans
-    data['subscription'] = user.subscription
     return data
 
 
