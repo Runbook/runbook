@@ -16,7 +16,7 @@ reaction_blueprint = Blueprint('reaction', __name__,)
 from web import app, verifyLogin, startData
 
 
-@app.before_request
+@reaction_blueprint.before_app_request
 def before_request():
     '''
     This function establishes a connection
@@ -31,7 +31,7 @@ def before_request():
         abort(503, "No Database Connection Could be Established.")
 
 
-@app.teardown_request
+@reaction_blueprint.teardown_app_request
 def teardown_request(exception):
     ''' This function closes the database connection when done '''
     try:

@@ -2,9 +2,11 @@
 
 
 import time
+import rethinkdb as r
+from rethinkdb.errors import RqlDriverError
 
 from flask import g, Blueprint, render_template, request, \
-    url_for, redirect, flash
+    url_for, redirect, flash, abort
 
 import stathat
 from monitors import Monitor
@@ -13,6 +15,31 @@ from users import User
 monitor_blueprint = Blueprint('monitor', __name__,)
 
 from web import app, verifyLogin, startData
+
+
+@monitor_blueprint.before_app_request
+def before_request():
+    '''
+    This function establishes a connection
+    to the rethinkDB before each connection
+    '''
+    try:
+        g.rdb_conn = r.connect(
+            host=app.config['DBHOST'], port=app.config['DBPORT'],
+            auth_key=app.config['DBAUTHKEY'], db=app.config['DATABASE'])
+    except RqlDriverError:
+        # If no connection possible throw 503 error
+        abort(503, "No Database Connection Could be Established.")
+
+
+@monitor_blueprint.teardown_app_request
+def teardown_request(exception):
+    ''' This function closes the database connection when done '''
+    try:
+        g.rdb_conn.close()
+    except AttributeError:
+        # Who cares?
+        pass
 
 
 # Monitors
