@@ -1,25 +1,27 @@
-site_name: Runbook
-
+site_name: Runbook Docs
 site_url: https://www.runbook.io/
-
 site_description:
-
 site_favicon: 
+theme: readthedocs
 
 pages:
 - ['index.md', 'Overview']
-- ['user-guide/index.md', 'User Guide']
-- ['user-guide/quick-start.md', 'User Guide', 'Quick Start']
-- ['user-guide/monitors/index.md', 'User Guide', 'Monitors']
-- ['user-guide/reactions/index.md', 'User Guide', 'Reactions']
-- ['user-guide/community-tutorials/index.md', 'User Guide', 'Community Tutorials']
-- ['user-guide/api.md', 'User Guide', 'API']
-- ['developer-documentation/index.md', 'Developer Documentation']
-- ['developer-documentation/quick-start.md', 'Developer Documentation', 'Quick Start']
-- ['developer-documentation/architecture-overview.md', 'Developer Documentation', 'Architecture Overview']
-- ['developer-documentation/running.md', 'Developer Documentation', 'Installation']
-- ['developer-documentation/creating_monitors.md', 'Developer Documentation', 'Creating Monitors']
-- ['developer-documentation/creating_reactions.md', 'Developer Documentation', 'Creating Reactions']
-
-
-theme: readthedocs
+- ['quick-start.md', 'Quick Start']
+- ['api.md', 'API']
+- ['monitors/index.md', 'Monitors', 'Overview']
+- ['monitors/network-availability.md', 'Monitors', "Network Availability"]
+- ['monitors/web-applications.md', 'Monitors', "Web Applications"]
+- ['monitors/heroku.md', 'Monitors', "Heroku"]
+- ['monitors/datadog.md', 'Monitors', "Datadog"]
+- ['monitors/papertrail.md', 'Monitors', "Papertrail"]
+- ['monitors/logentries.md', 'Monitors', "Logentries"]
+- ['monitors/runbook-webhooks.md', 'Monitors', "Runbook Webhooks"]
+- ['reactions/index.md', 'Reactions', 'Overview']
+- ['reactions/cloudflare.md', 'Reactions', 'CloudFlare']
+- ['developers/index.md', 'Developers']
+- ['developers/quick-start.md', 'Developers', 'Quick Start']
+- ['developers/architecture-overview.md', 'Developers', 'Architecture Overview']
+- ['developers/install.md', 'Developers', 'Installation']
+- ['developers/creating_monitors.md', 'Developers', 'Creating Monitors']
+- ['developers/creating_reactions.md', 'Developers', 'Creating Reactions']
+- ['community-tutorials/index.md', 'Community Tutorials']
