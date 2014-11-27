@@ -90,10 +90,10 @@
                     </tr>
                   </table>
               </div>
-              {% if data['acttype'] == "Lite" %}
-              {% include 'forms/stripe.html' %}
-              {% else %}
+              {% if data['upgraded'] %}
               {% include 'forms/addpacks.html' %}
+              {% else %}
+              {% include 'forms/stripe.html' %}
               {% endif %}
                 <div class="panel panel-primary">
                   <div class="panel-heading">
