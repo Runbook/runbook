@@ -1,0 +1,25 @@
+site_name: Runbook
+
+site_url: https://www.runbook.io/
+
+site_description:
+
+site_favicon: 
+
+pages:
+- ['index.md', 'Overview']
+- ['user-guide/index.md', 'User Guide']
+- ['user-guide/quick-start.md', 'User Guide', 'Quick Start']
+- ['user-guide/monitors/index.md', 'User Guide', 'Monitors']
+- ['user-guide/reactions/index.md', 'User Guide', 'Reactions']
+- ['user-guide/community-tutorials/index.md', 'User Guide', 'Community Tutorials']
+- ['user-guide/api.md', 'User Guide', 'API']
+- ['developer-documentation/index.md', 'Developer Documentation']
+- ['developer-documentation/quick-start.md', 'Developer Documentation', 'Quick Start']
+- ['developer-documentation/architecture-overview.md', 'Developer Documentation', 'Architecture Overview']
+- ['developer-documentation/running.md', 'Developer Documentation', 'Installation']
+- ['developer-documentation/creating_monitors.md', 'Developer Documentation', 'Creating Monitors']
+- ['developer-documentation/creating_reactions.md', 'Developer Documentation', 'Creating Reactions']
+
+
+theme: readthedocs
