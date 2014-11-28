@@ -6,6 +6,10 @@ This monitor is a generic webhook that is specific to Runbook. When created this
 
 This webhook URL could be used to integrate tools and systems we do not already have an inherent integration with; allowing users to add Runbook reactions to many monitoring services.
 
+## Every monitor has a webhook endpoint
+
+Every monitor created on Runbook recieves a unique URL and check_key token. The details of each monitors unique data is below the creation form. With these details all monitors can be used with the webhook interface.
+
 ### URL and Key
 
 Upon creation the monitor form will provide a user with a unique URL and Key. 
@@ -103,3 +107,15 @@ An example URL would look like the following.
 ##### Requesting Status
 
     $ curl -X POST https://dash.runbook.io/api/cr-api/example-webhook-id/example-webhook-token/status
+
+## Unofficial Extensions
+
+### RunbookWraps
+
+[RunbookWraps](https://github.com/madflojo/RunbookWraps) is a set of python scripts that utilize Runbooks webhook interface to perform on server monitors and reactions. These scripts include a monitoring script that will execute defined shell commands and will notify Runbook of success or failure. The second script included is a reaction script that requests monitor status from Runbook webhooks and performs shell commands defined in a configuration file.
+
+### runbook-webhook
+
+[Runbook-webhook](https://github.com/madflojo/runbook-webhook) is a simple shell script that can be used to perform the 3 webhook requests. URL and check_key are provided via command line arguments.
+
+
