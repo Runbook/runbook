@@ -1,7 +1,4 @@
 # API
 
-More information about the Runbook API will be coming soon.
+The Runbook API is currently under development, [check here](https://assembly.com/runbook/projects/122) for the lastest progress.
 
-Please visit [runbook.io](https://runbook.io) to learn more.
-
----

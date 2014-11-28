@@ -4,8 +4,8 @@ Monitors are the triggers used to check the status of your environment. A monito
 
 In general Runbook consists of two types of monitors:
 
-1) Monitors that run at a scheduled interval
-2) Monitors that listen for webhooks
+1. Monitors that run at a scheduled interval
+2. Monitors that listen for webhooks
 
 When creating reactions it is important to know what type of monitor it is being attached to, in general webhook monitors will recieve triggering events less often than monitors that run at scheduled intervals.
 
