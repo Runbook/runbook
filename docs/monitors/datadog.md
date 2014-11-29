@@ -1,6 +1,4 @@
-# Datadog
-
-## Datadog: Webhook
+## Webhook
 
 The Datadog: Webhook monitor is a webhook based monitor, this type of monitor does not run at a regular interval but rather listens on a unique URL for webhook requests. Within Datadog you can setup an [integration for webhook requests](http://docs.datadoghq.com/integrations/webhooks/). When defining metric alerts within Datadog you can simply tag the webhook integrations. When an alert is triggered Datadog will then send a webhook to the unique URL provided.
 

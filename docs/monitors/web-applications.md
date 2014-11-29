@@ -1,7 +1,6 @@
-Web Applications
-========================
-
 These monitors are designed to monitor the status of web servers and web based applications.
+
+---
 
 ## HTTP GET: Status Code
 

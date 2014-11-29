@@ -1,6 +1,4 @@
-# Reactions
-
-Reactions are automated tasks that are called when Monitors fail. At the moment Runbook reactions are made by integrating with outside services such as Heroku, CloudFlare and Commando. You can utilize these reactions to perform everything from restarting apache via Commando to Rolling back to a previous application version with Heroku.
+Reactions are automated tasks that are called when Monitors fail. At the moment Runbook reactions are made by integrating with outside services such as Heroku, CloudFlare and Commando. You can utilize these reactions to perform everything from restarting Apache via Commando to Rolling back to a previous application version with Heroku.
 
 Runbook currently features Reactions for these services:
 
@@ -20,11 +18,11 @@ Reaction creation can be a bit complicated, this section hopes to explain some o
 
 ### Trigger
 
-The `Trigger` field is used to denote how many times a reaction must be identified as Healthy or Failed before execution. For exmaple if a reaction had a trigger of 2 and the attached monitor ran every 4 minutes, the reaction would not execute until the 2nd run; 8 minutes from the first failure.
+The `Trigger` field is used to denote how many times a reaction must be identified as Healthy or Failed before execution. For example if a reaction had a trigger of 2 and the attached monitor ran every 4 minutes, the reaction would not execute until the 2nd run; 8 minutes from the first failure.
 
 ### Frequency
 
-The `Frequency` field is used to determine how often (in seconds) a reaction should run. If a reaction is executed the execution time is stored in cache and within the database. If a subseqent monitor attempts to trigger the reaction, the reaction will not execute if the time since last execution is within the `Frequency` value. Using the same example as above if areaction had a trigger of 2 and a frequency of 300 the reaction would not be executed until 8 minutes after the first failure. However, after the first execution the 
+The `Frequency` field is used to determine how often (in seconds) a reaction should run. If a reaction is executed the execution time is stored in cache and within the database. If a subsequent monitor attempts to trigger the reaction, the reaction will not execute if the time since last execution is within the `Frequency` value. Using the same example as above if a reaction had a trigger of 2 and a frequency of 300 the reaction would not be executed until 8 minutes after the first failure. However, after the first execution the 
 
 ### Call On
 

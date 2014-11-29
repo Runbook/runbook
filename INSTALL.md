@@ -1,7 +1,3 @@
-# Install Guide!
-
-Welcome!
-
 ## First Time Setup
 
 ### Basics
