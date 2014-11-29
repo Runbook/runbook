@@ -1,5 +1,3 @@
-# Heroku
-
 The Heroku monitors allow users to monitor Heroku applications and instances.
 
 ---

@@ -1,5 +1,3 @@
-# Logentries
-
 ## Webhook
 
 Users of Logentries can define unique [Alerts](https://logentries.com/doc/tagsalerts/) that call outside services such as Email, PagerDuty or even a generic Webhook. This monitor will create a unique webhook endpoint that you can configure Logentries to call when it detects an Alert. This integration allows you to combine Runbook Reactions with Logentries alerts.

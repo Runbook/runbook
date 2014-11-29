@@ -1,5 +1,3 @@
-# PaperTrail
-
 ## Webhook
 
 Users of PaperTrail can define unique [Alerts](http://help.papertrailapp.com/kb/how-it-works/alerts/) that call outside services such as Email, PagerDuty or even a generic Webhook. This monitor will create a unique webhook endpoint that you can configure PaperTrail to call when it detects an Alert. This integration allows you to combine Runbook Reactions with PaperTrail alerts.

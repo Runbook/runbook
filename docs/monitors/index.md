@@ -1,5 +1,3 @@
-# Monitors
-
 Monitors are the triggers used to check the status of your environment. A monitor can be many types of triggers they may perform an HTTP GET request or simply listen for webhooks from Github.
 
 In general Runbook consists of two types of monitors:
