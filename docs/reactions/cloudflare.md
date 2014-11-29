@@ -1,11 +1,10 @@
-# CloudFlare
-
 The CloudFlare Reactions are designed to provide DNS failover for CloudFlare protected domains.
 
 ## TTL
 
 It is recommended for DNS reactions to keep the TTL of each record hosted with CloudFlare set to Automatic. The automatic setting will allow CloudFlares reverse proxy servers to detect the change immediately making the modification faster.
 
+---
 ## Remove an IP
 
 The CloudFlare DNS: Remove an IP reaction is designed to provide an Active-Active DNS Failover functionality for domains that host their DNS with CloudFlare. This reaction is mainly useful for domains utilizing round-robin DNS load balancing. DNS records that are removed during a failed reaction are stored in Redis. When the monitor that triggered the removal of DNS is restored to a healthy state the DNS records are re-added automatically.

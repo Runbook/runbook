@@ -1,10 +1,6 @@
-# Heroku
-
 The Heroku Reactions are designed to allow users to automatically perform common tasks for Heroku applications. Common tasks include scaling, restarting dynos and rolling back application versions.
 
-## Call On
-
-The Heroku Reactions all allow for the user to specify the `Call On` field, this field determines whether the reaction should be executed on Healthy or Failed monitors.
+---
 
 ## Scale Out Dynos
 

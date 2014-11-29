@@ -1,5 +1,3 @@
-# Amazon Web Services (AWS)
-
 The Amazon Web Services reactions are designed to allow the user to interact with AWS instances and eventually other AWS services.
 
 ---

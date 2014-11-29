@@ -1,5 +1,3 @@
-# Commando.io
-
 [Commando.io](https://commando.io) is a SaaS product that allows you to execute commands/scripts called "Recipes" across any number of servers. It provides a web interface for running commands and allows it's customers to give an auditable access to users by allowing them to execute specific commands on specific servers.
 
 Commando.io also has an API that allows paid users to execute Recipes via API calls. The Runbook reactions below utilize this same API and thus require a paid account with Commando.

@@ -1,5 +1,3 @@
-# DigitalOcean
-
 The DigitalOcean Reactions are designed to allow users to automatically perform common tasks on DigitalOcean cloud servers. These tasks could be for issue resolution or simply day to day tasks.
 
 ---

@@ -1,5 +1,3 @@
-# Reactions
-
 Reactions are automated tasks that are called when Monitors fail. At the moment Runbook reactions are made by integrating with outside services such as Heroku, CloudFlare and Commando. You can utilize these reactions to perform everything from restarting apache via Commando to Rolling back to a previous application version with Heroku.
 
 Runbook currently features Reactions for these services:
