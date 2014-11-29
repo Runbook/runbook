@@ -1,6 +1,6 @@
 # Runbook Webhooks
 
-## Runbook: Webhooks
+## Webhooks
 
 This monitor is a generic webhook that is specific to Runbook. When created this monitor will provide the user with a unique URL and token that allows the user to signify if the monitor is healthy or failed. While most webhook listeners do not provide information back this webhook listener is different. It is also possible to query the current state of the monitor from this webhook URL.
 
