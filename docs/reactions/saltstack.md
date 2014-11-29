@@ -22,7 +22,7 @@ This reaction is designed to allow users to `accept`, `delete` or `reject` minio
 
 ## Execute a Command
 
-This reaction is designed to allow users to execute abritrary commands across one or many servers using Saltstack. This reaction is useful for combining legacy scripts for system health with Runbooks monitoring.
+This reaction is designed to allow users to execute arbitrary commands across one or many servers using Saltstack. This reaction is useful for combining legacy scripts for system health with Runbook's monitoring.
 
 ---
 

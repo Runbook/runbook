@@ -4,4 +4,4 @@ The notification reactions is designed to be a collection of notification servic
 
 ## Email Notifications
 
-This reaction is designed to allow users to notify a specific user of monitor condition changes. Currently email notifications are limited to one every 15 minutes, this is to prevent Inbox Armageddon where many monitors fail and the end user recieves an unmanagable number of emails.
+This reaction is designed to allow users to notify a specific user of monitor condition changes. Currently email notifications are limited to one every 15 minutes, this is to prevent Inbox Armageddon where many monitors fail and the end user receives an unmanageable number of emails.

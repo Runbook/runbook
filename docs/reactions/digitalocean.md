@@ -4,7 +4,7 @@ The DigitalOcean Reactions are designed to allow users to automatically perform 
 
 ## Power Cycle Droplet
 
-This reaction is designed to allow a user to perform a hard Power Cycle of a DigitalOcean cloud server. A power cycle in DigitalOcean is equivalent to pulling the power from a server. This reaction is useful as only a last restort, when all other reactions were unable to resolve the issue.
+This reaction is designed to allow a user to perform a hard Power Cycle of a DigitalOcean cloud server. A power cycle in DigitalOcean is equivalent to pulling the power from a server. This reaction is useful as only a last resort, when all other reactions were unable to resolve the issue.
 
 ---
 

@@ -10,4 +10,4 @@ This reaction is designed to allow you to reboot a Rackspace cloud server. This 
 
 ## Power Cycle Cloud Server
 
-This reaciton is designed to allow you to power cycle a Rackspace cloud server. This reaction is similar to the Reboot reaction but it is a hard reboot versus a soft reboot.
+This reaction is designed to allow you to power cycle a Rackspace cloud server. This reaction is similar to the Reboot reaction but it is a hard reboot versus a soft reboot.

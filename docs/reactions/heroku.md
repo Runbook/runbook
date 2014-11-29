@@ -42,7 +42,7 @@ When triggered the Restart Single Dyno reaction will make a call to the Heroku P
 
 ## Restart All Dynos
 
-When triggered the Restart All Dynos reaction will make a call to the Heroku Platofrm API to restart all dynos associated with the specified application.
+When triggered the Restart All Dynos reaction will make a call to the Heroku Platform API to restart all dynos associated with the specified application.
 
 ---
 
@@ -54,6 +54,6 @@ When triggered the Rollback Release reaction will make a call to the Heroku Plat
 
 ## Create One-Off Dyno
 
-One-off dynos in Heroku are generally used to kick off maitenance scripts or other backend jobs. These dynos typically run a process until it stops and then they are complete. The Create One-Off Dyno allows users to spawn a one off dyno and specify any command they want to run.
+One-off dynos in Heroku are generally used to kick off maintenance scripts or other back-end jobs. These dynos typically run a process until it stops and then they are complete. The Create One-Off Dyno allows users to spawn a one off dyno and specify any command they want to run.
 
 A real world example of this reaction would be detecting a database error using the HTTP Keyword monitor and launching a One-off dyno to run a clean up script.

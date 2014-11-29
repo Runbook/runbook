@@ -11,7 +11,7 @@ The CloudFlare DNS: Remove an IP reaction is designed to provide an Active-Activ
 
 **Note:** Our reaction will not remove any records that do not have a secondary entry. For example, if you had two `www` records; one that pointed to `10.0.0.1` and another that pointed to `10.0.0.2`. If the reaction was configured to remove `10.0.0.2` it would. If a second reaction was then told to remove `10.0.0.1` than our system would do nothing. This is designed to prevent a complete outage when issues may be occurring on both systems but are not impactful enough to completely take the system offline. It is generally better to route incoming traffic somewhere even if that system is not completely healthy.
 
-When re-adding DNS records secondary paramaters such as `prio` for `MX` records and `service_mode` for `A` records are re-added with the same settings as when they were removed.
+When re-adding DNS records secondary parameters such as `prio` for `MX` records and `service_mode` for `A` records are re-added with the same settings as when they were removed.
 
 ---
 
