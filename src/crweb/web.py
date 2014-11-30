@@ -64,7 +64,7 @@ def startData(user=None):
         data['dataret'] = app.config['PACKAGES'][user.acttype]['data_retention']
         data['acttype'] = app.config['PACKAGES'][user.acttype]['acttype']
         data['upgraded'] = app.config['PACKAGES'][user.acttype]['upgraded']
-        if data['upgraded'] == True:
+        if data['upgraded'] is True:
             if "yearly" in user.subscription:
                 data['cost'] = app.config['PACKAGES'][user.acttype]['cost_yearly'] * user.subplans
             else:

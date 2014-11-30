@@ -121,6 +121,7 @@ while True:
         zsend.send(jdata)
         count = count + 1
 
-    logger.debug("Sent %d health checks from queue %s" % (count, config['queue']))
+    logger.debug(
+        "Sent %d health checks from queue %s" % (count, config['queue']))
     # Sleep for x seconds
     time.sleep(config['sleep'])
