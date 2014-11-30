@@ -139,7 +139,8 @@ class Monitor(object):
         retdata = False
         if method == "mon-history":
             retdata = []
-            monitors = r.table('history').filter((r.row['cid'] == self.cid) & (r.row['starttime'] >= time) & (r.row['type'] == "monitor")).order_by(
+            monitors = r.table('history').filter(
+                (r.row['cid'] == self.cid) & (r.row['starttime'] >= time) & (r.row['type'] == "monitor")).order_by(
                 r.desc('starttime')).pluck('starttime', 'id', 'cid', 'zone', 'status', 'failcount', 'method', 'name').skip(start).limit(limit).run(rdb)
             for mon in monitors:
                 mon['starttime'] = datetime.datetime.fromtimestamp(
@@ -151,8 +152,8 @@ class Monitor(object):
                 'starttime', 'cid', 'zone', 'status',
                 'failcount', 'method', 'name').run(rdb)
             mon['reactions'] = []
-            reactions = r.table('history').filter((r.row['cid'] == self.cid) & (r.row['starttime'] == mon['starttime']) & (
-                r.row['zone'] == mon['zone']) & (r.row['type'] == "reaction")).pluck('name', 'rstatus', 'time', 'starttime').run(rdb)
+            reactions = r.table('history').filter(
+                (r.row['cid'] == self.cid) & (r.row['starttime'] == mon['starttime']) & (r.row['zone'] == mon['zone']) & (r.row['type'] == "reaction")).pluck('name', 'rstatus', 'time', 'starttime').run(rdb)
             for react in reactions:
                 react['starttime'] = datetime.datetime.fromtimestamp(
                     react['starttime']).strftime('%Y-%m-%d %H:%M:%S')

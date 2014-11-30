@@ -50,16 +50,15 @@ logger.info("Using config %s" % configfile)
 # Start ZeroMQ listener for control
 context = zmq.Context()
 zrecv = context.socket(zmq.PULL)
-bindaddress_pull = "tcp://%s:%d" % (config['sink_ip'],
-                               config['sink_port'])
+bindaddress_pull = "tcp://%s:%d" % (config['sink_ip'], config['sink_port'])
 zrecv.bind(bindaddress_pull)
 logger.info("Attempting to bind to %s for pulling" % bindaddress_pull)
 
 # Start ZeroMQ listener for workers
 context2 = zmq.Context()
 zsend = context2.socket(zmq.PUSH)
-bindaddress_push = "tcp://%s:%d" % (config['sink_ip'],
-                               config['sink_worker_port'])
+bindaddress_push = "tcp://%s:%d" % (
+    config['sink_ip'], config['sink_worker_port'])
 zsend.bind(bindaddress_push)
 logger.info("Attempting to bind to %s for pushing" % bindaddress_push)
 
