@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url>
-      <loc>https://cloudrout.es/</loc>
+      <loc>https://runbook.io/</loc>
       <changefreq>weekly</changefreq>
    </url>
    <url>
-      <loc>https://cloudrout.es/tos</loc>
+      <loc>https://runbook.io/pages/pricing/</loc>
       <changefreq>weekly</changefreq>
    </url>
    <url>
-      <loc>https://beta.cloudrout.es/signup</loc>
+      <loc>https://runbook.io/pages/tos/</loc>
       <changefreq>weekly</changefreq>
    </url>
    <url>
-      <loc>https://beta.cloudrout.es/login</loc>
+      <loc>https://runbook.io/pages/faq/</loc>
+      <changefreq>weekly</changefreq>
+   </url>
+   <url>
+      <loc>https://dash.runbook.io/login</loc>
+      <changefreq>weekly</changefreq>
+   </url>
+   <url>
+      <loc>https://dash.runbook.io/signup</loc>
       <changefreq>weekly</changefreq>
    </url>
 </urlset>
