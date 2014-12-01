@@ -5,77 +5,79 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- SEO Stuffz -->
-      <title>Runbook - DevOps, automated</title>
-      <meta name="description" content="Solve problems in your sleep with IFTTT-style mitigation of alerts">
-      <meta name="keywords" content="CloudFlare DNS, CloudFlare, Runbook, Heroku Autoscaling, DNS Failover, Cloud DNS, High Availability, Static IP, Load Balancing, Domain Name, DNS, Nagios, BMC, Zenoss, Datadog, Cloud Monitoring, Monitoring Automation, Cloud Servers, Cloud Services, Server, App Developers, Server Monitoring">
-      <meta property="og:type" content="website"/>
-      <meta property="og:title" content="Runbook - DevOps, automated"/>
-      <meta property="og:description" content="Solve problems in your sleep with IFTTT-style mitigation of alerts"/>
-      <meta property="og:site_name" content="Runbook"/>
-      <meta property="og:image" content="http://runbook.io/static/img/logos/png/runbook_logo_sleep_color_on_white.png"/>
+    <title>Runbook - DevOps, automated</title>
+    <meta name="description" content="Solve problems in your sleep with IFTTT-style mitigation of alerts">
+    <meta name="keywords" content="CloudFlare DNS, CloudFlare, Runbook, Heroku Autoscaling, DNS Failover, Cloud DNS, High Availability, Static IP, Load Balancing, Domain Name, DNS, Nagios, BMC, Zenoss, Datadog, Cloud Monitoring, Monitoring Automation, Cloud Servers, Cloud Services, Server, App Developers, Server Monitoring">
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="Runbook - DevOps, automated"/>
+    <meta property="og:description" content="Solve problems in your sleep with IFTTT-style mitigation of alerts"/>
+    <meta property="og:site_name" content="Runbook"/>
+    <meta property="og:image" content="{{url_for('static', filename='img/logos/png/runbook_logo_sleep_color_on_white.png')}}"/>
 
     <!-- Bootstrap core CSS -->
-   <!-- <link rel="stylesheet" href="/static/css/bootstrap.css">
-    <link rel="stylesheet" href="/static/css/carousel.css"> 
-    <link rel="stylesheet" href="/static/css/bootstrap-theme.css"> -->
+    <!-- <link rel="stylesheet" href="/static/css/bootstrap.css"> -->
+    <!-- <link rel="stylesheet" href="/static/css/carousel.css"> -->
+    <!-- <link rel="stylesheet" href="/static/css/bootstrap-theme.css"> -->
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/bootstrap-multiselect.css">
-    <link rel="stylesheet" href="/static/css/colorwrap.css">
-		<link rel="stylesheet" href="/static/css/c3.css">
+    <link href="{{url_for('static', filename='css/bootstrap-multiselect.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/colorwrap.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/c3.css')}}" rel="stylesheet">
 
     <!-- Custom CSS load -->
-    <link rel="stylesheet" href="/static/css/custom.css">
-    <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/pricing.css">
-    <link rel="stylesheet" href="/static/css/faq.css">
+    <link href="{{url_for('static', filename='css/custom.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/home.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/pricing.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/faq.css')}}" rel="stylesheet">
+
+    {% block css %}{% endblock %}
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-{% for item in data['js_header'] %}
-    {% include item %}
-{% endfor %}
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    {% for item in data['js_header'] %}
+        {% include item %}
+    {% endfor %}
 
   </head>
 
-<body>
-  <div class="navbar navbar-default navbar-static-top navigation-menu {{ 'clear' if data['clean_header'] }}" role="navigation">
-    <div class="container header">
-      <div class="navbar-header">
-        <a href="/" class="header-logo">
+  <body>
+    <div class="navbar navbar-default navbar-static-top navigation-menu {{ 'clear' if data['clean_header'] }}" role="navigation">
+      <div class="container header">
+        <div class="navbar-header">
+          <a href="{{ url_for('public.index_redirect') }}" class="header-logo">
           <img src="/static/img/logos/svg/runbook_white_logo_color_on_white.svg" width="100%" alt="Runbook">
-        </a>
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-       </div>
-       <div class="navbar-collapse navbar-right collapse">
-         <ul class="nav navbar-nav navigation-nav">
-          {% if data['loggedin'] == False %}
-            <li class="{{ 'active' if data['active'] == 'pricing' }}">
-              <a href="/pages/pricing">Pricing</a>
-            </li>
-            <li class="{{ 'active' if data['active'] == 'features' }}">
-              <a href="/#features">Features</a>
-            </li>
-            <li>
-              <a href="https://dash.runbook.io/login" class="btn btn-action">Sign In</a>
-            </li>
-            <li>
-              <a href="https://dash.runbook.io/signup" class="btn btn-action">Sign Up</a>
-            </li>
-          {% else %}
-            <li class="{{ 'active' if data['active'] == 'dashboard' }}">
-              <a href="/dashboard">Dashboard</a>
-            </li>
-            <li>
-              <a href="/logout" class="text-danger">Logout</a>
-            </li>
-          {% endif %}
-        </ul>
-			</div>
-		</div>
-  </div>
+          </a>
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+         </div>
+         <div class="navbar-collapse navbar-right collapse">
+           <ul class="nav navbar-nav navigation-nav">
+            {% if data['loggedin'] == False %}
+              <li class="{{ 'active' if data['active'] == 'pricing' }}">
+                <a href="/pages/pricing">Pricing</a>
+              </li>
+              <li class="{{ 'active' if data['active'] == 'features' }}">
+                <a href="/#features">Features</a>
+              </li>
+              <li>
+                <a href="{{ url_for('user.login_page') }}" class="btn btn-action">Sign In</a>
+              </li>
+              <li>
+                <a href="{{ url_for('user.signup') }}" class="btn btn-action">Sign Up</a>
+              </li>
+            {% else %}
+              <li class="{{ 'active' if data['active'] == 'dashboard' }}">
+                <a href="{{ url_for('member.dashboard_page') }}">Dashboard</a>
+              </li>
+              <li>
+                <a href="{{ url_for('user.logout_page') }}" class="text-danger">Logout</a>
+              </li>
+            {% endif %}
+          </ul>
+  			</div>
+  		</div>
+    </div>

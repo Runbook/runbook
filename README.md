@@ -1,68 +1,79 @@
-CloudRoutes
+Runbook
 ===========
 
-CloudRoutes is a Software as a service with the goal of eliminating the need for Development & Operations On Call. We will accomplish this by providing solutions to monitor applications and infrastructure; when our **Monitors** detect failure our platform will initiate predefined automatic responses. Ideally these responses called **"Reactions"** will automatically resolve the underline issue eliminating the need to alert the On Call Developer/Sysadmin/DevOps person.
+| Facility | Develop | Master |
+| --------- | --------| ------------ |
+| Travis-CI | [![Build Status](https://travis-ci.org/asm-products/cloudroutes-service.svg?branch=develop)](https://travis-ci.org/asm-products/cloudroutes-service) | [![Build Status](https://travis-ci.org/asm-products/cloudroutes-service.svg?branch=master)](https://travis-ci.org/asm-products/cloudroutes-service)
 
-By automatically resolving production issues our system will enable users to focus on finding the root cause of reoccuring incidents rather than fighting day to day fires.
+## What is Runbook
 
-A few examples of the types of activities that CloudRoutes can perform today are.
+[Runbook](https://runbook.io) is an open source monitoring service that allows you to perform automated "reactions" when issues are detected. Giving you the ability to automatically resolve DevOps alerts with zero human interaction.
 
-* Perform DNS changes to failover traffic
-* Reboot Digital Ocean or AWS servers
-* Perform SaltStack WebAPI calls to execute scripts or commands
-* Send a notification email (Worst case scenario)
-* Send Statistics to StatHat
+Simply put, Runbook is what you would get if Nagios and IFTTT had a baby.
 
-## Current Status
+## Documentation
 
-**Master Branch:** [![Build Status](https://travis-ci.org/asm-products/cloudroutes-service.svg?branch=master)](https://travis-ci.org/asm-products/cloudroutes-service)
+Developer and User docs can be found in the [docs](docs/) directory and on [ReadTheDocs](https://runbook.readthedocs.org).
 
-**Develop Branch:** [![Build Status](https://travis-ci.org/asm-products/cloudroutes-service.svg?branch=develop)](https://travis-ci.org/asm-products/cloudroutes-service)
+## Open Source
 
-## Parts of this project
+Runbook is 100% open source and developed using the [Assembly](https://assembly.com/runbook) platform. Runbook runs as a SaaS application, there are both free and paid plans; with the Assembly platform all revenue from the product is funnelled into the project and it's contributors. Essentially, after subtracting the cost of business, 10% goes to Assembly as a fee and the rest is given back to the contributors based on a percentage of their contributions.
 
-### crweb - CloudRoutes Web Interface
+Unlike other open source products, not only do you get the satisfaction of giving back to the community as a whole but you also get a cut of the profits. To get started simply join us on our [Assembly Project Page](https://assembly.com/runbook)
 
-This section is the web interface for CloudRoutes. This is the meat and potatoes of the web interface used by users, it allows users to create and manage Monitors and Reactions as well as provide a dashboard to identify what monitors are healthy, or failed. This is also the receiver of API based monitors such as the Datadog Webhook integration and CloudRoute's API version 1.
+## Contributing
 
-### cram - CloudRoutes Availability Monitor
+At Runbook we follow the [GitHub Flow](https://guides.github.com/introduction/flow/index.html), while it is not necessarily manditory that you create feature branches it does help keep code organized. Below are the basic getting started steps for setting up a repo to contribute.
 
-This section performs the actual monitoring of user created monitors. There are three main components to this system; **control**, **broker** and **worker** each of these components are used to perform and schedule monitor checks.
+### Setting up your Repo
 
-#### Control
+The first step in getting ready to contribute is forking our repository on github. Once it is forked you can clone that fork onto your desktop; this documentation is assuming you are working from a clone of your fork.
 
-The control component will read from a Redis slist queue that contains the ID's of monitors that should be checked. The control will take this list and pull the additional details of those monitors and format them into a JSON message. That JSON message is then sent to the broker via ZeroMQ.
+#### Cloning
 
-#### Broker
+To pull the repository to your local machine simply run the following.
 
-The broker will bind two zMQ ports, one to receive messages from various control processes and one to send messages to multiple workers. When the broker recieves the control servers JSON message he simply forwards that message to a single worker. This is a way of distributing the laod of monitor checks across many many workers. When it comes time to scale this platform out brokers and workers do not necessarily have to exist on the same server.
+    $ git clone <url of your repo>
 
-#### Worker
+#### Creating a feature branch
 
-The worker component does the actually health check. Depending on the "ctype" value of the JSON message the worker will load the module `checks/<ctype>` and execute the Check method. If the Check returns True the healthy check is Healthy and then forwarded to the sink, if it is False it is marked failed and forwarded to the sink.
+We have two branches `develop` and `master`, all new code must be submitted to the `develop` branch. This branch is considered our testing branch; once all of the features in the `develop` branch are ready for production they will be merged to the `master` branch.
 
-### crbridge - CloudRoutes Web to Availability Monitor Bridge
+To start developing a new feature simply create a unique branch for that feature.
 
-The bridge section is used to both synchronize the Redis Cache and the RethinkDB database as well as perform the reactions as necessesary. This component is made up of two parts, the bridge and the actioner (sink).
+    $ git checkout develop
+    $ git checkout -b new-feature
 
-#### Bridge
+You can make your changes, commit them and when complete push them to your GitHub repo.
 
-The bridge component is used to synchronize the redis cache and rethinkdb and vice versa. It is also used to send any web based actions as in API monitors or manual healthy/failed changes to the sink/actioner for actioning.
+    $ git push origin new-feature
 
-#### Actioner (AKA Sink)
+#### Creating a pull request
 
-The actioner also known as the sink is the component that performs the reactions based on the defined reaction id's listed in the JSON message. Each reaction is a module in the "actions" directory and is loaded dynamically based on the rtype value in the Redis Cache/RethinkDB Database. If the monitor is failed it will execute the failed method and if it is healthy it will execute the healthy method. If the reaction should be run (based on frequency and trigger values) is up to the individual reactions module. If the reaction returns a True status the reaction executed, if the reaction returns a False status the rection tried to execute but failed, if the reaction returns a None status it was simply skipped.
+Once your code is ready and on GitHub you can create a Pull Request via the GitHub UI. Once your pull request is created it is typically best practice to go to the bounty on Assembly and submit your work with a link to the pull request. If the feature you created does not have a bounty created yet, simply create one explaining what you've done and why.
 
-### static - Static Files for Web Interface and statically generated pages (i.e. Blog, Frontpage)
+Once the bounty or work is submitted it is best to add a comment to the pull request with a link to the bounty. This keeps the code review and merging process quick and easy.
 
-These are static files for the web gui, blog, documents, frontpage etc.
+#### Syncing your fork
 
-### How to contribute
+Runbook is a very fast paced application, we are making major code changes frequently and it is important that you keep your fork in sync to avoid conflicts. PR's with conflicts will not be merged until those conflicts are removed. To keep your repository in sync you can follow these steps.
 
-The best way to contribute is to join us at our [Assembly Project](https://assembly.com/cloudroutes) once there you can create bounties, add tasks, add input, contribute code or simply say hi. The biggest and easiest parts to contribute are to the Monitor and Reaction modules as they are simple to code and have the biggest impact by adding new features to the product.
+##### Setting the upstream repository
 
-### How Assembly Works
+To synchronize with the upstream repository you must first define it as an upstream source.
 
-Assembly products are like open-source and made with contributions from the community. Assembly handles the boring stuff like hosting, support, financing, legal, etc. Once the product launches we collect the revenue and split the profits amongst the contributors.
+    $ git remote add upstream git@github.com:asm-products/cloudroutes-service.git
 
-Visit [https://assembly.com](https://assembly.com) to learn more.
+##### Fetching and Merging updates
+
+Once the upstream repository is set you can update your repo by fetching and merging the updates.
+
+    $ git checkout develop
+    $ git fetch upstream
+    $ git merge upstream/develop
+    $ git checkout master
+    $ git merge upstream/master
+
+To keep your GitHub fork up to date you can push the changes to your `origin` repository
+
+    $ git push origin

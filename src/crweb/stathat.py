@@ -16,8 +16,7 @@ except ImportError:
         try:
             from django.utils import simplejson as json
         except ImportError:
-            raise ImportError(
-                'You need something for json encoding! simplejson, Django, or Python >= 2.6')
+            raise ImportError('You need something for json encoding! simplejson, Django, or Python >= 2.6')
 try:
     from gevent import monkey
     from gevent.pool import Group

@@ -3,7 +3,7 @@ Jinja2==2.7
 Markdown==2.4.1
 PyYAML==3.10
 WTForms==2.0.1
-Werkzeug==0.9.4
+Werkzeug==0.9.6
 itsdangerous==0.24
 requests==1.2.3
 rethinkdb==1.13.0-3

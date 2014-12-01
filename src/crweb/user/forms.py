@@ -1,8 +1,5 @@
-######################################################################
-# Cloud Routes Web Application
-# -------------------------------------------------------------------
-# Forms Class
-######################################################################
+# user/forms.py
+
 
 from wtforms import Form
 from wtforms import TextField, PasswordField
@@ -47,21 +44,3 @@ class LoginForm(Form):
     password = PasswordField(
         "Password",
         validators=[DataRequired(message='Password is required to login')])
-
-
-class ChangePassForm(Form):
-    ''' Class that creates a Password Change Form '''
-
-    password = PasswordField(
-        "Password",
-        validators=
-        [
-            Length(min=8, message='Password must be a minimum of 8 characters'),
-            EqualTo('confirm', message="Passwords did not match")
-        ]
-    )
-    confirm = PasswordField("Repeat Password")
-
-
-if __name__ == '__main__':
-    pass

@@ -1,13 +1,4 @@
-# Install Guide!
-
-Welcome!
-
 ## First Time Setup
-
-### Easy setup route
-
-Some steps provide easy setup default values, which you may want to use if doing a first-time setup to speed things up. Using easy setup options leads you through an installation happy path (easy setup route). Such options are marked as **_(EASY)_**.
-
 
 ### Basics
 
@@ -15,12 +6,11 @@ Some steps provide easy setup default values, which you may want to use if doing
 1. Create and activate a virtualenv
 1. Install the requirements - `sh build.sh`
 
-
 ### RethinkDB Setup
 
 We use [rethinkDB](http://www.rethinkdb.com/) for persistence. New to rethink? [Install](http://www.rethinkdb.com/docs/install/), then check out the [QuickStart](http://www.rethinkdb.com/docs/quickstart/).
 
-*Make sure to follow these rules regarding the server  vs. driver versions:*
+*Make sure to follow these rules regarding the server vs. driver versions:*
 
 - IF driver < 1.13 THEN use server < 1.13
 - IF driver >= 1.13 THEN use server > 1.13
@@ -31,19 +21,11 @@ Once installed, start the server in a new terminal window:
 $ rethinkdb
 ```
 
-Choose authentication key for rethinkdb and set it:
-
-```sh
-$ rethinkdb admin --join localhost:29015
-localhost:29015> set auth <auth_key>
-```
-
-**_(EASY)_** you may want to choose `cloudroutes` key, which will match to what is set in `*.default` configuration files:
+Then with the server running, run the following in a new window to set the authentication key (which comes from "/src/crweb/instance/crweb.cfg.default"):
 
 ```sh
 $ rethinkdb admin set auth cloudroutes
 ```
-
 
 ### Redis Setup
 
@@ -53,35 +35,30 @@ Download [Redis](http://redis.io/download) (if necessary), then fire up the serv
 $ redis-server
 ```
 
-
 ### Configuration
 
-Application has 4 configuration file types, which are used by 7 types of processes. This is because having different processes of the same type requires different configurations (ports, data shards, etc.). A minimal application will have exactly 7 processes and 4 configuration files.
+The entire application has 4 configuration file types, which are used by 7 types of processes. This is because having different processes of the same type requires different configurations (ports, data shards, etc.). A minimal application will have exactly 7 processes and 4 configuration files.
 
-**_(EASY)_** Here is a list of configuration files, that can be used for the first time to run a minimal working application locally:
+Here is a list of configuration files, that can be used for the first time to run a minimal working application locally:
 
  - crweb/instance/crweb.cfg.default - used by Web (crweb/web.py) process
  - cram/config/control.yml.5min.default - used by cram/control.py process
  - cram/config/main.yml.default - used by cram/broker.py and cram/worker.py processes
  - crbridge/config/config.yml.default - used by crbridge/bridge.py, crbridge/broker.py and crbridge/actioner.py processes
 
-
 ### Initialize database
 
-There is a `create_db.py` script for initializing RethinkDB.
-
-**_(EASY)_** Create the database and required tables from the Python shell:
+There is a `create_db.py` script for initializing RethinkDB. Create the database and required tables from the Python shell:
 
 ```sh
 $ python create_db.py src/crweb/instance/crweb.cfg.default
 ```
 
-
 ### Running for the first time
 
-1) Run web processes (src/crweb/web.py)
+With rethinkDB and redis running...
 
-**_(EASY)_** run web:
+1) Run web processes (src/crweb/web.py)
 
 ```sh
 $ python src/crweb/web.py instance/crweb.cfg.default
@@ -89,53 +66,26 @@ $ python src/crweb/web.py instance/crweb.cfg.default
 
 2) Run control process (src/cram/control.py)
 
-**_(EASY)_** run control:
-
 ```sh
 $ python src/cram/control.py config/control.yml.5min.default
 ```
 
 3) Run broker and worker (src/cram/broker.py and src/cram/worker.py)
 
-**_(EASY)_** run broker:
-
 ```sh
 $ python src/cram/broker.py config/main.yml.default
-```
-
-**_(EASY)_** run worker:
-
-```sh
 $ python src/cram/worker.py config/main.yml.default
 ```
 
-4) Run bridge, broker and actioner (src/crbridge/bridge.py, src/crbridge/broker.py, src/crbridge/acrioner.py)
-
-**_(EASY)_** run bridge:
+4) Run bridge, broker, and actioner (src/crbridge/bridge.py, src/crbridge/broker.py, src/crbridge/acrioner.py)
 
 ```sh
 $ python src/crbridge/bridge.py config/config.yml.default
-```
-
-**_(EASY)_** run broker:
-
-```sh
 $ python src/crbridge/broker.py config/config.yml.default
-```
-
-**_(EASY)_** run actioner:
-
-```sh
 $ python src/crbridge/actioner.py config/config.yml.default
 ```
 
 Now you can launch your browser and point it to `http://localhost:8000/signup`. Signup, create a monitor and a reaction, watch them being executed.
-
-
-### Note: Relative vs Absolute URLs
-
-When this is deployed in production static pages such as `/`, `/pages/tos` and `/pages/pricing` are prefetched and saved as HTML files. Since the static pages in production are `https://runbook.io` and the web app runs as `https://dash.runbook.io` the **login** and **signup** links are always absolute URLs. All other links should be kept as relative URLs. To get started with your local instance simply point your browser to `http://localhost:8000/signup`
-
 
 ### Run Tests
 
@@ -143,28 +93,23 @@ When this is deployed in production static pages such as `/`, `/pages/tos` and `
 $ python src/crweb/tests.py
 ```
 
+## Once everything is working fine
 
-### Once everything is working fine
+You can now use these 3 tmux scripts which run databases and other 7 processes with default settings with panes splitted.*You should have [tmux](http://tmux.sourceforge.net) installed for these to work.*
 
-You can now use these 3 tmux scripts which run databases and other 7 processes with default settings with panes splitted.
-
-**_(EASY)_** yes, these scripts only work if you follow the easy setup route
-
-You should have [tmux](http://tmux.sourceforge.net) installed for these to work.
-
-run databases and web:
+Run databases and web:
 
 ```sh
 $ ./tmux_1_web_and_databases.sh
 ```
 
-run all cram processes:
+Run all cram processes:
 
 ```sh
 $ ./tmux_2_cram.sh
 ```
 
-run all crbridge processes:
+Run all crbridge processes:
 
 ```sh
 $ ./tmux_3_crbridge.sh
