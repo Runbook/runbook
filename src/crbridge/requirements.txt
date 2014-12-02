@@ -1,6 +1,5 @@
 Jinja2==2.7
 PyYAML==3.10
-WTForms==2.0.1
 boto==2.32.1
 pyzmq==13.1.0
 redis==2.10.3
