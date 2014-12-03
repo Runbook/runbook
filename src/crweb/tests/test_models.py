@@ -4,8 +4,6 @@
 # Tests - models
 ######################################################################
 
-import time
-import datetime
 import unittest
 
 from flask import g, request
