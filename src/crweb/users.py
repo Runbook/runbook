@@ -103,6 +103,7 @@ class User(object):
             self.stripe = results['stripe']
             self.subplans = results['subplans']
             self.subscription = results['subscription']
+            self.creation_time = results['creation_time']
             return self
         else:
             return None
