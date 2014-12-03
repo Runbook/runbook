@@ -82,6 +82,7 @@ if len(emails_to_subscribe) > 0:
     data = json.dumps({
         "apikey": config['mailchimp_api_key'], # in the form XXX-us2
         "id": config['mailchimp_list_id'], # in the form a23o9af0f
+        "double_optin": True,
         "batch": [{"email": {"email": email}} for email in emails_to_subscribe]
     })
     url = config['mailchimp_api_url'] + "/lists/batch-subscribe"
