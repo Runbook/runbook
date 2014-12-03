@@ -4,7 +4,6 @@
 # Tests - models
 ######################################################################
 
-
 import unittest
 
 from flask import g, request
@@ -32,6 +31,7 @@ class TestUserModel(BaseTestCase):
             user = user.get('username', 'test@user.com', g.rdb_conn)
             self.assertTrue(user.email == 'test@user.com')
             self.assertTrue(user.status == 'active')
+            self.assertTrue(user.is_active('test@tester.com', g.rdb_conn))
 
     def test_check_password(self):
         # Ensure given password is correct after unhashing
@@ -63,6 +63,21 @@ class TestUserModel(BaseTestCase):
             user = User()
             user_id = user.getUID('test@tester.com', g.rdb_conn)
             self.assertTrue(logged_in_user_id == user_id)
+
+    def test_registered_user_time_attribue(self):
+        # Ensure that a registered user has creation_time attribute
+        with self.client:
+            response = self.client.post('/signup', data=dict(
+                email='test@user.com',
+                company="test",
+                contact="test",
+                password='test_user',
+                confirm='test_user'
+            ), follow_redirects=True)
+            self.assertEqual(response.status_code, 200)
+            user = User()
+            user = user.get('username', 'test@tester.com', g.rdb_conn)
+            self.assertTrue(user.creation_time)
 
 
 if __name__ == '__main__':
