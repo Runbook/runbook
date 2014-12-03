@@ -82,7 +82,6 @@ def startData(user=None):
 # Blueprints
 # ------------------------------------------------------------------
 
-
 from member.views import member_blueprint
 from monitor.views import monitor_blueprint
 from public.views import public_blueprint
