@@ -25,7 +25,7 @@ def check(data):
             url, timeout=timeout, headers=headers, verify=False)
     except:
         return False
-    retext = str(result.text)
+    retext = unicode(result.text)
     if data['data']['regex'] == "True":
         match = re.search(data['data']['keyword'], retext)
         if match:
