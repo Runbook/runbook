@@ -1,6 +1,8 @@
 # Project Specific
 crweb.cfg
 rethinkdb_data/
+tmp
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
