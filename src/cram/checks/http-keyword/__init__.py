@@ -23,9 +23,9 @@ def check(data):
     try:
         result = requests.get(
             url, timeout=timeout, headers=headers, verify=False)
+        retext = unicode(result.text)
     except:
         return False
-    retext = str(result.text)
     if data['data']['regex'] == "True":
         match = re.search(data['data']['keyword'], retext)
         if match:

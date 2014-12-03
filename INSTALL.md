@@ -89,9 +89,19 @@ Now you can launch your browser and point it to `http://localhost:8000/signup`. 
 
 ### Run Tests
 
+Without coverage:
+
 ```sh
 $ python src/crweb/tests.py
 ```
+
+With coverage:
+
+```sh
+$ python src/crweb/cov.py
+```
+
+> Tests only cover "src/crweb" right now.
 
 ## Once everything is working fine
 
