@@ -66,3 +66,24 @@ Once the upstream repository is set you can update your repo by fetching and mer
 To keep your GitHub fork up to date you can push the changes to your `origin` repository
 
     $ git push origin
+
+### Tests
+
+Test Driven Develoment is the ideal development process, and we are working toward that. Right now we are mostly dealing with tech debt, adding tests to cover the current code base. That said, when you add code, make sure you add a test. Every push *should* increase code coverage.
+
+
+#### Run Tests
+
+Without coverage:
+
+```sh
+$ python src/crweb/tests.py
+```
+
+With coverage:
+
+```sh
+$ python src/crweb/cov.py
+```
+
+> Tests only cover "src/crweb" right now.
