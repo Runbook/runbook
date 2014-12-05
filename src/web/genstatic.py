@@ -35,7 +35,7 @@ def GenStaticPage(f, data, output_dir):
 
     return True
 
-template_path = "/home/bcane/crweb/templates"
+template_path = "/home/bcane/web/templates"
 out_path = "/usr/share/nginx/html/"
 pages = {
     "/": template_path + "/tempdex.html"
@@ -53,4 +53,4 @@ for key in pages.keys():
         print("Did not create %s") % key
 
 # Copy static files
-distutils.dir_util.copy_tree("/home/bcane/crweb/static", out_path + "/static")
+distutils.dir_util.copy_tree("/home/bcane/web/static", out_path + "/static")

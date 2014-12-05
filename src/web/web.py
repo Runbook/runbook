@@ -34,7 +34,7 @@ from flask import render_template
 
 app = Flask(__name__)
 # Config files are located in the instance directory
-configfile = os.path.join('instance', 'crweb.cfg')
+configfile = os.path.join('instance', 'web.cfg')
 if len(sys.argv) > 1:
     configfile = sys.argv[1]
 print("Using config %s" % configfile)

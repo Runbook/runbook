@@ -30,7 +30,19 @@ class User(object):
         self.subscribed_to_newsletter = False
 
     def createUser(self, userdata, rdb):
-        ''' Create a new user in the RethinkDB '''
+        '''
+        Given-
+
+        userdata = {
+            "username": "foo",
+            "password": "foo_password",
+            "email": "foo@bar.com",
+            "company": "foobar",
+            "contact": "foo@bar.com""
+        }
+
+        - create a new user in the RethinkDB
+        '''
         jsondata = {}
         jsondata['username'] = userdata['username']
         jsondata['password'] = self.createPass(userdata['password'])

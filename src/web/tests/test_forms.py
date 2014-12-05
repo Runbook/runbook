@@ -17,13 +17,11 @@ class TestLoginForm(BaseTestCase):
         # Ensure correct data validates.
         form = LoginForm(email='ad@min.com', password='admin')
         self.assertTrue(form.validate())
-        pass
 
     def test_validate_invalid_email_format(self):
         # Ensure invalid email format throws error.
         form = LoginForm(email='unknown', password='example')
         self.assertFalse(form.validate())
-        pass
 
 
 class TestSignupForm(BaseTestCase):
