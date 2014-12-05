@@ -20,7 +20,12 @@ class AddPackForm(Form):
     ''' Class that creates signup form fields and validation '''
     add_packs = TextField(
         "Additional Monitor Packages",
-        validators=[NumberRange(min=0, message="Additional Monitor Packages must be a number")])
+        validators=[
+            NumberRange(
+                min=0,
+                message="Additional Monitor Packages must be a number"
+            )
+        ])
 
 if __name__ == '__main__':
     pass
