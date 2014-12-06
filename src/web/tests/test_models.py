@@ -4,6 +4,7 @@
 # Tests - models
 ######################################################################
 
+
 import unittest
 
 from flask import g, request
@@ -86,6 +87,13 @@ class TestUserModel(BaseTestCase):
         password_one = user_one.createPass("test")
         password_two = user_two.createPass("test")
         self.assertTrue(password_one != password_two)
+
+    def test_initial_permissions(self):
+        # Ensure initial permissions are set correctly
+        user = User()
+        user_test = user.get('username', 'test@tester.com', g.rdb_conn)
+        self.assertTrue(user_test.acttype == "lite-v2")
+        self.assertFalse(user_test.acttype == "pro")
 
 
 if __name__ == '__main__':
