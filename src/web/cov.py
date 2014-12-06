@@ -2,7 +2,7 @@ import os
 import unittest
 import coverage
 
-cov = coverage.coverage(branch=True, include='src/crweb/*')
+cov = coverage.coverage(branch=True, include='src/web/*')
 cov.start()
 tests = unittest.TestLoader().discover('tests')
 unittest.TextTestRunner(verbosity=2, buffer=True).run(tests)

@@ -21,7 +21,7 @@ Once installed, start the server in a new terminal window:
 $ rethinkdb
 ```
 
-Then with the server running, run the following in a new window to set the authentication key (which comes from "/src/crweb/instance/crweb.cfg.default"):
+Then with the server running, run the following in a new window to set the authentication key (which comes from "/src/web/instance/web.cfg.default"):
 
 ```sh
 $ rethinkdb admin set auth cloudroutes
@@ -41,7 +41,7 @@ The entire application has 4 configuration file types, which are used by 7 types
 
 Here is a list of configuration files, that can be used for the first time to run a minimal working application locally:
 
- - crweb/instance/crweb.cfg.default - used by Web (crweb/web.py) process
+ - web/instance/web.cfg.default - used by Web (web/web.py) process
  - cram/config/control.yml.5min.default - used by cram/control.py process
  - cram/config/main.yml.default - used by cram/broker.py and cram/worker.py processes
  - crbridge/config/config.yml.default - used by crbridge/bridge.py, crbridge/broker.py and crbridge/actioner.py processes
@@ -51,17 +51,17 @@ Here is a list of configuration files, that can be used for the first time to ru
 There is a `create_db.py` script for initializing RethinkDB. Create the database and required tables from the Python shell:
 
 ```sh
-$ python create_db.py src/crweb/instance/crweb.cfg.default
+$ python create_db.py src/web/instance/web.cfg.default
 ```
 
 ### Running for the first time
 
 With rethinkDB and redis running...
 
-1) Run web processes (src/crweb/web.py)
+1) Run web processes (src/web/web.py)
 
 ```sh
-$ python src/crweb/web.py instance/crweb.cfg.default
+$ python src/web/web.py instance/web.cfg.default
 ```
 
 2) Run control process (src/cram/control.py)
@@ -92,16 +92,16 @@ Now you can launch your browser and point it to `http://localhost:8000/signup`. 
 Without coverage:
 
 ```sh
-$ python src/crweb/tests.py
+$ python src/web/tests.py
 ```
 
 With coverage:
 
 ```sh
-$ python src/crweb/cov.py
+$ python src/web/cov.py
 ```
 
-> Tests only cover "src/crweb" right now.
+> Tests only cover "src/web" right now.
 
 ## Once everything is working fine
 

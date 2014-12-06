@@ -6,7 +6,7 @@ services:
   - redis-server
 
 install:
-  - pip install -r src/crweb/requirements.txt
+  - pip install -r src/web/requirements.txt
   - pip install -r src/crbridge/requirements.txt
   - pip install -r src/cram/requirements.txt
 #  - sudo add-apt-repository ppa:rethinkdb/ppa -y
@@ -19,9 +19,9 @@ install:
 before_script:
   - rethinkdb &
   - rethinkdb admin set auth cloudroutes
-  - cp src/crweb/instance/crweb.cfg.default src/crweb/instance/crweb.cfg
+  - cp src/web/instance/web.cfg.default src/web/instance/web.cfg
   - python create_db.py
-  - python src/crweb/web.py &
+  - python src/web/web.py &
 
 script:
-  - python src/crweb/tests.py
+  - python src/web/tests.py

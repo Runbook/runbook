@@ -79,6 +79,14 @@ class TestUserModel(BaseTestCase):
             user = user.get('username', 'test@tester.com', g.rdb_conn)
             self.assertTrue(user.creation_time)
 
+    def test_password_hashing_is_random(self):
+        # Ensure that a password salt/hash is random
+        user_one = User()
+        user_two = User()
+        password_one = user_one.createPass("test")
+        password_two = user_two.createPass("test")
+        self.assertTrue(password_one != password_two)
+
 
 if __name__ == '__main__':
     unittest.main()

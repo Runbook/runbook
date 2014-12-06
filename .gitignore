@@ -1,5 +1,5 @@
 # Project Specific
-crweb.cfg
+web.cfg
 rethinkdb_data/
 tmp
 

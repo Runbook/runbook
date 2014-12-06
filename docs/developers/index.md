@@ -77,13 +77,13 @@ Test Driven Develoment is the ideal development process, and we are working towa
 Without coverage:
 
 ```sh
-$ python src/crweb/tests.py
+$ python src/web/tests.py
 ```
 
 With coverage:
 
 ```sh
-$ python src/crweb/cov.py
+$ python src/web/cov.py
 ```
 
-> Tests only cover "src/crweb" right now.
+> Tests only cover "src/web" right now.

@@ -23,7 +23,8 @@ def webCheck(request, monitor, urldata, rdb):
     # Verify and then send web check Monitor
     monitor.get(urldata['cid'], rdb)
     # Verify check_key and api_type matches monitor for cid
-    if urldata['check_key'] == monitor.url and urldata['atype'] == monitor.ctype:
+    if urldata['check_key'] == monitor.url and \
+            urldata['atype'] == monitor.ctype:
         # Ensure action is failed or healthy
         if urldata['action'] == "failed" or urldata['action'] == "healthy":
             # Set new status (not saved until monitor.webCheck is performed

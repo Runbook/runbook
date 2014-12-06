@@ -21,12 +21,12 @@ In this guide we will be using the `http-keyword` Monitor as reference. This Mon
 
 Runbook is written using the [flask](http://flask.pocoo.org/) framework. A common utility for creating web forms within flask is [wtforms](https://wtforms.readthedocs.org/en/latest/). We utilize wtforms for all web forms within the Runbook GUI, including the forms that create Monitors.
 
-For this document, we will create a new Monitor named `some-monitor`; the first step of creating a Monitor is to create the web form needed for users. To start the web form we will create a directory in `crweb/monitorforms/` called `some-monitor`. Within that directory we will create a `__init__.py` file containing a class that defines the required form fields. 
+For this document, we will create a new Monitor named `some-monitor`; the first step of creating a Monitor is to create the web form needed for users. To start the web form we will create a directory in `web/monitorforms/` called `some-monitor`. Within that directory we will create a `__init__.py` file containing a class that defines the required form fields.
 
-    $ mkdir crweb/monitorforms/some-monitor
-    $ vi crweb/monitorforms/some-monitor/__init__.py
+    $ mkdir web/monitorforms/some-monitor
+    $ vi web/monitorforms/some-monitor/__init__.py
 
-Within this file is the actual wtforms code. You can use the [http-keyword](https://github.com/asm-products/cloudroutes-service/blob/master/src/crweb/monitorforms/http-keyword/__init__.py) Monitor as an example.
+Within this file is the actual wtforms code. You can use the [http-keyword](https://github.com/asm-products/cloudroutes-service/blob/master/src/web/monitorforms/http-keyword/__init__.py) Monitor as an example.
 
 There are a couple of guidelines when creating a web form for Monitors.
 
@@ -60,12 +60,12 @@ The below example will show an example Monitor form class that has two fields, o
     from wtforms import Form, TextField
     from wtforms.validators import DataRequired, IPAddress, NumberRange
     from ..datacenter import DatacenterCheckForm
-    
+
     class CheckForm(DatacenterCheckForm):
       ''' Class that creates a Check form for the dashboard '''
       ip = TextField("IP", validators=[IPAddress(message='Does not match IP address format')])
       port = TextField("Port", validators=[NumberRange(message='Port must be a number between 1 and 65535')])
-    
+
     if __name__ == '__main__':
       pass
 
@@ -96,7 +96,7 @@ The below is an example form input field written in HTML and [Jinja2](http://jin
       {{ form.host(class_="form-control", placeholder="example.com") }}
       {% endif %}
       </div>
-    </div> 
+    </div>
 
 As you can see Jinja2 offers the ability to use if statements within the template. In the above example if we are in edit mode `data['edit']` will be `True` and the form will be pre-filled with the value of `data['monitor']['data']['host']`. If the value of `data['edit']` is `False` the form field will be created and the placeholder value will be displayed.
 
@@ -161,7 +161,7 @@ Step #1 and #2 were all about creating the web elements of a Monitor. Step #3 is
 
 #### API-based Monitors
 
-An example of an API-based Monitor would be the [datadog-webhook](https://github.com/asm-products/cloudroutes-service/blob/master/src/crweb/monitorapis/datadog-webhook/__init__.py) monitor. The end point for API-based Monitors is `/api/<short-name>/<monitor id>`. The short-name in our example would be `some-monitor` and the ID would be the `id` key for the Monitor in the database. When this end point is called, the web application will try to load a python module `monitorapis/<short-name>`. If the module does not exist there is an error, if the module does exist then the web application will call the `webCheck` method from that module.
+An example of an API-based Monitor would be the [datadog-webhook](https://github.com/asm-products/cloudroutes-service/blob/master/src/web/monitorapis/datadog-webhook/__init__.py) monitor. The end point for API-based Monitors is `/api/<short-name>/<monitor id>`. The short-name in our example would be `some-monitor` and the ID would be the `id` key for the Monitor in the database. When this end point is called, the web application will try to load a python module `monitorapis/<short-name>`. If the module does not exist there is an error, if the module does exist then the web application will call the `webCheck` method from that module.
 
 #### Example API Monitor
 
@@ -169,11 +169,11 @@ The following is an example of a simple API-based Monitor that always marks the 
 
     def webCheck(request, monitor, urldata, rdb):
       ''' Process the webbased api call '''
-      replydata = { 
+      replydata = {
         'headers': { 'Content-type' : 'application/json' }
         }
       jdata = request.json
-       
+
       ## Delete the Monitor
       monitor.get(urldata['cid'], rdb)
       if jdata['check_key'] == monitor.url and urldata['atype'] == monitor.ctype:
@@ -190,14 +190,14 @@ The `rdb` object is a connection object to the RethinkDB database store.
 
 In the above example if the POST data contains a JSON string that has a key `check_key` and that key is the same as the `monitor.url` objects value, and the `atype` value is the same as the `monitor.cytype` objects value. The `monitor.healthcheck` object will be set to `failed` and the `monitor.webCheck` method will be called. This method will send a health check message to the backend [crbridge](https://github.com/asm-products/cloudroutes-service/tree/master/src/crbridge) process. This process will process the failed monitor and perform necessary reactions.
 
-To get started with a new API-based Monitor you will first need to create a new directory with the short-name under the `crweb/monitorapis` directory and then create an `__init__.py` file that contains the API processing code.
+To get started with a new API-based Monitor you will first need to create a new directory with the short-name under the `web/monitorapis` directory and then create an `__init__.py` file that contains the API processing code.
 
-    $ mkdir crweb/monitorapis/some-monitor
-    $ vi crweb/monitorapis/some-monitor/__init__.py
+    $ mkdir web/monitorapis/some-monitor
+    $ vi web/monitorapis/some-monitor/__init__.py
 
 #### Non API-based Monitors
 
-Non API-based Monitors are Monitors that are run via [cram](https://github.com/asm-products/cloudroutes-service/tree/master/src/cram). These monitors are executed from Runbook. You can think of these as external Monitors. At the moment of this writing, most of these have to do with checking a server/application externally. Using the [http-keyword](https://github.com/asm-products/cloudroutes-service/tree/master/src/cram/checks/http-keyword) Monitor as an example is the best place to start. All Monitors that run through `cram` are python modules placed into the `checks/` directory. 
+Non API-based Monitors are Monitors that are run via [cram](https://github.com/asm-products/cloudroutes-service/tree/master/src/cram). These monitors are executed from Runbook. You can think of these as external Monitors. At the moment of this writing, most of these have to do with checking a server/application externally. Using the [http-keyword](https://github.com/asm-products/cloudroutes-service/tree/master/src/cram/checks/http-keyword) Monitor as an example is the best place to start. All Monitors that run through `cram` are python modules placed into the `checks/` directory.
 
 Much like using the wtforms module in Step #1 to create a new Monitor, simply create a directory with the short-name and a `__init__.py` file.
 
@@ -212,34 +212,34 @@ Below is an example of what the `data` dictionary contains.
 
     data = {
       "status": "failed",
-      "uid": "1232131231231231231-111-15888dd98382", 
-      "zone": "Digital Ocean - sfo1", 
-      "cid": "232132312312312313123-aea-qer2-vs4e3", 
-      "url": "Twerewu230432423owrjewoj3fw3r-.2342432fserw323eaew1234567890204zT6el98CmmI2X30SwCo", 
-      "ctype": "http-keyword", 
-      "failcount": "412", 
+      "uid": "1232131231231231231-111-15888dd98382",
+      "zone": "Digital Ocean - sfo1",
+      "cid": "232132312312312313123-aea-qer2-vs4e3",
+      "url": "Twerewu230432423owrjewoj3fw3r-.2342432fserw323eaew1234567890204zT6el98CmmI2X30SwCo",
+      "ctype": "http-keyword",
+      "failcount": "412",
       "time_tracking": {
-        "control": 1411488928.422103, 
-        "ez_key": "key@example.com", 
+        "control": 1411488928.422103,
+        "ez_key": "key@example.com",
         "env": "Prod"
-      }, 
+      },
       "data": {
-        "regex": "True", 
+        "regex": "True",
         "datacenter": [
           "dc2queue",
           "dc1queue"
-        ], 
+        ],
         "name": "Some Monitor",
         "keyword": "Test",
         "reactions": [
           "1232432jsad-aefawewr2-adsfa-q23261c5",
           "asfkldjsafj0eq2.-23rq23=afsedfadc359"
-        ], 
+        ],
         "url": "http://example.com/hello.txt",
-        "timer": "5mincheck", 
+        "timer": "5mincheck",
         "host": "example.com",
         "present": "True"
-      }, 
+      },
       "name": "Some Monitor"
     }
 
