@@ -18,11 +18,11 @@ Reaction creation can be a bit complicated, this section hopes to explain some o
 
 ### Trigger
 
-The `Trigger` field is used to denote how many times a reaction must be identified as Healthy or Failed before execution. For example if a reaction had a trigger of 2 and the attached monitor ran every 4 minutes, the reaction would not execute until the 2nd run; 8 minutes from the first failure.
+The `Trigger` field is used to denote how many times a monitor must return the desired value before the reaction should be executed. This setting is useful for reactions that perform significant steps such as restarting a serivce or rebooting a server. If a monitor executes every 2 minutes and it's associated reaction has a `trigger` value of 2, the reaction would not be executed until the 2nd instance of the desired state. 
 
 ### Frequency
 
-The `Frequency` field is used to determine how often (in seconds) a reaction should run. If a reaction is executed the execution time is stored in cache and within the database. If a subsequent monitor attempts to trigger the reaction, the reaction will not execute if the time since last execution is within the `Frequency` value. Using the same example as above if a reaction had a trigger of 2 and a frequency of 300 the reaction would not be executed until 8 minutes after the first failure. However, after the first execution the 
+The `Frequency` field is used to denote how often (in seconds) a reaction should run. This setting allows you to build in time between reaction executions. If a monitor is set to execute every 2 minutes, once the monitor surpasses the `trigger` value reactions with a `frequency` of `0` will be executed each time the monitor is executed. Reactions with a `frequency` value of `360` will be executed no sooner than 6 minutes after the last reaction execution.
 
 ### Call On
 
