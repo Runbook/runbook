@@ -85,27 +85,27 @@ def addreaction_page(rname):
 
                     if results == "exists":
                         data['msg'] = "This reaction seems to already exist, try using a different name: %s" % reaction.name
-                        print("/dashboard/reactions/%s - Reaction creation false: exists") % rname
+                        print("/dashboard/reactions/%s - Reaction creation failed: exists") % rname
                         data['error'] = True
                     elif results == "edit noexists":
                         data['msg'] = "This reaction can not be edited as it does not exist: %s" % reaction.name
-                        print("/dashboard/reactions/%s - Reaction edit false: doesnt exist") % rname
+                        print("/dashboard/reactions/%s - Reaction edit failed: doesnt exist") % rname
                         data['error'] = True
                     elif results == "edit true":
                         data['msg'] = "Reaction successfully edited: %s" % reaction.name
                         print("/dashboard/reactions/%s - Reaction edit successful") % rname
                         data['error'] = False
-                    elif results == "edit false":
+                    elif results == "edit failed":
                         data['msg'] = "Reaction not successfully edited: %s" % reaction.name
-                        print("/dashboard/reactions/%s - Reaction edit false: unknown") % rname
+                        print("/dashboard/reactions/%s - Reaction edit failed: unknown") % rname
                         data['error'] = True
                     elif results == "toomany":
                         data['msg'] = "Could not create reaction: Too many reactions already created [%d]" % data['rlimit']
-                        print("/dashboard/reactions/%s - Reaction creation false: too many") % rname
+                        print("/dashboard/reactions/%s - Reaction creation failed: too many") % rname
                         data['error'] = True
                     elif results is False:
                         data['msg'] = "Could not create reaction"
-                        print("/dashboard/reactions/%s - Reaction creation false: unknown") % rname
+                        print("/dashboard/reactions/%s - Reaction creation failed: unknown") % rname
                         data['error'] = True
                     else:
                         stathat.ez_count(
@@ -116,7 +116,7 @@ def addreaction_page(rname):
                         data['error'] = False
                 else:
                     data['msg'] = "Form is not valid"
-                    print("/dashboard/reactions/%s - Reaction creation false: form invalid") % rname
+                    print("/dashboard/reactions/%s - Reaction creation failed: form invalid") % rname
                     data['error'] = True
 
         page = render_template(tmpl, data=data, form=form)
@@ -200,27 +200,27 @@ def editreact_page(rname, rid):
                     else:
                         results = False
                         data['msg'] = "It doesn't appear that you own this reaction"
-                        print("/dashboard/reactions/%s - Reaction edit false: not owner") % rname
+                        print("/dashboard/reactions/%s - Reaction edit failed: not owner") % rname
                         data['error'] = True
                     if results == "exists":
                         data['msg'] = "This reaction seems to already exist, try using a different name: %s" % reaction2.name
-                        print("/dashboard/reactions/%s - Reaction edit false: exists") % rname
+                        print("/dashboard/reactions/%s - Reaction edit failed: exists") % rname
                         data['error'] = True
                     elif results == "edit noexists":
                         data['msg'] = "This reaction can not be edited as it does not exist: %s" % reaction2.name
-                        print("/dashboard/reactions/%s - Reaction edit false: exists") % rname
+                        print("/dashboard/reactions/%s - Reaction edit failed: exists") % rname
                         data['error'] = True
                     elif results == "edit true":
                         data['msg'] = "Reaction successfully edited: %s" % reaction2.name
                         print("/dashboard/reactions/%s - Reaction edit successful") % rname
                         data['error'] = False
-                    elif results == "edit false":
+                    elif results == "edit failed":
                         data['msg'] = "Reaction not successfully edited: %s" % reaction2.name
-                        print("/dashboard/reactions/%s - Reaction edit false: unknown") % rname
+                        print("/dashboard/reactions/%s - Reaction edit failed: unknown") % rname
                         data['error'] = True
                     elif results is False:
                         data['msg'] = "Could not create reaction"
-                        print("/dashboard/reactions/%s - Reaction edit false: unknown") % rname
+                        print("/dashboard/reactions/%s - Reaction edit failed: unknown") % rname
                         data['error'] = True
                     else:
                         stathat.ez_count(
@@ -231,7 +231,7 @@ def editreact_page(rname, rid):
                         data['error'] = False
                 else:
                     data['msg'] = "Form is not valid"
-                    print("/dashboard/reactions/%s - Reaction edit false: form invalid") % rname
+                    print("/dashboard/reactions/%s - Reaction edit failed: form invalid") % rname
                     data['error'] = True
         form.process()
         page = render_template(tmpl, data=data, form=form)

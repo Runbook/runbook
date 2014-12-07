@@ -278,7 +278,7 @@ def userpref_page():
                         data['error'] = False
                     else:
                         data['msg'] = "Password change was unsuccessful"
-                        print("/dashboard/user-preferences - Password change false")
+                        print("/dashboard/user-preferences - Password change failed")
                         data['error'] = True
             data['url'] = '/dashboard/user-preferences'
             tmpl = 'member/user-preferences.html'

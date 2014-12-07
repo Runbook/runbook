@@ -93,7 +93,7 @@ if len(emails_to_subscribe) > 0:
     ).json()
     if "add_count" in resp:
         print("%s email(s) successfully subscribed!") % resp["add_count"]
-        print("%s email(s) false subscription!") % resp["error_count"]
+        print("%s email(s) failed subscription!") % resp["error_count"]
         for subscribed in resp["adds"]:
             r.table("users").filter({"email": subscribed["email"]}).update({"subscribed_to_newsletter": True}).run(rdb_server)
         if int(resp["add_count"]) == 0 and int(resp["error_count"]) > 1:

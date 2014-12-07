@@ -47,11 +47,11 @@ def webCheck(request, monitor, urldata, rdb):
         elif jdata['action'] == "status":
             rdata['result'] = "success"
             if monitor.status == "false":
-              rdata['status'] = "failed"
+                rdata['status'] = "failed"
             elif monitor.status == "true":
-              rdata['status'] = "healthy"
+                rdata['status'] = "healthy"
             else:
-              rdata['status'] = monitor.status
+                rdata['status'] = monitor.status
             rdata['failcount'] = monitor.failcount
         else:
             print("cr-api: Got an unknown action %s") % jdata['action']

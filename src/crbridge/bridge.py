@@ -240,7 +240,7 @@ while True:
                         if status['replaced'] == 1:
                             logger.debug("Monitor %s status changed in RethinkDB" % qitem['item']['cid'])
                         else:
-                            logger.debug("False to change monitor %s status in RethinkDB" % qitem['item']['cid'])
+                            logger.debug("Failed to change monitor %s status in RethinkDB" % qitem['item']['cid'])
                 else:
                     logger.debug("Skipping Monitor creation as it did not match datacenter checks: %s" % qitem['item']['cid'])
                     delete = r.table(config['dbqueue']).get(

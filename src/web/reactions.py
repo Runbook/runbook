@@ -67,7 +67,7 @@ class Reaction(object):
             q2 = r.table('dc2queue').insert(qdata).run(rdb)
             return "edit true"
         else:
-            return "edit false"
+            return "edit failed"
 
     def deleteReaction(self, uid, rid, rdb):
         ''' This will delete a specified reaction '''

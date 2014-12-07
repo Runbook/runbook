@@ -103,7 +103,7 @@ def addcheck_page(cname):
                         data['error'] = True
                     elif results is False:
                         data['msg'] = "Could not create monitor"
-                        print("/dashboard/monitors/%s - Monitor creation false") % cname
+                        print("/dashboard/monitors/%s - Monitor creation failed") % cname
                         data['error'] = True
                     elif results == 'toomany':
                         stathat.ez_count(
@@ -111,7 +111,7 @@ def addcheck_page(cname):
                             app.config['ENVNAME'] + ' Too many health checks',
                             1)
                         data['msg'] = "You have too many monitors [%d] to add another. Please upgrade your plan or clean up old ones." % data['limit']
-                        print("/dashboard/monitors/%s - Monitor creation false: toomany") % cname
+                        print("/dashboard/monitors/%s - Monitor creation failed: toomany") % cname
                         data['error'] = True
                     else:
                         stathat.ez_count(
@@ -132,7 +132,7 @@ def addcheck_page(cname):
                                 'data': newmonitor.data
                             }
                 else:
-                    print("/dashboard/monitors/%s - Monitor creation false: Form invalid") % cname
+                    print("/dashboard/monitors/%s - Monitor creation failed: Form invalid") % cname
                     data['msg'] = "Form is not valid"
                     data['error'] = True
         page = render_template(tmpl, data=data, form=form)
@@ -227,15 +227,15 @@ def editcheck_page(cname, cid):
                     else:
                         results = "NotYours"
                         data['msg'] = "This Monitor doesn't appear to be yours"
-                        print("/dashboard/edit-monitors/%s - Monitor edit false: not users") % cname
+                        print("/dashboard/edit-monitors/%s - Monitor edit failed: not users") % cname
                         data['error'] = True
                     if results == "exists":
                         data['msg'] = "This monitor seems to already exist, try using a different name: %s" % monitor.name
-                        print("/dashboard/edit-monitors/%s - Monitor edit false: exists") % cname
+                        print("/dashboard/edit-monitors/%s - Monitor edit failed: exists") % cname
                         data['error'] = True
                     elif results is False:
                         data['msg'] = "Could not edit monitor"
-                        print("/dashboard/edit-monitors/%s - Monitor edit false: unknown reason") % cname
+                        print("/dashboard/edit-monitors/%s - Monitor edit failed: unknown reason") % cname
                         data['error'] = True
                     elif results == 'toomany':
                         stathat.ez_count(
@@ -243,7 +243,7 @@ def editcheck_page(cname, cid):
                             app.config['ENVNAME'] + ' Too many health checks',
                             1)
                         data['msg'] = "You have too many monitors [%d] to add another. Please upgrade your plan or clean up old ones." % data['limit']
-                        print("/dashboard/edit-monitors/%s - Monitor edit false: too many") % cname
+                        print("/dashboard/edit-monitors/%s - Monitor edit failed: too many") % cname
                         data['error'] = True
                     else:
                         stathat.ez_count(app.config['STATHAT_EZ_KEY'], app.config['ENVNAME'] + ' Monitor Added', 1)
@@ -252,7 +252,7 @@ def editcheck_page(cname, cid):
                         data['error'] = False
                 else:
                     data['msg'] = "Form is not valid"
-                    print("/dashboard/edit-monitors/%s - Monitor edit false: Form invalid") % cname
+                    print("/dashboard/edit-monitors/%s - Monitor edit failed: Form invalid") % cname
                     data['error'] = True
             # Process form to display defaults
             if form.__contains__("timer"):
@@ -322,12 +322,12 @@ def checkaction_page(cid, action):
                     print("/dashboard/action-checks - Manual monitor queued")
                     flash('Health check status change is queued', 'success')
                 else:
-                    print("/dashboard/action-checks - Manual monitor action false")
+                    print("/dashboard/action-checks - Manual monitor action failed")
                     flash(
                         'Something went wrong. Could not modify health check',
                         'danger')
             else:
-                print("/dashboard/action-checks - Manual monitor action false: do not own")
+                print("/dashboard/action-checks - Manual monitor action failed: do not own")
                 flash('It does not appear you own this health check', 'danger')
 
     return redirect(url_for('member.dashboard_page'))
@@ -357,7 +357,7 @@ def delcheck_page(cid):
                 print("/dashboard/delete-checks - Delete successful")
                 flash('Health Check was successfully deleted', 'success')
             else:
-                print("/dashboard/delete-checks - Delete false")
+                print("/dashboard/delete-checks - Delete failed")
                 flash('Health Check was not deleted', 'danger')
     return redirect(url_for('member.dashboard_page'))
 
