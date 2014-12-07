@@ -145,7 +145,7 @@ When the web app processes the new Monitor the details will be stored into the m
       "failcount": 1583 ,
       "id":  "adfasdlkjfsdkljasdf98f0-1a2dbdea2675" ,
       "name":  "Example HTTP" ,
-      "status":  "healthy" ,
+      "status":  "true" ,
       "uid":  "sdfsaasdfjlaksdfaskj369-15888dd98382" ,
       "url":  "asdfweqrue0rj2302309rur20cdsa09dafw09iacs09caswekflkwjqfklwejfjf.qwerzPHUz7heZ6VxA"
     }
@@ -165,7 +165,7 @@ An example of an API-based Monitor would be the [datadog-webhook](https://github
 
 #### Example API Monitor
 
-The following is an example of a simple API-based Monitor that always marks the Monitor failed when called.
+The following is an example of a simple API-based Monitor that always marks the Monitor false when called.
 
     def webCheck(request, monitor, urldata, rdb):
       ''' Process the webbased api call '''
@@ -177,18 +177,18 @@ The following is an example of a simple API-based Monitor that always marks the 
       ## Delete the Monitor
       monitor.get(urldata['cid'], rdb)
       if jdata['check_key'] == monitor.url and urldata['atype'] == monitor.ctype:
-        monitor.healthcheck = "failed"
+        monitor.healthcheck = "false"
         result = monitor.webCheck(rdb)
       replydata['data'] = "{'success':'True'}"
       return replydata
 
 When the `webCheck` method is called it will be given 4 arguments; `request`, `monitor`, `urldata` and `rdb`. The `request` argument is the full `request` object from Flask, this contains all POST data and Headers of the API request. The `monitor` argument is an object for the `Monitor` class, in the example above we use the `get`, `healthcheck` and `webCheck` methods from this class.
 
-The `urldata` argument is a dictionary that contains data from the URL making the request. The dictionary contains `cid`, `atype`, `check_key` and `action`. The `cid` is the Monitor ID value passed from the URL, this is not a validated ID and should be treated the same as any user input. The `atype` value is the type of API being requested, this is essentially the `ctype` key in the monitors meta data. The `check_key` is an optional URL parameter, if it exists in the URL it can be compared with `monitor.url` as a validator, this is essentually an API Key. The `action` key is also an optional URL parameter, and is used in webhook requests to specify failed or healthy requests.
+The `urldata` argument is a dictionary that contains data from the URL making the request. The dictionary contains `cid`, `atype`, `check_key` and `action`. The `cid` is the Monitor ID value passed from the URL, this is not a validated ID and should be treated the same as any user input. The `atype` value is the type of API being requested, this is essentially the `ctype` key in the monitors meta data. The `check_key` is an optional URL parameter, if it exists in the URL it can be compared with `monitor.url` as a validator, this is essentually an API Key. The `action` key is also an optional URL parameter, and is used in webhook requests to specify false or true requests.
 
 The `rdb` object is a connection object to the RethinkDB database store.
 
-In the above example if the POST data contains a JSON string that has a key `check_key` and that key is the same as the `monitor.url` objects value, and the `atype` value is the same as the `monitor.cytype` objects value. The `monitor.healthcheck` object will be set to `failed` and the `monitor.webCheck` method will be called. This method will send a health check message to the backend [crbridge](https://github.com/asm-products/cloudroutes-service/tree/master/src/crbridge) process. This process will process the failed monitor and perform necessary reactions.
+In the above example if the POST data contains a JSON string that has a key `check_key` and that key is the same as the `monitor.url` objects value, and the `atype` value is the same as the `monitor.cytype` objects value. The `monitor.healthcheck` object will be set to `false` and the `monitor.webCheck` method will be called. This method will send a health check message to the backend [crbridge](https://github.com/asm-products/cloudroutes-service/tree/master/src/crbridge) process. This process will process the false monitor and perform necessary reactions.
 
 To get started with a new API-based Monitor you will first need to create a new directory with the short-name under the `web/monitorapis` directory and then create an `__init__.py` file that contains the API processing code.
 
@@ -211,7 +211,7 @@ The only requirement for this Monitor is to have a single method called `check`.
 Below is an example of what the `data` dictionary contains.
 
     data = {
-      "status": "failed",
+      "status": "false",
       "uid": "1232131231231231231-111-15888dd98382",
       "zone": "Digital Ocean - sfo1",
       "cid": "232132312312312313123-aea-qer2-vs4e3",
@@ -248,7 +248,7 @@ The key item of this Monitor is the `data['data']` dictionary. The `data['data']
 
 #### What to do after the health check is performed
 
-The actual code to perform the health check really depends on the health check itself, but once you determine if the check was "healthy" the check function should return `True`. If the monitor is determined "failed" the return value should be `False`.
+The actual code to perform the health check really depends on the health check itself, but once you determine if the check was "true" the check function should return `True`. If the monitor is determined "false" the return value should be `False`.
 
 
 #### Example Health Check: http-get-statuscode
@@ -273,10 +273,10 @@ The following monitor code is from the `http-get-statuscode` Monitor and can be 
 
 ###### Example Health Check: always-true
 
-The following Monitor code will always return `True`, which means the Monitor itself will always be `healthy`.
+The following Monitor code will always return `True`, which means the Monitor itself will always be `true`.
 
     def check(data):
-      ''' Always return healthy '''
+      ''' Always return true '''
       return True
 
 

@@ -44,7 +44,7 @@ class ReactForm(BaseReactForm):
     args = TextField("Arguments")
     call_on = SelectField(
         "Call On",
-        choices=[('failed', 'Failed Monitors'), ('healthy', 'Healthy Monitors')],
+        choices=[('false', 'False Monitors'), ('true', 'True Monitors')],
         validators=[DataRequired(message='Call On is a required field')])
 
     misc1 = TextField("Misc. #1")

@@ -18,10 +18,10 @@ class ReactForm(BaseReactForm):
     email = TextField(
         "Email",
         validators=[Email(message='Email address invalid')])
-    send_healthy = SelectField(
-        "Send When Healthy",
+    send_true = SelectField(
+        "Send When True",
         choices=send_choices,
-        validators=[DataRequired(message='You must select to send email when healthy or not')])
+        validators=[DataRequired(message='You must select to send email when true or not')])
 
 if __name__ == '__main__':
     pass

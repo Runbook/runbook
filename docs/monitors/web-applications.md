@@ -16,11 +16,11 @@ This allows the user to request a specific domain even if it is not part of the 
 
 ### Expected response codes
 
-This field is a multi-select field that allows you to select the HTTP status codes that you expect your application or webserver to respond with. During the execution of this monitor we will check the HTTP status code we get in response to our GET request and if that code is not within the "Expected response codes" list, the monitor will be marked as failed.
+This field is a multi-select field that allows you to select the HTTP status codes that you expect your application or webserver to respond with. During the execution of this monitor we will check the HTTP status code we get in response to our GET request and if that code is not within the "Expected response codes" list, the monitor will be marked as false.
 
 ### Timeout value
 
-This monitor has a timeout value of 3 seconds, if while performing the GET request the response is not received in 3 seconds the monitor will return failed.
+This monitor has a timeout value of 3 seconds, if while performing the GET request the response is not received in 3 seconds the monitor will return false.
 
 ---
 
@@ -42,4 +42,4 @@ This selection field allows you to specify if the keyword provided is in regular
 
 ### Timeout value
 
-This monitor has a timeout value of 3 seconds, if while performing the GET request the response is not received in 3 seconds the monitor will return failed.
+This monitor has a timeout value of 3 seconds, if while performing the GET request the response is not received in 3 seconds the monitor will return false.

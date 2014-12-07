@@ -26,8 +26,8 @@ def webCheck(request, monitor, urldata, rdb):
     print("cr-api: Monitor %s is - %s") % (cid, monitor.name)
     if jdata['check_key'] == monitor.url:
         print("cr-api: monitor %s check_key is valid") % cid
-        if jdata['action'] == "failed":
-            monitor.healthcheck = "api-failed"
+        if jdata['action'] == "false" or jdata['action'] == "failed":
+            monitor.healthcheck = "false"
             result = monitor.webCheck(rdb)
             if result:
                 print("cr-api: change of webCheck for monitor %s was successful") % cid
@@ -35,8 +35,8 @@ def webCheck(request, monitor, urldata, rdb):
             else:
                 print("cr-api: could not set webCheck for monitor %s") % cid
                 rdata['result'] = "failed"
-        elif jdata['action'] == "healthy":
-            monitor.healthcheck = "api-healthy"
+        elif jdata['action'] == "true" or jdata['action'] == "healthy":
+            monitor.healthcheck = "true"
             result = monitor.webCheck(rdb)
             if result:
                 print("cr-api: change of webCheck for monitor %s was successful") % cid
@@ -46,7 +46,12 @@ def webCheck(request, monitor, urldata, rdb):
                 rdata['result'] = "failed"
         elif jdata['action'] == "status":
             rdata['result'] = "success"
-            rdata['status'] = monitor.status
+            if monitor.status == "false":
+              rdata['status'] = "failed"
+            elif monitor.status == "true":
+              rdata['status'] = "healthy"
+            else:
+              rdata['status'] = monitor.status
             rdata['failcount'] = monitor.failcount
         else:
             print("cr-api: Got an unknown action %s") % jdata['action']

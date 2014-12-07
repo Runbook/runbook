@@ -5,7 +5,7 @@
 # Description:
 # ------------------------------------------------------------------
 # This module is used to failover and failback domains after
-# unhealthy and healthy checks.
+# untrue and true checks.
 # ------------------------------------------------------------------
 # Version: Alpha.20140424
 # Original Author: Benjamin J. Cane - madflojo@cloudrout.es
@@ -20,8 +20,8 @@ import json
 import time
 
 
-def failed(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has failed '''
+def false(redata, jdata, rdb, r_server):
+    ''' This method will be called when a monitor has false '''
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -39,7 +39,7 @@ def failed(redata, jdata, rdb, r_server):
         return None
 
 
-def healthy(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
     run = True
     # Check for Trigger
@@ -57,7 +57,7 @@ def healthy(redata, jdata, rdb, r_server):
                 edit(redata, jdata, r_server, failback=True)
         else:
             # Do nothing to prevent unplanned failback
-            line = "cloudflare-ip-replace: Monitor is healthy, nothing to do"
+            line = "cloudflare-ip-replace: Monitor is true, nothing to do"
             syslog.syslog(syslog.LOG_INFO, line)
         return True
     else:
@@ -89,22 +89,22 @@ def edit(redata, jdata, r_server, failback=False):
                         data['id'], data['content'])
                     syslog.syslog(syslog.LOG_DEBUG, line)
                 else:
-                    line = "cloudflare-ip-replace: Failed to change record %s" % data['id']
+                    line = "cloudflare-ip-replace: False to change record %s" % data['id']
                     syslog.syslog(syslog.LOG_DEBUG, line)
             else:
                 skey = key + ":deleted"
                 r_server.srem(skey, rec)
-                line = "cloudflare-ip-replace: Failed to change record %s - Not found in Redis, removed from record list" % rec
+                line = "cloudflare-ip-replace: False to change record %s - Not found in Redis, removed from record list" % rec
                 syslog.syslog(syslog.LOG_DEBUG, line)
             runcount = runcount + 1
     else:
-        faileddata, failcount = checkZone(redata['data']['ip'], usrdata)
-        line = "cloudflare-ip-replace: Found %d failed records" % failcount
+        falsedata, failcount = checkZone(redata['data']['ip'], usrdata)
+        line = "cloudflare-ip-replace: Found %d false records" % failcount
         syslog.syslog(syslog.LOG_DEBUG, line)
-        for rec in faileddata.keys():
+        for rec in falsedata.keys():
             data = usrdata
-            for item in faileddata[rec].keys():
-                data[item] = faileddata[rec][item]
+            for item in falsedata[rec].keys():
+                data[item] = falsedata[rec][item]
             rstring = json.dumps(data)
             data['content'] = redata['data']['replaceip']
             data['id'] = rec
@@ -117,7 +117,7 @@ def edit(redata, jdata, r_server, failback=False):
                     data['id'], data['content'])
                 syslog.syslog(syslog.LOG_DEBUG, line)
             else:
-                line = "cloudflare-ip-replace: Failed to edit record %s" % data[
+                line = "cloudflare-ip-replace: False to edit record %s" % data[
                     'id']
                 syslog.syslog(syslog.LOG_DEBUG, line)
             runcount = runcount + 1
@@ -134,20 +134,20 @@ def callAPI(reqdata):
             url="https://www.cloudflare.com/api_json.html",
             data=reqdata, headers=headers)
     except:
-        response = {'result': 'failed'}
+        response = {'result': 'false'}
         return response
 
     if req.status_code == 200:
         response = json.loads(req.text)
         return response
     else:
-        response = {'result': 'failed'}
+        response = {'result': 'false'}
         return response
 
 
 def checkZone(ip, usrdata):
     ''' Check the zone for the IP specified '''
-    failed = {}
+    false = {}
     usrdata['a'] = 'rec_load_all'
     response = callAPI(usrdata)
     runcount = 0
@@ -155,13 +155,13 @@ def checkZone(ip, usrdata):
         for record in response['response']['recs']['objs']:
             if record['content'] == ip:
                 runcount = runcount + 1
-                failed[record['rec_id']] = {'type': record["type"],
+                false[record['rec_id']] = {'type': record["type"],
                                             'name': record["name"],
                                             'content': record["content"],
                                             'service_mode': record["service_mode"],
                                             'ttl': record["ttl"],
                                             'prio': record["prio"]}
-    return failed, runcount
+    return false, runcount
 
 
 def editRecord(data):

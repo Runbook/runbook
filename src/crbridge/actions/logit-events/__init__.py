@@ -13,10 +13,10 @@ import datetime
 import json
 
 
-def failed(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has failed '''
+def false(redata, jdata, rdb, r_server):
+    ''' This method will be called when a monitor has false '''
     run = True
-    if "failed" in jdata['check']['prev_status']:
+    if "false" in jdata['check']['prev_status']:
         run = False
 
     if run:
@@ -26,10 +26,10 @@ def failed(redata, jdata, rdb, r_server):
         return None
 
 
-def healthy(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
     run = True
-    if "healthy" in jdata['check']['prev_status']:
+    if "true" in jdata['check']['prev_status']:
         run = False
 
     if run:

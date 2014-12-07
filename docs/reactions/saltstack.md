@@ -10,7 +10,7 @@ The Runbook Saltstack reactions are based on the [Salt API & Reactor Formula](ht
 
 ## Manage Services
 
-This reaction is designed to allow users to `start`, `stop`, `reload` and `restart` services across one or many servers using Saltstack. This reaction is extremely practical as it allows users to restart failed services.
+This reaction is designed to allow users to `start`, `stop`, `reload` and `restart` services across one or many servers using Saltstack. This reaction is extremely practical as it allows users to restart false services.
 
 ---
 

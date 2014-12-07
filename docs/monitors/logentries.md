@@ -6,15 +6,15 @@ Users of Logentries can define unique [Alerts](https://logentries.com/doc/tagsal
 
 Upon creating the monitor you will be provided with two unique URL's. These URL's can be the destination of the Logentries webhook.
 
-**Unique Failed URL:**
+**Unique False URL:**
 
-    https://dash.runbook.io/api/logentries-webhook/example-api-id/example-api-key/failed
+    https://dash.runbook.io/api/logentries-webhook/example-api-id/example-api-key/false
 
-**Unique Healthy URL:**
+**Unique True URL:**
 
-    https://dash.runbook.io/api/logentries-webhook/example-api-id/example-api-key/healthy
+    https://dash.runbook.io/api/logentries-webhook/example-api-id/example-api-key/true
 
-Since Logentries does not send healthy webhook events this monitor has two URLs, one for failed alerts and another for healthy alerts. Once a monitor is marked failed it will not be marked healthy until the healthy URL is also called. It is best practice for every failed alert in Logentries to create a second alert for healthy states.
+Since Logentries does not send true webhook events this monitor has two URLs, one for false alerts and another for true alerts. Once a monitor is marked false it will not be marked true until the true URL is also called. It is best practice for every false alert in Logentries to create a second alert for true states.
 
 #### URL Secrecy
 

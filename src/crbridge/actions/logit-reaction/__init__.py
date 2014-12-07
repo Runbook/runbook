@@ -12,13 +12,13 @@ import time
 import json
 
 
-def failed(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has failed '''
+def false(redata, jdata, rdb, r_server):
+    ''' This method will be called when a monitor has false '''
     result = logit(redata, jdata, rdb, r_server)
     return result
 
 
-def healthy(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
     result = logit(redata, jdata, rdb, r_server)
     return result
@@ -50,7 +50,7 @@ def logit(redata, jdata, rdb, r_server):
     elif redata['reaction_return'] is None:
         transaction['rstatus'] = 'Skipped'
     elif redata['reaction_return'] is False:
-        transaction['rstatus'] = 'Failed'
+        transaction['rstatus'] = 'False'
     else:
         transaction['rstatus'] = 'Unknown'
 

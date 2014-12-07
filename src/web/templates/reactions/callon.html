@@ -3,7 +3,7 @@
             <div class="col-sm-8">
               <div class="input-group">
               <span class="input-group-btn">
-                <button type="button" id="base-callon" class="btn btn-default" rel="popover" data-content="Select whether this reaction should be triggered during Healthy or Failed monitors" title="Call on healthy or failed"><i class="fa fa-question"></i></button>
+                <button type="button" id="base-callon" class="btn btn-default" rel="popover" data-content="Select whether this reaction should be triggered during True or False monitors" title="Call on true or false"><i class="fa fa-question"></i></button>
               </span>
               {% if data['edit'] %}
               {{ form.call_on(class_="select", value=data['reaction']['data']['call_on']) }}

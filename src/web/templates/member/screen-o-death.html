@@ -32,27 +32,27 @@
         {% if data['mons'] %}
           <ul class="nav nav-tabs" role="tablist">
             <li class="active"><a href="#tactical" role="tab" data-toggle="tab">Tactical View</a></li>
-            <li><a href="#failed" role="tab" data-toggle="tab">Failed Monitors</a></li>
+            <li><a href="#false" role="tab" data-toggle="tab">False Monitors</a></li>
             <li><a href="#manage" role="tab" data-toggle="tab">Manage Monitors/Reactions</a></li>
           </ul>
 
           <div class="tab-content">
           <!-- Start Tab -->
-          <div class="tab-pane" id="failed">
+          <div class="tab-pane" id="false">
                 <div class="panel panel-primary">
                   <div class="panel-heading">
                     <div class="panel-title">
-                      Failed Monitors
+                      False Monitors
                     </div>
                   </div>
-                    {% if data['monstats']['failed'] == 0 %}
+                    {% if data['monstats']['false'] == 0 %}
                     <div class="panel-body">
-                      All Monitors are healthy
+                      All Monitors are true
                     </div>
                     {% else %}
                     <table class="table table-condensed table-striped" width="100%">
                       {% for cid, monitor in data['monitors'].iteritems() %}
-                      {% if "failed" in monitor['status'] %}
+                      {% if "false" in monitor['status'] %}
                       <tr class="danger">
                         <td><i class="fa fa-exclamation-triangle"></i></td>
                         <td>{{ monitor['name'] }}
@@ -80,10 +80,10 @@
                 </div>
                   <table class="table table-condensed table-striped" width="100%">
                     <tr>
-                      <td>Failed</td><td>{{ data['monstats']['failed'] }}</td>
+                      <td>False</td><td>{{ data['monstats']['false'] }}</td>
                     </tr>
                     <tr>
-                      <td>Healthy</td><td>{{ data['monstats']['healthy'] }}</td>
+                      <td>True</td><td>{{ data['monstats']['true'] }}</td>
                     </tr>
                     <tr>
                       <td>Other</td><td>{{ data['monstats']['unknown'] }}</td>
@@ -108,7 +108,7 @@
                   {% else %}
                   <table class="table table-condensed table-striped" width="100%">
                     {% for event in data['monevents'] %}
-                    <td>{%- if "healthy" in event['status'] -%}<span class="label label-success">{%- elif "failed" in event['status'] -%}<span class="label label-danger">{%- else -%}<span class="label label-warning">{%- endif -%}{{ event['time_friendly'] }}</span></td><td>Monitor <b>{{ event['name'] }}</b> changed from <b>{{ event['prev_status'] }}</b> to <b>{{ event['status'] }}</b>. This monitor was <b>{{ event['prev_status'] }}</b> for <b>{{ event['prev_failcount'] }}</b> checks.</td>
+                    <td>{%- if "true" in event['status'] -%}<span class="label label-success">{%- elif "false" in event['status'] -%}<span class="label label-danger">{%- else -%}<span class="label label-warning">{%- endif -%}{{ event['time_friendly'] }}</span></td><td>Monitor <b>{{ event['name'] }}</b> changed from <b>{{ event['prev_status'] }}</b> to <b>{{ event['status'] }}</b>. This monitor was <b>{{ event['prev_status'] }}</b> for <b>{{ event['prev_failcount'] }}</b> checks.</td>
                   </tr>
                     {% endfor %}
                   </table>
@@ -132,10 +132,10 @@
               <td><h5>Actions</h5></td>
             </tr>
             {% for cid, monitor in data['monitors'].iteritems() %}
-            {%- if "healthy" in monitor['status'] -%}
+            {%- if "true" in monitor['status'] -%}
             <tr class="success">
               <td><i class="fa fa-check-circle"></i></td>
-            {%- elif "failed" in monitor['status'] -%}
+            {%- elif "false" in monitor['status'] -%}
             <tr class="danger">
               <td><i class="fa fa-exclamation-triangle"></i></td>
             {%- else -%}
@@ -145,11 +145,11 @@
               <td>{{ monitor['name'] }}</td>
               <td>{{ monitor['status'] }}</td>
               <td>
-{%- if "healthy" in monitor['status'] or "monitored" in monitor['status'] %}
-<a href="/dashboard/action-checks/{{ cid }}/failed" class="btn btn-danger btn-xs" role="button"><i class="fa fa-exclamation-triangle"></i> Mark Failed</a> 
+{%- if "true" in monitor['status'] or "monitored" in monitor['status'] %}
+<a href="/dashboard/action-checks/{{ cid }}/false" class="btn btn-danger btn-xs" role="button"><i class="fa fa-exclamation-triangle"></i> Mark False</a> 
 {%- endif %}
-{%- if "failed" in monitor['status'] or "monitored" in monitor['status'] %}
-<a href="/dashboard/action-checks/{{ cid }}/healthy" class="btn btn-success btn-xs" role="button"><i class="fa fa-check-circle"></i> Mark Healthy</a> 
+{%- if "false" in monitor['status'] or "monitored" in monitor['status'] %}
+<a href="/dashboard/action-checks/{{ cid }}/true" class="btn btn-success btn-xs" role="button"><i class="fa fa-check-circle"></i> Mark True</a> 
 {%- endif %}
 <a href="/dashboard/delete-checks/{{ cid }}" class="btn btn-danger btn-xs" role="button"><i class="fa fa-trash-o"></i> Delete</a> 
 <a href="/dashboard/edit-monitors/{{ monitor['ctype'] }}/{{ cid }}" class="btn btn-primary btn-xs" role="button"><i class="fa fa-edit"></i> Edit</a>

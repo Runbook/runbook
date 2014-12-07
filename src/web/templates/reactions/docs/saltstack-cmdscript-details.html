@@ -33,12 +33,12 @@
             <p></p>
             <h3>Reaction Actions</h3>
 
-            <p>This reaction will only perform a single reaction, this reaction can be configured to occur on "Failed Monitors" or "Healthy Monitors" but is not designed to be executed on both. In order to setup this reaction to have an action for "Healthy Monitors" and a different action for "Failed Monitors" you can create two reactions and attach them to the same Monitor.</p>
+            <p>This reaction will only perform a single reaction, this reaction can be configured to occur on "False Monitors" or "True Monitors" but is not designed to be executed on both. In order to setup this reaction to have an action for "True Monitors" and a different action for "False Monitors" you can create two reactions and attach them to the same Monitor.</p>
 
             <p></p>
-            <h4>Failed Monitors</h4>
-            <p><b>If this reaction's Call On field is set to "Failed Monitors".</b></p>
-            <p>When this reaction receives a "Failed Monitor" the reaction will send a POST request to the URL specified, this post request will contain the following data fields.</p>
+            <h4>False Monitors</h4>
+            <p><b>If this reaction's Call On field is set to "False Monitors".</b></p>
+            <p>When this reaction receives a "False Monitor" the reaction will send a POST request to the URL specified, this post request will contain the following data fields.</p>
             <pre>
 url: {{ postdata_url }}
 secretkey: {{ postdata_secretkey }}
@@ -47,15 +47,15 @@ matcher: {{ postdata_matcher }}
 script: {{ postdata_script }}
 args: {{ postdata_args }}
 </pre>
-            <p><b>If this reaction's Call On field is set to "Healthy Monitors".</b></p>
-            <p>This reaction will perform no tasks when it receives a "Failed Monitor"</p>
+            <p><b>If this reaction's Call On field is set to "True Monitors".</b></p>
+            <p>This reaction will perform no tasks when it receives a "False Monitor"</p>
 
 
             <p></p>
-            <h4>Healthy Monitors</h4>
+            <h4>True Monitors</h4>
 
-            <p><b>If this reaction's Call On field is set to "Healthy Monitors".</b></p>
-            <p>When this reaction receives a "Healthy Monitor" the reaction will send a POST request to the URL specified, this post request will contain the following data fields.</p>
+            <p><b>If this reaction's Call On field is set to "True Monitors".</b></p>
+            <p>When this reaction receives a "True Monitor" the reaction will send a POST request to the URL specified, this post request will contain the following data fields.</p>
             <pre>
 url: {{ postdata_url }}
 secretkey: {{ postdata_secretkey }}
@@ -64,8 +64,8 @@ matcher: {{ postdata_matcher }}
 script: {{ postdata_script }}
 args: {{ postdata_args }}
 </pre>
-            <p><b>If this reaction's Call On field is set to "Failed Monitors".</b></p>
-            <p>This reaction will perform no tasks when it receives a "Healthy Monitor"</p>
+            <p><b>If this reaction's Call On field is set to "False Monitors".</b></p>
+            <p>This reaction will perform no tasks when it receives a "True Monitor"</p>
 
             <p></p>
             <h3>Reaction Form Details</h3>

@@ -11,19 +11,19 @@
             <p></p>
             <h3>Reaction Actions</h3>
 
-            <p>This reaction has two types of actions, one is executed when the attached monitors return "Failed" and another is executed when the attached monitors return "Healthy".</p>
+            <p>This reaction has two types of actions, one is executed when the attached monitors return "False" and another is executed when the attached monitors return "True".</p>
 
             <p></p>
-            <h4>Failed Monitors</h4>
+            <h4>False Monitors</h4>
 
-            <p>When this reaction is executing the "Failed Monitor" tasks it will first query CloudFlare to determine which entries should be removed. The DNS entry will be stored within our local cache in order to facilitate the "Healthy Monitor" tasks. After the zone entries are stored locally our system will remove any entries that point to the specified IP or CNAME. The type of record is arbitrary to our system with the exception of <code>SRV</code> records, at this time we do not support removing and re-adding <code>SRV</code> records.</p>
+            <p>When this reaction is executing the "False Monitor" tasks it will first query CloudFlare to determine which entries should be removed. The DNS entry will be stored within our local cache in order to facilitate the "True Monitor" tasks. After the zone entries are stored locally our system will remove any entries that point to the specified IP or CNAME. The type of record is arbitrary to our system with the exception of <code>SRV</code> records, at this time we do not support removing and re-adding <code>SRV</code> records.</p>
 
-            <p class="text-warning">Note: Our system will not remove any records that do not have a secondary entry. For example, if you had two <code>www</code> records; one that pointed to <code>10.0.0.1</code> and another that pointed to <code>10.0.0.2</code>. If the reaction was configured to remove <code>10.0.0.2</code> it would. If a second reaction was then told to remove <code>10.0.0.1</code> than our system would do nothing. This is designed to prevent a complete outage when issues may be occurring on both systems but are not impactful enough to completely take the system offline. It is generally better to route incoming traffic somewhere even if that system is not completely healthy.</p>
+            <p class="text-warning">Note: Our system will not remove any records that do not have a secondary entry. For example, if you had two <code>www</code> records; one that pointed to <code>10.0.0.1</code> and another that pointed to <code>10.0.0.2</code>. If the reaction was configured to remove <code>10.0.0.2</code> it would. If a second reaction was then told to remove <code>10.0.0.1</code> than our system would do nothing. This is designed to prevent a complete outage when issues may be occurring on both systems but are not impactful enough to completely take the system offline. It is generally better to route incoming traffic somewhere even if that system is not completely true.</p>
 
             <p></p>
-            <h4>Healthy Monitors</h4>
+            <h4>True Monitors</h4>
 
-            <p>When this reaction is executing the "Healthy Monitor" tasks it will first look through the systems local cache to identify any previously removed records. If the system finds removed records it will re-add to the DNS zone via CloudFlare's API. When the entry is re-added any optional configurations will be re-added as well; these options include but are not limited to <code>prio</code> for MX records, or <code>service_mode</code> which enables or disables the CloudFlare proxy (the orange cloud).</p>
+            <p>When this reaction is executing the "True Monitor" tasks it will first look through the systems local cache to identify any previously removed records. If the system finds removed records it will re-add to the DNS zone via CloudFlare's API. When the entry is re-added any optional configurations will be re-added as well; these options include but are not limited to <code>prio</code> for MX records, or <code>service_mode</code> which enables or disables the CloudFlare proxy (the orange cloud).</p>
             <p></p>
 
             <h4>TTL</h4>

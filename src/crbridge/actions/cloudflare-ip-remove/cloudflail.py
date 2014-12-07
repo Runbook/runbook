@@ -2,7 +2,7 @@
 # Module for making calls to cloudflares API
 ######################################################################
 #### callAPI(request, userdata)
-#### checkZone(failedip, userdata)
+#### checkZone(falseip, userdata)
 # delRecord(rec,userdata)
 # addRecord(rec,userdata)
 # Benjamin J. Cane - 11/3/2013
@@ -34,20 +34,20 @@ def callAPI(request, usrdata):
     return json_data
 
 
-def checkZone(failed, usrdata):
+def checkZone(false, usrdata):
     """ Check the cloudflare zone record for entries to remove """
     # Call api
     request = [('a', 'rec_load_all')]
     json_data = callAPI(request, usrdata)
 
     # Dicts and Lists for later
-    failedrecs = {}
+    falserecs = {}
     names = {}
     recs = []
-    faileddata = {}
+    falsedata = {}
     recdata = {}
 
-    # Parse the response and tally failed entries
+    # Parse the response and tally false entries
     # Check if the json request is successful
     if json_data["result"] == "success":
         # each zone is a dict in objs dict
@@ -60,23 +60,23 @@ def checkZone(failed, usrdata):
             except KeyError:
                 names[key] = 1
 
-            if line["content"] == failed:
-                failedrecs[line["rec_id"]] = key
-                faileddata[line["rec_id"]] = {'type': line["type"],
+            if line["content"] == false:
+                falserecs[line["rec_id"]] = key
+                falsedata[line["rec_id"]] = {'type': line["type"],
                                               'name': line["name"],
                                               'content': line["content"],
                                               'service_mode': line["service_mode"],
                                               'ttl': line["ttl"],
                                               'prio': line["prio"]}
 
-        # Go through failed records
-        for rec in failedrecs.keys():
-            if names[failedrecs[rec]] > 1:
+        # Go through false records
+        for rec in falserecs.keys():
+            if names[falserecs[rec]] > 1:
                 # if record isn't the last entry add for removal
                 recs.append(rec)
-                recdata[rec] = faileddata[rec]
+                recdata[rec] = falsedata[rec]
 
-        # Return the records that have failed
+        # Return the records that have false
         return recs, recdata
 
 
