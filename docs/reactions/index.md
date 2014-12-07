@@ -26,5 +26,5 @@ The `Frequency` field is used to denote how often (in seconds) a reaction should
 
 ### Call On
 
-The `Call On` field is used to specify whether a reaction should be executed on Healthy or Failed monitors. Not all reactions have this setting as some reactions only apply to Failed or only apply to Healthy monitors.
+The `Call On` field is used to specify whether a reaction should be executed on True or False monitors. Not all reactions have this setting as some reactions only apply to False or only apply to True monitors.
 

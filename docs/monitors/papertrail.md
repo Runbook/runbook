@@ -6,15 +6,15 @@ Users of PaperTrail can define unique [Alerts](http://help.papertrailapp.com/kb/
 
 Upon creating the monitor you will be provided with two unique URL's. These URL's can be the destination of the PaperTrail webhook.
 
-**Unique Failed URL:**
+**Unique False URL:**
 
-    https://dash.runbook.io/api/papertrail-webhook/example-api-id/example-api-key/failed
+    https://dash.runbook.io/api/papertrail-webhook/example-api-id/example-api-key/false
 
-**Unique Healthy URL:**
+**Unique True URL:**
 
-    https://dash.runbook.io/api/papertrail-webhook/example-api-id/example-api-key/healthy
+    https://dash.runbook.io/api/papertrail-webhook/example-api-id/example-api-key/true
 
-Since PaperTrail does not send healthy webhook events this monitor has two URLs, one for failed alerts and another for healthy alerts. Once a monitor is marked failed it will not be marked healthy until the healthy URL is also called. It is best practice for every failed alert in PaperTrail to create a second alert for healthy states.
+Since PaperTrail does not send true webhook events this monitor has two URLs, one for false alerts and another for true alerts. Once a monitor is marked false it will not be marked true until the true URL is also called. It is best practice for every false alert in PaperTrail to create a second alert for true states.
 
 #### URL Secrecy
 

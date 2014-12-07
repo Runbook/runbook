@@ -58,16 +58,16 @@
               </div>  
 
                 <div class="form-group">
-                <label for="Send When Healthy" class="col-sm-4 control-label">Send Email When Healthy?</label>
+                <label for="Send When True" class="col-sm-4 control-label">Send Email When True?</label>
             <div class="col-sm-8">
               <div class="input-group">
               <span class="input-group-btn">
-                <button type="button" id="enotify-sendhealthy" class="btn btn-default" rel="popover" data-content="Select whether to send notification emails when the reaction returns healthy. By default this reaction will send email on the first instance of a healthy monitor." title="Send on healthy"><i class="fa fa-question"></i></button>
+                <button type="button" id="enotify-sendtrue" class="btn btn-default" rel="popover" data-content="Select whether to send notification emails when the reaction returns true. By default this reaction will send email on the first instance of a true monitor." title="Send on true"><i class="fa fa-question"></i></button>
               </span>
               {% if data['edit'] %}
-              {{ form.send_healthy(class_="form-control", value=data['reaction']['data']['send_healthy']) }}
+              {{ form.send_true(class_="form-control", value=data['reaction']['data']['send_true']) }}
               {% else %}
-              {{ form.send_healthy(class_="form-control", placeholder="Send Email When Healthy?") }}
+              {{ form.send_true(class_="form-control", placeholder="Send Email When True?") }}
               {% endif %}
             </div>
             </div>

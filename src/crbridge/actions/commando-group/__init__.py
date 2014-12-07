@@ -11,8 +11,8 @@ import json
 import time
 
 
-def failed(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has failed '''
+def false(redata, jdata, rdb, r_server):
+    ''' This method will be called when a monitor has false '''
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -23,7 +23,7 @@ def failed(redata, jdata, rdb, r_server):
     if checktime < redata['frequency']:
         run = False
 
-    if redata['data']['call_on'] == 'healthy':
+    if redata['data']['call_on'] == 'true':
         run = False
 
     if run:
@@ -32,7 +32,7 @@ def failed(redata, jdata, rdb, r_server):
         return None
 
 
-def healthy(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
     run = True
     # Check for Trigger
@@ -44,7 +44,7 @@ def healthy(redata, jdata, rdb, r_server):
     if checktime < redata['frequency']:
         run = False
 
-    if redata['data']['call_on'] == 'failed':
+    if redata['data']['call_on'] == 'false':
         run = False
 
     if run:
@@ -77,7 +77,7 @@ def call(redata, jdata):
             line = "commando-group: Reqeust to %s sent for monitor %s - Successful - %d" % (url, jdata['cid'], req.status_code)
             syslog.syslog(syslog.LOG_INFO, line)
         else:
-            line = "commando-group: Request to %s sent for monitor %s - Failed - %d" % (url, jdata['cid'], req.status_code)
+            line = "commando-group: Request to %s sent for monitor %s - False - %d" % (url, jdata['cid'], req.status_code)
             syslog.syslog(syslog.LOG_INFO, line)
             line = "commando-group: Debug Reply %s" % req.text
             syslog.syslog(syslog.LOG_DEBUG, line)

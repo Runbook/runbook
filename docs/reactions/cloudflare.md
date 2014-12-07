@@ -7,9 +7,9 @@ It is recommended for DNS reactions to keep the TTL of each record hosted with C
 ---
 ## Remove an IP
 
-The CloudFlare DNS: Remove an IP reaction is designed to provide an Active-Active DNS Failover functionality for domains that host their DNS with CloudFlare. This reaction is mainly useful for domains utilizing round-robin DNS load balancing. DNS records that are removed during a failed reaction are stored in Redis. When the monitor that triggered the removal of DNS is restored to a healthy state the DNS records are re-added automatically.
+The CloudFlare DNS: Remove an IP reaction is designed to provide an Active-Active DNS Failover functionality for domains that host their DNS with CloudFlare. This reaction is mainly useful for domains utilizing round-robin DNS load balancing. DNS records that are removed during a false reaction are stored in Redis. When the monitor that triggered the removal of DNS is restored to a true state the DNS records are re-added automatically.
 
-**Note:** Our reaction will not remove any records that do not have a secondary entry. For example, if you had two `www` records; one that pointed to `10.0.0.1` and another that pointed to `10.0.0.2`. If the reaction was configured to remove `10.0.0.2` it would. If a second reaction was then told to remove `10.0.0.1` than our system would do nothing. This is designed to prevent a complete outage when issues may be occurring on both systems but are not impactful enough to completely take the system offline. It is generally better to route incoming traffic somewhere even if that system is not completely healthy.
+**Note:** Our reaction will not remove any records that do not have a secondary entry. For example, if you had two `www` records; one that pointed to `10.0.0.1` and another that pointed to `10.0.0.2`. If the reaction was configured to remove `10.0.0.2` it would. If a second reaction was then told to remove `10.0.0.1` than our system would do nothing. This is designed to prevent a complete outage when issues may be occurring on both systems but are not impactful enough to completely take the system offline. It is generally better to route incoming traffic somewhere even if that system is not completely true.
 
 When re-adding DNS records secondary parameters such as `prio` for `MX` records and `service_mode` for `A` records are re-added with the same settings as when they were removed.
 
@@ -23,4 +23,4 @@ An example of this could be databases; some databases support Master-Master repl
 
 ### Failback Method
 
-The reaction creation form for **CloudFlare DNS: Replace an IP** contains a select field that allows you to select either `automatic` or `none`. The `automatic` failback policy will cause the reaction to re-add removed records when the monitor that triggered the reaction returns a healthy state. The `none` failback policy will cause the reaction to perform no action when the triggering monitor returns a healthy state.
+The reaction creation form for **CloudFlare DNS: Replace an IP** contains a select field that allows you to select either `automatic` or `none`. The `automatic` failback policy will cause the reaction to re-add removed records when the monitor that triggered the reaction returns a true state. The `none` failback policy will cause the reaction to perform no action when the triggering monitor returns a true state.

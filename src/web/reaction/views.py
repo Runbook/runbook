@@ -95,7 +95,7 @@ def addreaction_page(rname):
                         data['msg'] = "Reaction successfully edited: %s" % reaction.name
                         print("/dashboard/reactions/%s - Reaction edit successful") % rname
                         data['error'] = False
-                    elif results == "edit false":
+                    elif results == "edit failed":
                         data['msg'] = "Reaction not successfully edited: %s" % reaction.name
                         print("/dashboard/reactions/%s - Reaction edit failed: unknown") % rname
                         data['error'] = True
@@ -214,7 +214,7 @@ def editreact_page(rname, rid):
                         data['msg'] = "Reaction successfully edited: %s" % reaction2.name
                         print("/dashboard/reactions/%s - Reaction edit successful") % rname
                         data['error'] = False
-                    elif results == "edit false":
+                    elif results == "edit failed":
                         data['msg'] = "Reaction not successfully edited: %s" % reaction2.name
                         print("/dashboard/reactions/%s - Reaction edit failed: unknown") % rname
                         data['error'] = True

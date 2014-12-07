@@ -20,10 +20,10 @@
             {% for monitor in data['monitor-history'] %}
             <tr>
               <td><b>Status:</b></td>
-            {%- if "healthy" in monitor['status'] -%}
-              <td><span class="label label-success">Healthy</span></td>
-            {%- elif "failed" in monitor['status'] -%}
-              <td><span class="label label-danger">Failed</span></td>
+            {%- if "true" in monitor['status'] -%}
+              <td><span class="label label-success">True</span></td>
+            {%- elif "false" in monitor['status'] -%}
+              <td><span class="label label-danger">False</span></td>
             {%- else -%}
               <td><span class="label label-warning">{{ monitor['status'] }}</span></td>
             {%- endif -%} 
@@ -39,7 +39,7 @@
                   <li class="list-group-item"><span class="label label-success">{{ react['rstatus'] }}</span> {{ react['name'] }}</li>
                   {% elif react['rstatus'] == "Skipped" %}
                   <li class="list-group-item"><span class="label label-default">{{ react['rstatus'] }}</span> {{ react['name'] }}</li>
-                  {% elif react['rstatus'] == "Failed" %}
+                  {% elif react['rstatus'] == "False" %}
                   <li class="list-group-item"><span class="label label-danger">{{ react['rstatus'] }}</span> {{ react['name'] }}</li>
                   {% else %}
                   <li class="list-group-item"><span class="label label-default">{{ react['rstatus'] }}</span> {{ react['name'] }}</li>

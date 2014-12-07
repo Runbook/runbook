@@ -22,7 +22,7 @@ class ReactForm(BaseReactForm):
         validators=[DataRequired(message='Droplet ID# is a required field'), NumberRange(min=1, max=None, message="Droplet ID should be a numeric ID number")])
     call_on = SelectField(
         "Call On",
-        choices=[('failed', 'Failed Monitors'), ('healthy', 'Healthy Monitors')],
+        choices=[('false', 'False Monitors'), ('true', 'True Monitors')],
         validators=[DataRequired(message='Call On is a required field')])
 
 

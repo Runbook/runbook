@@ -1,6 +1,6 @@
 ## Webhooks
 
-This monitor is a generic webhook that is specific to Runbook. When created this monitor will provide the user with a unique URL and token that allows the user to signify if the monitor is healthy or failed. While most webhook listeners do not provide information back this webhook listener is different. It is also possible to query the current state of the monitor from this webhook URL.
+This monitor is a generic webhook that is specific to Runbook. When created this monitor will provide the user with a unique URL and token that allows the user to signify if the monitor is true or false. While most webhook listeners do not provide information back this webhook listener is different. It is also possible to query the current state of the monitor from this webhook URL.
 
 This webhook URL could be used to integrate tools and systems we do not already have an inherent integration with; allowing users to add Runbook reactions to many monitoring services.
 
@@ -12,12 +12,12 @@ Every monitor created on Runbook receives a unique URL and check_key token. The 
 
 Upon creation the monitor form will provide a user with a unique URL and Key. 
 
-url: https://dash.runbook.io/api/cr-api/example-webhook-id
-check_key: example-webhook-token
+    url: https://dash.runbook.io/api/cr-api/example-webhook-id
+    check_key: example-webhook-token
 
 ### Requesting with JSON
 
-The standard method of making webhook requests to the Runbook: Webhooks monitor is to send JSON data via a `POST` request to the unique URL. The JSON data requires two keys `check_key` which contains the unique token and the `action` key which defines what the request is for. Valid actions are `healthy`, `failed`, or `status`.
+The standard method of making webhook requests to the Runbook: Webhooks monitor is to send JSON data via a `POST` request to the unique URL. The JSON data requires two keys `check_key` which contains the unique token and the `action` key which defines what the request is for. Valid actions are `true`, `false`, or `status`.
 
 When sending webhook requests with JSON data it is important to set the `content-type` header to `application/json`. In addition to returning a JSON reply the webhook reply will return a status code of 200 for valid and accepted webhooks.
 
@@ -25,13 +25,13 @@ When sending webhook requests with JSON data it is important to set the `content
 
 The below are examples of valid JSON webhook requests.
 
-##### Sending a Healthy Notification
+##### Sending a True Notification
 
 **Request**
 
     {
       "check_key" : "example-webhook-token",
-      "action" : "healthy"
+      "action" : "true"
     }
 
 **Reply**
@@ -40,13 +40,13 @@ The below are examples of valid JSON webhook requests.
       "result": "success",
     }
 
-##### Sending a Failed Notification
+##### Sending a False Notification
 
 **Request**
 
     {
       "check_key" : "example-webhook-token",
-      "action" : "failed"
+      "action" : "false"
     }
 
 **Reply**
@@ -70,7 +70,7 @@ The below are examples of valid JSON webhook requests.
     {
       "result": "success",
       "failcount": 300,
-      "status": "healthy"
+      "status": "true"
     }
 
 The JSON reply for status requests includes two new keys `status` which describes the current status of the monitor and `failcount` which is a value of the number of times this monitor has returned the current status.
@@ -94,13 +94,13 @@ An example URL would look like the following.
 
 ##### Example URL requests with cURL
 
-##### Healthy Notification
+##### True Notification
 
-    $ curl -X POST https://dash.runbook.io/api/cr-api/example-webhook-id/example-webhook-token/healthy
+    $ curl -X POST https://dash.runbook.io/api/cr-api/example-webhook-id/example-webhook-token/true
 
-##### Failed Notification
+##### False Notification
 
-    $ curl -X POST https://dash.runbook.io/api/cr-api/example-webhook-id/example-webhook-token/failed
+    $ curl -X POST https://dash.runbook.io/api/cr-api/example-webhook-id/example-webhook-token/false
 
 ##### Requesting Status
 

@@ -104,36 +104,36 @@ signal.signal(signal.SIGTERM, killhandle)
 
 def runAction(redata, jdata):
     ''' Run reactions in a function '''
-    if "failed" in jdata['check']['status']:
+    if "false" in jdata['check']['status']:
         reaction = __import__(
-            "actions." + redata['rtype'], globals(), locals(), ['failed'], -1)
-        react = reaction.failed(redata, jdata, rdb_server, r_server)
+            "actions." + redata['rtype'], globals(), locals(), ['false'], -1)
+        react = reaction.false(redata, jdata, rdb_server, r_server)
         if react is True:
-            logger.info("Successfully processed failed reaction type %s for monitor %s" % (
+            logger.info("Successfully processed false reaction type %s for monitor %s" % (
                 redata['rtype'], jdata['cid']))
             return True
         elif react is None:
-            logger.info("Skipped failed reaction type %s for monitor %s" % (
+            logger.info("Skipped false reaction type %s for monitor %s" % (
                 redata['rtype'], jdata['cid']))
             return None
         else:
             logger.info("Processing reaction type %s for monitor %s did not occur" % (
                 redata['rtype'], jdata['cid']))
             return False
-    elif "healthy" in jdata['check']['status']:
+    elif "true" in jdata['check']['status']:
         reaction = __import__(
-            "actions." + redata['rtype'], globals(), locals(), ['healthy'], -1)
-        react = reaction.healthy(redata, jdata, rdb_server, r_server)
+            "actions." + redata['rtype'], globals(), locals(), ['true'], -1)
+        react = reaction.true(redata, jdata, rdb_server, r_server)
         if react:
-            logger.info("Successfully processed healthy reaction type %s for monitor %s" % (
+            logger.info("Successfully processed true reaction type %s for monitor %s" % (
                 redata['rtype'], jdata['cid']))
             return True
         elif react is None:
-            logger.info("Skipped healthy reaction type %s for monitor %s" % (
+            logger.info("Skipped true reaction type %s for monitor %s" % (
                 redata['rtype'], jdata['cid']))
             return None
         else:
-            logger.info("Error while processing healthy reaction type %s for monitor %s" % (
+            logger.info("Error while processing true reaction type %s for monitor %s" % (
                 redata['rtype'], jdata['cid']))
             return False
     else:
@@ -242,10 +242,10 @@ while True:
             jdata['failcount'] = 0
 
         # Ensure reactions run on manual failures
-        if jdata['check']['method'] == "manual" and jdata['check']['status'] == "web-failed":
+        if jdata['check']['method'] == "manual" and jdata['check']['status'] == "web-false":
             jdata['failcount'] = 9999
 
-        if results['status'] != "web-failed" or jdata['check']['method'] == "manual":
+        if results['status'] != "web-false" or jdata['check']['method'] == "manual":
 
             # Start running through normal reactions
             for reactid in jdata['data']['reactions']:

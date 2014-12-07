@@ -52,12 +52,12 @@
               <td></td>
             </tr>
             {% for monitor in data['monitor-history'] %}
-            {%- if "healthy" in monitor['status'] -%}
+            {%- if "true" in monitor['status'] -%}
             <tr class="success">
-              <td><i class="fa fa-check-circle"></i> <span class="label label-success">Healthy</span></td>
-            {%- elif "failed" in monitor['status'] -%}
+              <td><i class="fa fa-check-circle"></i> <span class="label label-success">True</span></td>
+            {%- elif "false" in monitor['status'] -%}
             <tr class="danger">
-              <td><i class="fa fa-exclamation-triangle"></i> <span class="label label-danger">Failed</span></td>
+              <td><i class="fa fa-exclamation-triangle"></i> <span class="label label-danger">False</span></td>
             {%- else -%}
             <tr class="warning">
               <td><i class="fa fa-circle"></i> <span class="label label-warning">{{ monitor['status'] }}</span></td>

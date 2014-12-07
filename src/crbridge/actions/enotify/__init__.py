@@ -10,8 +10,8 @@ import syslog
 import time
 
 
-def failed(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has failed '''
+def false(redata, jdata, rdb, r_server):
+    ''' This method will be called when a monitor has false '''
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -23,14 +23,14 @@ def failed(redata, jdata, rdb, r_server):
         run = False
 
     if run:
-        result = emailNotify(redata, jdata, "failed.msg")
+        result = emailNotify(redata, jdata, "false.msg")
         if result:
             line = "enotify: Sent %s email notification for monitor %s" % (
                 jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_INFO, line)
             return True
         else:
-            line = "enotify: Failed to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
+            line = "enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_ERR, line)
             return False
     else:
@@ -40,25 +40,25 @@ def failed(redata, jdata, rdb, r_server):
         return None
 
 
-def healthy(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
     run = True
-    if "healthy" in jdata['check']['prev_status']:
+    if "true" in jdata['check']['prev_status']:
         run = False
 
-    if "send_healthy" in redata['data']:
-        if redata['data']['send_healthy'] == "False":
+    if "send_true" in redata['data']:
+        if redata['data']['send_true'] == "False":
             run = False
 
     if run:
-        result = emailNotify(redata, jdata, "healthy.msg")
+        result = emailNotify(redata, jdata, "true.msg")
         if result:
             line = "enotify: Sent %s email notification for monitor %s" % (
                 jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_INFO, line)
             return True
         else:
-            line = "enotify: Failed to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
+            line = "enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_ERR, line)
             return False
     else:
@@ -75,7 +75,7 @@ def emailNotify(redata, jdata, tfile):
     import yaml
     import requests
     import json
-    # TODO: I hate reading the config file in should look at reaction failed/healthy
+    # TODO: I hate reading the config file in should look at reaction false/true
     # definitions to find a better way of doing this
     configfile = "config/config.yml"
     cfh = open(configfile, "r")

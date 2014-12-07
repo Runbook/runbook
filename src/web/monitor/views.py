@@ -309,13 +309,13 @@ def checkaction_page(cid, action):
             monitor = Monitor(cid)
             monitor.get(cid, g.rdb_conn)
             if user.uid == monitor.uid:
-                if action == "failed":
-                    monitor.healthcheck = "web-failed"
+                if action == "false":
+                    monitor.healthcheck = "web-false"
                     result = monitor.webCheck(g.rdb_conn)
                     print("/dashboard/action-checks - Manual monitor failure")
-                elif action == "healthy":
-                    monitor.healthcheck = "web-healthy"
-                    print("/dashboard/action-checks - Manual monitor healthy")
+                elif action == "true":
+                    monitor.healthcheck = "web-true"
+                    print("/dashboard/action-checks - Manual monitor true")
                     result = monitor.webCheck(g.rdb_conn)
 
                 if result:

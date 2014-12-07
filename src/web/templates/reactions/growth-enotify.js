@@ -5,7 +5,7 @@
         container: 'body',
         trigger: 'click focus',
     });
-    $("#enotify-sendhealthy").popover({
+    $("#enotify-sendtrue").popover({
         placement : 'auto bottom',
         container: 'body',
         trigger: 'click focus',

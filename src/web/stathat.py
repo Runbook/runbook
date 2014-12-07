@@ -109,7 +109,7 @@ class _StatHatBase(object):
             try:
                 resp = json.loads(raw)
             except Exception:
-                # JSON decoding failed meaning StatHat returned something bad
+                # JSON decoding false meaning StatHat returned something bad
                 raise StatHatError('Something bad happened: %s' % raw)
             if 'msg' in resp and 'status' in resp:
                 if resp['status'] != 200:

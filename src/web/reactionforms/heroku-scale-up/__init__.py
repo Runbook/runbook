@@ -15,7 +15,7 @@ class ReactForm(BaseReactForm):
 
     apikey = TextField("API Key", validators=[DataRequired(message='API Key is a required field')])
     appname = TextField("Application Name", validators=[DataRequired(message='Application Name is a required field')])
-    call_on = SelectField("Call On", choices=[('failed', 'Failed Monitors'), ('healthy', 'Healthy Monitors')], validators=[DataRequired(message='Call On is a required field')])
+    call_on = SelectField("Call On", choices=[('false', 'False Monitors'), ('true', 'True Monitors')], validators=[DataRequired(message='Call On is a required field')])
 
     dyno_type = TextField("Dyno Type", validators=[DataRequired(message='Dyno Type is a required field')])
     max_size = SelectField("Max Size", choices=[( '1', '1X'), ( '2', '2X'), ( '3', 'PX')], validators=[DataRequired(message='Max Size is a required field')])

@@ -10,8 +10,8 @@ import stathat
 import time
 
 
-def failed(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has failed '''
+def false(redata, jdata, rdb, r_server):
+    ''' This method will be called when a monitor has false '''
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -22,7 +22,7 @@ def failed(redata, jdata, rdb, r_server):
     if checktime < redata['frequency']:
         run = False
 
-    if redata['data']['call_on'] == 'healthy':
+    if redata['data']['call_on'] == 'true':
         run = False
 
     if run:
@@ -30,18 +30,18 @@ def failed(redata, jdata, rdb, r_server):
             callStathat(redata, jdata)
             return True
         else:
-            if jdata['check']['prev_status'] != "failed":
+            if jdata['check']['prev_status'] != "false":
                 callStathat(redata, jdata)
                 return True
             else:
-                line = "stathat: Skipping stathat call as monitor %s was previously failed" % jdata['cid']
+                line = "stathat: Skipping stathat call as monitor %s was previously false" % jdata['cid']
                 syslog.syslog(syslog.LOG_INFO, line)
                 return None
     else:
         return None
 
 
-def healthy(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
     run = True
     # Check for Trigger
@@ -53,7 +53,7 @@ def healthy(redata, jdata, rdb, r_server):
     if checktime < redata['frequency']:
         run = False
 
-    if redata['data']['call_on'] == 'failed':
+    if redata['data']['call_on'] == 'false':
         run = False
 
     if run:
@@ -61,11 +61,11 @@ def healthy(redata, jdata, rdb, r_server):
             callStathat(redata, jdata)
             return True
         else:
-            if jdata['check']['prev_status'] != "healthy":
+            if jdata['check']['prev_status'] != "true":
                 callStathat(redata, jdata)
                 return True
             else:
-                line = "stathat: Skipping stathat call as monitor %s was previously healthy" % jdata['cid']
+                line = "stathat: Skipping stathat call as monitor %s was previously true" % jdata['cid']
                 syslog.syslog(syslog.LOG_INFO, line)
                 return None
     else:

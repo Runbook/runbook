@@ -11,15 +11,15 @@
             <p></p>
             <h3>Reaction Actions</h3>
 
-            <p>This reaction has two types of actions, one is executed when the attached monitors return "Failed" and another is executed when the attached monitors return "Healthy".</p>
+            <p>This reaction has two types of actions, one is executed when the attached monitors return "False" and another is executed when the attached monitors return "True".</p>
 
             <p></p>
-            <h4>Failed Monitors</h4>
-            <p>When this reaction receives a "Failed Monitor" it will send an email notification of the failure that includes the name of the Monitor affected. This reaction can be attached to each monitor without fear of an inbox onslaught, as this reaction will only send 1 email per monitor. Once an email is sent regarding the failure a second email will not be sent until the monitor has returned to a "Healthy" status and is then changed back to a "Failed" status.</p>
+            <h4>False Monitors</h4>
+            <p>When this reaction receives a "False Monitor" it will send an email notification of the failure that includes the name of the Monitor affected. This reaction can be attached to each monitor without fear of an inbox onslaught, as this reaction will only send 1 email per monitor. Once an email is sent regarding the failure a second email will not be sent until the monitor has returned to a "True" status and is then changed back to a "False" status.</p>
             <p></p>
 
-            <h4>Healthy Monitors</h4>
-            <p>When this reaction receives a "Healthy Monitor" the reaction will first check the monitors previous status, if the previous status was "Failed" the reaction will send an email notification that includes the name of the Monitor that has been restored. If the previous status was "Healthy" this reaction will perform no tasks.</p>
+            <h4>True Monitors</h4>
+            <p>When this reaction receives a "True Monitor" the reaction will first check the monitors previous status, if the previous status was "False" the reaction will send an email notification that includes the name of the Monitor that has been restored. If the previous status was "True" this reaction will perform no tasks.</p>
 
             <p></p>
 

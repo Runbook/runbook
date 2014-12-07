@@ -67,15 +67,15 @@ def dashboard_page():
             data['reactions'] = user.getReactions(g.rdb_conn)
             data['monevents'] = user.getEvents(g.rdb_conn)
             data['moneventsnum'] = len(data['monevents'])
-            data['monstats'] = {'healthy': 0,
+            data['monstats'] = {'true': 0,
                                 'unknown': 0,
-                                'failed': 0}
+                                'false': 0}
             for key in data['monitors'].keys():
-                if "healthy" in data['monitors'][key]['status']:
-                    data['monstats']['healthy'] = data[
-                        'monstats']['healthy'] + 1
-                elif "failed" in data['monitors'][key]['status']:
-                    data['monstats']['failed'] = data['monstats']['failed'] + 1
+                if "true" in data['monitors'][key]['status']:
+                    data['monstats']['true'] = data[
+                        'monstats']['true'] + 1
+                elif "false" in data['monitors'][key]['status']:
+                    data['monstats']['false'] = data['monstats']['false'] + 1
                 else:
                     data['monstats']['unknown'] = data[
                         'monstats']['unknown'] + 1

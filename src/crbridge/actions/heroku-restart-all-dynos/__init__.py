@@ -11,8 +11,8 @@ import json
 import base64
 import requests
 
-def failed(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has failed '''
+def false(redata, jdata, rdb, r_server):
+    ''' This method will be called when a monitor has false '''
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -23,8 +23,8 @@ def failed(redata, jdata, rdb, r_server):
     if checktime < redata['frequency']:
         run = False
 
-    # Check if reaction should run on fails or healthy
-    if redata['data']['call_on'] == 'healthy':
+    # Check if reaction should run on fails or true
+    if redata['data']['call_on'] == 'true':
         run = False
 
     # If all checks out run it, or say i skipped
@@ -35,7 +35,7 @@ def failed(redata, jdata, rdb, r_server):
 
 
 
-def healthy(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
     run = True
     # Check for Trigger
@@ -47,8 +47,8 @@ def healthy(redata, jdata, rdb, r_server):
     if checktime < redata['frequency']:
         run = False
 
-    # Check if reaction should run on fails or healthy
-    if redata['data']['call_on'] == 'failed':
+    # Check if reaction should run on fails or true
+    if redata['data']['call_on'] == 'false':
         run = False
 
     # If all checks out run it, or say i skipped
@@ -82,7 +82,7 @@ def action(redata, jdata):
           verify=True
         )
     except:
-        # If fail return False to mark reaction failed
+        # If fail return False to mark reaction false
         return False
         line = ("heroku-restart-dyno: Could not connect to Heroku"
                 " for monitor %s") % jdata['cid']

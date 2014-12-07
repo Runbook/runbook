@@ -10,13 +10,13 @@ import time
 import syslog
 
 
-def failed(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has failed '''
+def false(redata, jdata, rdb, r_server):
+    ''' This method will be called when a monitor has false '''
     updateStathat(jdata)
     return True
 
 
-def healthy(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
     updateStathat(jdata)
     return True

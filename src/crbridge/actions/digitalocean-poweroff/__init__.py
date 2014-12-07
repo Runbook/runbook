@@ -11,8 +11,8 @@ import json
 import time
 
 
-def failed(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has failed '''
+def false(redata, jdata, rdb, r_server):
+    ''' This method will be called when a monitor has false '''
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -23,7 +23,7 @@ def failed(redata, jdata, rdb, r_server):
     if checktime < redata['frequency']:
         run = False
 
-    if redata['data']['call_on'] == 'healthy':
+    if redata['data']['call_on'] == 'true':
         run = False
 
     if run:
@@ -32,7 +32,7 @@ def failed(redata, jdata, rdb, r_server):
         return None
 
 
-def healthy(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
     run = True
     # Check for Trigger
@@ -44,7 +44,7 @@ def healthy(redata, jdata, rdb, r_server):
     if checktime < redata['frequency']:
         run = False
 
-    if redata['data']['call_on'] == 'failed':
+    if redata['data']['call_on'] == 'false':
         run = False
 
     if run:
@@ -71,6 +71,6 @@ def callDO(redata, jdata):
         syslog.syslog(syslog.LOG_INFO, line)
         return True
     else:
-        line = "digitalocean-poweroff: Request to %s sent for monitor %s - Failed" % (url, jdata['cid'])
+        line = "digitalocean-poweroff: Request to %s sent for monitor %s - False" % (url, jdata['cid'])
         syslog.syslog(syslog.LOG_INFO, line)
         return False
