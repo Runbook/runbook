@@ -12,8 +12,8 @@ Every monitor created on Runbook receives a unique URL and check_key token. The 
 
 Upon creation the monitor form will provide a user with a unique URL and Key. 
 
-url: https://dash.runbook.io/api/cr-api/example-webhook-id
-check_key: example-webhook-token
+    url: https://dash.runbook.io/api/cr-api/example-webhook-id
+    check_key: example-webhook-token
 
 ### Requesting with JSON
 

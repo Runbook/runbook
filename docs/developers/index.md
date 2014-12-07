@@ -86,4 +86,4 @@ With coverage:
 $ python src/web/cov.py
 ```
 
-> Tests only cover "src/web" right now.
+Currently tests only cover the web application in "src/web".
