@@ -19,12 +19,12 @@
             <div class="col-sm-8">
               <div class="input-group">
               <span class="input-group-btn">
-                <button type="button" id="base-trigger" class="btn btn-default" rel="popover" data-content="Define the number of healthy or failed monitors before reacting." title="Reaction Trigger"><i class="fa fa-question"></i></button>
+                <button type="button" id="base-trigger" class="btn btn-default" rel="popover" data-content="Define the number of true or false monitors before reacting." title="Reaction Trigger"><i class="fa fa-question"></i></button>
               </span>
               {% if data['edit'] %}
               {{ form.trigger(class_="form-control", value=data['reaction']['trigger']) }}
               {% else %}
-              {{ form.trigger(class_="form-control", placeholder="Trigger on # monitor healthy/failed returns") }}
+              {{ form.trigger(class_="form-control", placeholder="Trigger on # monitor true/false returns") }}
               {% endif %}
               </div>
             </div>

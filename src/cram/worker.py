@@ -105,11 +105,11 @@ while True:
     result = monitor.check(jdata)
     if result is True:
         # Log it
-        stat = "[%s] Healthy Checks" % config['envname']
+        stat = "[%s] True Checks" % config['envname']
         stathat.ez_count(config['stathat_ez_key'], stat, 1)
-        logger.info("Health check %s for monitor %s is Healthy" % (
+        logger.info("Health check %s for monitor %s is True" % (
             jdata['ctype'], jdata['cid']))
-        jdata['check'] = {'status': 'healthy',
+        jdata['check'] = {'status': 'true',
                           'method': 'automatic'}
         jdata['time_tracking']['worker'] = time.time()
         # Send success to sink
@@ -119,11 +119,11 @@ while True:
         ztext = None
     else:
         # Log it
-        stat = "[%s] Failed Checks" % config['envname']
+        stat = "[%s] False Checks" % config['envname']
         stathat.ez_count(config['stathat_ez_key'], stat, 1)
-        logger.info("Health check %s for monitor %s is Failed" % (
+        logger.info("Health check %s for monitor %s is False" % (
             jdata['ctype'], jdata['cid']))
-        jdata['check'] = {'status': 'failed',
+        jdata['check'] = {'status': 'false',
                           'method': 'automatic'}
         jdata['time_tracking']['worker'] = time.time()
         # Send success to sink

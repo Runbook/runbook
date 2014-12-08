@@ -161,9 +161,9 @@ A good reference file would be the [aws-ec2restart](https://github.com/asm-produ
 
 In each datacenter/monitoring zone there is a process running that is sometimes referred to as **"the sink"**, this process is executing [crbridge/actioner.py](https://github.com/asm-products/cloudroutes-service/blob/master/crbridge/actioner.py). This process will bind a port and listen for [ZeroMQ](http://zeromq.org/) messages. These messages are the results of health checks from both the web application and [cram/worker.py](https://github.com/asm-products/cloudroutes-service/blob/master/cram/worker.py).
 
-When the `actioner.py` receives a ZeroMQ message it converts the JSON message into a dictionary. The `actioner.py` will then look up details from Redis and RethinkDB for both the Monitor and all associated Reactions. For each Reaction defined in the Monitor it will load the Reaction module `actions/<short-name>` and execute either the `failed` or `healthy` methods.
+When the `actioner.py` receives a ZeroMQ message it converts the JSON message into a dictionary. The `actioner.py` will then look up details from Redis and RethinkDB for both the Monitor and all associated Reactions. For each Reaction defined in the Monitor it will load the Reaction module `actions/<short-name>` and execute either the `false` or `true` methods.
 
-When a Monitor is healthy, `actioner.py` will call the Reaction's `healthy` method. When a Monitor is failed, `actioner.py` will call the `failed` method.
+When a Monitor is true, `actioner.py` will call the Reaction's `true` method. When a Monitor is false, `actioner.py` will call the `false` method.
 
 The `actioner.py` process calls these methods with 4 objects: `redata`, `jdata`, `rdb_server` and `r_server`. The `redata` object contains a dictionary of the specific Reaction pulled from the database/cache. The `jdata` object contains a dictionary of the JSON message received with some additional fields required for executing Reactions. The `rdb_server` is an object required for the connection to the RethinkDB instance. The `r_server` is an object required for the connection to the Redis instance.
 
@@ -193,7 +193,7 @@ As you can see this is exactly what was queried from the database store.
 ##### jdata
 
     jdata = {
-      "status": "failed",
+      "status": "false",
       "uid": "1232131231231231231-111-15888dd98382",
       "zone": "Digital Ocean - sfo1",
       "cid": "232132312312312313123-aea-qer2-vs4e3",
@@ -206,8 +206,8 @@ As you can see this is exactly what was queried from the database store.
         "env": "Prod"
       },
       "check": {
-        "status": "healthy",
-        "prev_status": "healthy",
+        "status": "true",
+        "prev_status": "true",
         "method": "automatic"
       },
       "cacheonly": False,
@@ -235,20 +235,20 @@ Depending on the type of monitor the `data` key may contain different keys and v
 
 #### Processing reactions
 
-Once `actioner.py` invokes the `failed` or `healthy` method from a Reaction, it is up to the Reaction itself to determine what it should do. The decision on whether the Reaction should actually be executed or not depends on the configuration of each action and is placed solely on the Reaction's code. While this does vary from Reaction to Reaction, there are a couple of set rules for processing Reactions.
+Once `actioner.py` invokes the `false` or `true` method from a Reaction, it is up to the Reaction itself to determine what it should do. The decision on whether the Reaction should actually be executed or not depends on the configuration of each action and is placed solely on the Reaction's code. While this does vary from Reaction to Reaction, there are a couple of set rules for processing Reactions.
 
 1) The Reaction must honor trigger and frequency settings
 
-In Runbook, we have implemented a feature called `trigger` and `frequency`. These two settings allow users to define the number of `healthy` or `failed` checks that must be returned before Reaction execution and the frequency between Reaction executions.
+In Runbook, we have implemented a feature called `trigger` and `frequency`. These two settings allow users to define the number of `true` or `false` checks that must be returned before Reaction execution and the frequency between Reaction executions.
 
 The trigger value is stored in `redata['trigger']` and this can be compared with `jdata['failcount']`. The frequency value is the number of seconds between executions, is stored in `redata['frequency']`, and can be compared with `jdata['lastrun']` which is a timestamp of when the Reaction was last executed.
 
-Some Reactions may require additional processing rules. Each Reaction is free to define additional fields in the web form that only have the purpose of determining whether the Reaction should be executed. An example of this is the `jdata['data']['call_on']` field in the `aws-ec2restart` Reaction. This field allows users to define if the restart should happen on `healthy` or `failed` monitors.
+Some Reactions may require additional processing rules. Each Reaction is free to define additional fields in the web form that only have the purpose of determining whether the Reaction should be executed. An example of this is the `jdata['data']['call_on']` field in the `aws-ec2restart` Reaction. This field allows users to define if the restart should happen on `true` or `false` monitors.
 
 The below example is an excerpt of the [aws-ec2restart](https://github.com/asm-products/cloudroutes-service/blob/master/crbridge/actions/aws-ec2restart/__init__.py) Reaction.
 
-    def failed(redata, jdata, rdb, r_server):
-      ''' This method will be called when a monitor has failed '''
+    def false(redata, jdata, rdb, r_server):
+      ''' This method will be called when a monitor has false '''
       run = True
       ## Check for Trigger
       if redata['trigger'] > jdata['failcount']:
@@ -259,7 +259,7 @@ The below example is an excerpt of the [aws-ec2restart](https://github.com/asm-p
       if checktime < redata['frequency']:
         run = False
 
-      if redata['data']['call_on'] == 'healthy':
+      if redata['data']['call_on'] == 'true':
         run = False
 
       if run:
@@ -274,7 +274,7 @@ The above is a simple example of how to perform the above processing rules.
 After a reaction has executed, it is important that an appropriate return code is used. The `actioner.py` process is expecting either a `True`, `False` or `None` return; depending on which value is returned will determine the state of the Reaction's execution. Below is a list of return value and what that value means to `actioner.py`.
 
 * `True` - Reaction was processed successfully
-* `False` - Reaction attempted to process but failed
+* `False` - Reaction attempted to process but false
 * `None` - Reaction processing was skipped
 
 If we review the sample code above, we can see that the return value is set to `None` if the Reaction's function `actionEC2` was not executed. This tells the `actioner.py` process that the Reaction was not executed.

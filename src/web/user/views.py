@@ -102,8 +102,8 @@ def signup():
         else:
             stathat.ez_count(
                 app.config['STATHAT_EZ_KEY'],
-                app.config['ENVNAME'] + ' Failed User Signup', 1)
-            print("/signup - Failed user creation")
+                app.config['ENVNAME'] + ' False User Signup', 1)
+            print("/signup - False user creation")
             data['msg'] = 'Form is not valid'
             data['error'] = True
 

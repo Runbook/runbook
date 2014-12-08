@@ -5,7 +5,7 @@
 # Description:
 # ------------------------------------------------------------------
 # This module is used to failover and failback domains after
-# unhealthy and healthy checks.
+# untrue and true checks.
 # ------------------------------------------------------------------
 # Version: Alpha.20140424
 # Original Author: Benjamin J. Cane - madflojo@cloudrout.es
@@ -21,8 +21,8 @@ import cloudflail
 import time
 
 
-def failed(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has failed '''
+def false(redata, jdata, rdb, r_server):
+    ''' This method will be called when a monitor has false '''
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -40,7 +40,7 @@ def failed(redata, jdata, rdb, r_server):
         return None
 
 
-def healthy(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
     run = True
     # Check for Trigger
@@ -70,18 +70,18 @@ def remove(redata, jdata, r_server):
     zone = redata['data']['domain']
 
     # Check the CloudFlare Zone
-    failedrecs, faileddata = cloudflail.checkZone(
+    falserecs, falsedata = cloudflail.checkZone(
         redata['data']['ip'], usrdata)
-    numrecs = len(failedrecs)
+    numrecs = len(falserecs)
     if numrecs > 0:
         line = "cloudflare-ip-remove: %d records found to remove" % numrecs
         syslog.syslog(syslog.LOG_DEBUG, line)
-        for rec in failedrecs:
+        for rec in falserecs:
             result = cloudflail.delRecord(rec, usrdata)
             if result:
                 # Log Removal to Redis for later checks
                 key = 'domains:' + jdata['cid'] + ':' + zone + ':' + rec
-                rdata = faileddata[rec]
+                rdata = falsedata[rec]
                 for item in rdata.keys():
                     r_server.set(key + ":" + item, rdata[item])
                 r_server.sadd(
@@ -90,7 +90,7 @@ def remove(redata, jdata, r_server):
                 line = "cloudflare-ip-remove: Removal of record %s successful" % rec
                 syslog.syslog(syslog.LOG_INFO, line)
             else:
-                line = "cloudflare-ip-remove: Removal of record %s failed" % rec
+                line = "cloudflare-ip-remove: Removal of record %s false" % rec
                 syslog.syslog(syslog.LOG_INFO, line)
     else:
         line = "cloudflare-ip-remove: IP %s not found in zone" % redata[
@@ -156,7 +156,7 @@ def readd(redata, jdata, r_server, replaceip=None):
                 line = "cloudflare-ip-remove: Readding record %s to zone %s successful" % (name, zone)
                 syslog.syslog(syslog.LOG_INFO, line)
             else:
-                line = "cloudflare-ip-remove: Readding record %s to zone %s failed" % (name, zone)
+                line = "cloudflare-ip-remove: Readding record %s to zone %s false" % (name, zone)
                 syslog.syslog(syslog.LOG_INFO, line)
     except TypeError:
         line = "cloudflare-ip-remove: No records for ip %s in deleted queue for zone %s" % (ip, zone)

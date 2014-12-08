@@ -32,15 +32,15 @@ def check(data):
         result.text)
     syslog.syslog(syslog.LOG_DEBUG, line)
     retdata = json.loads(result.text)
-    failed = 0
+    false = 0
     if result.status_code >= 200 and result.status_code <= 299:
         for dyno in retdata:
             if dyno['state'] != "up" and dyno['state'] != "idle":
-                failed = failed + 1
+                false = false + 1
     else:
         return None
 
-    if failed == 0:
+    if false == 0:
         return True
     else:
         return False

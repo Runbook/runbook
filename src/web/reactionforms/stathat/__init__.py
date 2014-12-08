@@ -31,7 +31,7 @@ class ReactForm(BaseReactForm):
         validators=[DataRequired(message='Stat Type is a required field')])
     call_on = SelectField(
         "Call On",
-        choices=[('failed', 'Failed Monitors'), ('healthy', 'Healthy Monitors')],
+        choices=[('false', 'False Monitors'), ('true', 'True Monitors')],
         validators=[DataRequired(message='Call On is a required field')])
 
 if __name__ == '__main__':

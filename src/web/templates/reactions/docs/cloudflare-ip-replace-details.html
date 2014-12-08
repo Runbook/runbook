@@ -12,20 +12,20 @@
             <p></p>
             <h3>Reaction Actions</h3>
 
-            <p>This reaction has two types of actions, one is executed when the attached monitors return "Failed" and another is executed when the attached monitors return "Healthy".</p>
+            <p>This reaction has two types of actions, one is executed when the attached monitors return "False" and another is executed when the attached monitors return "True".</p>
 
             <p></p>
-            <h4>Failed Monitors</h4>
+            <h4>False Monitors</h4>
 
-            <p>When this reaction is executed with a "Failed Monitor" the reaction will use CloudFlare's API to query the supplied domains zone records. When the system finds an entry with the supplied IP or CNAME it will then use CloudFlare's API to replace that entry with an identical zone entry using the "Failover IP/CNAME". Effectively sending traffic that targets your DNS to your backup systems.</p>
+            <p>When this reaction is executed with a "False Monitor" the reaction will use CloudFlare's API to query the supplied domains zone records. When the system finds an entry with the supplied IP or CNAME it will then use CloudFlare's API to replace that entry with an identical zone entry using the "Failover IP/CNAME". Effectively sending traffic that targets your DNS to your backup systems.</p>
 
             <p>It is important to note that if your current zone record is an A record we will replace it with another A record. We do not support failing over from an A record to a CNAME.<p>
 
             <p></p>
-            <h4>Healthy Monitors</h4>
+            <h4>True Monitors</h4>
 
             <p>Active-Passive failover is generally reserved for Disaster Recovery scenarios where one set of systems is completely down. Most Active-Passive failover architectures deploy Replication of some sort, however replication is rarely instant and after a long period of downtime the replication process may take quite a while. With this in mind, you can set the "Failback Method" to manual or automatic.</p> 
-            <p>A failback setting of "None" will tell this reaction to perform no actions on "Healthy Monitors", however "Automatic" failback will replace the removed IP's with the original settings. Effectively resetting your DNS to the position it was in before the failure occurred.</p>
+            <p>A failback setting of "None" will tell this reaction to perform no actions on "True Monitors", however "Automatic" failback will replace the removed IP's with the original settings. Effectively resetting your DNS to the position it was in before the failure occurred.</p>
             <p>The failback setting "None" is designed to prevent "flapping conditions" where the primary site goes offline sending traffic to the passive site, then primary site comes back quickly without data being replicated back from the passive site. In most cases with Active-Passive failover it is more desirable to manually migrate traffic back to the primary site.</p>
 
             <p></p>

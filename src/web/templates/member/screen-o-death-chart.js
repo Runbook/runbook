@@ -5,13 +5,13 @@
     bindto: '#chart',
     data: {
       columns: [
-        ['Healthy', {{ data['monstats']['healthy'] }}],
-        ['Failed', {{ data['monstats']['failed'] }}],
+        ['True', {{ data['monstats']['true'] }}],
+        ['False', {{ data['monstats']['false'] }}],
         ['Other', {{ data['monstats']['unknown'] }}]
       ],
       colors: {
-        'Failed': '#EC1D25',
-        'Healthy': '#008cba',
+        'False': '#EC1D25',
+        'True': '#008cba',
         'Other': '#e99002'
       },
       type: 'donut',

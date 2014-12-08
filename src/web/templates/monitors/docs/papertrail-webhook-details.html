@@ -22,14 +22,14 @@
             {% endif %}
 
             <p>
-            <b>Unique Failed URL:</b>
+            <b>Unique False URL:</b>
             </p>
-             <pre>https://dash.runbook.io/api/papertrail-webhook/{{ apiid }}/{{ apikey }}/failed</pre>
+             <pre>https://dash.runbook.io/api/papertrail-webhook/{{ apiid }}/{{ apikey }}/false</pre>
 
             <p>
-            <b>Unique Healthy URL:</b>
+            <b>Unique True URL:</b>
             </p>
-             <pre>https://dash.runbook.io/api/papertrail-webhook/{{ apiid }}/{{ apikey }}/healthy</pre>
+             <pre>https://dash.runbook.io/api/papertrail-webhook/{{ apiid }}/{{ apikey }}/true</pre>
 
             {% if data['monitor'] %}
             <p class="text-primary">The details above and below are unique to this monitor</p>
@@ -37,7 +37,7 @@
             <p class="text-warning">When you create or edit a monitor these details will show the monitors unique information</p>
             {% endif %}
 
-            <p>Since PaperTrail does not send healthy webhook events this monitor has two URLs, one for failed alerts and another for healthy alerts. Once a monitor is marked failed it will not be marked healthy until the healthy URL is also called. It is best practice for every failed alert in PaperTrail to create a second alert for healthy states.</p>
+            <p>Since PaperTrail does not send true webhook events this monitor has two URLs, one for false alerts and another for true alerts. Once a monitor is marked false it will not be marked true until the true URL is also called. It is best practice for every false alert in PaperTrail to create a second alert for true states.</p>
           
           </div>
           </div>

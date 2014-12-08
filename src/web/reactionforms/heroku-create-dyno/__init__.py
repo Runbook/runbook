@@ -15,7 +15,7 @@ class ReactForm(BaseReactForm):
 
     apikey = TextField("API Key", validators=[DataRequired(message='API Key is a required field')])
     appname = TextField("Application Name", validators=[DataRequired(message='Application Name is a required field')])
-    call_on = SelectField("Call On", choices=[('failed', 'Failed Monitors'), ('healthy', 'Healthy Monitors')], validators=[DataRequired(message='Call On is a required field')])
+    call_on = SelectField("Call On", choices=[('false', 'False Monitors'), ('true', 'True Monitors')], validators=[DataRequired(message='Call On is a required field')])
 
 
     cmd = TextField("Command", validators=[DataRequired(message='Command is a required field')])

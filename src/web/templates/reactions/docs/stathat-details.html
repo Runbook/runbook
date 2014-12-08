@@ -17,14 +17,14 @@
             <p></p>
             <h3>Reaction Actions</h3>
 
-            <p>This reaction will only perform a single reaction, this reaction can be configured to occur on "Failed Monitors" or "Healthy Monitors" but is not designed to be executed on both. In order to setup this reaction to have an action for "Healthy Monitors" and a different action for "Failed Monitors" you can create two reactions and attach them to the same Monitor.</p>
+            <p>This reaction will only perform a single reaction, this reaction can be configured to occur on "False Monitors" or "True Monitors" but is not designed to be executed on both. In order to setup this reaction to have an action for "True Monitors" and a different action for "False Monitors" you can create two reactions and attach them to the same Monitor.</p>
 
             <p></p>
-            <h4>Failed Monitors</h4>
-            <p>When this reaction receives a "Failed Monitor" the reaction will send the defined statistic to StatHat if the Call On field is set to "Failed Monitors". If the Call On field is set to "Healthy Monitors" this reaction will do nothing.</p>
+            <h4>False Monitors</h4>
+            <p>When this reaction receives a "False Monitor" the reaction will send the defined statistic to StatHat if the Call On field is set to "False Monitors". If the Call On field is set to "True Monitors" this reaction will do nothing.</p>
             <p></p>
-            <h4>Healthy Monitors</h4>
-            <p>When this reaction receives a "Healthy Monitor" the reaction will send the defined statistic to StatHat if the Call On field is set to "Healthy Monitors". If the Call On field is set to "Failed Monitors" this reaction will do nothing.</p>
+            <h4>True Monitors</h4>
+            <p>When this reaction receives a "True Monitor" the reaction will send the defined statistic to StatHat if the Call On field is set to "True Monitors". If the Call On field is set to "False Monitors" this reaction will do nothing.</p>
             <p></p>
 
             <h3>Reaction Form Details</h3>
@@ -47,7 +47,7 @@
 
 
             <h4>Continuous</h4>
-            <p>If set to Yes, the Continuous option will tell this reaction to send the statistic every time the monitor runs. This is useful for situations such as the CloudRout.es Uptime statistic, where we are tracking every time we receive a <code>200</code> response code. If set to No, the reaction will only send a statistic each time the Monitor changes status. For example, if the reaction is set to "Failed Monitors" the statistic will only be sent when the monitor changes from "Healthy" to "Failed" status.</p>
+            <p>If set to Yes, the Continuous option will tell this reaction to send the statistic every time the monitor runs. This is useful for situations such as the CloudRout.es Uptime statistic, where we are tracking every time we receive a <code>200</code> response code. If set to No, the reaction will only send a statistic each time the Monitor changes status. For example, if the reaction is set to "False Monitors" the statistic will only be sent when the monitor changes from "True" to "False" status.</p>
             <p>Be extra cautious with the <code>Trigger</code> and <code>Frequency</code> settings, as every reaction including the StatHat Reaction honors these values. If you are utilizing the Continuous feature it is most likely best to set the <code>Trigger</code> and <code>Frequency</code> values to 0.</p>
             <p></p>
 

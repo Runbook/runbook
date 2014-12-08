@@ -11,8 +11,8 @@ import time
 import syslog
 
 
-def failed(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has failed '''
+def false(redata, jdata, rdb, r_server):
+    ''' This method will be called when a monitor has false '''
     if redata['reaction_return'] is True:
         chlastrun(redata['id'], rdb, r_server)
         return True
@@ -20,7 +20,7 @@ def failed(redata, jdata, rdb, r_server):
         return None
 
 
-def healthy(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
     if redata['reaction_return'] is True:
         chlastrun(redata['id'], rdb, r_server)

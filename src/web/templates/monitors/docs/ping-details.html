@@ -11,12 +11,12 @@
 
             <h3>Monitor Details</h3>
             
-            <p>This monitor will attempt to send one ICMP Ping request per run, if the request is replied to the monitor will return healthy. If for any reason the request fails the monitor will return failed.</p>
+            <p>This monitor will attempt to send one ICMP Ping request per run, if the request is replied to the monitor will return true. If for any reason the request fails the monitor will return false.</p>
 
             <h4>Host</h4>
 
             <p>This field can be either an IP Address or Hostname. The IP or Hostname supplied must be resolvable and addressable via the internet.</p>
-            <p class="text-warning">Broadcast pings are not allowed and will always return failed.</p>
+            <p class="text-warning">Broadcast pings are not allowed and will always return false.</p>
 
           </div>
           </div>

@@ -18,7 +18,7 @@
             <p></p>
             <h4>Reactions</h4>
 
-            <p>This field is a multi-select field that allows you to add multiple or single reactions to a monitor. When a monitor returns a failed status our system will execute the "Failed" tasks for each reaction, when the monitor returns to a healthy state our system will execute the "Healthy" tasks for those same reactions. You can combine multiple reactions to perform a set of tasks. For example, on failure of a TCP port you may want to use the <a href="https://dash.cloudrout.es/dashboard/reactions/cloudflare-ip-remove">Remove IP from CloudFlare DNS</a> reaction to remove traffic from that server. After traffic is removed you may want to execute the <a href="https://dash.cloudrout.es/dashboard/reactions/saltstack-highstate">SaltStack Highstate via salt-api</a> reaction to ensure your servers are in a desired state.</p>
+            <p>This field is a multi-select field that allows you to add multiple or single reactions to a monitor. When a monitor returns a false status our system will execute the "False" tasks for each reaction, when the monitor returns to a true state our system will execute the "True" tasks for those same reactions. You can combine multiple reactions to perform a set of tasks. For example, on failure of a TCP port you may want to use the <a href="https://dash.cloudrout.es/dashboard/reactions/cloudflare-ip-remove">Remove IP from CloudFlare DNS</a> reaction to remove traffic from that server. After traffic is removed you may want to execute the <a href="https://dash.cloudrout.es/dashboard/reactions/saltstack-highstate">SaltStack Highstate via salt-api</a> reaction to ensure your servers are in a desired state.</p>
 
             <p></p>
             <h4>Time Interval</h4>

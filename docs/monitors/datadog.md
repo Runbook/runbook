@@ -8,8 +8,9 @@ This monitor allows users to integrate Runbook Reactions with existing monitorin
 
 After creating a Datadog: Webhook monitor you will be given a unique `url` and `check_key`. The `url` value is the target for Datadogs webhooks and is unique for each monitor.
 
-url: https://dash.runbook.io/api/datadog-webhook/example-api-id
-check_key: example-api-key
+
+    url: https://dash.runbook.io/api/datadog-webhook/example-api-id
+    check_key: example-api-key
 
 ## Custom Payload
 

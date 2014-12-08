@@ -109,7 +109,7 @@ The `cram/broker.py` or CRAM Broker process is simply a ZeroMQ broker. The proce
 
 The `cram/worker.py` or CRAM Worker process is the actual process that performs the monitor tasks. The code to perform an actual monitor check is stored as modules within `checks/` directory. For example, TCP Port monitor is the module `checks/tcp-check`. When the CRAM worker process receives a health check message from the CRAM Broker it decodes the JSON message and determines what type of check module should be loaded. It then loads the module and executes the `check()` function passing the monitor specific data to the function.
 
-The `check()` function will return either `True` for healthy or `False` for failed. With this result the worker process will generate a JSON message which is then sent to the CloudRoutes Action Service.
+The `check()` function will return either `True` for true or `False` for false. With this result the worker process will generate a JSON message which is then sent to the CloudRoutes Action Service.
 
 #### Diagram showing monitor execution process
 

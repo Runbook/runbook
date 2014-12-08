@@ -10,7 +10,7 @@ This reaction is designed to allow a user to perform a hard Power Cycle of a Dig
 
 ## Power On Droplet
 
-This reaction is designed to allow a user to Power On a DigitalOcean cloud server. This reaction is a bit of an edge case but can be used to power on a server that will take over the role of a failed server.
+This reaction is designed to allow a user to Power On a DigitalOcean cloud server. This reaction is a bit of an edge case but can be used to power on a server that will take over the role of a false server.
 
 ---
 
