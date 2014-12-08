@@ -21,4 +21,8 @@
         <li><a href="/dashboard/user-preferences"><i class="fa fa-user fa-lg"></i>&nbsp;&nbsp;User Preferences</a></li>
         {% endif %}
       </ul>
+      {% if data['upgraded'] == False %}
+      <h6>Free Tier Sponsors:</h6>
+        <a href="https://www.digitalocean.com/?refcode=4c1c0f8027bb" target="_blank"><img src="/static/img/ads/digital-250.jpg" border=0 class="img-responsive"></a>
+      {% endif %}
     </div>
