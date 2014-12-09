@@ -44,7 +44,7 @@ cfh.close()
 # ------------------------------------------------------------------
 
 # Init logger
-logger = logconfig.getLogger('cram.broker', config['use_syslog'])
+logger = logconfig.getLogger('actions.broker', config['use_syslog'])
 
 logger.info("Using config %s" % configfile)
 

@@ -42,7 +42,7 @@ Runbook is a service that allows users to build environments that require minima
 
 ## Components
 
-Runbook currently has 4 major application components, `cram`, `cras`, `crbridge` and `web`. Each component is designed to be independently scalable. One component may be scaled without requiring other components to meet the same scalability.
+Runbook currently has 4 major application components, `actions`, `cras`, `crbridge` and `web`. Each component is designed to be independently scalable. One component may be scaled without requiring other components to meet the same scalability.
 
 **Note:** The name CloudRoutes will appear several times within this document, this is because it is the original name of the Runbook product.
 
@@ -84,7 +84,7 @@ Recovering from RethinkDB failures, when RethinkDB servers are experiencing issu
 
 ![Reaction Creation](/img/architecture/reaction-creation-multidc.png)
 
-### CRAM - CloudRoutes Availability Monitor
+### ACTIONS - CloudRoutes Availability Monitor
 
 The CloudRoutes Availability Monitor component is designed to perform the actual monitoring of remote systems. This is the monitoring part of the monitoring and reacting back-end application. This component is comprised of 3 major programs `control.py`, `broker.py`, and `worker.py`.
 
@@ -97,17 +97,17 @@ When the CloudRoutes Bridge process adds monitor details into Redis it looks at 
 * `2mincheck` - This sorted list is for monitors that run every 2 minutes
 * `30seccheck` - This sorted list is for monitors that run every 30 seconds
 
-The `cram/control.py` program is a generic program that is designed to pull monitor IDs from a defined sorted list in Redis (one of the intervals listed above). Once it has a list of monitor IDs it will loop through that list and look-up the monitors details from Redis using the monitor ID as a key. Once the monitors details are read, the `cram/control.py` process will create a JSON message including the monitors details and send that message to `cram/broker.py` using ZeroMQ.
+The `actions/control.py` program is a generic program that is designed to pull monitor IDs from a defined sorted list in Redis (one of the intervals listed above). Once it has a list of monitor IDs it will loop through that list and look-up the monitors details from Redis using the monitor ID as a key. Once the monitors details are read, the `actions/control.py` process will create a JSON message including the monitors details and send that message to `actions/broker.py` using ZeroMQ.
 
-Each `cram/control.py` process can only read from one sorted list, in order to have all sorted lists monitored each sorted list must have it's own `cram/control.py` process. This is possible as the `cram/control.py` process receives all of it's Redis and timer configuration from a configuration file. In production there are currently 4 `cram/control.py` process running per datacenter.
+Each `actions/control.py` process can only read from one sorted list, in order to have all sorted lists monitored each sorted list must have it's own `actions/control.py` process. This is possible as the `actions/control.py` process receives all of it's Redis and timer configuration from a configuration file. In production there are currently 4 `actions/control.py` process running per datacenter.
 
 #### Broker
 
-The `cram/broker.py` or CRAM Broker process is simply a ZeroMQ broker. The process binds two ports, one port is used to listen for ZeroMQ messages from the various `cram/control.py` processes. The second port is used to send that received message to a `cram/worker.py` process. Currently in production each datacenter has only 1 CRAM Broker, however this process is not limited to only one. When two servers are specified in an stunnel configuration the stunnel service will send requests in a round robin algorithm. This allows the control messages to be sent to multiple brokers which then could be sent to multiple sets of workers.
+The `actions/broker.py` or ACTIONS Broker process is simply a ZeroMQ broker. The process binds two ports, one port is used to listen for ZeroMQ messages from the various `actions/control.py` processes. The second port is used to send that received message to a `actions/worker.py` process. Currently in production each datacenter has only 1 ACTIONS Broker, however this process is not limited to only one. When two servers are specified in an stunnel configuration the stunnel service will send requests in a round robin algorithm. This allows the control messages to be sent to multiple brokers which then could be sent to multiple sets of workers.
 
 #### Worker
 
-The `cram/worker.py` or CRAM Worker process is the actual process that performs the monitor tasks. The code to perform an actual monitor check is stored as modules within `checks/` directory. For example, TCP Port monitor is the module `checks/tcp-check`. When the CRAM worker process receives a health check message from the CRAM Broker it decodes the JSON message and determines what type of check module should be loaded. It then loads the module and executes the `check()` function passing the monitor specific data to the function.
+The `actions/worker.py` or ACTIONS Worker process is the actual process that performs the monitor tasks. The code to perform an actual monitor check is stored as modules within `checks/` directory. For example, TCP Port monitor is the module `checks/tcp-check`. When the ACTIONS worker process receives a health check message from the ACTIONS Broker it decodes the JSON message and determines what type of check module should be loaded. It then loads the module and executes the `check()` function passing the monitor specific data to the function.
 
 The `check()` function will return either `True` for true or `False` for false. With this result the worker process will generate a JSON message which is then sent to the CloudRoutes Action Service.
 
@@ -119,17 +119,17 @@ The entire CloudRoutes Availability Monitor design is built to scale. The Worker
 
 ### CRAS - CloudRoutes Action Service
 
-The CloudRoutes Action Service or CRAS is designed to perform the "Reaction" aspect of Runbook's Monitoring and Reacting. Like the CRAM there are two main programs with CRAS, `cras/broker.py` or CRAS Broker and `cras/actioner.py` or CRAS Actioner.
+The CloudRoutes Action Service or CRAS is designed to perform the "Reaction" aspect of Runbook's Monitoring and Reacting. Like the ACTIONS there are two main programs with CRAS, `cras/broker.py` or CRAS Broker and `cras/actioner.py` or CRAS Actioner.
 
 #### Broker
 
-Like the CRAM Broker the CRAS Broker simply receives JSON messages from the CRAM Worker or CRBRIDGE Bridge processes and forwards them to a CRAS Actioner process. This facilitates the ability for multiple monitor results to be processed at the same time and from multiple machines. Like the CRAM broker while currently this process is a single process in each datacenter it does not necessarily require this. To scale the performance of monitor result processing multiple Brokers could be launched.
+Like the ACTIONS Broker the CRAS Broker simply receives JSON messages from the ACTIONS Worker or CRBRIDGE Bridge processes and forwards them to a CRAS Actioner process. This facilitates the ability for multiple monitor results to be processed at the same time and from multiple machines. Like the ACTIONS broker while currently this process is a single process in each datacenter it does not necessarily require this. To scale the performance of monitor result processing multiple Brokers could be launched.
 
 #### Actioner
 
-The CRAS Actioner process is the process that performs reaction tasks. Like the CRAM worker the code to perform a reaction is stored within modules in the `actions/` directory. An example of this would be the `actions/enotify` module which handles email notification reactions.
+The CRAS Actioner process is the process that performs reaction tasks. Like the ACTIONS worker the code to perform a reaction is stored within modules in the `actions/` directory. An example of this would be the `actions/enotify` module which handles email notification reactions.
 
-When the CRAS Actioner process receives the JSON message from the CRAM Worker process it will first look-up the monitor from Redis and then RethinkDB. If the RethinkDB request does not return a result due to a RethinkDB error the monitor is flagged as a `cache-only` monitor. The idea behind this is that even if RethinkDB is down the monitor should still be actioned to ensure that Runbook is providing it's function of protecting user environments.
+When the CRAS Actioner process receives the JSON message from the ACTIONS Worker process it will first look-up the monitor from Redis and then RethinkDB. If the RethinkDB request does not return a result due to a RethinkDB error the monitor is flagged as a `cache-only` monitor. The idea behind this is that even if RethinkDB is down the monitor should still be actioned to ensure that Runbook is providing it's function of protecting user environments.
 
 Each monitor JSON message has a list of reactions associated with that monitor. After looking up he monitor the Actioner process will loop through these reactions. The Actioner will look-up reaction details first from Redis and secondly from RethinkDB following the same process as the monitor data look-ups. In this case, the Actioner will compare the `lastrun` time from both results and utilize the newest. This is to ensure that `frequency` settings within the reaction are honored if the reaction was executed from another datacenter.
 

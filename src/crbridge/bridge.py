@@ -7,7 +7,7 @@
 # This is a bridge application between the web interface of
 # cloudrout.es and the backend cloud routes availability maanger.
 # This will gather queue tasks from rethinkdb and create/delete
-# the appropriate monitor in cram.
+# the appropriate monitor in the action processes.
 # ------------------------------------------------------------------
 # Original Author: Benjamin J. Cane - @madflojo
 # Maintainers:
