@@ -42,8 +42,8 @@ The entire application has 4 configuration file types, which are used by 7 types
 Here is a list of configuration files, that can be used for the first time to run a minimal working application locally:
 
  - web/instance/web.cfg.default - used by Web (web/web.py) process
- - actions/config/control.yml.5min.default - used by actions/control.py process
- - actions/config/main.yml.default - used by actions/broker.py and actions/worker.py processes
+ - monitors/config/control.yml.5min.default - used by monitors/control.py process
+ - monitors/config/main.yml.default - used by monitors/broker.py and monitors/worker.py processes
  - crbridge/config/config.yml.default - used by crbridge/bridge.py, crbridge/broker.py and crbridge/actioner.py processes
 
 ### Initialize database
@@ -64,17 +64,17 @@ With rethinkDB and redis running...
 $ python src/web/web.py instance/web.cfg.default
 ```
 
-2) Run control process (src/actions/control.py)
+2) Run control process (src/monitors/control.py)
 
 ```sh
-$ python src/actions/control.py config/control.yml.5min.default
+$ python src/monitors/control.py config/control.yml.5min.default
 ```
 
-3) Run broker and worker (src/actions/broker.py and src/actions/worker.py)
+3) Run broker and worker (src/monitors/broker.py and src/monitors/worker.py)
 
 ```sh
-$ python src/actions/broker.py config/main.yml.default
-$ python src/actions/worker.py config/main.yml.default
+$ python src/monitors/broker.py config/main.yml.default
+$ python src/monitors/worker.py config/main.yml.default
 ```
 
 4) Run bridge, broker, and actioner (src/crbridge/bridge.py, src/crbridge/broker.py, src/crbridge/acrioner.py)
