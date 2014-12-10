@@ -159,7 +159,7 @@ A good reference file would be the [aws-ec2restart](https://github.com/asm-produ
 
 #### How Reactions are called
 
-In each datacenter/monitoring zone there is a process running that is sometimes referred to as **"the sink"**, this process is executing [crbridge/actioner.py](https://github.com/asm-products/cloudroutes-service/blob/master/crbridge/actioner.py). This process will bind a port and listen for [ZeroMQ](http://zeromq.org/) messages. These messages are the results of health checks from both the web application and [cram/worker.py](https://github.com/asm-products/cloudroutes-service/blob/master/cram/worker.py).
+In each datacenter/monitoring zone there is a process running that is sometimes referred to as **"the sink"**, this process is executing [crbridge/actioner.py](https://github.com/asm-products/cloudroutes-service/blob/master/crbridge/actioner.py). This process will bind a port and listen for [ZeroMQ](http://zeromq.org/) messages. These messages are the results of health checks from both the web application and [actions/worker.py](https://github.com/asm-products/cloudroutes-service/blob/master/actions/worker.py).
 
 When the `actioner.py` receives a ZeroMQ message it converts the JSON message into a dictionary. The `actioner.py` will then look up details from Redis and RethinkDB for both the Monitor and all associated Reactions. For each Reaction defined in the Monitor it will load the Reaction module `actions/<short-name>` and execute either the `false` or `true` methods.
 
