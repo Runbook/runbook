@@ -5,7 +5,7 @@
 # Description:
 # ------------------------------------------------------------------
 # This is a message broker for the actioner.
-# This process will get messages from the various action processes
+# This process will get messages from the various monitor processes
 # and send them to the actioner worker processes via zMQ.
 # ------------------------------------------------------------------
 # Original Author: Benjamin J. Cane - @madflojo

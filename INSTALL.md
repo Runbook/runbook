@@ -113,10 +113,10 @@ Run databases and web:
 $ ./tmux_1_web_and_databases.sh
 ```
 
-Run all actions processes:
+Run all monitors processes:
 
 ```sh
-$ ./tmux_2_actions.sh
+$ ./tmux_2_monitors.sh
 ```
 
 Run all crbridge processes:
