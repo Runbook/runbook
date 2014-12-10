@@ -102,43 +102,29 @@ signal.signal(signal.SIGTERM, killhandle)
 # ------------------------------------------------------------------
 
 
-def runAction(redata, jdata):
+def runAction(**kwargs):
     ''' Run reactions in a function '''
-    if "false" in jdata['check']['status']:
-        reaction = __import__(
-            "actions." + redata['rtype'], globals(), locals(), ['false'], -1)
-        react = reaction.false(redata, jdata, rdb_server, r_server)
-        if react is True:
-            logger.info("Successfully processed false reaction type %s for monitor %s" % (
-                redata['rtype'], jdata['cid']))
-            return True
-        elif react is None:
-            logger.info("Skipped false reaction type %s for monitor %s" % (
-                redata['rtype'], jdata['cid']))
-            return None
-        else:
-            logger.info("Processing reaction type %s for monitor %s did not occur" % (
-                redata['rtype'], jdata['cid']))
-            return False
-    elif "true" in jdata['check']['status']:
-        reaction = __import__(
-            "actions." + redata['rtype'], globals(), locals(), ['true'], -1)
-        react = reaction.true(redata, jdata, rdb_server, r_server)
-        if react:
-            logger.info("Successfully processed true reaction type %s for monitor %s" % (
-                redata['rtype'], jdata['cid']))
-            return True
-        elif react is None:
-            logger.info("Skipped true reaction type %s for monitor %s" % (
-                redata['rtype'], jdata['cid']))
-            return None
-        else:
-            logger.info("Error while processing true reaction type %s for monitor %s" % (
-                redata['rtype'], jdata['cid']))
-            return False
+    redata = kwargs['redata']
+    jdata = kwargs['jdata']
+    reaction = __import__(
+        "actions." + redata['rtype'], globals(), locals(), ['action'], -1)
+    try:
+        react = reaction.action(kwargs)
+    except:
+        logger.error("Got error when attempting to run reaction %s for monitor %s" % (
+            redata['rtype'], jdata['cid']))
+        react = False
+    if react is True:
+        logger.info("Successfully processed %s reaction type %s for monitor %s" % (
+            jdata['check']['status'], redata['rtype'], jdata['cid']))
+        return True
+    elif react is None:
+        logger.info("Skipped %s reaction type %s for monitor %s" % (
+            jdata['check']['status'], redata['rtype'], jdata['cid']))
+        return None
     else:
-        logger.error("Got an unknown status for health check %s: %s" % (
-            jdata['cid'], jdata['status']))
+        logger.info("Processing %s reaction type %s for monitor %s did not occur" % (
+            jdata['check']['status'], redata['rtype'], jdata['cid']))
         return False
 
 
@@ -252,14 +238,16 @@ while True:
                 results = getReaction(reactid)
                 if results:
                     results['default'] = False
-                    run = runAction(results, jdata)
+                    run = runAction(redata=results, jdata=jdata,
+                        rdb=rdb_server, r_server=r_server, config=config)
                     for meta in config['reaction_meta']:
                         results['rtype'] = meta
                         results['lastrun'] = 0
                         results['trigger'] = 0
                         results['frequency'] = 0
                         results['reaction_return'] = run
-                        runAction(results, jdata)
+                        runAction(redata=results, jdata=jdata,
+                            rdb=rdb_server, r_server=r_server, config=config)
 
             # Always perform the default actions
             for always in config['default_actions']:
@@ -268,7 +256,8 @@ while True:
                           'frequency': 0,
                           'lastrun': 0,
                           'default': True}
-                runAction(redata, jdata)
+                runAction(redata=redata, jdata=jdata,
+                    rdb=rdb_server, r_server=r_server, config=config)
 
         if cacheonly is True:
             logger.critical("Process is in cacheonly mode: attempting reconnect")
