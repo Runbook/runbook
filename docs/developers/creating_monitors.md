@@ -188,7 +188,7 @@ The `urldata` argument is a dictionary that contains data from the URL making th
 
 The `rdb` object is a connection object to the RethinkDB database store.
 
-In the above example if the POST data contains a JSON string that has a key `check_key` and that key is the same as the `monitor.url` objects value, and the `atype` value is the same as the `monitor.cytype` objects value. The `monitor.healthcheck` object will be set to `false` and the `monitor.webCheck` method will be called. This method will send a health check message to the backend [crbridge](https://github.com/asm-products/cloudroutes-service/tree/master/src/crbridge) process. This process will process the false monitor and perform necessary reactions.
+In the above example if the POST data contains a JSON string that has a key `check_key` and that key is the same as the `monitor.url` objects value, and the `atype` value is the same as the `monitor.cytype` objects value. The `monitor.healthcheck` object will be set to `false` and the `monitor.webCheck` method will be called. This method will send a health check message to the backend [bridge](https://github.com/asm-products/cloudroutes-service/tree/master/src/bridge) process. This process will process the false monitor and perform necessary reactions.
 
 To get started with a new API-based Monitor you will first need to create a new directory with the short-name under the `web/monitorapis` directory and then create an `__init__.py` file that contains the API processing code.
 
