@@ -5,7 +5,6 @@
 # Actions Module
 ######################################################################
 
-import smtplib
 import jinja2
 import syslog
 import time
@@ -24,18 +23,18 @@ def false(redata, jdata, rdb, r_server):
         run = False
 
     if run:
-        result = emailNotify(redata, jdata, "growth-false.msg")
+        result = emailNotify(redata, jdata, "false.msg")
         if result:
-            line = "growth-enotify: Sent %s email notification for monitor %s" % (
+            line = "enotify: Sent %s email notification for monitor %s" % (
                 jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_INFO, line)
             return True
         else:
-            line = "growth-enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
+            line = "enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_ERR, line)
             return False
     else:
-        line = "growth-enotify: Skipping %s email notification for monitor %s" % (
+        line = "enotify: Skipping %s email notification for monitor %s" % (
             jdata['check']['status'], jdata['cid'])
         syslog.syslog(syslog.LOG_ERR, line)
         return None
@@ -52,21 +51,22 @@ def true(redata, jdata, rdb, r_server):
             run = False
 
     if run:
-        result = emailNotify(redata, jdata, "growth-true.msg")
+        result = emailNotify(redata, jdata, "true.msg")
         if result:
-            line = "growth-enotify: Sent %s email notification for monitor %s" % (
+            line = "enotify: Sent %s email notification for monitor %s" % (
                 jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_INFO, line)
             return True
         else:
-            line = "growth-enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
+            line = "enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_ERR, line)
             return False
     else:
-        line = "growth-enotify: Skipping %s email notification for monitor %s" % (
+        line = "enotify: Skipping %s email notification for monitor %s" % (
             jdata['check']['status'], jdata['cid'])
         syslog.syslog(syslog.LOG_INFO, line)
         return None
+
 
 def emailNotify(redata, jdata, tfile):
     '''
@@ -84,7 +84,7 @@ def emailNotify(redata, jdata, tfile):
 
     data = {}
     templateLoader = jinja2.FileSystemLoader(
-        searchpath="/data/crbridge/templates/")
+        searchpath="/data/bridge/templates/")
     templateEnv = jinja2.Environment(loader=templateLoader)
     template = templateEnv.get_template(tfile)
 
@@ -97,7 +97,7 @@ def emailNotify(redata, jdata, tfile):
             "text": msg,
             "from_email": "noreply@runbook.io",
             "from_name" : "Runbook Notifications",
-            "subject" : "Heads up! %s is down" % jdata['name'],
+            "subject" : "Monitor Alerts",
             "to" : [
                 { "email": redata['data']['email'] }
             ]

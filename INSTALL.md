@@ -44,7 +44,7 @@ Here is a list of configuration files, that can be used for the first time to ru
  - web/instance/web.cfg.default - used by Web (web/web.py) process
  - monitors/config/control.yml.5min.default - used by monitors/control.py process
  - monitors/config/main.yml.default - used by monitors/broker.py and monitors/worker.py processes
- - crbridge/config/config.yml.default - used by crbridge/bridge.py, crbridge/broker.py and crbridge/actioner.py processes
+ - bridge/config/config.yml.default - used by bridge/bridge.py, bridge/broker.py and bridge/actioner.py processes
 
 ### Initialize database
 
@@ -77,12 +77,12 @@ $ python src/monitors/broker.py config/main.yml.default
 $ python src/monitors/worker.py config/main.yml.default
 ```
 
-4) Run bridge, broker, and actioner (src/crbridge/bridge.py, src/crbridge/broker.py, src/crbridge/acrioner.py)
+4) Run bridge, broker, and actioner (src/bridge/bridge.py, src/bridge/broker.py, src/bridge/acrioner.py)
 
 ```sh
-$ python src/crbridge/bridge.py config/config.yml.default
-$ python src/crbridge/broker.py config/config.yml.default
-$ python src/crbridge/actioner.py config/config.yml.default
+$ python src/bridge/bridge.py config/config.yml.default
+$ python src/bridge/broker.py config/config.yml.default
+$ python src/bridge/actioner.py config/config.yml.default
 ```
 
 Now you can launch your browser and point it to `http://localhost:8000/signup`. Signup, create a monitor and a reaction, watch them being executed.
@@ -119,8 +119,8 @@ Run all monitors processes:
 $ ./tmux_2_monitors.sh
 ```
 
-Run all crbridge processes:
+Run all bridge processes:
 
 ```sh
-$ ./tmux_3_crbridge.sh
+$ ./tmux_3_bridge.sh
 ```

@@ -42,7 +42,7 @@ Runbook is a service that allows users to build environments that require minima
 
 ## Components
 
-Runbook currently has 4 major application components, `monitors`, `cras`, `crbridge` and `web`. Each component is designed to be independently scalable. One component may be scaled without requiring other components to meet the same scalability.
+Runbook currently has 4 major application components, `monitors`, `cras`, `bridge` and `web`. Each component is designed to be independently scalable. One component may be scaled without requiring other components to meet the same scalability.
 
 **Note:** The name CloudRoutes will appear several times within this document, this is because it is the original name of the Runbook product.
 
@@ -62,15 +62,15 @@ WEB uses RethinkDB as it's back-end database system. [RethinkDB](https://rethink
 2. Queries are automatically parallelized and distributed amongst multiple nodes
 3. Allows for scaling at both a local datacenter and cross datacenter level
 
-### CRBRIDGE - CloudRoutes Bridge
+### BRIDGE - CloudRoutes Bridge
 
-The CloudRoutes Bridge application is designed to bridge the gap between the web front-end and the monitoring and reacting back-end systems. When monitors and reactions are created the WEB process stores them into the `monitors` or `reactions` tables within RethinkDB; the WEB process also places a `create`, `edit`, or `delete` entry into the `dc#queue` tables within the database. The `crbridge/bridge.py` process is constantly reading from the `dc#queue` table and processing the entries placed within those tables.
+The CloudRoutes Bridge application is designed to bridge the gap between the web front-end and the monitoring and reacting back-end systems. When monitors and reactions are created the WEB process stores them into the `monitors` or `reactions` tables within RethinkDB; the WEB process also places a `create`, `edit`, or `delete` entry into the `dc#queue` tables within the database. The `bridge/bridge.py` process is constantly reading from the `dc#queue` table and processing the entries placed within those tables.
 
-Each `dc#queue` table is unique for each datacenter Runbook runs from. In production today Runbook runs out of only 2 data-centers, this means currently there are two `dc#queue` tables. `dc1queue` and `dc2queue`. Since the WEB process itself does not interact with the back-end monitors the `dc#queue` tables are used to relay tasks to the back-end systems. It is the `crbridge` systems responsibility to process those tasks.
+Each `dc#queue` table is unique for each datacenter Runbook runs from. In production today Runbook runs out of only 2 data-centers, this means currently there are two `dc#queue` tables. `dc1queue` and `dc2queue`. Since the WEB process itself does not interact with the back-end monitors the `dc#queue` tables are used to relay tasks to the back-end systems. It is the `bridge` systems responsibility to process those tasks.
 
-When the `crbridge` process receives a `create` task it will read the monitor or reaction configuration from the database entry and store that data in that data-centers local Redis instance. Each datacenter or "monitoring zone" within the Runbook environment has it's own local Redis server. This Redis server is not replicated to any other data-centers and is simply there to serve as a local cache for monitors and reactions running from that datacenter.
+When the `bridge` process receives a `create` task it will read the monitor or reaction configuration from the database entry and store that data in that data-centers local Redis instance. Each datacenter or "monitoring zone" within the Runbook environment has it's own local Redis server. This Redis server is not replicated to any other data-centers and is simply there to serve as a local cache for monitors and reactions running from that datacenter.
 
-**Note:** If an issue was to occur where a local Redis instance was destroyed and unrecoverable a new Redis server can be repopulated using the `crbridge/mgmtscripts/rebuild_Redis.py` script. This script reads from RethinkDB and creates edit requests within each data-centers `dc#queue`. This will cause a re-population of each Redis instance in each datacenter. This is a benign process as RethinkDB is designed to be the source of truth regarding monitor and reaction configurations.
+**Note:** If an issue was to occur where a local Redis instance was destroyed and unrecoverable a new Redis server can be repopulated using the `bridge/mgmtscripts/rebuild_Redis.py` script. This script reads from RethinkDB and creates edit requests within each data-centers `dc#queue`. This will cause a re-population of each Redis instance in each datacenter. This is a benign process as RethinkDB is designed to be the source of truth regarding monitor and reaction configurations.
 
 In addition to creation and deletion tasks the WEB will also writes webhook monitor events to the local `dc#queue`. If the WEB instance is running in datacenter 1 it will write to the `dc1queue`. When the bridge process identifies a monitor event it will forward an even JSON message to the `cras/broker.py` process. Again, acting as a bridge between the web application and the back-end monitoring application.
 
@@ -123,7 +123,7 @@ The CloudRoutes Action Service or CRAS is designed to perform the "Reaction" asp
 
 #### Broker
 
-Like the MONITORS Broker the CRAS Broker simply receives JSON messages from the MONITORS Worker or CRBRIDGE Bridge processes and forwards them to a CRAS Actioner process. This facilitates the ability for multiple monitor results to be processed at the same time and from multiple machines. Like the MONITORS broker while currently this process is a single process in each datacenter it does not necessarily require this. To scale the performance of monitor result processing multiple Brokers could be launched.
+Like the MONITORS Broker the CRAS Broker simply receives JSON messages from the MONITORS Worker or BRIDGE Bridge processes and forwards them to a CRAS Actioner process. This facilitates the ability for multiple monitor results to be processed at the same time and from multiple machines. Like the MONITORS broker while currently this process is a single process in each datacenter it does not necessarily require this. To scale the performance of monitor result processing multiple Brokers could be launched.
 
 #### Actioner
 
@@ -155,7 +155,7 @@ This diagram depicts each component and it's interactions as it is deployed in t
 
 * [High Availability and Scalabitlity Deployment](/img/architecture/overview-scaledandredundant.png)
 
-This diagram shows each component deployed in a highly scaled out and redundant design. Components with multiples can be scaled beyond the number depicted as needed, components without multiples such as the control.py processes can expanded by adding additional monitoring zones. The CRBRIDGE Bridge component in theory could support running multiple copies however this is untested at this time.
+This diagram shows each component deployed in a highly scaled out and redundant design. Components with multiples can be scaled beyond the number depicted as needed, components without multiples such as the control.py processes can expanded by adding additional monitoring zones. The BRIDGE Bridge component in theory could support running multiple copies however this is untested at this time.
 
 
 ---
