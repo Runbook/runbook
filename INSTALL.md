@@ -44,7 +44,8 @@ Here is a list of configuration files, that can be used for the first time to ru
  - web/instance/web.cfg.default - used by Web (web/web.py) process
  - monitors/config/control.yml.5min.default - used by monitors/control.py process
  - monitors/config/main.yml.default - used by monitors/broker.py and monitors/worker.py processes
- - bridge/config/config.yml.default - used by bridge/bridge.py, actions/broker.py and actions/actioner.py processes
+ - bridge/config/config.yml.default - used by bridge/bridge.py processes
+ - actions/config/config.yml.default - used by actions/broker.py and actions/actioner.py processes
 
 ### Initialize database
 
