@@ -9,16 +9,16 @@ import jinja2
 import syslog
 import time
 
-def action(**kwarg):
+def action(**kwargs):
     ''' This method is called to action a reaction '''
     # This method can be used for legacy reactions that have
     # a different function based on true/false
-    if "false" in kwarg['jdata']['check']['status']:
-        return false(kwarg['redata'], kwarg['jdata'],
-            kwarg['rdb'], kwarg['r_server'], kwarg['config'])
-    if "true" in kwarg['jdata']['check']['status']:
-        return true(kwarg['redata'], kwarg['jdata'],
-            kwarg['rdb'], kwarg['r_server'], kwarg['config'])
+    if "false" in kwargs['jdata']['check']['status']:
+        return false(kwargs['redata'], kwargs['jdata'],
+            kwargs['rdb'], kwargs['r_server'], kwargs['config'])
+    if "true" in kwargs['jdata']['check']['status']:
+        return true(kwargs['redata'], kwargs['jdata'],
+            kwargs['rdb'], kwargs['r_server'], kwargs['config'])
 
 
 def false(redata, jdata, rdb, r_server, config):

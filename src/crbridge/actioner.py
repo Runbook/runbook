@@ -109,10 +109,12 @@ def runAction(**kwargs):
     reaction = __import__(
         "actions." + redata['rtype'], globals(), locals(), ['action'], -1)
     try:
-        react = reaction.action(kwargs)
-    except:
+        react = reaction.action(redata=kwargs['redata'], jdata=kwargs['jdata'],
+            rdb=kwargs['rdb'], r_server=kwargs['r_server'], config=kwargs['config'])
+    except Exception as e:
         logger.error("Got error when attempting to run reaction %s for monitor %s" % (
             redata['rtype'], jdata['cid']))
+        logger.error(e)
         react = False
     if react is True:
         logger.info("Successfully processed %s reaction type %s for monitor %s" % (
