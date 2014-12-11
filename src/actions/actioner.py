@@ -49,7 +49,7 @@ cfh.close()
 # ------------------------------------------------------------------
 
 # Init logger
-logger = logconfig.getLogger('bridge.actioner', config['use_syslog'])
+logger = logconfig.getLogger('actions.actioner', config['use_syslog'])
 
 logger.info("Using config %s" % configfile)
 
