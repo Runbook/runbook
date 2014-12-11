@@ -42,7 +42,7 @@ Runbook is a service that allows users to build environments that require minima
 
 ## Components
 
-Runbook currently has 4 major application components, `cram`, `cras`, `crbridge` and `web`. Each component is designed to be independently scalable. One component may be scaled without requiring other components to meet the same scalability.
+Runbook currently has 4 major application components, `monitors`, `cras`, `bridge` and `web`. Each component is designed to be independently scalable. One component may be scaled without requiring other components to meet the same scalability.
 
 **Note:** The name CloudRoutes will appear several times within this document, this is because it is the original name of the Runbook product.
 
@@ -62,15 +62,15 @@ WEB uses RethinkDB as it's back-end database system. [RethinkDB](https://rethink
 2. Queries are automatically parallelized and distributed amongst multiple nodes
 3. Allows for scaling at both a local datacenter and cross datacenter level
 
-### CRBRIDGE - CloudRoutes Bridge
+### BRIDGE - CloudRoutes Bridge
 
-The CloudRoutes Bridge application is designed to bridge the gap between the web front-end and the monitoring and reacting back-end systems. When monitors and reactions are created the WEB process stores them into the `monitors` or `reactions` tables within RethinkDB; the WEB process also places a `create`, `edit`, or `delete` entry into the `dc#queue` tables within the database. The `crbridge/bridge.py` process is constantly reading from the `dc#queue` table and processing the entries placed within those tables.
+The CloudRoutes Bridge application is designed to bridge the gap between the web front-end and the monitoring and reacting back-end systems. When monitors and reactions are created the WEB process stores them into the `monitors` or `reactions` tables within RethinkDB; the WEB process also places a `create`, `edit`, or `delete` entry into the `dc#queue` tables within the database. The `bridge/bridge.py` process is constantly reading from the `dc#queue` table and processing the entries placed within those tables.
 
-Each `dc#queue` table is unique for each datacenter Runbook runs from. In production today Runbook runs out of only 2 data-centers, this means currently there are two `dc#queue` tables. `dc1queue` and `dc2queue`. Since the WEB process itself does not interact with the back-end monitors the `dc#queue` tables are used to relay tasks to the back-end systems. It is the `crbridge` systems responsibility to process those tasks.
+Each `dc#queue` table is unique for each datacenter Runbook runs from. In production today Runbook runs out of only 2 data-centers, this means currently there are two `dc#queue` tables. `dc1queue` and `dc2queue`. Since the WEB process itself does not interact with the back-end monitors the `dc#queue` tables are used to relay tasks to the back-end systems. It is the `bridge` systems responsibility to process those tasks.
 
-When the `crbridge` process receives a `create` task it will read the monitor or reaction configuration from the database entry and store that data in that data-centers local Redis instance. Each datacenter or "monitoring zone" within the Runbook environment has it's own local Redis server. This Redis server is not replicated to any other data-centers and is simply there to serve as a local cache for monitors and reactions running from that datacenter.
+When the `bridge` process receives a `create` task it will read the monitor or reaction configuration from the database entry and store that data in that data-centers local Redis instance. Each datacenter or "monitoring zone" within the Runbook environment has it's own local Redis server. This Redis server is not replicated to any other data-centers and is simply there to serve as a local cache for monitors and reactions running from that datacenter.
 
-**Note:** If an issue was to occur where a local Redis instance was destroyed and unrecoverable a new Redis server can be repopulated using the `crbridge/mgmtscripts/rebuild_Redis.py` script. This script reads from RethinkDB and creates edit requests within each data-centers `dc#queue`. This will cause a re-population of each Redis instance in each datacenter. This is a benign process as RethinkDB is designed to be the source of truth regarding monitor and reaction configurations.
+**Note:** If an issue was to occur where a local Redis instance was destroyed and unrecoverable a new Redis server can be repopulated using the `bridge/mgmtscripts/rebuild_Redis.py` script. This script reads from RethinkDB and creates edit requests within each data-centers `dc#queue`. This will cause a re-population of each Redis instance in each datacenter. This is a benign process as RethinkDB is designed to be the source of truth regarding monitor and reaction configurations.
 
 In addition to creation and deletion tasks the WEB will also writes webhook monitor events to the local `dc#queue`. If the WEB instance is running in datacenter 1 it will write to the `dc1queue`. When the bridge process identifies a monitor event it will forward an even JSON message to the `cras/broker.py` process. Again, acting as a bridge between the web application and the back-end monitoring application.
 
@@ -84,7 +84,7 @@ Recovering from RethinkDB failures, when RethinkDB servers are experiencing issu
 
 ![Reaction Creation](/img/architecture/reaction-creation-multidc.png)
 
-### CRAM - CloudRoutes Availability Monitor
+### MONITORS - CloudRoutes Availability Monitor
 
 The CloudRoutes Availability Monitor component is designed to perform the actual monitoring of remote systems. This is the monitoring part of the monitoring and reacting back-end application. This component is comprised of 3 major programs `control.py`, `broker.py`, and `worker.py`.
 
@@ -97,17 +97,17 @@ When the CloudRoutes Bridge process adds monitor details into Redis it looks at 
 * `2mincheck` - This sorted list is for monitors that run every 2 minutes
 * `30seccheck` - This sorted list is for monitors that run every 30 seconds
 
-The `cram/control.py` program is a generic program that is designed to pull monitor IDs from a defined sorted list in Redis (one of the intervals listed above). Once it has a list of monitor IDs it will loop through that list and look-up the monitors details from Redis using the monitor ID as a key. Once the monitors details are read, the `cram/control.py` process will create a JSON message including the monitors details and send that message to `cram/broker.py` using ZeroMQ.
+The `monitors/control.py` program is a generic program that is designed to pull monitor IDs from a defined sorted list in Redis (one of the intervals listed above). Once it has a list of monitor IDs it will loop through that list and look-up the monitors details from Redis using the monitor ID as a key. Once the monitors details are read, the `monitors/control.py` process will create a JSON message including the monitors details and send that message to `monitors/broker.py` using ZeroMQ.
 
-Each `cram/control.py` process can only read from one sorted list, in order to have all sorted lists monitored each sorted list must have it's own `cram/control.py` process. This is possible as the `cram/control.py` process receives all of it's Redis and timer configuration from a configuration file. In production there are currently 4 `cram/control.py` process running per datacenter.
+Each `monitors/control.py` process can only read from one sorted list, in order to have all sorted lists monitored each sorted list must have it's own `monitors/control.py` process. This is possible as the `monitors/control.py` process receives all of it's Redis and timer configuration from a configuration file. In production there are currently 4 `monitors/control.py` process running per datacenter.
 
 #### Broker
 
-The `cram/broker.py` or CRAM Broker process is simply a ZeroMQ broker. The process binds two ports, one port is used to listen for ZeroMQ messages from the various `cram/control.py` processes. The second port is used to send that received message to a `cram/worker.py` process. Currently in production each datacenter has only 1 CRAM Broker, however this process is not limited to only one. When two servers are specified in an stunnel configuration the stunnel service will send requests in a round robin algorithm. This allows the control messages to be sent to multiple brokers which then could be sent to multiple sets of workers.
+The `monitors/broker.py` or MONITORs Broker process is simply a ZeroMQ broker. The process binds two ports, one port is used to listen for ZeroMQ messages from the various `monitors/control.py` processes. The second port is used to send that received message to a `monitors/worker.py` process. Currently in production each datacenter has only 1 MONITORS Broker, however this process is not limited to only one. When two servers are specified in an stunnel configuration the stunnel service will send requests in a round robin algorithm. This allows the control messages to be sent to multiple brokers which then could be sent to multiple sets of workers.
 
 #### Worker
 
-The `cram/worker.py` or CRAM Worker process is the actual process that performs the monitor tasks. The code to perform an actual monitor check is stored as modules within `checks/` directory. For example, TCP Port monitor is the module `checks/tcp-check`. When the CRAM worker process receives a health check message from the CRAM Broker it decodes the JSON message and determines what type of check module should be loaded. It then loads the module and executes the `check()` function passing the monitor specific data to the function.
+The `monitors/worker.py` or MONITORS Worker process is the actual process that performs the monitor tasks. The code to perform an actual monitor check is stored as modules within `checks/` directory. For example, TCP Port monitor is the module `checks/tcp-check`. When the MONITORS worker process receives a health check message from the MONITORS Broker it decodes the JSON message and determines what type of check module should be loaded. It then loads the module and executes the `check()` function passing the monitor specific data to the function.
 
 The `check()` function will return either `True` for true or `False` for false. With this result the worker process will generate a JSON message which is then sent to the CloudRoutes Action Service.
 
@@ -119,21 +119,21 @@ The entire CloudRoutes Availability Monitor design is built to scale. The Worker
 
 ### CRAS - CloudRoutes Action Service
 
-The CloudRoutes Action Service or CRAS is designed to perform the "Reaction" aspect of Runbook's Monitoring and Reacting. Like the CRAM there are two main programs with CRAS, `cras/broker.py` or CRAS Broker and `cras/actioner.py` or CRAS Actioner.
+The CloudRoutes Action Service or CRAS is designed to perform the "Reaction" aspect of Runbook's Monitoring and Reacting. Like the MONITORS there are two main programs with CRAS, `cras/broker.py` or CRAS Broker and `cras/actioner.py` or CRAS Actioner.
 
 #### Broker
 
-Like the CRAM Broker the CRAS Broker simply receives JSON messages from the CRAM Worker or CRBRIDGE Bridge processes and forwards them to a CRAS Actioner process. This facilitates the ability for multiple monitor results to be processed at the same time and from multiple machines. Like the CRAM broker while currently this process is a single process in each datacenter it does not necessarily require this. To scale the performance of monitor result processing multiple Brokers could be launched.
+Like the MONITORS Broker the CRAS Broker simply receives JSON messages from the MONITORS Worker or BRIDGE Bridge processes and forwards them to a CRAS Actioner process. This facilitates the ability for multiple monitor results to be processed at the same time and from multiple machines. Like the MONITORS broker while currently this process is a single process in each datacenter it does not necessarily require this. To scale the performance of monitor result processing multiple Brokers could be launched.
 
 #### Actioner
 
-The CRAS Actioner process is the process that performs reaction tasks. Like the CRAM worker the code to perform a reaction is stored within modules in the `actions/` directory. An example of this would be the `actions/enotify` module which handles email notification reactions.
+The CRAS Actioner process is the process that performs reaction tasks. Like the MONITORS worker the code to perform a reaction is stored within modules in the `monitors/` directory. An example of this would be the `monitors/enotify` module which handles email notification reactions.
 
-When the CRAS Actioner process receives the JSON message from the CRAM Worker process it will first look-up the monitor from Redis and then RethinkDB. If the RethinkDB request does not return a result due to a RethinkDB error the monitor is flagged as a `cache-only` monitor. The idea behind this is that even if RethinkDB is down the monitor should still be actioned to ensure that Runbook is providing it's function of protecting user environments.
+When the CRAS Actioner process receives the JSON message from the MONITORS Worker process it will first look-up the monitor from Redis and then RethinkDB. If the RethinkDB request does not return a result due to a RethinkDB error the monitor is flagged as a `cache-only` monitor. The idea behind this is that even if RethinkDB is down the monitor should still be actioned to ensure that Runbook is providing it's function of protecting user environments.
 
 Each monitor JSON message has a list of reactions associated with that monitor. After looking up he monitor the Actioner process will loop through these reactions. The Actioner will look-up reaction details first from Redis and secondly from RethinkDB following the same process as the monitor data look-ups. In this case, the Actioner will compare the `lastrun` time from both results and utilize the newest. This is to ensure that `frequency` settings within the reaction are honored if the reaction was executed from another datacenter.
 
-When the Actioner process has the reaction data it then loads the appropriate `actions/` module and executes the appropriate method for performing the reaction. When reactions are executed a set of "meta" reactions are also executed, these are essentially reactions of reactions and are used to update the RethinkDB and Redis datastores as well as update any reaction tracking logs.
+When the Actioner process has the reaction data it then loads the appropriate `monitors/` module and executes the appropriate method for performing the reaction. When reactions are executed a set of "meta" reactions are also executed, these are essentially reactions of reactions and are used to update the RethinkDB and Redis datastores as well as update any reaction tracking logs.
 
 After all user defined reactions have been executed a list of default reactions are executed for the monitor. These reactions are similar to the "meta" reactions, but are reacting on the monitor itself rather than the reaction.
 
@@ -155,7 +155,7 @@ This diagram depicts each component and it's interactions as it is deployed in t
 
 * [High Availability and Scalabitlity Deployment](/img/architecture/overview-scaledandredundant.png)
 
-This diagram shows each component deployed in a highly scaled out and redundant design. Components with multiples can be scaled beyond the number depicted as needed, components without multiples such as the control.py processes can expanded by adding additional monitoring zones. The CRBRIDGE Bridge component in theory could support running multiple copies however this is untested at this time.
+This diagram shows each component deployed in a highly scaled out and redundant design. Components with multiples can be scaled beyond the number depicted as needed, components without multiples such as the control.py processes can expanded by adding additional monitoring zones. The BRIDGE Bridge component in theory could support running multiple copies however this is untested at this time.
 
 
 ---

@@ -42,9 +42,9 @@ The entire application has 4 configuration file types, which are used by 7 types
 Here is a list of configuration files, that can be used for the first time to run a minimal working application locally:
 
  - web/instance/web.cfg.default - used by Web (web/web.py) process
- - cram/config/control.yml.5min.default - used by cram/control.py process
- - cram/config/main.yml.default - used by cram/broker.py and cram/worker.py processes
- - crbridge/config/config.yml.default - used by crbridge/bridge.py, crbridge/broker.py and crbridge/actioner.py processes
+ - monitors/config/control.yml.5min.default - used by monitors/control.py process
+ - monitors/config/main.yml.default - used by monitors/broker.py and monitors/worker.py processes
+ - bridge/config/config.yml.default - used by bridge/bridge.py, bridge/broker.py and bridge/actioner.py processes
 
 ### Initialize database
 
@@ -64,25 +64,25 @@ With rethinkDB and redis running...
 $ python src/web/web.py instance/web.cfg.default
 ```
 
-2) Run control process (src/cram/control.py)
+2) Run control process (src/monitors/control.py)
 
 ```sh
-$ python src/cram/control.py config/control.yml.5min.default
+$ python src/monitors/control.py config/control.yml.5min.default
 ```
 
-3) Run broker and worker (src/cram/broker.py and src/cram/worker.py)
+3) Run broker and worker (src/monitors/broker.py and src/monitors/worker.py)
 
 ```sh
-$ python src/cram/broker.py config/main.yml.default
-$ python src/cram/worker.py config/main.yml.default
+$ python src/monitors/broker.py config/main.yml.default
+$ python src/monitors/worker.py config/main.yml.default
 ```
 
-4) Run bridge, broker, and actioner (src/crbridge/bridge.py, src/crbridge/broker.py, src/crbridge/acrioner.py)
+4) Run bridge, broker, and actioner (src/bridge/bridge.py, src/bridge/broker.py, src/bridge/acrioner.py)
 
 ```sh
-$ python src/crbridge/bridge.py config/config.yml.default
-$ python src/crbridge/broker.py config/config.yml.default
-$ python src/crbridge/actioner.py config/config.yml.default
+$ python src/bridge/bridge.py config/config.yml.default
+$ python src/bridge/broker.py config/config.yml.default
+$ python src/bridge/actioner.py config/config.yml.default
 ```
 
 Now you can launch your browser and point it to `http://localhost:8000/signup`. Signup, create a monitor and a reaction, watch them being executed.
@@ -113,14 +113,14 @@ Run databases and web:
 $ ./tmux_1_web_and_databases.sh
 ```
 
-Run all cram processes:
+Run all monitors processes:
 
 ```sh
-$ ./tmux_2_cram.sh
+$ ./tmux_2_monitors.sh
 ```
 
-Run all crbridge processes:
+Run all bridge processes:
 
 ```sh
-$ ./tmux_3_crbridge.sh
+$ ./tmux_3_bridge.sh
 ```

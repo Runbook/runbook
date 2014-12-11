@@ -5,8 +5,8 @@
 # Description:
 # ------------------------------------------------------------------
 # This is a message broker for the actioner.
-# This process will get messages from the various cram processes
-# and send them to the actioner worker processes via zMQ.
+# This process will get messages from the various monitor processes
+# and send them to the actions worker processes via zMQ.
 # ------------------------------------------------------------------
 # Original Author: Benjamin J. Cane - @madflojo
 # Maintainers:
@@ -43,7 +43,7 @@ cfh.close()
 # ------------------------------------------------------------------
 
 # Init logger
-logger = logconfig.getLogger('crbridge.broker', config['use_syslog'])
+logger = logconfig.getLogger('bridge.broker', config['use_syslog'])
 
 logger.info("Using config %s" % configfile)
 

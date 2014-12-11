@@ -1,0 +1,7 @@
+PyYAML==3.10
+pyzmq==13.1.0
+redis==2.10.3
+requests==1.2.3
+cffi>=0.8
+cryptography==0.5.4
+pyOpenSSL==0.14

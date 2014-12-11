@@ -7,7 +7,7 @@
 # This is a bridge application between the web interface of
 # cloudrout.es and the backend cloud routes availability maanger.
 # This will gather queue tasks from rethinkdb and create/delete
-# the appropriate monitor in cram.
+# the appropriate monitor in the action processes.
 # ------------------------------------------------------------------
 # Version: Alpha.20140306
 # Original Author: Benjamin J. Cane - madflojo@cloudrout.es
@@ -100,9 +100,4 @@ signal.signal(signal.SIGTERM, killhandle)
 results = r.table('monitors').run(rdb_server)
 for item in results:
     r.table('monitors').get(item['id']).update(
-        {'failcount': 0}).run(rdb_server)
-
-results = r.table('reactions').run(rdb_server)
-for item in results:
-    r.table('reactions').get(item['id']).update(
-        {'trigger': 0, 'frequency': 0, 'lastrun': 0}).run(rdb_server)
+        {'data': {'datacenter': ['dc1queue']}}).run(rdb_server)

@@ -5,23 +5,13 @@
 # Actions Module
 ######################################################################
 
+import smtplib
 import jinja2
 import syslog
 import time
 
-def action(**kwargs):
-    ''' This method is called to action a reaction '''
-    # This method can be used for legacy reactions that have
-    # a different function based on true/false
-    if "false" in kwargs['jdata']['check']['status']:
-        return false(kwargs['redata'], kwargs['jdata'],
-            kwargs['rdb'], kwargs['r_server'], kwargs['config'])
-    if "true" in kwargs['jdata']['check']['status']:
-        return true(kwargs['redata'], kwargs['jdata'],
-            kwargs['rdb'], kwargs['r_server'], kwargs['config'])
 
-
-def false(redata, jdata, rdb, r_server, config):
+def false(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has false '''
     run = True
     # Check for Trigger
@@ -34,24 +24,24 @@ def false(redata, jdata, rdb, r_server, config):
         run = False
 
     if run:
-        result = emailNotify(redata, jdata, "false.msg", config)
+        result = emailNotify(redata, jdata, "growth-false.msg")
         if result:
-            line = "enotify: Sent %s email notification for monitor %s" % (
+            line = "growth-enotify: Sent %s email notification for monitor %s" % (
                 jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_INFO, line)
             return True
         else:
-            line = "enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
+            line = "growth-enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_ERR, line)
             return False
     else:
-        line = "enotify: Skipping %s email notification for monitor %s" % (
+        line = "growth-enotify: Skipping %s email notification for monitor %s" % (
             jdata['check']['status'], jdata['cid'])
         syslog.syslog(syslog.LOG_ERR, line)
         return None
 
 
-def true(redata, jdata, rdb, r_server, config):
+def true(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has passed '''
     run = True
     if "true" in jdata['check']['prev_status']:
@@ -62,33 +52,39 @@ def true(redata, jdata, rdb, r_server, config):
             run = False
 
     if run:
-        result = emailNotify(redata, jdata, "true.msg", config)
+        result = emailNotify(redata, jdata, "growth-true.msg")
         if result:
-            line = "enotify: Sent %s email notification for monitor %s" % (
+            line = "growth-enotify: Sent %s email notification for monitor %s" % (
                 jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_INFO, line)
             return True
         else:
-            line = "enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
+            line = "growth-enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
             syslog.syslog(syslog.LOG_ERR, line)
             return False
     else:
-        line = "enotify: Skipping %s email notification for monitor %s" % (
+        line = "growth-enotify: Skipping %s email notification for monitor %s" % (
             jdata['check']['status'], jdata['cid'])
         syslog.syslog(syslog.LOG_INFO, line)
         return None
 
-
-def emailNotify(redata, jdata, tfile, config):
+def emailNotify(redata, jdata, tfile):
     '''
     This method will be called to notify a user via email of status changes
     '''
+    import yaml
     import requests
     import json
+    # TODO: I hate reading the config file in should look at reaction false/true
+    # definitions to find a better way of doing this
+    configfile = "config/config.yml"
+    cfh = open(configfile, "r")
+    config = yaml.safe_load(cfh)
+    cfh.close()
 
     data = {}
     templateLoader = jinja2.FileSystemLoader(
-        searchpath="/data/crbridge/templates/")
+        searchpath="/data/bridge/templates/")
     templateEnv = jinja2.Environment(loader=templateLoader)
     template = templateEnv.get_template(tfile)
 
@@ -101,7 +97,7 @@ def emailNotify(redata, jdata, tfile, config):
             "text": msg,
             "from_email": "noreply@runbook.io",
             "from_name" : "Runbook Notifications",
-            "subject" : "Monitor Alerts",
+            "subject" : "Heads up! %s is down" % jdata['name'],
             "to" : [
                 { "email": redata['data']['email'] }
             ]

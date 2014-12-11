@@ -188,7 +188,7 @@ The `urldata` argument is a dictionary that contains data from the URL making th
 
 The `rdb` object is a connection object to the RethinkDB database store.
 
-In the above example if the POST data contains a JSON string that has a key `check_key` and that key is the same as the `monitor.url` objects value, and the `atype` value is the same as the `monitor.cytype` objects value. The `monitor.healthcheck` object will be set to `false` and the `monitor.webCheck` method will be called. This method will send a health check message to the backend [crbridge](https://github.com/asm-products/cloudroutes-service/tree/master/src/crbridge) process. This process will process the false monitor and perform necessary reactions.
+In the above example if the POST data contains a JSON string that has a key `check_key` and that key is the same as the `monitor.url` objects value, and the `atype` value is the same as the `monitor.cytype` objects value. The `monitor.healthcheck` object will be set to `false` and the `monitor.webCheck` method will be called. This method will send a health check message to the backend [bridge](https://github.com/asm-products/cloudroutes-service/tree/master/src/bridge) process. This process will process the false monitor and perform necessary reactions.
 
 To get started with a new API-based Monitor you will first need to create a new directory with the short-name under the `web/monitorapis` directory and then create an `__init__.py` file that contains the API processing code.
 
@@ -197,14 +197,14 @@ To get started with a new API-based Monitor you will first need to create a new 
 
 #### Non API-based Monitors
 
-Non API-based Monitors are Monitors that are run via [cram](https://github.com/asm-products/cloudroutes-service/tree/master/src/cram). These monitors are executed from Runbook. You can think of these as external Monitors. At the moment of this writing, most of these have to do with checking a server/application externally. Using the [http-keyword](https://github.com/asm-products/cloudroutes-service/tree/master/src/cram/checks/http-keyword) Monitor as an example is the best place to start. All Monitors that run through `cram` are python modules placed into the `checks/` directory.
+Non API-based Monitors are Monitors that are run via [monitors](https://github.com/asm-products/cloudroutes-service/tree/master/src/monitors). These monitors are executed from Runbook. You can think of these as external Monitors. At the moment of this writing, most of these have to do with checking a server/application externally. Using the [http-keyword](https://github.com/asm-products/cloudroutes-service/tree/master/src/monitors/checks/http-keyword) Monitor as an example is the best place to start. All Monitors that run through `monitors` are python modules placed into the `checks/` directory.
 
 Much like using the wtforms module in Step #1 to create a new Monitor, simply create a directory with the short-name and a `__init__.py` file.
 
-    $ mkdir cram/checks/some-monitor
-    $ vi cram/checks/some-monitor/__init__.py
+    $ mkdir monitors/checks/some-monitor
+    $ vi monitors/checks/some-monitor/__init__.py
 
-The only requirement for this Monitor is to have a single method called `check`. This method will be given `data` which is a dictionary that contains the Monitor information from the database as well as some extra information from the `cram/control.py` process.
+The only requirement for this Monitor is to have a single method called `check`. This method will be given `data` which is a dictionary that contains the Monitor information from the database as well as some extra information from the `monitors/control.py` process.
 
 #### Example of `data`
 
@@ -253,7 +253,7 @@ The actual code to perform the health check really depends on the health check i
 
 #### Example Health Check: http-get-statuscode
 
-The following monitor code is from the `http-get-statuscode` Monitor and can be used as a guide on how to write a `cram` based Monitor.
+The following monitor code is from the `http-get-statuscode` Monitor and can be used as a guide on how to write a `monitors` based Monitor.
 
     def check(data):
       """ Perform a http get request and validate the return code """

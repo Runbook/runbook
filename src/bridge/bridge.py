@@ -7,7 +7,7 @@
 # This is a bridge application between the web interface of
 # cloudrout.es and the backend cloud routes availability maanger.
 # This will gather queue tasks from rethinkdb and create/delete
-# the appropriate monitor in cram.
+# the appropriate monitor in the action processes.
 # ------------------------------------------------------------------
 # Original Author: Benjamin J. Cane - @madflojo
 # Maintainers:
@@ -50,7 +50,7 @@ cfh.close()
 # ------------------------------------------------------------------
 
 # Init logger
-logger = logconfig.getLogger('crbridge.bridge', config['use_syslog'])
+logger = logconfig.getLogger('bridge.bridge', config['use_syslog'])
 
 logger.info("Using config %s" % configfile)
 

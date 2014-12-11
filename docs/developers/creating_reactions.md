@@ -150,16 +150,16 @@ Steps #1 and #2 were specifically related to creating the web elements of a Reac
 
 #### Creating a new Reaction
 
-Reactions are essentially python modules that are called by another process. To create a new Reaction you will first need to create a directory using the short-name in the `crbridge/actions` directory, then create a `__init__.py` file that contains the Reaction code.
+Reactions are essentially python modules that are called by another process. To create a new Reaction you will first need to create a directory using the short-name in the `bridge/actions` directory, then create a `__init__.py` file that contains the Reaction code.
 
-    $ mkdir crbridge/actions/some-reaction
-    $ vi crbridge/actions/some-reaction/__init__.py
+    $ mkdir bridge/actions/some-reaction
+    $ vi bridge/actions/some-reaction/__init__.py
 
-A good reference file would be the [aws-ec2restart](https://github.com/asm-products/cloudroutes-service/blob/master/crbridge/actions/aws-ec2restart/__init__.py) Reaction.
+A good reference file would be the [aws-ec2restart](https://github.com/asm-products/cloudroutes-service/blob/master/bridge/actions/aws-ec2restart/__init__.py) Reaction.
 
 #### How Reactions are called
 
-In each datacenter/monitoring zone there is a process running that is sometimes referred to as **"the sink"**, this process is executing [crbridge/actioner.py](https://github.com/asm-products/cloudroutes-service/blob/master/crbridge/actioner.py). This process will bind a port and listen for [ZeroMQ](http://zeromq.org/) messages. These messages are the results of health checks from both the web application and [cram/worker.py](https://github.com/asm-products/cloudroutes-service/blob/master/cram/worker.py).
+In each datacenter/monitoring zone there is a process running that is sometimes referred to as **"the sink"**, this process is executing [bridge/actioner.py](https://github.com/asm-products/cloudroutes-service/blob/master/bridge/actioner.py). This process will bind a port and listen for [ZeroMQ](http://zeromq.org/) messages. These messages are the results of health checks from both the web application and [actions/worker.py](https://github.com/asm-products/cloudroutes-service/blob/master/actions/worker.py).
 
 When the `actioner.py` receives a ZeroMQ message it converts the JSON message into a dictionary. The `actioner.py` will then look up details from Redis and RethinkDB for both the Monitor and all associated Reactions. For each Reaction defined in the Monitor it will load the Reaction module `actions/<short-name>` and execute either the `false` or `true` methods.
 
@@ -245,7 +245,7 @@ The trigger value is stored in `redata['trigger']` and this can be compared with
 
 Some Reactions may require additional processing rules. Each Reaction is free to define additional fields in the web form that only have the purpose of determining whether the Reaction should be executed. An example of this is the `jdata['data']['call_on']` field in the `aws-ec2restart` Reaction. This field allows users to define if the restart should happen on `true` or `false` monitors.
 
-The below example is an excerpt of the [aws-ec2restart](https://github.com/asm-products/cloudroutes-service/blob/master/crbridge/actions/aws-ec2restart/__init__.py) Reaction.
+The below example is an excerpt of the [aws-ec2restart](https://github.com/asm-products/cloudroutes-service/blob/master/bridge/actions/aws-ec2restart/__init__.py) Reaction.
 
     def false(redata, jdata, rdb, r_server):
       ''' This method will be called when a monitor has false '''
