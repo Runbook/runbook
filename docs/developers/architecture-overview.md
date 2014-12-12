@@ -42,7 +42,7 @@ Runbook is a service that allows users to build environments that require minima
 
 ## Components
 
-Runbook currently has 4 major application components, `monitors`, `cras`, `bridge` and `web`. Each component is designed to be independently scalable. One component may be scaled without requiring other components to meet the same scalability.
+Runbook currently has 4 major application components, `monitors`, `actions`, `bridge` and `web`. Each component is designed to be independently scalable. One component may be scaled without requiring other components to meet the same scalability.
 
 **Note:** The name CloudRoutes will appear several times within this document, this is because it is the original name of the Runbook product.
 
@@ -72,7 +72,7 @@ When the `bridge` process receives a `create` task it will read the monitor or r
 
 **Note:** If an issue was to occur where a local Redis instance was destroyed and unrecoverable a new Redis server can be repopulated using the `bridge/mgmtscripts/rebuild_Redis.py` script. This script reads from RethinkDB and creates edit requests within each data-centers `dc#queue`. This will cause a re-population of each Redis instance in each datacenter. This is a benign process as RethinkDB is designed to be the source of truth regarding monitor and reaction configurations.
 
-In addition to creation and deletion tasks the WEB will also writes webhook monitor events to the local `dc#queue`. If the WEB instance is running in datacenter 1 it will write to the `dc1queue`. When the bridge process identifies a monitor event it will forward an even JSON message to the `cras/broker.py` process. Again, acting as a bridge between the web application and the back-end monitoring application.
+In addition to creation and deletion tasks the WEB will also writes webhook monitor events to the local `dc#queue`. If the WEB instance is running in datacenter 1 it will write to the `dc1queue`. When the bridge process identifies a monitor event it will forward an even JSON message to the `actions/broker.py` process. Again, acting as a bridge between the web application and the back-end monitoring application.
 
 Recovering from RethinkDB failures, when RethinkDB servers are experiencing issues in it's current configuration the RethinkDB instance may become read only until the other nodes are automatically recovered. During this time being read only monitors and reactions are unable to write historical logs of execution. During this time those processes will write those logs to Redis. When the bridge process is starting it will read the Redis keys associated with these logs and if there is data it will process them and store them into RethinkDB; essentially becoming a write behind process.
 
@@ -117,19 +117,19 @@ The `check()` function will return either `True` for true or `False` for false. 
 
 The entire CloudRoutes Availability Monitor design is built to scale. The Worker processes are design to run in large numbers, currently in production each monitoring zone is running approximately 25 worker processes. The Broker facilitates this, by having each Control process route though the Broker we are able to fully utilize each worker process and able to distribute monitor executions efficiently. The Control processes are the only singleton, but these processes are unique for each monitoring zone. It is simple enough to add monitoring zones as needed, if the performance of the Control process is unable to keep up with demand the answer is to simply add additional monitoring zones.
 
-### CRAS - CloudRoutes Action Service
+### ACTIONS - CloudRoutes Action Service
 
-The CloudRoutes Action Service or CRAS is designed to perform the "Reaction" aspect of Runbook's Monitoring and Reacting. Like the MONITORS there are two main programs with CRAS, `cras/broker.py` or CRAS Broker and `cras/actioner.py` or CRAS Actioner.
+The CloudRoutes Action Service or ACTIONS is designed to perform the "Reaction" aspect of Runbook's Monitoring and Reacting. Like the MONITORS there are two main programs with ACTIONS, `actions/broker.py` or ACTIONS Broker and `actions/actioner.py` or ACTIONS Actioner.
 
 #### Broker
 
-Like the MONITORS Broker the CRAS Broker simply receives JSON messages from the MONITORS Worker or BRIDGE Bridge processes and forwards them to a CRAS Actioner process. This facilitates the ability for multiple monitor results to be processed at the same time and from multiple machines. Like the MONITORS broker while currently this process is a single process in each datacenter it does not necessarily require this. To scale the performance of monitor result processing multiple Brokers could be launched.
+Like the MONITORS Broker the ACTIONS Broker simply receives JSON messages from the MONITORS Worker or BRIDGE Bridge processes and forwards them to a ACTIONS Actioner process. This facilitates the ability for multiple monitor results to be processed at the same time and from multiple machines. Like the MONITORS broker while currently this process is a single process in each datacenter it does not necessarily require this. To scale the performance of monitor result processing multiple Brokers could be launched.
 
 #### Actioner
 
-The CRAS Actioner process is the process that performs reaction tasks. Like the MONITORS worker the code to perform a reaction is stored within modules in the `monitors/` directory. An example of this would be the `monitors/enotify` module which handles email notification reactions.
+The ACTIONS Actioner process is the process that performs reaction tasks. Like the MONITORS worker the code to perform a reaction is stored within modules in the `monitors/` directory. An example of this would be the `monitors/enotify` module which handles email notification reactions.
 
-When the CRAS Actioner process receives the JSON message from the MONITORS Worker process it will first look-up the monitor from Redis and then RethinkDB. If the RethinkDB request does not return a result due to a RethinkDB error the monitor is flagged as a `cache-only` monitor. The idea behind this is that even if RethinkDB is down the monitor should still be actioned to ensure that Runbook is providing it's function of protecting user environments.
+When the ACTIONS Actioner process receives the JSON message from the MONITORS Worker process it will first look-up the monitor from Redis and then RethinkDB. If the RethinkDB request does not return a result due to a RethinkDB error the monitor is flagged as a `cache-only` monitor. The idea behind this is that even if RethinkDB is down the monitor should still be actioned to ensure that Runbook is providing it's function of protecting user environments.
 
 Each monitor JSON message has a list of reactions associated with that monitor. After looking up he monitor the Actioner process will loop through these reactions. The Actioner will look-up reaction details first from Redis and secondly from RethinkDB following the same process as the monitor data look-ups. In this case, the Actioner will compare the `lastrun` time from both results and utilize the newest. This is to ensure that `frequency` settings within the reaction are honored if the reaction was executed from another datacenter.
 
