@@ -7,7 +7,7 @@ sleep: 30
 redis_host: localhost
 redis_port: 6379
 redis_db: 0
-redis_password: 
+redis_password:
 ## Rethink Config
 rethink_host: localhost
 rethink_port: 28015
@@ -17,24 +17,11 @@ rethink_db: "crdb"
 sink_ip: 127.0.0.1
 sink_port: 40301
 sink_worker_port: 40302
-## Maximum time for monitor execution
-max_monitor_time: 600
-default_actions:
-  - logit-monitor
-  - logit-events
-  - chstatus
-  - timetracking
-reaction_meta:
-  - logit-reaction
-  - update-lastrun
 ## History Retention
 history_retention: 18000
 ## MailChimp
 mailchimp_api_key: "update_me!"
 mailchimp_list_id: "update_me!"
 mailchimp_api_url: "update_me!"
-## Mandrill
-mandrill_api_url: "https://mandrillapp.com/api/1.0/"
-mandrill_api_key: "update_me!"
 ## Logging
 use_syslog: true

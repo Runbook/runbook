@@ -1,7 +1,6 @@
 ## Bridge Configuration
 stathat_key: "update_me!"
 envname: "[Alpha]"
-dbqueue: "update_me!"
 sleep: 30
 ## Redis Config
 redis_host: localhost
