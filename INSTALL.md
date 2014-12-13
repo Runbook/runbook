@@ -55,38 +55,13 @@ There is a `create_db.py` script for initializing RethinkDB. Create the database
 $ python create_db.py src/web/instance/web.cfg.default
 ```
 
-### Running for the first time
+### Run all processes
 
-With rethinkDB and redis running...
-
-1) Run web processes (src/web/web.py)
-
-```sh
-$ python src/web/web.py instance/web.cfg.default
+```
+sh run.sh
 ```
 
-2) Run control process (src/monitors/control.py)
-
-```sh
-$ python src/monitors/control.py src/monitors/config/control.yml.5min.default
-```
-
-3) Run broker and worker (src/monitors/broker.py and src/monitors/worker.py)
-
-```sh
-$ python src/monitors/broker.py src/monitors/config/main.yml.default
-$ python src/monitors/worker.py src/monitors/config/main.yml.default
-```
-
-4) Run bridge, broker, and actioner (src/bridge/bridge.py, src/actions/broker.py, src/actions/actioner.py)
-
-```sh
-$ python src/bridge/bridge.py src/bridge/config/config.yml.default
-$ python src/actions/broker.py src/bridge/config/config.yml.default
-$ python src/actions/actioner.py src/actions/config/config.yml.default
-```
-
-Now you can launch your browser and point it to `http://localhost:8000/signup`. Signup, create a monitor and a reaction, watch them being executed.
+Now you can launch your browser and point it to http://localhost:8000/signup. Signup, create a monitor and a reaction, and then watch them execute.
 
 ### Run Tests
 
@@ -103,31 +78,3 @@ $ python src/web/cov.py
 ```
 
 > Tests only cover "src/web" right now.
-
-## Once everything is working fine
-
-You can now use these 4 tmux scripts which run databases and other 7 processes with default settings with panes splitted.*You should have [tmux](http://tmux.sourceforge.net) installed for these to work.*
-
-Run databases and web:
-
-```sh
-$ ./tmux_1_web_and_databases.sh
-```
-
-Run all monitors processes:
-
-```sh
-$ ./tmux_2_monitors.sh
-```
-
-Run all bridge processes:
-
-```sh
-$ ./tmux_3_bridge.sh
-```
-
-Run all action processes:
-
-```sh
-$ ./tmux_4_actions.sh
-```
