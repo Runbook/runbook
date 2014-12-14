@@ -88,7 +88,7 @@ def emailNotify(redata, jdata, tfile, config):
 
     data = {}
     templateLoader = jinja2.FileSystemLoader(
-        searchpath="/data/bridge/templates/")
+        searchpath="/data/actions/templates/")
     templateEnv = jinja2.Environment(loader=templateLoader)
     template = templateEnv.get_template(tfile)
 
@@ -100,13 +100,13 @@ def emailNotify(redata, jdata, tfile, config):
         "message": {
             "text": msg,
             "from_email": "noreply@runbook.io",
-            "from_name" : "Runbook Notifications",
-            "subject" : "Monitor Alerts",
-            "to" : [
-                { "email": redata['data']['email'] }
+            "from_name": "Runbook Notifications",
+            "subject": "Monitor Alerts",
+            "to": [
+                {"email": redata['data']['email']}
             ]
         },
-        "async" : True
+        "async": True
     }
 
     payload = json.dumps(mandrill_data)
@@ -116,8 +116,8 @@ def emailNotify(redata, jdata, tfile, config):
     except:
         return False
     if result.status_code >= 200 and result.status_code <= 299:
-      return True
+        return True
     else:
-      line = "enotify: Got status code %d from mandrill for monitor %s" % (
+        line = "enotify: Got status code %d from mandrill for monitor %s" % (
             result.status_code, jdata['cid'])
-      return False
+        return False
