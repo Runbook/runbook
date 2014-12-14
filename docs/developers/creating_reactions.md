@@ -159,13 +159,18 @@ A good reference file would be the [aws-ec2restart](https://github.com/asm-produ
 
 #### How Reactions are called
 
-In each datacenter/monitoring zone there is a process running that is sometimes referred to as **"the sink"**, this process is executing [actions/actioner.py](https://github.com/asm-products/cloudroutes-service/blob/master/actions/actioner.py). This process will bind a port and listen for [ZeroMQ](http://zeromq.org/) messages. These messages are the results of health checks from both the web application and [actions/worker.py](https://github.com/asm-products/cloudroutes-service/blob/master/actions/worker.py).
+After a monitor process has finished performing it's taks the monitor will send the results in JSON format to a process called "the sink" this process is a broker process which receives the messages and then forwards them to an [actioning worker](https://github.com/asm-products/cloudroutes-service/blob/develop/src/actions/actioner.py). This process will read the JSON message and determine which reactions it should process. The JSON message contains a list of reaction IDs, when the actioner processes this list it will first lookup the details of the reaction from Redis and lookup the details from RethinkDB. If he RethinkDB cluster is unavailable for that read request the actioner will utilize the Redis cache for any reaction details it needs. This cache may not be the latest and greatest information but it will allow the system to perform the necessary steps with the RethinkDB cluster down.
 
-When the `actioner.py` receives a ZeroMQ message it converts the JSON message into a dictionary. The `actioner.py` will then look up details from Redis and RethinkDB for both the Monitor and all associated Reactions. For each Reaction defined in the Monitor it will load the Reaction module `actions/<short-name>` and execute either the `false` or `true` methods.
+All reactions are modules to the actioning system; each module is located in `actions/`. After looking up the details of a reaction the actioner will import the module specified by the `short-name` defined. For example, the Cloudflare Remove IP reaction is loaded by importing `actions.cloudflare-ip-remove`. After importing the module the actioner will call the `action()` method defined in that module. The `action()` method is a keyword arguments defined method. When the actioner calls this method it specifies values for `redata`, `jdata, `rdb_server`, `r_server` and `config`.
 
-When a Monitor is true, `actioner.py` will call the Reaction's `true` method. When a Monitor is false, `actioner.py` will call the `false` method.
+    try:
+        react = reaction.action(redata=kwargs['redata'], jdata=kwargs['jdata'],
+            rdb=kwargs['rdb'], r_server=kwargs['r_server'], config=kwargs['config'])
+    except Exception as e:
+        logger.error("Got error when attempting to run reaction %s for monitor %s" % (
+            redata['rtype'], jdata['cid']))
 
-The `actioner.py` process calls these methods with 4 objects: `redata`, `jdata`, `rdb_server` and `r_server`. The `redata` object contains a dictionary of the specific Reaction pulled from the database/cache. The `jdata` object contains a dictionary of the JSON message received with some additional fields required for executing Reactions. The `rdb_server` is an object required for the connection to the RethinkDB instance. The `r_server` is an object required for the connection to the Redis instance.
+The `redata` object contains a dictionary of the specific Reaction pulled from the database/cache. The `jdata` object contains a dictionary of the JSON message received with some additional fields required for executing Reactions. The `rdb_server` is an object required for the connection to the RethinkDB instance. The `r_server` is an object required for the connection to the Redis instance. The `config` object is a dictionary that contains values loaded on start from the actioner's configuration file.
 
 Below are examples of the `redata` and `jdata` dictionaries.
 
@@ -235,7 +240,7 @@ Depending on the type of monitor the `data` key may contain different keys and v
 
 #### Processing reactions
 
-Once `actioner.py` invokes the `false` or `true` method from a Reaction, it is up to the Reaction itself to determine what it should do. The decision on whether the Reaction should actually be executed or not depends on the configuration of each action and is placed solely on the Reaction's code. While this does vary from Reaction to Reaction, there are a couple of set rules for processing Reactions.
+Once `actioner.py` invokes the `action` method from a Reaction, it is up to the Reaction itself to determine what it should do. The decision on whether the Reaction should actually be executed or not depends on the configuration of each action and is placed solely on the Reaction's code. While this does vary from Reaction to Reaction, there are a couple of set rules for processing Reactions.
 
 1) The Reaction must honor trigger and frequency settings
 
@@ -247,27 +252,29 @@ Some Reactions may require additional processing rules. Each Reaction is free to
 
 The below example is an excerpt of the [aws-ec2restart](https://github.com/asm-products/cloudroutes-service/blob/master/actions/actions/aws-ec2restart/__init__.py) Reaction.
 
-    def false(redata, jdata, rdb, r_server):
-      ''' This method will be called when a monitor has false '''
-      run = True
-      ## Check for Trigger
-      if redata['trigger'] > jdata['failcount']:
-        run = False
+    def action(**kwargs):
+        ''' This method is called to action a reaction '''
+        redata = kwargs['redata']
+        jdata = kwargs['jdata']
+        run = True
+        # Check for Trigger
+        if redata['trigger'] > jdata['failcount']:
+            run = False
+    
+        # Check for lastrun
+        checktime = time.time() - float(redata['lastrun'])
+        if checktime < redata['frequency']:
+            run = False
+    
+        if redata['data']['call_on'] not in jdata['check']['status']:
+            run = False
+    
+        if run:
+            return actionEC2(redata, jdata)
+        else:
+            return None
 
-      ## Check for lastrun
-      checktime = time.time() - float(redata['lastrun'])
-      if checktime < redata['frequency']:
-        run = False
-
-      if redata['data']['call_on'] == 'true':
-        run = False
-
-      if run:
-        return actionEC2(redata, jdata)
-      else:
-        return None
-
-The above is a simple example of how to perform the above processing rules.
+The above is a simple example of how to perform the processing rules.
 
 2) The return code is important
 
