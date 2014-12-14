@@ -12,6 +12,7 @@ import syslog
 def action(**kwargs):
     ''' This method is called to action a reaction '''
     updateStathat(kwargs['jdata'])
+    return True
 
 
 def updateStathat(jdata):
