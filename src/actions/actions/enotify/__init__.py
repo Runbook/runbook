@@ -88,7 +88,7 @@ def emailNotify(redata, jdata, tfile, config):
 
     data = {}
     templateLoader = jinja2.FileSystemLoader(
-        searchpath="/data/actions/templates/")
+        searchpath="./templates/")
     templateEnv = jinja2.Environment(loader=templateLoader)
     template = templateEnv.get_template(tfile)
 
