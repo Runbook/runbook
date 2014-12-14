@@ -225,6 +225,7 @@ while True:
         # Check if status is changing and reset counter
         if jdata['check']['prev_status'] in jdata['check']['status']:
             jdata['failcount'] = results['failcount']
+            jdata['prev_failcount'] = results['failcount']
         else:
             jdata['prev_failcount'] = results['failcount']
             jdata['failcount'] = 0

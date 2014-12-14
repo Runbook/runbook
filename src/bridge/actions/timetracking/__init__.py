@@ -9,17 +9,9 @@ import stathat
 import time
 import syslog
 
-
-def false(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has false '''
-    updateStathat(jdata)
-    return True
-
-
-def true(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has passed '''
-    updateStathat(jdata)
-    return True
+def action(**kwargs):
+    ''' This method is called to action a reaction '''
+    updateStathat(kwargs['jdata'])
 
 
 def updateStathat(jdata):
