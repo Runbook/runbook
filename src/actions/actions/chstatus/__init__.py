@@ -9,56 +9,24 @@ import rethinkdb as r
 from rethinkdb.errors import RqlRuntimeError, RqlDriverError
 import syslog
 
-
-def false(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has false '''
-    if jdata['check']['prev_status'] != "false":
-        if jdata['check']['status'] == "web-false":
-            result = chStatus(jdata['cid'], "web-false", rdb, r_server)
-            # Manuals are always increased
-            incFailcount(jdata['cid'], jdata['failcount'], rdb, r_server)
+def action(**kwargs):
+    ''' This method is called to action a reaction '''
+    jdata = kwargs['jdata']
+    rdb = kwargs['rdb']
+    r_server = kwargs['r_server']
+    if jdata['check']['prev_status'] != jdata['check']['status']:
+        chStatus(jdata['cid'], jdata['check']['status'], rdb, r_server)
+        if "web" in jdata['check']['status']:
+            # Web Checks always get an increased failcount
+            incFailcount(jdata['cid'],
+                jdata['prev_failcount'], rdb, r_server)
         else:
-            result = chStatus(jdata['cid'], "false", rdb, r_server)
-            # Reset failcounter
+            # Reset failcount as status is different
             resetFailcount(jdata['cid'], rdb, r_server)
-        if result:
-            line = "chstatus: Setting monitor %s status to false" % jdata['cid']
-            syslog.syslog(syslog.LOG_INFO, line)
-            return True
-        else:
-            line = "chstatus: Error setting monitor %s status to false" % jdata['cid']
-            syslog.syslog(syslog.LOG_ERR, line)
-            return False
     else:
-        line = "chstatus: skipping status change as monitor %s status is already false" % jdata['cid']
-        syslog.syslog(syslog.LOG_INFO, line)
-        # Auto increase failcount which isn't just for fails
-        incFailcount(jdata['cid'], jdata['failcount'], rdb, r_server)
-
-    return True
-
-
-def true(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has passed '''
-    if jdata['check']['prev_status'] != "true":
-        result = chStatus(jdata['cid'], "true", rdb, r_server)
-        # Reset failcounter
-        resetFailcount(jdata['cid'], rdb, r_server)
-        if result:
-            line = "chstatus: Setting monitor %s status to true" % jdata[
-                'cid']
-            syslog.syslog(syslog.LOG_INFO, line)
-            return True
-        else:
-            line = "chstatus: Error setting monitor %s status to true" % jdata['cid']
-            syslog.syslog(syslog.LOG_ERR, line)
-            return False
-    else:
-        # Auto increase failcount which isn't just for fails
-        incFailcount(jdata['cid'], jdata['failcount'], rdb, r_server)
-        line = "chstatus: skipping status change as monitor %s status is already true" % jdata['cid']
-        syslog.syslog(syslog.LOG_INFO, line)
-
+        # Increase failcount for each returned status
+        incFailcount(jdata['cid'],
+            jdata['prev_failcount'], rdb, r_server)
     return True
 
 

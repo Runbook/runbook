@@ -11,8 +11,11 @@ import json
 import base64
 import requests
 
-def false(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has false '''
+
+def action(**kwargs):
+    ''' This method is called to action a reaction '''
+    redata = kwargs['redata']
+    jdata = kwargs['jdata']
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -23,43 +26,16 @@ def false(redata, jdata, rdb, r_server):
     if checktime < redata['frequency']:
         run = False
 
-    # Check if reaction should run on fails or true
-    if redata['data']['call_on'] == 'true':
+    if redata['data']['call_on'] not in jdata['check']['status']:
         run = False
 
-    # If all checks out run it, or say i skipped
     if run:
-        return action(redata, jdata)
+        return callAction(redata, jdata)
     else:
         return None
 
 
-
-def true(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has passed '''
-    run = True
-    # Check for Trigger
-    if redata['trigger'] > jdata['failcount']:
-        run = False
-
-    # Check for lastrun
-    checktime = time.time() - float(redata['lastrun'])
-    if checktime < redata['frequency']:
-        run = False
-
-    # Check if reaction should run on fails or true
-    if redata['data']['call_on'] == 'false':
-        run = False
-
-    # If all checks out run it, or say i skipped
-    if run:
-        return action(redata, jdata)
-    else:
-        return None
-
-
-
-def action(redata, jdata):
+def callAction(redata, jdata):
     ''' Perform Heroku Actions '''
     # Ready API Request
     # Generate Base64 encoded API Key

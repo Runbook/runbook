@@ -11,8 +11,10 @@ import json
 import time
 
 
-def false(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has false '''
+def action(**kwargs):
+    ''' This method is called to action a reaction '''
+    redata = kwargs['redata']
+    jdata = kwargs['jdata']
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -23,35 +25,13 @@ def false(redata, jdata, rdb, r_server):
     if checktime < redata['frequency']:
         run = False
 
-    if redata['data']['call_on'] == 'true':
+    if redata['data']['call_on'] not in jdata['check']['status']:
         run = False
 
     if run:
         return call_action(redata, jdata)
     else:
         return None
-
-
-def true(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has passed '''
-    run = True
-    # Check for Trigger
-    if redata['trigger'] > jdata['failcount']:
-        run = False
-
-    # Check for lastrun
-    checktime = time.time() - float(redata['lastrun'])
-    if checktime < redata['frequency']:
-        run = False
-
-    if redata['data']['call_on'] == 'false':
-        run = False
-
-    if run:
-        return call_action(redata, jdata)
-    else:
-        return None
-
 
 def call_action(redata, jdata):
     ''' Perform actual call '''
