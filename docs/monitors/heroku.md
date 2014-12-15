@@ -1,25 +1,27 @@
-The Heroku monitors allow users to monitor Heroku applications and instances.
+The Heroku monitors allow users to monitor [Heroku](https://www.heroku.com) applications and instances.
 
 ---
 
 ## Dyno Status
 
-This monitor uses the Heroku platform API to poll the state of a all dynos attached to the specified application. If the returned state is anything other than `up` or `idle` on any dyno, the monitor is marked as false. This monitor can be utilized to detect application crashes or infrastructure issues within Heroku.
+The **Dyno Status** Monitor uses the Heroku platform API to poll the state of all dynos attached to the specified application. If the returned state is anything other than `up` or `idle` on any dyno, the Monitor is marked as false. This Monitor can be utilized to detect application crashes or infrastructure issues within Heroku.
 
 ---
 
 ## Dyno Status (Single)
 
-This monitor uses the Heroku platform API to poll the state of a single dyno. If the returned state is anything other than `up` or `idle`, the monitor is marked as false. This monitor can be utilized to detect application crashes or infrastructure issues within Heroku.
+The **Dyno Status (Single)** Monitor uses the Heroku platform API to poll the state of a single dyno. If the returned state is anything other than `up` or `idle`, the Monitor is marked as false. This Monitor can be utilized to detect application crashes or infrastructure issues within Heroku.
 
 ---
 
 ## Dyno Not Idle
 
-This monitor uses the Heroku platform API to poll the state of all dynos attached to the specified application. If the returned state of any dyno is `idle` the monitor will be marked as false. This monitor can be used to detect when dyno's are over provisioned and not receiving enough traffic.
+The **Dyno Not Idle** Monitor uses the Heroku platform API to poll the state of all dynos attached to the specified application. If the returned state of any dyno is `idle`, the Monitor will be marked as false. This Monitor can be used to detect when dynos are over provisioned and not receiving enough traffic.
 
 ---
 
 ## Dyno Not Idle (Single)
 
-This monitor uses the Heroku platform API to poll the state of a single dyno. If the returned state of any dyno is `idle` the monitor will be marked as false. This monitor can be used to detect when dyno's are over provisioned and not receiving enough traffic.
+The **Dyno Not Idle (Single)** Monitor uses the Heroku platform API to poll the state of a single dyno. If the returned state of any dyno is `idle`, the Monitor will be marked as false. This Monitor can be used to detect when dynos are over provisioned and not receiving enough traffic.
+
+---
