@@ -11,6 +11,7 @@ pages:
 - ['monitors/index.md', 'Monitors', 'Overview']
 - ['monitors/network-availability.md', 'Monitors', "Network Availability"]
 - ['monitors/web-applications.md', 'Monitors', "Web Applications"]
+- ['monitors/ssl.md', 'Monitors', "SSL Certificates"]
 - ['monitors/heroku.md', 'Monitors', "Heroku"]
 - ['monitors/datadog.md', 'Monitors', "Datadog"]
 - ['monitors/papertrail.md', 'Monitors', "Papertrail"]
