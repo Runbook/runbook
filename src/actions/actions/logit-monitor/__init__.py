@@ -11,18 +11,13 @@ import syslog
 import time
 import json
 
-
-def false(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has false '''
-    result = logit(jdata, rdb, r_server)
-    return result
-
-
-def true(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has passed '''
-    result = logit(jdata, rdb, r_server)
-    return result
-
+def action(**kwargs):
+    ''' This method is called to action a reaction '''
+    redata = kwargs['redata']
+    jdata = kwargs['jdata']
+    rdb = kwargs['rdb']
+    r_server = kwargs['r_server']
+    return logit(jdata, rdb, r_server)
 
 def logit(jdata, rdb, r_server):
     ''' This method will be called to log monitor transaction history '''

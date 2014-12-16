@@ -10,18 +10,11 @@ from rethinkdb.errors import RqlRuntimeError, RqlDriverError
 import time
 import syslog
 
-
-def false(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has false '''
-    if redata['reaction_return'] is True:
-        chlastrun(redata['id'], rdb, r_server)
-        return True
-    else:
-        return None
-
-
-def true(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has passed '''
+def action(**kwargs):
+    ''' This method is called to action a reaction '''
+    redata = kwargs['redata']
+    rdb = kwargs['rdb']
+    r_server = kwargs['r_server']
     if redata['reaction_return'] is True:
         chlastrun(redata['id'], rdb, r_server)
         return True

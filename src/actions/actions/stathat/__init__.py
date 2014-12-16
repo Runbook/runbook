@@ -9,6 +9,16 @@ import syslog
 import stathat
 import time
 
+def action(**kwargs):
+    ''' This method is called to action a reaction '''
+    # This method can be used for legacy reactions that have
+    # a different function based on true/false
+    if "false" in kwargs['jdata']['check']['status']:
+        return false(kwargs['redata'], kwargs['jdata'],
+            kwargs['rdb'], kwargs['r_server'])
+    if "true" in kwargs['jdata']['check']['status']:
+        return true(kwargs['redata'], kwargs['jdata'],
+            kwargs['rdb'], kwargs['r_server'])
 
 def false(redata, jdata, rdb, r_server):
     ''' This method will be called when a monitor has false '''

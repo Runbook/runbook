@@ -12,29 +12,19 @@ import time
 import datetime
 import json
 
+def action(**kwargs):
+    ''' This method is called to action a reaction '''
+    redata = kwargs['redata']
+    jdata = kwargs['jdata']
+    rdb = kwargs['rdb']
+    r_server = kwargs['r_server']
 
-def false(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has false '''
     run = True
-    if "false" in jdata['check']['prev_status']:
-        run = False
+    if jdata['check']['prev_status'] == jdata['check']['status']:
+         run = False 
 
     if run:
-        result = logit(jdata, rdb, r_server)
-        return result
-    else:
-        return None
-
-
-def true(redata, jdata, rdb, r_server):
-    ''' This method will be called when a monitor has passed '''
-    run = True
-    if "true" in jdata['check']['prev_status']:
-        run = False
-
-    if run:
-        result = logit(jdata, rdb, r_server)
-        return result
+        return logit(jdata, rdb, r_server)
     else:
         return None
 
