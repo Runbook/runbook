@@ -1,1 +1,0 @@
-ps -ef | grep "python src" | awk '{print $2}' | xargs kill
