@@ -1,10 +1,12 @@
 SECRET_KEY = "update_me!"
+BIND_IP = "0.0.0.0"
+BIND_PORT = 8080
 CSRF_ENABLED = True
 SALT = "update_me!"
 DBHOST = "localhost"
 DBPORT = "28015"
 DATABASE = "crdb"
-DBAUTHKEY = "cloudroutes"
+DBAUTHKEY = ""
 DEBUG = True
 COOKIE_TIMEOUT = "1200"
 ENVNAME = "[Alpha]"

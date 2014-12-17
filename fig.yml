@@ -1,0 +1,36 @@
+db:
+  image: dockerfile/rethinkdb
+redis:
+  image: dockerfile/redis
+web:
+  build: src/web/
+  command: bash /code/bootstrap.sh
+  volumes:
+    - src/web:code:ro
+  ports:
+    - "8080:8080"
+  links:
+    - db
+bridge:
+  build: src/bridge/
+  command: python /code/bridge.py /code/config/config.yml.example
+  volumes:
+    - src/bridge:code:ro
+  links:
+    - redis
+    - db  
+    - actionBroker
+actionBroker:
+  build: src/actions/
+  command: python /code/broker.py /code/config/config.yml.example
+  volumes:
+    - src/actions:code:ro
+actioner:
+  build: src/actions/
+  command: python /code/actioner.py /code/config/config.yml.example
+  volumes:
+    - src/actions:code:ro
+  links:
+    - redis
+    - db
+    - actionBroker

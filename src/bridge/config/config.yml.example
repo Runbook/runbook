@@ -5,13 +5,13 @@ dbqueue: "update_me!"
 sleep: 30
 ## Redis Config
 redis_host: localhost
-redis_port: 546
+redis_port: 3679
 redis_db: "update_me!"
 redis_password: "update_me!"
 ## Rethink Config
 rethink_host: localhost
 rethink_port: 28015
-rethink_authkey: "update_me!"
+rethink_authkey: False
 rethink_db: "crdb"
 ## Sink Config
 sink_ip: 127.0.0.1
@@ -24,4 +24,4 @@ mailchimp_api_key: "update_me!"
 mailchimp_list_id: "update_me!"
 mailchimp_api_url: "update_me!"
 ## Logging
-use_syslog: true
+use_syslog: False
