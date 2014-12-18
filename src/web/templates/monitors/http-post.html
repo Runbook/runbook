@@ -1,0 +1,166 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+      {% if data['edit'] %}
+        <h1><i class="fa fa-eye-slash fa-1x"></i> Manage Monitor</h1>
+      {% else %}
+        <h1><i class="fa fa-eye-slash fa-1x"></i> Add Monitor</h1>
+      {% endif %}
+      </div>
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <div class="panel-title">
+            HTTP Post
+            </div>
+          </div>
+          <div class="panel-body">
+            <form action="{{ data['url'] }}" method="post" name="http-oist" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+
+            {% include 'monitors/base.html' %}
+            {% include 'monitors/timer.html' %}
+            {% include 'monitors/datacenter.html' %}
+            <hr>
+
+            <div class="form-group">
+                <label for="URL" class="col-sm-4 control-label">URL</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="http-post-url" class="btn btn-default" rel="popover" data-content="Enter the target HTTP/S url including the page to request (example: http://127.0.0.1/status)." title="URL">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.url(class_="form-control", value=data['monitor']['data']['url']) }}
+                        {% else %}
+                            {{ form.url(class_="form-control", placeholder="http://url") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Host" class="col-sm-4 control-label">Host</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="http-post-host" class="btn btn-default" rel="popover" data-content="Specify the domain name to request (example: runbook.io)." title="Host">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.host(class_="form-control", value=data['monitor']['data']['host']) }}
+                        {% else %}
+                            {{ form.host(class_="form-control", placeholder="example.com") }}
+                        {% endif %}
+                    </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                  <label for="Payload" class="col-sm-4 control-label">Payload</label>
+                  <div class="col-sm-8">
+                      <div class="input-group">
+                          <span class="input-group-btn">
+                              <button type="button" id="http-post-payload" class="btn btn-default" rel="popover" data-content="Payload is the data sent with the POST request" title="Payload">
+                                  <i class="fa fa-question"></i>
+                              </button>
+                          </span>
+                          {% if data['edit'] %}
+                              {{ form.payload(class_="form-control", value=data['monitor']['data']['payload']) }}
+                          {% else %}
+                              {{ form.payload(class_="form-control", placeholder="Sample data") }}
+                          {% endif %}
+                      </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Extra headers (in request)" class="col-sm-4 control-label">Extra headers (in request)</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" id="http-post-extra_headers" class="btn btn-default" rel="popover" data-content="Extra headers to pass to HTTP request. Enter one header per line as key:value" title="Extra headers (in request)">
+                                    <i class="fa fa-question"></i>
+                                </button>
+                            </span>
+                            {% if data['edit'] %}
+                                {{ form.extra_headers(class_="form-control", value=data['monitor']['data']['extra_headers']) }}
+                            {% else %}
+                                {{ form.extra_headers(class_="form-control", placeholder="header_key: header_value") }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Response Keyword" class="col-sm-4 control-label">Keyword to match</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" id="http-post-response_regex" class="btn btn-default" rel="popover" data-content="Keyword matched in response. Can be a simple string or a regular expression. Case-sensitive." title="Response Keyword">
+                                    <i class="fa fa-question"></i>
+                                </button>
+                            </span>
+                            {% if data['edit'] %}
+                                {{ form.response_regex(class_="form-control", value=data['monitor']['data']['response_regex']) }}
+                            {% else %}
+                                {{ form.response_regex(class_="form-control", placeholder="Foo") }}
+                            {% endif %}
+                        </div>
+                    </div>
+                  </div>
+
+                <div class="form-group">
+                    <label for="Response headers to match" class="col-sm-4 control-label">Response headers to match</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" id="http-post-response_headers" class="btn btn-default" rel="popover" data-content="Headers to match in response. Only exact match. Enter one header per line as key:value. Note that headers are not case-sensitive." title="Response headers to match">
+                                    <i class="fa fa-question"></i>
+                                </button>
+                            </span>
+                            {% if data['edit'] %}
+                                {{ form.response_headers(class_="form-control", value=data['monitor']['data']['response_headers']) }}
+                            {% else %}
+                                {{ form.response_headers(class_="form-control", placeholder="header_key: header_value") }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      <div class="panel-group" id="accordion">
+    {% include 'monitors/docs/url-details.html' %}
+
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}
