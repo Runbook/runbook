@@ -1,27 +1,27 @@
 ## Bridge Configuration
-stathat_key: "update_me!"
-envname: "[Alpha]"
-dbqueue: "update_me!"
+stathat_key: "update_me"
+envname: "[Dev-Fork]"
+dbqueue: dc1queue
 sleep: 30
 ## Redis Config
-redis_host: localhost
+redis_host: redis_ip
 redis_port: 3679
-redis_db: "update_me!"
-redis_password: "update_me!"
+redis_db: 0
+redis_password: False
 ## Rethink Config
-rethink_host: localhost
+rethink_host: rethink_host
 rethink_port: 28015
 rethink_authkey: False
 rethink_db: "crdb"
 ## Sink Config
-sink_ip: 127.0.0.1
-sink_port: "update_me!"
-sink_worker_port: "update_me!"
+sink_ip: sink_host
+sink_port: 6000
+sink_worker_port: 6001
 ## History Retention
 history_retention: 18000
 ## MailChimp
-mailchimp_api_key: "update_me!"
-mailchimp_list_id: "update_me!"
-mailchimp_api_url: "update_me!"
+mailchimp_api_key: "update_me"
+mailchimp_list_id: "update_me"
+mailchimp_api_url: "update_me"
 ## Logging
 use_syslog: False

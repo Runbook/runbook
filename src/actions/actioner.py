@@ -65,9 +65,14 @@ except:
 
 # RethinkDB Server
 try:
-    rdb_server = r.connect(
-        host=config['rethink_host'], port=config['rethink_port'],
-        auth_key=config['rethink_authkey'], db=config['rethink_db'])
+    if config['rethink_authkey']:
+        rdb_server = r.connect(
+            host=config['rethink_host'], port=config['rethink_port'],
+            auth_key=config['rethink_authkey'], db=config['rethink_db'])
+    else:
+        rdb_server = r.connect(
+            host=config['rethink_host'], port=config['rethink_port'],
+            db=config['rethink_db'])
     logger.info("Connected to Rethinkdb on port %s" % config['rethink_port'])
     cacheonly = False
 except (RqlDriverError, RqlRuntimeError, socket.error) as e:

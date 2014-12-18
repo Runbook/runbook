@@ -13,7 +13,7 @@ web:
     - db
 bridge:
   build: src/bridge/
-  command: python /code/bridge.py /code/config/config.yml.example
+  command: bash /code/bootstrap.sh
   volumes:
     - src/bridge:code:ro
   links:
@@ -22,15 +22,74 @@ bridge:
     - actionBroker
 actionBroker:
   build: src/actions/
-  command: python /code/broker.py /code/config/config.yml.example
+  command: bash /code/bootstrap-broker.sh
   volumes:
     - src/actions:code:ro
+  ports:
+    - 6000
+    - 6001
 actioner:
   build: src/actions/
-  command: python /code/actioner.py /code/config/config.yml.example
+  command: bash /code/bootstrap-actioner.sh
   volumes:
     - src/actions:code:ro
   links:
     - redis
     - db
+    - actionBroker
+monitorBroker:
+  build: src/monitors/
+  command: bash /code/bootstrap-broker.sh
+  volumes:
+    - src/monitors:code:ro
+  ports:
+    - 5879
+    - 5878
+monitor5min:
+  build: src/monitors/
+  command: bash /code/bootstrap-control.sh
+  volumes:
+    - src/monitors:code:ro
+  links:
+    - redis
+    - monitorBroker
+  environment:
+    MONITORINTERVAL: 5mincheck
+monitor30min:
+  build: src/monitors/
+  command: bash /code/bootstrap-control.sh
+  volumes:
+    - src/monitors:code:ro
+  links:
+    - redis
+    - monitorBroker
+  environment:
+    MONITORINTERVAL: 30mincheck
+monitor2min:
+  build: src/monitors/
+  command: bash /code/bootstrap-control.sh
+  volumes:
+    - src/monitors:code:ro
+  links:
+    - redis
+    - monitorBroker
+  environment:
+    MONITORINTERVAL: 2mincheck
+monitor30sec:
+  build: src/monitors/
+  command: bash /code/bootstrap-control.sh
+  volumes:
+    - src/monitors:code:ro
+  links:
+    - redis
+    - monitorBroker
+  environment:
+    MONITORINTERVAL: 30seccheck
+monitorWorker:
+  build: src/monitors/
+  command: bash /code/bootstrap-worker.sh
+  volumes:
+    - src/monitors:code:ro
+  links:
+    - monitorBroker
     - actionBroker

@@ -12,9 +12,9 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 RUN \
-  mkdir -p /code
+  mkdir -p /code /config
 
-ADD requirements.txt /code/requirements.txt
+ADD requirements.txt /config/requirements.txt
 
 RUN \
-  pip install -r /code/requirements.txt
+  pip install -r /config/requirements.txt
