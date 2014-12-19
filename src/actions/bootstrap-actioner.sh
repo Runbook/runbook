@@ -2,11 +2,10 @@
 ## Docker Bootstrap Script
 
 echo "Bootstrapping Application Environmental"
-echo "-------------------------------------------------"
 echo "[BOOTSTRAP] Dumping Docker Environment:"
 echo "-------------------------------------------------"
 env
-echo "-------------------------------------------------"
+
 echo "[BOOTSTRAP] Generating config file"
 echo "-------------------------------------------------"
 cp /code/config/config.yml.example /config/config.yml
@@ -18,7 +17,6 @@ sed -i "s/6000/$ACTIONBROKER_PORT_6000_TCP_PORT/" /config/config.yml
 sed -i "s/sink_host$/$ACTIONBROKER_PORT_6001_TCP_ADDR/" /config/config.yml
 sed -i "s/6001/$ACTIONBROKER_PORT_6001_TCP_PORT/" /config/config.yml
 
-echo "-------------------------------------------------"
 echo "[BOOTSTRAP] Starting actioner.py"
 echo "-------------------------------------------------"
 python /code/actioner.py /config/config.yml
