@@ -58,7 +58,7 @@ $ python create_db.py src/web/instance/web.cfg.default
 ### Run all processes
 
 ```
-sh run.sh
+$ foreman start
 ```
 
 Now you can launch your browser and point it to http://localhost:8000/signup. Signup, create a monitor and a reaction, and then watch them execute.
