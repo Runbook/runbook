@@ -1,0 +1,134 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+      {% if data['edit'] %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Manage Reaction</h1>
+      {% else %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Add Reaction</h1>
+      {% endif %}
+      </div>
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            Nexmo SMS Notification
+          </div>
+          </div>
+          <div class="panel-body">
+            <form action="{{ data['url'] }}" method="post" name="reaction-form" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+
+            {% include 'reactions/base.html' %}
+            {% include 'reactions/callon.html' %}
+
+            <hr>
+
+
+            <div class="form-group">
+                <label for="API Key" class="col-sm-4 control-label">API Key</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="nexmo-sms-notification-api_key" class="btn btn-default" rel="popover" data-content="Your Nexmo API Key" title="API Key">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.api_key(class_="form-control", value=data['reaction']['data']['api_key']) }}
+                        {% else %}
+                            {{ form.api_key(class_="form-control", placeholder="api_key") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="API Secret" class="col-sm-4 control-label">API Secret</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="nexmo-sms-notification-api_secret" class="btn btn-default" rel="popover" data-content="Your Nexmo API Secret" title="API Secret">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.api_secret(class_="form-control", value=data['reaction']['data']['api_secret']) }}
+                        {% else %}
+                            {{ form.api_secret(class_="form-control", placeholder="api_secret") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="From Address" class="col-sm-4 control-label">From Address</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="nexmo-sms-notification-from_address" class="btn btn-default" rel="popover" data-content="Sender address. See Nexmo API doc for specification." title="From Address">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.from_address(class_="form-control", value=data['reaction']['data']['from_address']) }}
+                        {% else %}
+                            {{ form.from_address(class_="form-control", placeholder="from_address") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="To Address" class="col-sm-4 control-label">To Address</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="nexmo-sms-notification-to_address" class="btn btn-default" rel="popover" data-content="Receiver address. See Nexmo API doc for specification." title="To Address">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.to_address(class_="form-control", value=data['reaction']['data']['to_address']) }}
+                        {% else %}
+                            {{ form.to_address(class_="form-control", placeholder="to_address") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      <div class="panel-group" id="accordion">
+
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}
