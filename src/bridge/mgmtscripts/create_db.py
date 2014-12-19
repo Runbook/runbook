@@ -9,6 +9,7 @@ import rethinkdb as r
 from flask import Flask
 
 configfile = os.path.join('src', 'web', 'instance', 'web.cfg')
+print configfile
 if len(sys.argv) > 1:
     configfile = sys.argv[1]
 print("Using config %s" % configfile)

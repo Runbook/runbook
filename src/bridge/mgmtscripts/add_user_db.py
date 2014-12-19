@@ -7,6 +7,8 @@ import os
 import rethinkdb as r
 from flask import Flask
 
+import time
+
 
 configfile = os.path.join('src', 'web', 'instance', 'web.cfg')
 if len(sys.argv) > 1:
@@ -23,10 +25,14 @@ if app.config.from_pyfile(configfile):
 
     userdata = {
         'username': 'test@tester.com',
+        'password': 'password456321',
         'email': 'test@tester.com',
-        'password': 'password456',
-        'company': 'company',
-        'contact': 'tester'
+        'status': 'active',
+        'company': 'runbook',
+        'contact': 'tester',
+        'acttype': 'lite-v2',
+        'creation_time': time.time(),
+        'confirmed': True
     }
 
     # add dummy user
@@ -38,9 +44,9 @@ if app.config.from_pyfile(configfile):
         print user
 
     # remove data
-    r.db(database).table('users').delete().run(conn)
+    # r.db(database).table('users').delete().run(conn)
 
     # close connection
     conn.close()
 
-    print "Done!"
+    print "User Added!"
