@@ -8,7 +8,7 @@ env
 
 echo "[BOOTSTRAP] Generating config file"
 echo "-------------------------------------------------"
-cp /code/instance/web.cfg.default /config/web.cfg
+cp /code/instance/web.cfg.example /config/web.cfg
 sed -i "s/28015/$DB_PORT_28015_TCP_PORT/" /config/web.cfg
 sed -i "s/localhost/$DB_PORT_28015_TCP_ADDR/" /config/web.cfg
 
