@@ -22,11 +22,11 @@ To make testing easier you can setup and utilize a private network. This will al
 
     $ vi Vagrantfile
 
-Find:
+**Find:**
 
       # config.vm.network "private_network", ip: "192.168.33.10"
 
-Uncomment:
+**Uncomment:**
 
       config.vm.network "private_network", ip: "192.168.33.10"
 
@@ -98,7 +98,7 @@ Sometimes during development you may want to clear the database or wipe active c
 
 To access the web application you can simply enter the IP of the vm into your browser targeting port 8080.
 
-Example:
+**Example:**
 
     http://192.168.33.10:8080
 
