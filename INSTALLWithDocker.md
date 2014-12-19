@@ -98,6 +98,9 @@ Sometimes during development you may want to clear the database or wipe active c
 
 To access the web application you can simply enter the IP of the vm into your browser targeting port 8080.
 
+Example:
+    http://192.168.33.10:8080/dashboard
+
 ### Finding the IP
 
 You can find the vagrant vm's IP via the `ip` command.
