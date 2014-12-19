@@ -100,7 +100,7 @@ To access the web application you can simply enter the IP of the vm into your br
 
 Example:
 
-    http://192.168.33.10:8080/dashboard
+    http://192.168.33.10:8080
 
 ### Finding the IP
 
