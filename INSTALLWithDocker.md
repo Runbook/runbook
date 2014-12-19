@@ -1,6 +1,6 @@
-This guide will walk you through installing and launching Runbook with Vagrant and Docker. The benefit of this setup vs. the normal installation is that you can quickly setup and destroy an isolated Runbook environment as needed with only a few commands.
+This guide will walk you through installing and launching of Runbook with Vagrant and Docker. The benefit of this setup vs. the normal installation is once setup, you can quickly setup and destroy an isolated Runbook environment as needed with only a few commands.
 
-The Vagrant setup in this guide is optional, however you will need to have an environment that supports both Docker and Fig for the docker setup.
+The Vagrant setup in this guide is optional; however you will need to have an environment that supports both Docker and Fig for the docker setup.
 
 ## Vagrant
 
@@ -93,3 +93,13 @@ Sometimes during development you may want to clear the database or wipe active c
 
     $ sudo fig kill
     $ sudo fig rm
+
+## Accessing the Web Application
+
+To access the web application you can simply enter the IP of the vm into your browser targeting port 8080.
+
+### Finding the IP
+
+You can find the vagrant vm's IP via the `ip` command.
+
+    $ ip addr show
