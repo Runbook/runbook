@@ -33,7 +33,7 @@ if app.config.from_pyfile(configfile):
     auth_key = app.config['DBAUTHKEY']
     try:
         if auth_key:
-            conn = r.connect(host, port, auth_keyi=auth_key).repl()
+            conn = r.connect(host, port, auth_key=auth_key).repl()
         else:
             conn = r.connect(host, port).repl()
     except (RqlDriverError, RqlRuntimeError, socket.error) as e:
