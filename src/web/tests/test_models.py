@@ -49,6 +49,12 @@ class TestUserModel(BaseTestCase):
             ), follow_redirects=True)
         self.assertIn('Password does not seem valid', response.data)
 
+    def test_check_if_confirmed_before_confirming(self):
+        # Ensure an "unconfimered" user is not "confirmed"
+        user = User()
+        user = user.get('username', 'test@tester.com', g.rdb_conn)
+        self.assertFalse(user.is_confirmed('username', g.rdb_conn))
+
     def test_get_by_id(self):
         # Ensure id is correct for the current/logged in user
         with self.client:

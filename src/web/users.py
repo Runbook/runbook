@@ -28,6 +28,8 @@ class User(object):
         self.subplans = 2
         self.subscription = 'Free'
         self.subscribed_to_newsletter = False
+        self.confirmed = False
+        self.confirmed_on = None
 
     def createUser(self, userdata, rdb):
         '''
@@ -57,6 +59,7 @@ class User(object):
         jsondata['subscription'] = self.subscription
         jsondata['subscribed_to_newsletter'] = self.subscribed_to_newsletter
         jsondata['creation_time'] = time.time()
+        jsondata['confirmed'] = False
 
         if self.is_active(userdata['username'], rdb):
             return 'exists'
@@ -116,6 +119,7 @@ class User(object):
             self.subplans = results['subplans']
             self.subscription = results['subscription']
             self.creation_time = results['creation_time']
+            self.confirmed = results['confirmed']
             return self
         else:
             return None
@@ -138,6 +142,14 @@ class User(object):
         else:
             self.active = False
         return self.active
+
+    def is_confirmed(self, username, rdb):
+        ''' Check if a user is confirmed or not '''
+        results = r.table('users').filter({'username': username}).run(rdb)
+        if results:
+            return self.confirmed
+        else:
+            return "No data found"
 
     def getDomains(self, rdb):
         ''' Returns a list of domain id's that this user owns '''
