@@ -66,20 +66,9 @@ Fig can be installed with python's `pip` package manager. The vagrant vm does no
 Now that Docker and Fig are installed we can use Fig to launch and manage the containers. All fig commands must be run from the same directory the `fig.yml` file is in. In our case this is the main directory for the repository.
 
     $ cd cloudroutes-service
-
-#### First time setup
-
-When first setting up a development environment or after reseting your development environment it is important to first start the web container.
-
-    $ sudo fig up -d web
-
-The web container on boot will detect if the RethinkDB database is already created or not. If not it will go ahead and create the database.
-
-#### Startup all other containers
-
-Once the web container starts you can start all containers.
-
     $ sudo fig up -d
+
+During boot the `bridge` container will run `src/bridge/mgmtscripts/create_db.py` which will connect to RethinkDB and create the required database structure.
 
 #### Reading logs/output
 
