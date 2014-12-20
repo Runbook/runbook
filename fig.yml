@@ -11,6 +11,7 @@ web:
     - "8080:8080"
   links:
     - db
+    - bridge
 bridge:
   build: src/bridge/
   command: bash /code/bootstrap.sh
@@ -37,6 +38,7 @@ actioner:
     - redis
     - db
     - actionBroker
+    - bridge
 monitorBroker:
   build: src/monitors/
   command: bash /code/bootstrap-broker.sh

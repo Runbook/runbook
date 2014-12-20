@@ -43,7 +43,7 @@ class User(object):
             "contact": "foo@bar.com""
         }
 
-        - create a new user in the RethinkDB
+        - create a new user in the RethinkDB database
         '''
         jsondata = {}
         jsondata['username'] = userdata['username']

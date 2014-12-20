@@ -22,7 +22,7 @@ before_script:
   - rethinkdb &
   - rethinkdb admin set auth cloudroutes
   - cp src/web/instance/web.cfg.default src/web/instance/web.cfg
-  - python src/web/create_db.py
+  - python src/bridge/mgmtscripts/create_db.py src/bridge/config/config.yml.default
   - python src/web/web.py &
 
 script:
