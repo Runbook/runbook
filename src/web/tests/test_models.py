@@ -101,6 +101,13 @@ class TestUserModel(BaseTestCase):
         self.assertTrue(user_test.acttype == "lite-v2")
         self.assertFalse(user_test.acttype == "pro")
 
+    # def test_generate_confirmation_token(self):
+    #     from user import token
+    #     # user = User()
+    #     # user_test = user.get('username', 'test@tester.com', g.rdb_conn)
+    #     token = token.generate_confirmation_token('test@tester.com')
+    #     self.assertTrue(token)
+
 
 if __name__ == '__main__':
     unittest.main()
