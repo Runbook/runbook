@@ -52,7 +52,7 @@ Here is a list of configuration files, that can be used for the first time to ru
 There is a `create_db.py` script for initializing RethinkDB. Create the database and required tables from the Python shell:
 
 ```sh
-$ python src/bridge/mgmtscripts/create_db.py src/web/instance/web.cfg.default
+$ python src/bridge/mgmtscripts/create_db.py src/bridge/config/config.yml.default
 ```
 
 ### Run all processes
