@@ -74,8 +74,8 @@ body {
 
 .hero-section .btn.hero-call-to-action {
   color: #fff;
-  font-size: 280% !important;
-  padding: 20px 80px !important;
+  font-size: 200%;
+  padding: 10px;
   display: block;
   max-width: 500px;
   margin: 40px auto;
@@ -84,6 +84,13 @@ body {
   -webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	-o-border-radius: 10px;
+}
+
+@media screen and (min-width: 500px) {
+  .hero-section .btn.hero-call-to-action {
+    font-size: 280%;
+    padding: 20px 80px;
+  }
 }
 
 .btn.btn-action {
