@@ -68,13 +68,13 @@ Now you can launch your browser and point it to http://localhost:8000/signup. Si
 Without coverage:
 
 ```sh
-$ python src/web/tests.py
+$ coverage run src/web/tests.py
 ```
 
 With coverage:
 
 ```sh
-$ python src/web/cov.py
+$ coverage run src/web/cov.py
 ```
 
 > Tests only cover "src/web" right now.
