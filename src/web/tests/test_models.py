@@ -122,7 +122,7 @@ class TestUserModel(BaseTestCase):
         token = generate_confirmation_token('test@tester.com', expiration=1)
         time.sleep(2)  # expire token
         email = confirm_token(token)
-        self.assertEqual(email, 'test@tester.com')
+        self.assertEqual(email, token)
 
 
 if __name__ == '__main__':
