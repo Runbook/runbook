@@ -19,7 +19,7 @@ bridge:
     - src/bridge:code:ro
   links:
     - redis
-    - db  
+    - db
     - actionBroker
 actionBroker:
   build: src/actions/
