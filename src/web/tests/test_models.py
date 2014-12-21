@@ -9,6 +9,7 @@ import unittest
 import time
 
 from flask import g, request
+from itsdangerous import SignatureExpired
 
 from base import BaseTestCase
 from users import User
@@ -119,10 +120,10 @@ class TestUserModel(BaseTestCase):
 
     def test_expired_confirmation_token(self):
         # Ensure expired token is invalid
-        token = generate_confirmation_token('test@tester.com', expiration=1)
+        token = generate_confirmation_token('test@tester.com')
         time.sleep(2)  # expire token
-        email = confirm_token(token)
-        self.assertEqual(email, token)
+        email = confirm_token(token, expiration=1)
+        self.assertFalse(email)
 
 
 if __name__ == '__main__':

@@ -10,19 +10,26 @@ from itsdangerous import URLSafeTimedSerializer
 from web import app
 
 
-def generate_confirmation_token(email, expiration=3600):
+def generate_confirmation_token(email):
     '''
-    Given a user email address and expiration (in seconds),
-    create a unique token.
+    Given a user email address, create a unique token.
     '''
-    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'], expiration)
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt=app.config['SECURITY_PASSWORD_SALT'])
 
 
-def confirm_token(token):
+def confirm_token(token, expiration=3600):
     '''
-    Given a token, as long as it has not expired an email will be returned.
+    Given a token and expiration (in seconds),
+    as long as it has not expired an email will be returned.
     '''
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-    email = serializer.loads(token, salt=app.config['SECURITY_PASSWORD_SALT'])
+    try:
+        email = serializer.loads(
+            token,
+            salt=app.config['SECURITY_PASSWORD_SALT'],
+            max_age=expiration
+        )
+    except:
+        return False
     return email
