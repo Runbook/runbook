@@ -27,7 +27,7 @@ before_script:
 
 script:
   - python src/web/test.py
-  - coverage run src/web/cov.py
+  - coverage run src/web/test.py
 
 after_success:
   coveralls
