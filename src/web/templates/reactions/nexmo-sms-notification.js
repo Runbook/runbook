@@ -5,6 +5,7 @@
         '#nexmo-sms-notification-api_secret',
         '#nexmo-sms-notification-from_address',
         '#nexmo-sms-notification-to_address',
+        '#nexmo-sms-notification-text',
       ], function(_, value) {
       $(value).popover({
         placement: 'auto bottom',

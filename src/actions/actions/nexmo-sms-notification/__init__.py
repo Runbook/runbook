@@ -20,8 +20,7 @@ def __action(**kwargs):
         api_secret = redata['data']['api_secret']
         from_address = redata['data']['from_address']
         to_address = redata['data']['to_address']
-        text = 'Monitor {monitor} with id {id} failing.'.format(
-            monitor=jdata['name'], id=jdata['cid'])
+        text = redata['data']['text']
         return call_nexmo(api_key, api_secret, from_address, to_address, text)
 
 

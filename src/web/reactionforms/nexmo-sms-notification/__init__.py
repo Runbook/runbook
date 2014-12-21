@@ -1,7 +1,7 @@
 """Reactions form class for Nexmo SMS Notification."""
 
 from wtforms import SelectField, TextField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Regexp
 from ..base import BaseReactForm
 
 
@@ -18,7 +18,11 @@ class ReactForm(BaseReactForm):
         validators=[DataRequired(message='From Address is a required field.')])
     to_address = TextField(
         'to_address',
-        validators=[DataRequired(message='To Address is a required field.')])
+        validators=[DataRequired(message='To Address is a required field.'),
+                    Regexp('^\d{5,}$', message='Invalid format for To Address. Use numbers only.')])
+    text = TextField(
+        'text',
+        validators=[DataRequired(message='Message Text is a required field.')])
     call_on = SelectField(
         "Call On",
         choices=[('false', 'False Monitors'), ('true', 'True Monitors')],

@@ -119,6 +119,25 @@
                 </div>
             </div>
 
+
+            <div class="form-group">
+                <label for="Message Text" class="col-sm-4 control-label">Message Text</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="nexmo-sms-notification-text" class="btn btn-default" rel="popover" data-content="Text of the message received." title="Message Text">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.text(class_="form-control", value=data['reaction']['data']['text']) }}
+                        {% else %}
+                            {{ form.text(class_="form-control", placeholder="Monitor is failing.") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
                 <p></p>
                 <button type="submit" class="btn btn-primary btn-block">Submit</button>
             </form>
