@@ -9,7 +9,6 @@ import unittest
 import time
 
 from flask import g, request
-from itsdangerous import SignatureExpired
 
 from base import BaseTestCase
 from users import User
