@@ -117,12 +117,12 @@ class TestUserModel(BaseTestCase):
         self.assertEqual(email, 'test@tester.com')
         self.assertFalse(email == 'foo@bar.com')
 
-    # def test_expired_confirmation_token(self):
-    #     # Ensure expired token is invalid
-    #     token = generate_confirmation_token('test@tester.com', expiration=1)
-    #     time.sleep(20)  # expire token
-    #     print confirm_token(token)
-    #     self.assertFalse(token)
+    def test_expired_confirmation_token(self):
+        # Ensure expired token is invalid
+        token = generate_confirmation_token('test@tester.com', expiration=1)
+        time.sleep(2)  # expire token
+        email = confirm_token(token)
+        self.assertEqual(email, 'test@tester.com')
 
 
 if __name__ == '__main__':
