@@ -32,6 +32,7 @@ def _check(data):
     host = data['data']['host']
     payload = data['data']['payload'] or ''
     extra_headers = data['data']['extra_headers'] or ''
+    status_codes = data['data']['status_codes'] or []
     response_regex = data['data']['response_regex'] or ''
     response_headers = data['data']['response_headers'] or ''
     assert url, "URL field not present"
@@ -40,7 +41,8 @@ def _check(data):
     headers['host'] = host
     r = requests.post(url, timeout=_HTTP_REQUEST_TIMEOUT, headers=headers,
                       data=payload, verify=False)
-    assert r.status_code >= 200 and r.status_code < 400, "Invalid response code"
+    status_codes = [int(code) for code in status_codes]
+    assert not status_codes or r.status_code in status_codes, "Invalid HTTP Response status code."
     assert re.search(response_regex, unicode(r.text)), "Response doesn't match"
     response_headers = ParseHeaders(response_headers)
     for header_name, header_value in response_headers.iteritems():

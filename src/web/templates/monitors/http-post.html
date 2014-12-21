@@ -43,7 +43,7 @@
             <hr>
 
             <div class="form-group">
-                <label for="URL" class="col-sm-4 control-label">URL</label>
+                <label for="URL" class="col-sm-4 control-label">URL*</label>
                 <div class="col-sm-8">
                     <div class="input-group">
                         <span class="input-group-btn">
@@ -61,7 +61,7 @@
             </div>
 
             <div class="form-group">
-                <label for="Host" class="col-sm-4 control-label">Host</label>
+                <label for="Host" class="col-sm-4 control-label">Host*</label>
                 <div class="col-sm-8">
                     <div class="input-group">
                         <span class="input-group-btn">
@@ -115,6 +115,20 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="Status Codes" class="col-sm-4 control-label">Expected response codes</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" id="http-post-status_codes" class="btn btn-default" rel="popover" data-content="Acceptable HTTP Response codes." title="Status codes">
+                                    <i class="fa fa-question"></i>
+                                </button>
+                            </span>
+                            {{ form.status_codes(class_="multiselect", multiple="multiple", placeholder="Expected/True HTTP Codes") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="Response Keyword" class="col-sm-4 control-label">Keyword to match</label>
                     <div class="col-sm-8">
                         <div class="input-group">
@@ -149,6 +163,8 @@
                         </div>
                     </div>
                 </div>
+
+                <em>Fields marked * are required.</em>
 
                 <p></p>
                 <button type="submit" class="btn btn-primary btn-block">Submit</button>
