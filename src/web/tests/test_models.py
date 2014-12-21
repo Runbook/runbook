@@ -108,8 +108,6 @@ class TestUserModel(BaseTestCase):
         token_one = generate_confirmation_token('test@tester.com')
         token_two = generate_confirmation_token('foo@bar.com')
         self.assertTrue(token_one)
-        print token_one
-        print token_two
         self.assertTrue(token_one != token_two)
 
     def test_valid_confirmation_token(self):
