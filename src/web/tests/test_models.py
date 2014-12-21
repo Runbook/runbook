@@ -105,24 +105,33 @@ class TestUserModel(BaseTestCase):
 
     def test_generate_confirmation_token(self):
         # Ensure token is generated and unique
-        token_one = generate_confirmation_token('test@tester.com')
-        token_two = generate_confirmation_token('foo@bar.com')
+        timestamp = time.time()
+        token_one = generate_confirmation_token(
+            'test@tester.com', 1, timestamp)
+        token_two = generate_confirmation_token(
+            'foo@bar.com', 2, timestamp)
         self.assertTrue(token_one)
         self.assertTrue(token_one != token_two)
 
     def test_valid_confirmation_token(self):
         # Ensure token is valid
-        token = generate_confirmation_token('test@tester.com')
-        email = confirm_token(token)
-        self.assertEqual(email, 'test@tester.com')
-        self.assertFalse(email == 'foo@bar.com')
+        timestamp = time.time()
+        token = generate_confirmation_token(
+            'test@tester.com', 1, timestamp)
+        user_info = confirm_token(token)
+        self.assertEqual(user_info[0], 'test@tester.com')
+        self.assertFalse(user_info[0] == 'foo@bar.com')
+        self.assertEqual(user_info[1], 1)
+        self.assertEqual(user_info[2], timestamp)
 
     def test_expired_confirmation_token(self):
         # Ensure expired token is invalid
-        token = generate_confirmation_token('test@tester.com')
+        timestamp = time.time()
+        token = generate_confirmation_token(
+            'test@tester.com', 1, timestamp)
         time.sleep(2)  # expire token
-        email = confirm_token(token, expiration=1)
-        self.assertFalse(email)
+        user_info = confirm_token(token, expiration=1)
+        self.assertFalse(user_info)
 
 
 if __name__ == '__main__':
