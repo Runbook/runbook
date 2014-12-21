@@ -1,12 +1,12 @@
-## First Time Setup
+# First Time Setup
 
-### Basics
+## Basics
 
 1. Clone the repo
 1. Create and activate a virtualenv
 1. Install the requirements - `sh build.sh`
 
-### RethinkDB Setup
+## RethinkDB Setup
 
 We use [rethinkDB](http://www.rethinkdb.com/) for persistence. New to rethink? [Install](http://www.rethinkdb.com/docs/install/), then check out the [QuickStart](http://www.rethinkdb.com/docs/quickstart/).
 
@@ -27,7 +27,7 @@ Then with the server running, run the following in a new window to set the authe
 $ rethinkdb admin set auth cloudroutes
 ```
 
-### Redis Setup
+## Redis Setup
 
 Download [Redis](http://redis.io/download) (if necessary), then fire up the server in a new terminal window:
 
@@ -35,7 +35,7 @@ Download [Redis](http://redis.io/download) (if necessary), then fire up the serv
 $ redis-server
 ```
 
-### Configuration
+## Configuration
 
 The entire application has 4 configuration file types, which are used by 7 types of processes. This is because having different processes of the same type requires different configurations (ports, data shards, etc.). A minimal application will have exactly 7 processes and 4 configuration files.
 
@@ -47,7 +47,7 @@ Here is a list of configuration files, that can be used for the first time to ru
  - bridge/config/config.yml.default - used by bridge/bridge.py processes
  - actions/config/config.yml.default - used by actions/broker.py and actions/actioner.py processes
 
-### Initialize database
+## Initialize database
 
 There is a `create_db.py` script for initializing RethinkDB. Create the database and required tables from the Python shell:
 
@@ -55,7 +55,7 @@ There is a `create_db.py` script for initializing RethinkDB. Create the database
 $ python src/bridge/mgmtscripts/create_db.py src/bridge/config/config.yml.default
 ```
 
-### Run all processes
+## Run all processes
 
 ```
 $ foreman start
@@ -63,7 +63,7 @@ $ foreman start
 
 Now you can launch your browser and point it to http://localhost:8000/signup. Signup, create a monitor and a reaction, and then watch them execute.
 
-### Run Tests
+## Run Tests
 
 Without coverage:
 

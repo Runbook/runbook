@@ -6,7 +6,7 @@ The Vagrant setup in this guide is optional; however you will need to have an en
 
 ### Prerequisites
 
-Before starting you must first install Vagrant. 
+Before starting you must first install Vagrant.
 
 1. [Install Vagrant](https://docs.vagrantup.com/v2/installation/)
 
