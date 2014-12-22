@@ -12,6 +12,7 @@ RUN apt-get upgrade -y
 
 # Install python
 RUN apt-get install -y python python-dev python-pip python-virtualenv wget unzip
+RUN apt-get install -y libssl-dev libffi-dev
 RUN rm -rf /var/lib/apt/lists/*
 
 # Create working directory
