@@ -41,7 +41,7 @@ Now that Docker and Fig are installed we can use Fig to launch and manage the co
 ### Starting up the environment with Fig
 
 ```sh
-$ fig -up -d
+$ fig up -d
 ```
 
 During boot the `bridge` container will run `src/bridge/mgmtscripts/create_db.py` which will connect to RethinkDB and create the required database structure.
@@ -54,7 +54,7 @@ Run the following command to stop all servies:
 $ fig stop
 ```
 
-Then run `fig -up -d` to start back up.
+Then run `fig up -d` to start back up.
 
 ### Reading logs/output
 

@@ -16,7 +16,7 @@ RUN rm -rf /var/lib/apt/lists/*
 
 # Create working directory
 RUN mkdir -p /code /config
-ADD requirements.txt /code/requirements.txt
+ADD requirements.txt /config/requirements.txt
 
 # Install requirements
-pip install -r /code/requirements.txt
+RUN pip install -r /config/requirements.txt

@@ -19,4 +19,4 @@ RUN mkdir -p /code /config
 ADD requirements.txt /config/requirements.txt
 
 # Install requirements
-pip install -r /config/requirements.txt
+RUN pip install -r /config/requirements.txt
