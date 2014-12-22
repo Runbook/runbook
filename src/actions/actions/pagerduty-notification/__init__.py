@@ -25,8 +25,8 @@ def action(**kwargs):
     if checktime < redata['frequency']:
         run = False
 
-    #if redata['data']['call_on'] not in jdata['check']['status']:
-    #    run = False
+    if redata['data']['call_on'] not in jdata['check']['status']:
+        run = False
 
     if run:
         return actionPDTrigger(redata, jdata)
