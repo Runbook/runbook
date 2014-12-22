@@ -1,23 +1,26 @@
-#
-# Runbook.io - Web App Dockerfile
-#
+#######################################
+### Runbook.io - Actions Dockerfile ###
+#######################################
 
-# Pull base image.
+
+
+# Pull base image
 FROM dockerfile/ubuntu
 
-# Install Python.
-RUN \
-  apt-get update && \
-  apt-get install -y python python-dev python-pip python-virtualenv wget unzip && \
-  rm -rf /var/lib/apt/lists/*
+# Update
+RUN apt-get update
+RUN apt-get upgrade -y
 
-RUN \
-  mkdir -p /code /config
+# Install python
+RUN apt-get install -y python python-dev python-pip python-virtualenv wget unzip
+RUN rm -rf /var/lib/apt/lists/*
 
+# Create working directory
+RUN mkdir -p /code /config
 ADD requirements.txt /code/requirements.txt
 
-RUN \
-  pip install -r /code/requirements.txt
+# Install requirements
+pip install -r /code/requirements.txt
 
 EXPOSE 6000
 EXPOSE 6001

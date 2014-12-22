@@ -20,8 +20,8 @@ bridge:
   links:
     - redis
     - db
-    - actionBroker
-actionBroker:
+    - actionbroker
+actionbroker:
   build: src/actions/
   command: bash /code/bootstrap-broker.sh
   volumes:
@@ -37,9 +37,9 @@ actioner:
   links:
     - redis
     - db
-    - actionBroker
+    - actionbroker
     - bridge
-monitorBroker:
+monitorbroker:
   build: src/monitors/
   command: bash /code/bootstrap-broker.sh
   volumes:
@@ -54,7 +54,7 @@ monitor5min:
     - src/monitors:code:ro
   links:
     - redis
-    - monitorBroker
+    - monitorbroker
   environment:
     MONITORINTERVAL: 5mincheck
     SLEEPTIMER: 300
@@ -65,7 +65,7 @@ monitor30min:
     - src/monitors:code:ro
   links:
     - redis
-    - monitorBroker
+    - monitorbroker
   environment:
     MONITORINTERVAL: 30mincheck
     SLEEPTIMER: 1800
@@ -76,7 +76,7 @@ monitor2min:
     - src/monitors:code:ro
   links:
     - redis
-    - monitorBroker
+    - monitorbroker
   environment:
     MONITORINTERVAL: 2mincheck
     SLEEPTIMER: 120
@@ -87,15 +87,15 @@ monitor30sec:
     - src/monitors:code:ro
   links:
     - redis
-    - monitorBroker
+    - monitorbroker
   environment:
     MONITORINTERVAL: 30seccheck
     SLEEPTIMER: 30
-monitorWorker:
+monitorworker:
   build: src/monitors/
   command: bash /code/bootstrap-worker.sh
   volumes:
     - src/monitors:code:ro
   links:
-    - monitorBroker
-    - actionBroker
+    - monitorbroker
+    - actionbroker
