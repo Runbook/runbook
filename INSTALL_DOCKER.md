@@ -13,6 +13,7 @@ Start by [installing](https://docs.docker.com/installation/) Docker version 1.3 
 ```sh
 $ boot2docker init
 $ boot2docker start
+$ (boot2docker shellinit)
 ```
 
 This should return the `DOCKER_HOST` environment variables, which should look something like this:
@@ -40,10 +41,20 @@ Now that Docker and Fig are installed we can use Fig to launch and manage the co
 ### Starting up the environment with Fig
 
 ```sh
-$ fig up -d
+$ fig -up -d
 ```
 
 During boot the `bridge` container will run `src/bridge/mgmtscripts/create_db.py` which will connect to RethinkDB and create the required database structure.
+
+### Stopping Fig
+
+Run the following command to stop all servies:
+
+```sh
+$ fig stop
+```
+
+Then run `fig -up -d` to start back up.
 
 ### Reading logs/output
 
@@ -64,15 +75,7 @@ $ fig rm
 
 ## Accessing the Web Application
 
-To access the web application you can simply enter the IP of the vm into your browser targeting port 8080.
-
-**Example:**
-
-```
-http://192.168.33.10:8080
-```
-
-### Finding the IP
+To access the web application you can simply enter the IP of the vm into your browser targeting port 8080 - i.e., [http://192.168.33.10:8080](http://192.168.33.10:8080)
 
 You can find the vm's IP with:
 
