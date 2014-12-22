@@ -65,10 +65,16 @@ except:
     sys.exit(1)
 
 # RethinkDB Server
+
 try:
-    rdb_server = r.connect(
-        host=config['rethink_host'], port=config['rethink_port'],
-        auth_key=config['rethink_authkey'], db=config['rethink_db'])
+    if config['rethink_authkey']:
+        rdb_server = r.connect(
+            host=config['rethink_host'], port=config['rethink_port'],
+            auth_key=config['rethink_authkey'], db=config['rethink_db'])
+    else:
+        rdb_server = r.connect(
+            host=config['rethink_host'], port=config['rethink_port'],
+            db=config['rethink_db'])
     logger.info("Connecting to RethinkDB")
 except RqlDriverError:
     logger.error("Cannot connect to rethinkdb, shutting down")

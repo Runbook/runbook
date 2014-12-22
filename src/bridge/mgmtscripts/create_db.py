@@ -2,6 +2,17 @@ import sys
 import yaml
 
 import rethinkdb as r
+from rethinkdb.errors import RqlDriverError, RqlRuntimeError
+import socket
+
+def createTable(dbname, tablename, conn):
+    ''' Create a rethinkDB table '''
+    print("Creating table: %s") % tablename
+    try:
+        r.db(dbname).table_create(tablename).run(conn)
+    except (RqlDriverError, RqlRuntimeError, socket.error) as e:
+        print("RethinkDB Error: %s") % e.message
+        print("Table %s not created") % tablename
 
 if len(sys.argv) != 2:
     print("Hey, thats not how you launch this...")
@@ -16,22 +27,37 @@ cfh.close()
 
 # Establish Connection
 host = config['rethink_host']
+port = config['rethink_port']
 database = config['rethink_db']
 auth_key = config['rethink_authkey']
-conn = r.connect(host, 28015, auth_key=auth_key).repl()
+try:
+    if auth_key:
+        conn = r.connect(host, port, auth_key=auth_key).repl()
+    else:
+        conn = r.connect(host, port).repl()
+except (RqlDriverError, RqlRuntimeError, socket.error) as e:
+    print("RethinkDB Error on Connection: %s") % e.message
+    sys.exit(1)
 
-# Create Database and Tables
+result = r.db_list().run(conn)
+if database in result:
+    print("Database %s already exists exiting") % database
+    sys.exit(0)
+
 r.db_create(database).run(conn)
-r.db(database).table_create('monitors').run(conn)
-r.db(database).table_create('reactions').run(conn)
-r.db(database).table_create('users').run(conn)
-r.db(database).table_create('history').run(conn)
-r.db(database).table_create('events').run(conn)
-r.db(database).table_create('subscription_history').run(conn)
-r.db(database).table_create('dc1queue').run(conn)
-r.db(database).table_create('dc2queue').run(conn)
-
-print "Done!"
+tables = [
+    'monitors',
+    'reactions',
+    'users',
+    'history',
+    'events',
+    'subscription_history',
+    'dc1queue',
+    'dc2queue'
+]
+for name in tables:
+    createTable(database, name, conn)
+print "Database created!"
 
 
 #######################

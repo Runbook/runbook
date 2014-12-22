@@ -1,14 +1,12 @@
 SECRET_KEY = "update_me!"
-SECURITY_PASSWORD_SALT = "update_me!"
 BIND_IP = "0.0.0.0"
 BIND_PORT = 8080
->>>>>>> upstream/develop
 CSRF_ENABLED = True
 SALT = "update_me!"
 DBHOST = "localhost"
 DBPORT = "28015"
 DATABASE = "crdb"
-DBAUTHKEY = "cloudroutes"
+DBAUTHKEY = ""
 DEBUG = True
 COOKIE_TIMEOUT = "1200"
 ENVNAME = "[Alpha]"
@@ -81,7 +79,7 @@ PACKAGES = {
             ('30mincheck', 'Every 30 Minutes'),
             ('5mincheck', 'Every 5 Minutes'),
             ('2mincheck', 'Every 2 Minutes'),
-            ('30seccheck', 'Every 30 Seconds')
+            ('30seccheck', 'Every 30 Seconds')   
         },
         'reaction_multiplier' : 2,
         'data_retention' : 604800,
@@ -95,7 +93,7 @@ PACKAGES = {
             ('30mincheck', 'Every 30 Minutes'),
             ('5mincheck', 'Every 5 Minutes'),
             ('2mincheck', 'Every 2 Minutes'),
-            ('30seccheck', 'Every 30 Seconds')
+            ('30seccheck', 'Every 30 Seconds')   
         },
         'reaction_multiplier' : 2,
         'data_retention' : 604800,
