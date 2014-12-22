@@ -2,7 +2,6 @@ SECRET_KEY = "update_me!"
 SECURITY_PASSWORD_SALT = "update_me!"
 BIND_IP = "0.0.0.0"
 BIND_PORT = 8080
->>>>>>> upstream/develop
 CSRF_ENABLED = True
 SALT = "update_me!"
 DBHOST = "localhost"
