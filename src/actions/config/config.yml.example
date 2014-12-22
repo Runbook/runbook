@@ -1,21 +1,22 @@
 ## Bridge Configuration
-stathat_key: "update_me!"
-envname: "[Alpha]"
+stathat_key: "update_me"
+envname: "[Dev-Fork]"
+dbqueue: dc1queue
 sleep: 30
 ## Redis Config
-redis_host: localhost
-redis_port: 546
-redis_db: "update_me!"
-redis_password: "update_me!"
+redis_host: redis_ip
+redis_port: 3679
+redis_db: 0
+redis_password: False
 ## Rethink Config
-rethink_host: localhost
+rethink_host: rethink_host
 rethink_port: 28015
-rethink_authkey: "update_me!"
+rethink_authkey: False
 rethink_db: "crdb"
 ## Sink Config
-sink_ip: 127.0.0.1
-sink_port: "update_me!"
-sink_worker_port: "update_me!"
+sink_ip: sink_host
+sink_port: 6000
+sink_worker_port: 6001
 ## Maximum time for monitor execution
 max_monitor_time: 600
 default_actions:
@@ -36,4 +37,4 @@ mailchimp_api_url: "update_me!"
 mandrill_api_url: "https://mandrillapp.com/api/1.0/"
 mandrill_api_key: "update_me!"
 ## Logging
-use_syslog: true
+use_syslog: False

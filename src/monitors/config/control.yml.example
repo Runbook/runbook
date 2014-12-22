@@ -1,18 +1,23 @@
 ## Control Configuration
-envname: {{ config['envname'] }}
-stathat_key: {{ config['stathat_key'] }}
-control_appname: {{ configlocal['queue'] }}
-sleep: {{ configlocal['timer'] }} 
-queue: {{ configlocal['queue'] }}
-zone: {{ config['zone'] }}
+envname: [Dev-Fork]
+stathat_key: "update_me!"
+control_appname: "control-example"
+sleep: 300
+## Available Queues ##
+# 5mincheck - 5 Minute Checks
+# 30mincheck - 30 Minute Checks
+# 2mincheck - 2 Minute Checks
+# 30seccheck - 30 Second Checks
+queue: interval
+zone: Docker Dev Zones
 ## zMQ
-broker_ip: {{ config['broker_ip'] }}
-broker_control_port: {{ config['broker_control_port'] }}
-broker_worker_port: {{ config['broker_worker_port'] }}
+broker_ip: broker_host
+broker_control_port: 5879
+broker_worker_port: 5878
 ## Redis Config
-redis_host: 127.0.0.1
-redis_port: {{ redcluster['master_port'] }}
-redis_db: {{ redcluster['master_db'] }}
-redis_password: {{ redcluster['master_password'] }}
+redis_host: redis_ip
+redis_port: 6379
+redis_db: 0
+redis_password: False
 ## Logging
-use_syslog: true
+use_syslog: False

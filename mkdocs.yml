@@ -30,6 +30,7 @@ pages:
 - ['developers/index.md', 'Developers', 'Overview']
 - ['developers/architecture-overview.md', 'Developers', 'Architecture Overview']
 - ['developers/install.md', 'Developers', 'Installation']
+- ['developers/install_docker.md', 'Developers', 'Installation with Docker'] 
 - ['developers/creating_monitors.md', 'Developers', 'Creating Monitors']
 - ['developers/creating_reactions.md', 'Developers', 'Creating Reactions']
 - ['community-tutorials/index.md', 'Community Tutorials']
