@@ -18,7 +18,7 @@ This page is the front page of our documentation for Runbook users and developer
 
 To get started, we recommend these resources:
 
-[Quick Start guide](/quick-start.md)
+[Quick Start guide](quick-start.md)
 [Community tutorials](community-tutorials/index.md)
 [Developer documentation](developers/index.md)
 
