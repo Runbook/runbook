@@ -1,0 +1,153 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+      {% if data['edit'] %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Manage Reaction</h1>
+      {% else %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Add Reaction</h1>
+      {% endif %}
+      </div>
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            Twilio SMS Notification
+          </div>
+          </div>
+          <div class="panel-body">
+            <form action="{{ data['url'] }}" method="post" name="reaction-form" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+
+            {% include 'reactions/base.html' %}
+            {% include 'reactions/callon.html' %}
+
+            <hr>
+
+
+            <div class="form-group">
+                <label for="Account SID" class="col-sm-4 control-label">Account SID</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="twilio-sms-notification-account_sid" class="btn btn-default" rel="popover" data-content="Your Twilio Account SID." title="Account SID">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.account_sid(class_="form-control", value=data['reaction']['data']['account_sid']) }}
+                        {% else %}
+                            {{ form.account_sid(class_="form-control", placeholder="account_sid") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="Auth Token" class="col-sm-4 control-label">Auth Token</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="twilio-sms-notification-auth_token" class="btn btn-default" rel="popover" data-content="Your Twilio Auth Token." title="Auth Token">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.auth_token(class_="form-control", value=data['reaction']['data']['auth_token']) }}
+                        {% else %}
+                            {{ form.auth_token(class_="form-control", placeholder="auth_token") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="From Address" class="col-sm-4 control-label">From Address</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="twilio-sms-notification-from_address" class="btn btn-default" rel="popover" data-content="Sender address. See Twilio API doc for specification." title="From Address">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.from_address(class_="form-control", value=data['reaction']['data']['from_address']) }}
+                        {% else %}
+                            {{ form.from_address(class_="form-control", placeholder="from_address") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="To Address" class="col-sm-4 control-label">To Address</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="twilio-sms-notification-to_address" class="btn btn-default" rel="popover" data-content="Receiver address. See Twilio API doc for specification." title="To Address">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.to_address(class_="form-control", value=data['reaction']['data']['to_address']) }}
+                        {% else %}
+                            {{ form.to_address(class_="form-control", placeholder="to_address") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="Message Text" class="col-sm-4 control-label">Message Text</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="twilio-sms-notification-text" class="btn btn-default" rel="popover" data-content="Text of the message received." title="Message Text">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.text(class_="form-control", value=data['reaction']['data']['text']) }}
+                        {% else %}
+                            {{ form.text(class_="form-control", placeholder="Monitor is failing.") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      <div class="panel-group" id="accordion">
+
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}
