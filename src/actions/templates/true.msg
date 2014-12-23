@@ -5,4 +5,4 @@ This is an automated notification that {{ name }} has returned to a true state.
 - Runbook
 
 https://runbook.io
-https://twitter.com/cloudroutes
+https://twitter.com/runbookio
