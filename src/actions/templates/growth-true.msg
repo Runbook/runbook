@@ -7,4 +7,4 @@ P.S. we setup this alert for you, if you would like to stop knowing when your ap
 - Runbook | Solve issues in your sleep with IFTTT-style mitigation of alerts
 
 https://runbook.io
-https://twitter.com/cloudroutes
+https://twitter.com/runbookio
