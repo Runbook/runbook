@@ -6,12 +6,14 @@
 
 
 import unittest
+import time
 
 from flask import g, request
 
 from base import BaseTestCase
 from users import User
 from web import app, verifyLogin
+from user.token import generate_confirmation_token, confirm_token
 
 
 class TestUserModel(BaseTestCase):
@@ -101,12 +103,35 @@ class TestUserModel(BaseTestCase):
         self.assertTrue(user_test.acttype == "lite-v2")
         self.assertFalse(user_test.acttype == "pro")
 
-    # def test_generate_confirmation_token(self):
-    #     from user import token
-    #     # user = User()
-    #     # user_test = user.get('username', 'test@tester.com', g.rdb_conn)
-    #     token = token.generate_confirmation_token('test@tester.com')
-    #     self.assertTrue(token)
+    def test_generate_confirmation_token(self):
+        # Ensure token is generated and unique
+        timestamp = time.time()
+        token_one = generate_confirmation_token(
+            'test@tester.com', 1, timestamp)
+        token_two = generate_confirmation_token(
+            'foo@bar.com', 2, timestamp)
+        self.assertTrue(token_one)
+        self.assertTrue(token_one != token_two)
+
+    def test_valid_confirmation_token(self):
+        # Ensure token is valid
+        timestamp = time.time()
+        token = generate_confirmation_token(
+            'test@tester.com', 1, timestamp)
+        user_info = confirm_token(token)
+        self.assertEqual(user_info[0], 'test@tester.com')
+        self.assertFalse(user_info[0] == 'foo@bar.com')
+        self.assertEqual(user_info[1], 1)
+        self.assertEqual(user_info[2], timestamp)
+
+    def test_expired_confirmation_token(self):
+        # Ensure expired token is invalid
+        timestamp = time.time()
+        token = generate_confirmation_token(
+            'test@tester.com', 1, timestamp)
+        time.sleep(2)  # expire token
+        user_info = confirm_token(token, expiration=1)
+        self.assertFalse(user_info)
 
 
 if __name__ == '__main__':
