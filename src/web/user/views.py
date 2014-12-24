@@ -13,6 +13,7 @@ from flask import g, abort, make_response, Blueprint, request, redirect, \
 
 from users import User
 from user.forms import SignupForm, LoginForm
+from token import generate_confirmation_token
 
 
 user_blueprint = Blueprint('user', __name__,)
@@ -92,6 +93,10 @@ def signup():
                 data['loggedin'] = True
                 data['msg'] = 'You are signed up'
                 data['error'] = False
+
+                # Generate confirmation token
+                generate_confirmation_token(email, result, time.time())
+
                 # Build response
                 resp = make_response(redirect(url_for('member.dashboard_page')))
                 timeout = int(time.time()) + int(app.config['COOKIE_TIMEOUT'])
