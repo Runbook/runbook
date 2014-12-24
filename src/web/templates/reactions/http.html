@@ -1,0 +1,133 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+      {% if data['edit'] %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Manage Reaction</h1>
+      {% else %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Add Reaction</h1>
+      {% endif %}
+      </div>
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            HTTP: GET / POST
+          </div>
+          </div>
+          <div class="panel-body">
+            <form action="{{ data['url'] }}" method="post" name="reaction-form" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+
+            {% include 'reactions/base.html' %}
+            {% include 'reactions/callon.html' %}
+
+            <hr>
+
+            <div class="form-group">
+                <label for="HTTP Verb" class="col-sm-4 control-label">HTTP Verb</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="http-http_verb" class="btn btn-default" rel="popover" data-content="Verb for the HTTP request" title="HTTP Verb">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.http_verb(class_="select", value=data['reaction']['data']['http_verb']) }}
+                        {% else %}
+                            {{ form.http_verb(class_="select", placeholder="GET") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="URL" class="col-sm-4 control-label">URL</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="http-url" class="btn btn-default" rel="popover" data-content="URL to make the HTTP request to" title="URL">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.url(class_="form-control", value=data['reaction']['data']['url']) }}
+                        {% else %}
+                            {{ form.url(class_="form-control", placeholder="http://example.com/") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="Extra headers" class="col-sm-4 control-label">Extra headers</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="http-extra_headers" class="btn btn-default" rel="popover" data-content="Extra headers to pass to HTTP request. Use key:value format. Pass one header in each line." title="Extra headers">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.extra_headers(class_="form-control", value=data['reaction']['data']['extra_headers']) }}
+                        {% else %}
+                            {{ form.extra_headers(class_="form-control", placeholder="header1:value1\nheader2:value2") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="Payload" class="col-sm-4 control-label">Payload</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="http-payload" class="btn btn-default" rel="popover" data-content="Data sent along with HTTP request. Only for HTTP POST requests." title="Payload">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.payload(class_="form-control", value=data['reaction']['data']['payload']) }}
+                        {% else %}
+                            {{ form.payload(class_="form-control", placeholder="payload") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      <div class="panel-group" id="accordion">
+
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}
