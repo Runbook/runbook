@@ -31,6 +31,13 @@ class ReactForm(BaseReactForm):
     details = TextAreaField(
         "Details",
         validators=[DataRequired(message="Details is a required field")])
+    call_on = SelectField(
+        "Call On",
+        choices=[
+        ('false', 'False Monitors'),
+        ('true', 'True Monitors')],
+        validators=[DataRequired(message='Call On is a required field')])
+
 
 
 if __name__ == '__main__':
