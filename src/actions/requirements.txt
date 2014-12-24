@@ -5,3 +5,4 @@ pyzmq==13.1.0
 redis==2.10.3
 requests==1.2.3
 rethinkdb==1.13.0-3
+twilio
