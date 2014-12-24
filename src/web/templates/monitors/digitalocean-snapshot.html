@@ -35,7 +35,7 @@
           </div>
           </div>
           <div class="panel-body">
-            <form action="{{ data['url'] }}" method="post" name="reaction-form" target="_self" class="form-horizontal" role="form">
+            <form action="{{ data['url'] }}" method="post" name="monitor" target="_self" class="form-horizontal" role="form">
             {{ form.csrf_token }}
 
             {% include 'monitors/base.html' %}
@@ -71,22 +71,6 @@
               {{ form.dropletid(class_="form-control", value=data['monitor']['data']['dropletid']) }}
               {% else %}
               {{ form.dropletid(class_="form-control", placeholder="Droplet ID#") }}
-              {% endif %}
-              </div>
-            </div>
-              </div>
-
-                <div class="form-group">
-                <label for="Snapshot Name" class="col-sm-4 control-label">Snapshot Name</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-                <span class="input-group-btn">
-                  <button type="button" id="cl-snapshot" class="btn btn-default" rel="popover" data-content="This field contains the name of the snapshot." title="DigitalOcean Snapshot Name"><i class="fa fa-question"></i></button>
-                </span>
-              {% if data['edit'] %}
-              {{ form.snapname(class_="form-control", value=data['monitor']['data']['snapname']) }}
-              {% else %}
-              {{ form.snapname(class_="form-control", placeholder="Snapshot Name") }}
               {% endif %}
               </div>
             </div>

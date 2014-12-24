@@ -20,12 +20,10 @@ class CheckForm(DatacenterCheckForm):
         "Droplet ID#",
         validators=[
             DataRequired(message='Droplet ID# is a required field'),
-            NumberRange(min=1, max=None, message="Droplet ID should be a numeric ID number")
+            NumberRange(min=1, max=None,
+                        message="Droplet ID should be a numeric ID number")
         ]
     )
-    snapname = TextField(
-        "Snapshot Name",
-        validators=[DataRequired(message='Snapshot Name is a required field')])
     call_on = SelectField(
         "Call On",
         choices=[('false', 'False Monitors'), ('true', 'True Monitors')],
