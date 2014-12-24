@@ -46,7 +46,7 @@ def CallDO(api_key, data):
     r = requests.post(_DO_CREATE_DROPLET_URL, timeout=_HTTP_TIMEOUT,
                       data=payload, headers=headers, verify=True)
     assert r.status_code >= 200 and r.status_code < 400, \
-        'Invalid HTTP status code received: %d.' % r.status_code
+        'Invalid HTTP status code received: %d - %s.' % (r.status_code, r.text)
     return True
 
 
@@ -55,8 +55,7 @@ def action(**kwargs):
         return __action(**kwargs)
     except Exception, e:
         redata = kwargs['redata']
-        syslog.syslog(
-            syslog.LOG_WARNING,
-            'digitalocean-new-droplet: Reaction {id} failed: {message}'.format(
-                id=redata['id'], message=e.message))
+        logger = kwargs['logger']
+        logger.warning("digitalocean-new-droplet: Reaction {id} failed: {message}".format(
+            id=redata['id'], message=e.message))
         return False

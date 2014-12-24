@@ -115,7 +115,8 @@ def runAction(**kwargs):
         "actions." + redata['rtype'], globals(), locals(), ['action'], -1)
     try:
         react = reaction.action(redata=kwargs['redata'], jdata=kwargs['jdata'],
-            rdb=kwargs['rdb'], r_server=kwargs['r_server'], config=kwargs['config'])
+            rdb=kwargs['rdb'], r_server=kwargs['r_server'], config=kwargs['config'],
+            logger=kwargs['logger'])
     except Exception as e:
         logger.error("Got error when attempting to run reaction %s for monitor %s" % (
             redata['rtype'], jdata['cid']))
@@ -247,7 +248,7 @@ while True:
                 if results:
                     results['default'] = False
                     run = runAction(redata=results, jdata=jdata,
-                        rdb=rdb_server, r_server=r_server, config=config)
+                        rdb=rdb_server, r_server=r_server, config=config, logger=logger)
                     for meta in config['reaction_meta']:
                         results['rtype'] = meta
                         results['lastrun'] = 0
@@ -255,7 +256,7 @@ while True:
                         results['frequency'] = 0
                         results['reaction_return'] = run
                         runAction(redata=results, jdata=jdata,
-                            rdb=rdb_server, r_server=r_server, config=config)
+                            rdb=rdb_server, r_server=r_server, config=config, logger=logger)
 
             # Always perform the default actions
             for always in config['default_actions']:
@@ -265,7 +266,7 @@ while True:
                           'lastrun': 0,
                           'default': True}
                 runAction(redata=redata, jdata=jdata,
-                    rdb=rdb_server, r_server=r_server, config=config)
+                    rdb=rdb_server, r_server=r_server, config=config, logger=logger)
 
         if cacheonly is True:
             logger.critical("Process is in cacheonly mode: attempting reconnect")
