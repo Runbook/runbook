@@ -34,6 +34,7 @@ class TestUserModel(BaseTestCase):
             user = user.get('username', 'test@user.com', g.rdb_conn)
             self.assertTrue(user.email == 'test@user.com')
             self.assertTrue(user.status == 'active')
+            self.assertFalse(user.confirmed)
             self.assertTrue(user.is_active('test@tester.com', g.rdb_conn))
 
     def test_check_password(self):
