@@ -7,10 +7,7 @@
 
 import unittest
 
-from flask import url_for, g
-
 from base import BaseTestCase
-from users import User
 
 
 class MonitorTests(BaseTestCase):
