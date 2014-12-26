@@ -1,7 +1,7 @@
 ######################################################################
 # Runbook Web Application
 # -------------------------------------------------------------------
-# Tests - monitors
+# Tests - reactions
 ######################################################################
 
 
@@ -12,8 +12,8 @@ from base import BaseTestCase
 
 class MonitorTests(BaseTestCase):
 
-    def test_user_can_access_monitor(self):
-        # Ensure that a logged in user can access a monitor
+    def test_user_can_access_reactions(self):
+        # Ensure that a logged in user can access a reaction
         with self.client:
             self.client.post(
                 '/login',
@@ -21,10 +21,10 @@ class MonitorTests(BaseTestCase):
                 follow_redirects=True
             )
             response = self.client.get(
-                '/dashboard/monitors/cr-api',
+                '/dashboard/reactions/heroku-scale-out',
                 follow_redirects=True)
             self.assertEqual(response.status_code, 200)
-            self.assertIn('Runbook Webhooks', response.data)
+            self.assertIn('Heroku: Scale Out Dynos', response.data)
 
 
 if __name__ == '__main__':
