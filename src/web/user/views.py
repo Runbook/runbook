@@ -2,6 +2,7 @@
 
 
 import time
+import datetime
 import stathat
 import cookies
 import rethinkdb as r
@@ -13,12 +14,12 @@ from flask import g, abort, make_response, Blueprint, request, redirect, \
 
 from users import User
 from user.forms import SignupForm, LoginForm
-from token import generate_confirmation_token
+from token import generate_confirmation_token, confirm_token
 
 
 user_blueprint = Blueprint('user', __name__,)
 
-from web import app
+from web import app, verifyLogin, startData
 
 
 @user_blueprint.before_app_request
@@ -179,3 +180,28 @@ def logout_page():
     resp.set_cookie('loggedin', 'null', max_age=0)
     print("/logout - User logout")
     return resp
+
+
+# Confirm Token
+@user_blueprint.route('/confirm/<token>')
+def confirm_email(token):
+    verify = verifyLogin(
+        app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
+    if verify:
+        user = User()
+        user.get('uid', verify, g.rdb_conn)
+        if user.confirmed:
+            return redirect(url_for('member.dashboard_page'))  # still need to test
+        else:
+            try:
+                email = confirm_token(token)
+                if user.email == email[0]:
+                    user.confirmed = True
+                    user.confirmed_on = datetime.datetime.now()
+                    return redirect(url_for('member.dashboard_page'))
+                else:
+                    return redirect(url_for('user.login_page'))  # still need to test
+            except:
+                print "error message here"  # still need to test
+    else:
+        return redirect(url_for('user.login_page'))
