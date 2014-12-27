@@ -10,12 +10,13 @@ import unittest
 from base import BaseTestCase
 
 
-class FunctionalTests(BaseTestCase):
+class FunctionalMemberTests(BaseTestCase):
 
     def test_dashboard_route_login(self):
         # Ensure that /dashboard requires user login.
         response = self.client.get('/dashboard', follow_redirects=True)
         self.assertIn('Login', response.data)
+        self.assertIn('Please Login.', response.data)
 
     def test_dashboard_monitors_route_login(self):
         # Ensure that /dashboard/monitors requires user login.
@@ -78,6 +79,13 @@ class FunctionalTests(BaseTestCase):
             self.assertTrue(response.status_code == 200)
             self.assertIn('Upgrade your subscription', response.data)
 
+    def test_dashboard_subscription_route_login(self):
+        # Ensure that dashboard/mod-subscription requires user login.
+        response = self.client.get(
+            '/dashboard/mod-subscription', follow_redirects=True)
+        self.assertIn('Login', response.data)
+        self.assertIn('Please Login.', response.data)
+
     def test_dashboard_preferences_route(self):
         # Ensure registered user can access dashboard/user-preferences route.
         with self.client:
@@ -96,6 +104,7 @@ class FunctionalTests(BaseTestCase):
         response = self.client.get(
             '/dashboard/user-preferences', follow_redirects=True)
         self.assertIn('Login', response.data)
+        self.assertIn('Please Login.', response.data)
 
     def test_password_change_success(self):
         # Ensure user can update password.

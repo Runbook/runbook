@@ -29,9 +29,9 @@ def before_request():
         g.rdb_conn = r.connect(
             host=app.config['DBHOST'], port=app.config['DBPORT'],
             auth_key=app.config['DBAUTHKEY'], db=app.config['DATABASE'])
-    except RqlDriverError:
+    except RqlDriverError:                                          # pragma: no cover
         # If no connection possible throw 503 error
-        abort(503, "No Database Connection Could be Established.")
+        abort(503, "No Database Connection Could be Established.")  # pragma: no cover
 
 
 @member_blueprint.teardown_app_request
@@ -39,9 +39,9 @@ def teardown_request(exception):
     ''' This function closes the database connection when done '''
     try:
         g.rdb_conn.close()
-    except AttributeError:
+    except AttributeError:  # pragma: no cover
         # Who cares?
-        pass
+        pass                # pragma: no cover
 
 
 # Dashboard Home
@@ -102,6 +102,7 @@ def dashboard_page():
                 'member/screen-o-death.html', data=data, form=form)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
@@ -237,6 +238,7 @@ def modsub_page():
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
@@ -275,4 +277,5 @@ def userpref_page():
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
