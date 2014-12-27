@@ -10,7 +10,7 @@ import unittest
 from base import BaseTestCase
 
 
-class FunctionalMemberTests(BaseTestCase):
+class MemberTests(BaseTestCase):
 
     def test_dashboard_route_login(self):
         # Ensure that /dashboard requires user login.

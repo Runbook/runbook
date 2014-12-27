@@ -26,9 +26,10 @@ def before_request():
         g.rdb_conn = r.connect(
             host=app.config['DBHOST'], port=app.config['DBPORT'],
             auth_key=app.config['DBAUTHKEY'], db=app.config['DATABASE'])
-    except RqlDriverError:
+    except RqlDriverError:                      # pragma: no cover
         # If no connection possible throw 503 error
-        abort(503, "No Database Connection Could be Established.")
+        abort(503, "No Database Connection \
+                    Could be Established.")     # pragma: no cover
 
 
 @reaction_blueprint.teardown_app_request
@@ -36,14 +37,19 @@ def teardown_request(exception):
     ''' This function closes the database connection when done '''
     try:
         g.rdb_conn.close()
-    except AttributeError:
+    except AttributeError:  # pragma: no cover
         # Who cares?
-        pass
+        pass                # pragma: no cover
 
-# Reactions
+
+###############################
+### Reaction View Functions ###
+###############################
+
 
 # Add a new reaction
-@reaction_blueprint.route('/dashboard/reactions/<rname>', methods=['GET', 'POST'])
+@reaction_blueprint.route(
+    '/dashboard/reactions/<rname>', methods=['GET', 'POST'])
 def addreaction_page(rname):
     verify = verifyLogin(
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
@@ -84,49 +90,57 @@ def addreaction_page(rname):
                         results = "toomany"
 
                     if results == "exists":
-                        data['msg'] = "This reaction seems to already exist, try using a different name: %s" % reaction.name
-                        print("/dashboard/reactions/%s - Reaction creation failed: exists") % rname
-                        data['error'] = True
+                        print("/dashboard/reactions/{0} - \
+                            Reaction creation failed: exists".format(rname))
+                        flash('{0} seems to already exist. Try using a \
+                              different name.'.format(reaction.name), 'danger')
                     elif results == "edit noexists":
-                        data['msg'] = "This reaction can not be edited as it does not exist: %s" % reaction.name
-                        print("/dashboard/reactions/%s - Reaction edit failed: doesnt exist") % rname
-                        data['error'] = True
+                        print("/dashboard/reactions/{0} - Reaction \
+                              edit failed: doesn't exist".format(rname))
+                        flash('{0} cannot be edited as it does not \
+                              exist.'.format(reaction.name), 'danger')
                     elif results == "edit true":
-                        data['msg'] = "Reaction successfully edited: %s" % reaction.name
-                        print("/dashboard/reactions/%s - Reaction edit successful") % rname
-                        data['error'] = False
+                        print("/dashboard/reactions/{0} - \
+                              Reaction edit successful".format(rname))
+                        flash('Reaction successfully edited: {0}.'.format(
+                            reaction.name), 'success')
                     elif results == "edit failed":
-                        data['msg'] = "Reaction not successfully edited: %s" % reaction.name
-                        print("/dashboard/reactions/%s - Reaction edit failed: unknown") % rname
-                        data['error'] = True
+                        print("/dashboard/reactions/{0} - \
+                              Reaction edit failed: unknown".format(rname))
+                        flash('Reaction not successfully edited: {0}.'.format(
+                            reaction.name), 'danger')
                     elif results == "toomany":
-                        data['msg'] = "Could not create reaction: Too many reactions already created [%d]" % data['rlimit']
-                        print("/dashboard/reactions/%s - Reaction creation failed: too many") % rname
-                        data['error'] = True
+                        print("/dashboard/reactions/{0} - \
+                              Reaction creation failed: too many".format(rname))
+                        flash('Could not create reaction: \
+                              Too many reactions already created.', 'danger')
                     elif results is False:
-                        data['msg'] = "Could not create reaction"
-                        print("/dashboard/reactions/%s - Reaction creation failed: unknown") % rname
-                        data['error'] = True
+                        print("/dashboard/reactions/{0} - \
+                              Reaction creation failed: unknown".format(rname))
+                        flash('Could not create reaction.', 'danger')
                     else:
                         stathat.ez_count(
                             app.config['STATHAT_EZ_KEY'],
                             app.config['ENVNAME'] + ' Reaction Added', 1)
-                        data['msg'] = 'Reaction "%s" successfully added' % reaction.name
-                        print("/dashboard/reactions/%s - Reaction creation successful") % rname
-                        data['error'] = False
+                        print("/dashboard/reactions/{0} - \
+                              Reaction creation successful".format(rname))
+                        flash('Reaction "{0}" successfully added.'.format(
+                            reaction.name), 'success')
                 else:
-                    data['msg'] = "Form is not valid"
-                    print("/dashboard/reactions/%s - Reaction creation failed: form invalid") % rname
-                    data['error'] = True
+                    print("/dashboard/reactions/{0} - \
+                          Reaction creation failed: form invalid".format(rname))
+                    flash('Form is not valid.', 'success')
 
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
 # Edit an existing reaction
-@reaction_blueprint.route('/dashboard/edit-reactions/<rname>/<rid>', methods=['GET', 'POST'])
+@reaction_blueprint.route(
+    '/dashboard/edit-reactions/<rname>/<rid>', methods=['GET', 'POST'])
 def editreact_page(rname, rid):
     ''' This is a generic edit page for reactions '''
     verify = verifyLogin(
@@ -199,44 +213,49 @@ def editreact_page(rname, rid):
                         results = reaction2.editReaction(g.rdb_conn)
                     else:
                         results = False
-                        data['msg'] = "It doesn't appear that you own this reaction"
-                        print("/dashboard/reactions/%s - Reaction edit failed: not owner") % rname
-                        data['error'] = True
+                        print("/dashboard/reactions/{0} - \
+                            Reaction edit failed: not owner".format(rname))
+                        flash("It doesn't appear that you own this reaction.",
+                              'danger')
                     if results == "exists":
-                        data['msg'] = "This reaction seems to already exist, try using a different name: %s" % reaction2.name
-                        print("/dashboard/reactions/%s - Reaction edit failed: exists") % rname
-                        data['error'] = True
+                        print("/dashboard/reactions/{0} - \
+                              Reaction edit failed: exists".format(rname))
+                        flash('This reaction seems to already exist. \
+                              Try using a different name.', 'danger')
                     elif results == "edit noexists":
-                        data['msg'] = "This reaction can not be edited as it does not exist: %s" % reaction2.name
-                        print("/dashboard/reactions/%s - Reaction edit failed: exists") % rname
-                        data['error'] = True
+                        print("/dashboard/reactions/{0} - \
+                              Reaction edit failed: exists".format(rname))
+                        flash('This reaction can not be edited \
+                              as it does not exist.', 'danger')
                     elif results == "edit true":
-                        data['msg'] = "Reaction successfully edited: %s" % reaction2.name
-                        print("/dashboard/reactions/%s - Reaction edit successful") % rname
-                        data['error'] = False
+                        print("/dashboard/reactions/{0} - \
+                              Reaction edit successful".format(rname))
+                        flash('Reaction successfully edited.', 'success')
                     elif results == "edit failed":
-                        data['msg'] = "Reaction not successfully edited: %s" % reaction2.name
-                        print("/dashboard/reactions/%s - Reaction edit failed: unknown") % rname
-                        data['error'] = True
+                        print("/dashboard/reactions/{0} - \
+                              Reaction edit failed: unknown".format(rname))
+                        flash('Reaction not successfully edited.', 'danger')
                     elif results is False:
-                        data['msg'] = "Could not create reaction"
-                        print("/dashboard/reactions/%s - Reaction edit failed: unknown") % rname
-                        data['error'] = True
+                        print("/dashboard/reactions/{0} - \
+                              Reaction edit failed: unknown".format(rname))
+                        flash('Could not create reaction.', 'danger')
                     else:
                         stathat.ez_count(
                             app.config['STATHAT_EZ_KEY'],
                             app.config['ENVNAME'] + ' Reaction Added', 1)
-                        data['msg'] = 'Reaction "%s" successfully added' % reaction2.name
-                        print("/dashboard/reactions/%s - Reaction edit success") % rname
-                        data['error'] = False
+                        print("/dashboard/reactions/{0} - \
+                              Reaction edit success".format(rname))
+                        flash('Reaction "{0}" successfully \
+                              added.'.format(reaction2.name), 'danger')
                 else:
-                    data['msg'] = "Form is not valid"
-                    print("/dashboard/reactions/%s - Reaction edit failed: form invalid") % rname
-                    data['error'] = True
+                    print("/dashboard/reactions/{0} - \
+                          Reaction edit failed: form invalid".format(rname))
+                    flash('Form is not valid.', 'danger')
         form.process()
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
@@ -261,6 +280,7 @@ def reactions_page():
         page = render_template(tmpl, data=data)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
@@ -292,9 +312,10 @@ def delreaction_page(rid):
                 reaction = Reaction(rid)
                 result = reaction.deleteReaction(user.uid, rid, g.rdb_conn)
                 if result:
-                    flash('Reaction was successfully deleted', 'success')
+                    flash('Reaction was successfully deleted.', 'success')
                 else:
-                    flash('Reaction was not deleted', 'danger')
+                    flash('Reaction was not deleted.', 'danger')
             else:
-                flash('You must first detach this reaction from all monitors before deleting', 'danger')
+                flash('You must first detach this reaction \
+                      from all monitors before deleting.', 'danger')
     return redirect(url_for('member.dashboard_page'))

@@ -10,7 +10,7 @@ import unittest
 from base import BaseTestCase
 
 
-class FunctionalMonitorTests(BaseTestCase):
+class MonitorTests(BaseTestCase):
 
     def test_dashboard_monitors_route_login(self):
         # Ensure that /dashboard/monitors requires user login.
