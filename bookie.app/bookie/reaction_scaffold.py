@@ -16,11 +16,10 @@ class ReactionScaffold:
     def __init__(self, logger):
         self.log = logger
 
-    def generate(self, reaction, model):
+    def generate(self, reaction):
         ret = collections.namedtuple('Return', ['status', 'logs'])
         status = 0
         logs = ['line 1', 'line 2']
-
 
         self.log.info("reaction generator returned {d}".format(d=status))
 
