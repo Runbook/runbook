@@ -55,6 +55,23 @@ class FunctionalMonitorTests(BaseTestCase):
             self.assertIn('Login', response.data)
             self.assertIn('Please Login.', response.data)
 
+    def test_user_can_add_monitor(self):
+        # Ensure that a logged in user can add a monitor.
+        with self.client:
+            self.client.post(
+                '/login',
+                data=dict(email="test@tester.com", password="password456"),
+                follow_redirects=True
+            )
+            response = self.client.post(
+                '/dashboard/monitors/cr-api',
+                data=dict(name="test"),
+                follow_redirects=True
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(
+                'Monitor &#34;test&#34; successfully added.', response.data)
+
 
 if __name__ == '__main__':
     unittest.main()
