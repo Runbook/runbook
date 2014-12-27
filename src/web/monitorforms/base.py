@@ -16,5 +16,5 @@ class BaseCheckForm(Form):
         "Name", validators=[DataRequired(message='Name is a required field')])
     reactions = SelectMultipleField("Reactions")
 
-if __name__ == '__main__':
-    pass
+if __name__ == '__main__':  # pragma: no cover
+    pass                    # pragma: no cover

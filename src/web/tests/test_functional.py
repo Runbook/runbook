@@ -33,6 +33,17 @@ class FunctionalTests(BaseTestCase):
         response = self.client.get('/dashboard', follow_redirects=True)
         self.assertIn('Login', response.data)
 
+    def test_dashboard_monitors_route_login(self):
+        # Ensure that /dashboard/monitors requires user login
+        response = self.client.get('/dashboard/monitors', follow_redirects=True)
+        self.assertIn('Login', response.data)
+
+    def test_dashboard_reactions_route_login(self):
+        # Ensure that /dashboard/reactions requires user login
+        response = self.client.get(
+            '/dashboard/reactions', follow_redirects=True)
+        self.assertIn('Login', response.data)
+
     def test_login_page_loads(self):
         # Ensure that the login page loads correctly
         response = self.client.get('/login')
@@ -44,11 +55,6 @@ class FunctionalTests(BaseTestCase):
         response = self.client.get('/signup')
         self.assertIn('Sign up', response.data)
         self.assertEqual(response.status_code, 200)
-
-    def test_dashboard_route_requires_login(self):
-        # Ensure main route requres logged in user.
-        response = self.client.get('/dashboard', follow_redirects=True)
-        self.assertIn('Login', response.data)
 
     def test_logout_route_requires_login(self):
         # Ensure logout route requres logged in user.

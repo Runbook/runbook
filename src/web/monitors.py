@@ -209,5 +209,5 @@ class Monitor(object):
         return result
 
 
-if __name__ == '__main__':
-    pass
+if __name__ == '__main__':  # pragma: no cover
+    pass                    # pragma: no cover

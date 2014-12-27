@@ -22,5 +22,5 @@ def verifyCdata(cdata, secretkey, mxtime):
         return False
 
 
-if __name__ == '__main__':
-    pass
+if __name__ == '__main__':  # pragma: no cover
+    pass                    # pragma: no cover

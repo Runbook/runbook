@@ -23,5 +23,5 @@ class ChangePassForm(Form):
     confirm = PasswordField("Repeat Password")
 
 
-if __name__ == '__main__':
-    pass
+if __name__ == '__main__':  # pragma: no cover
+    pass                    # pragma: no cover
