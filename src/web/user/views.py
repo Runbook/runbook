@@ -9,7 +9,7 @@ import rethinkdb as r
 from rethinkdb.errors import RqlDriverError
 
 from flask import g, abort, make_response, Blueprint, request, redirect, \
-    url_for, render_template
+    url_for, render_template, flash
 
 
 from users import User
@@ -32,9 +32,10 @@ def before_request():
         g.rdb_conn = r.connect(
             host=app.config['DBHOST'], port=app.config['DBPORT'],
             auth_key=app.config['DBAUTHKEY'], db=app.config['DATABASE'])
-    except RqlDriverError:
+    except RqlDriverError:                      # pragma: no cover
         # If no connection possible throw 503 error
-        abort(503, "No Database Connection Could be Established.")
+        abort(503, "No Database Connection \
+                    Could be Established.")     # pragma: no cover
 
 
 @user_blueprint.teardown_app_request
@@ -42,10 +43,14 @@ def teardown_request(exception):
     ''' This function closes the database connection when done '''
     try:
         g.rdb_conn.close()
-    except AttributeError:
+    except AttributeError:  # pragma: no cover
         # Who cares?
-        pass
+        pass                # pragma: no cover
 
+
+###########################
+### User View Functions ###
+###########################
 
 # Signup
 @user_blueprint.route('/signup', methods=['GET', 'POST'])
@@ -83,8 +88,7 @@ def signup():
             result = user.createUser(userdata, g.rdb_conn)
             # Check results for success or failure
             if result == "exists":
-                data['error'] = True
-                data['msg'] = 'User already exists'
+                flash('User already exists.', 'danger')
             elif result is not False:
                 stathat.ez_count(
                     app.config['STATHAT_EZ_KEY'],
@@ -92,8 +96,7 @@ def signup():
                 print("/signup - New user created")
                 cdata = cookies.genCdata(result, app.config['SECRET_KEY'])
                 data['loggedin'] = True
-                data['msg'] = 'You are signed up'
-                data['error'] = False
+                flash('You are signed up.', 'success')
 
                 # Generate confirmation token
                 generate_confirmation_token(email, result, time.time())
@@ -110,8 +113,7 @@ def signup():
                 app.config['STATHAT_EZ_KEY'],
                 app.config['ENVNAME'] + ' False User Signup', 1)
             print("/signup - False user creation")
-            data['msg'] = 'Form is not valid'
-            data['error'] = True
+            flash('Form is not valid.', 'danger')
 
     # Return Signup Page
     return render_template('user/signup.html', data=data, form=form)
@@ -139,9 +141,8 @@ def login_page():
                 result = user.checkPass(password, g.rdb_conn)
                 if result is True:
                     data['loggedin'] = True
-                    data['msg'] = 'You are logged in'
-                    data['error'] = False
                     print("/login - User login successful")
+                    flash('You are logged in.', 'success')
                     # Start building response
                     resp = make_response(
                         redirect(url_for('member.dashboard_page')))
@@ -155,21 +156,17 @@ def login_page():
                     print("Setting cookie")
                     return resp
                 else:
-                    data['msg'] = 'Password does not seem valid'
-                    data['error'] = True
                     print("/login - User login error: wrong password")
+                    flash('Password does not seem valid.', 'danger')
             else:
-                data['msg'] = 'Uhh... User not found'
                 print("/login - User login error: invalid user")
-                data['error'] = True
+                flash('Uhh... User not found.', 'danger')
         else:
-            data['msg'] = 'Form is not valid'
             print("/login - User login error: invalid form")
-            data['error'] = True
+            flash('Form is not valid.', 'danger')
 
     # Return Login Page
-    page = render_template('user/login.html', data=data, form=form)
-    return page
+    return render_template('user/login.html', data=data, form=form)
 
 
 # Logout
@@ -204,4 +201,5 @@ def confirm_email(token):
             except:
                 print "error message here"  # still need to test
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))

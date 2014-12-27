@@ -1,7 +1,7 @@
 ######################################################################
 # Runbook Web Application
 # -------------------------------------------------------------------
-# Tests - models
+# Tests - users
 ######################################################################
 
 
@@ -16,10 +16,10 @@ from web import app, verifyLogin
 from user.token import generate_confirmation_token, confirm_token
 
 
-class TestUserModel(BaseTestCase):
+class TestUser(BaseTestCase):
 
     def test_user_registration(self):
-        # Ensure user registration behaves correctly
+        # Ensure user registration behaves correctly.
         with self.client:
             response = self.client.post('/signup', data=dict(
                 email='test@user.com',
@@ -36,6 +36,35 @@ class TestUserModel(BaseTestCase):
             self.assertTrue(user.status == 'active')
             self.assertFalse(user.confirmed)
             self.assertTrue(user.is_active('test@tester.com', g.rdb_conn))
+
+    def test_invalid_user_registration(self):
+        # Ensure user registration behaves correctly when form is invalid.
+        with self.client:
+            response = self.client.post('/signup', follow_redirects=True)
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('Sign up', response.data)
+            self.assertIn('Form is not valid.', response.data)
+
+    def test_user_registration_duplicates(self):
+        # Ensure user registration behaves correctly for duplicates.
+        with self.client:
+            self.client.post('/signup', data=dict(
+                email='test@user.com',
+                company="test",
+                contact="test",
+                password='test_user',
+                confirm='test_user'
+            ), follow_redirects=True)
+            response = self.client.post('/signup', data=dict(
+                email='test@user.com',
+                company="test",
+                contact="test",
+                password='test_user',
+                confirm='test_user'
+            ), follow_redirects=True)
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('Sign up', response.data)
+            self.assertIn('User already exists.', response.data)
 
     def test_check_password(self):
         # Ensure given password is correct after unhashing
