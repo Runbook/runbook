@@ -45,6 +45,11 @@ def teardown_request(exception):
         pass                # pragma: no cover
 
 
+#############################
+### Member View Functions ###
+#############################
+
+
 # Dashboard Home
 @member_blueprint.route('/dashboard')
 def dashboard_page():

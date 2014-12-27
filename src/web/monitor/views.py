@@ -27,9 +27,10 @@ def before_request():
         g.rdb_conn = r.connect(
             host=app.config['DBHOST'], port=app.config['DBPORT'],
             auth_key=app.config['DBAUTHKEY'], db=app.config['DATABASE'])
-    except RqlDriverError:
+    except RqlDriverError:                      # pragma: no cover
         # If no connection possible throw 503 error
-        abort(503, "No Database Connection Could be Established.")
+        abort(503, "No Database Connection \
+                    Could be Established.")     # pragma: no cover
 
 
 @monitor_blueprint.teardown_app_request
@@ -37,12 +38,14 @@ def teardown_request(exception):
     ''' This function closes the database connection when done '''
     try:
         g.rdb_conn.close()
-    except AttributeError:
+    except AttributeError:  # pragma: no cover
         # Who cares?
-        pass
+        pass                # pragma: no cover
 
 
-# Monitors
+##############################
+### Monitor View Functions ###
+##############################
 
 
 # Add a new Monitor
@@ -143,6 +146,7 @@ def addcheck_page(cname):
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
@@ -277,6 +281,7 @@ def editcheck_page(cname, cid):
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
@@ -301,6 +306,7 @@ def monitors_page():
         page = render_template(tmpl, data=data)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
@@ -457,6 +463,7 @@ def viewhistory_page(cid, start, limit):
         page = render_template(tmpl, data=data)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
@@ -495,4 +502,5 @@ def detailhistory_page(cid, hid):
         page = render_template(tmpl, data=data)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))

@@ -1,7 +1,7 @@
 ######################################################################
 # Runbook Web Application
 # -------------------------------------------------------------------
-# Tests - functional (members blueprint)
+# Tests - members blueprint
 ######################################################################
 
 
@@ -17,11 +17,6 @@ class FunctionalMemberTests(BaseTestCase):
         response = self.client.get('/dashboard', follow_redirects=True)
         self.assertIn('Login', response.data)
         self.assertIn('Please Login.', response.data)
-
-    def test_dashboard_monitors_route_login(self):
-        # Ensure that /dashboard/monitors requires user login.
-        response = self.client.get('/dashboard/monitors', follow_redirects=True)
-        self.assertIn('Login', response.data)
 
     def test_dashboard_reactions_route_login(self):
         # Ensure that /dashboard/reactions requires user login.
@@ -39,19 +34,6 @@ class FunctionalMemberTests(BaseTestCase):
             )
             self.assertTrue(response.status_code == 200)
             self.assertIn('User Preferences', response.data)
-
-    def test_dashboard_monitor_route(self):
-        # Ensure registered user can access dashboard/monitor route.
-        with self.client:
-            self.client.post(
-                '/login',
-                data=dict(email="test@tester.com", password="password456"),
-                follow_redirects=True
-            )
-            response = self.client.get(
-                '/dashboard/monitors', follow_redirects=True)
-            self.assertTrue(response.status_code == 200)
-            self.assertIn('Create Monitors', response.data)
 
     def test_dashboard_reaction_route(self):
         # Ensure registered user can access dashboard/reaction route.
