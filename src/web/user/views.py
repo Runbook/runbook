@@ -19,7 +19,7 @@ from token import generate_confirmation_token, confirm_token
 
 user_blueprint = Blueprint('user', __name__,)
 
-from web import app, verifyLogin, startData
+from web import app, verifyLogin
 
 
 @user_blueprint.before_app_request

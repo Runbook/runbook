@@ -124,6 +124,22 @@ class FunctionalTests(BaseTestCase):
             self.assertTrue(response.status_code == 200)
             self.assertIn('User Preferences', response.data)
 
+    def test_password_change_success(self):
+        # Ensure user can update password.
+        with self.client:
+            self.client.post(
+                '/login',
+                data=dict(email="test@tester.com", password="password456"),
+                follow_redirects=True
+            )
+            response = self.client.post(
+                '/dashboard/user-preferences',
+                data=dict(password="tester678", confirm="tester678"),
+                follow_redirects=True
+            )
+            self.assertTrue(response.status_code == 200)
+            self.assertIn('Password successfully changed.', response.data)
+
     def test_correct_login(self):
         # Ensure login behaves correctly with correct credentials
         with self.client:
