@@ -20,7 +20,8 @@ class DatacenterCheckForm(TimerCheckForm):
     datacenter = SelectMultipleField(
         "Datacenter",
         choices=dc_choices,
-        validators=[DataRequired(message='Monitoring Zone is a required field')])
+        validators=[DataRequired(
+            message='Monitoring Zone is a required field')])
 
 if __name__ == '__main__':
     pass

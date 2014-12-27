@@ -20,7 +20,7 @@ class HeaderList(object):
                 value = value.strip()
                 assert key
                 assert value
-        except Exception, e:
+        except Exception:
             raise ValidationError('Invalid headers. Use key:value format.')
 
 
