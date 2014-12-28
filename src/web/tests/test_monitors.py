@@ -6,6 +6,10 @@
 
 
 import unittest
+import datetime
+import rethinkdb as r
+
+from flask import g
 
 from base import BaseTestCase
 
@@ -71,6 +75,35 @@ class MonitorTests(BaseTestCase):
             self.assertEqual(response.status_code, 200)
             self.assertIn(
                 'Monitor &#34;test&#34; successfully added.', response.data)
+
+    def test_user_can_edit_monitor(self):
+        # Ensure that a logged in user can edit an existing monitor.
+        timestamp = str(datetime.datetime.now())
+        with self.client:
+            self.client.post(
+                '/login',
+                data=dict(email="test@tester.com", password="password456"),
+                follow_redirects=True
+            )
+            self.client.post(
+                '/dashboard/monitors/cr-api',
+                data=dict(name=timestamp),
+                follow_redirects=True
+            )
+            results = r.table('monitors').filter(
+                {'name': timestamp}).run(g.rdb_conn)
+            for result in results:
+                monitor_id = result['id']
+                break
+            new_timestamp = str(datetime.datetime.now())
+            response = self.client.post(
+                '/dashboard/edit-monitors/cr-api/{0}'.format(monitor_id),
+                data=dict(name=new_timestamp),
+                follow_redirects=True
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('Monitor &#34;{0}&#34; successfully edited'.format(
+                new_timestamp), response.data)
 
 
 if __name__ == '__main__':
