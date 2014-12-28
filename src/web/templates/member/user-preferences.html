@@ -32,30 +32,28 @@
           </div>
           <div class="panel-body">
             <form action="/dashboard/user-preferences" method="post" name="add-domain" target="_self" class="form-horizontal" role="form">
-               {{ form.csrf_token }}
+              {{ form.csrf_token }}
               <div class="form-group">
-                <label for="Password" class="col-sm-4 control-label">Password</label>
-            <div class="col-sm-8">
-               {{ form.password(class_="form-control", Placeholder="Password") }}
-            </div>
+                <label for="Password" class="col-sm-4 control-label">New Password</label>
+                <div class="col-sm-8">
+                   {{ form.password(class_="form-control", Placeholder="Password") }}
+                </div>
               </div>
-                
               <div class="form-group">
-                <label for="Confirm" class="col-sm-4 control-label">Password</label>
-            <div class="col-sm-8">
-               {{ form.confirm(class_="form-control", Placeholder="Password") }}
-            </div>
+                <label for="Confirm" class="col-sm-4 control-label">Confirm</label>
+                <div class="col-sm-8">
+                   {{ form.confirm(class_="form-control", Placeholder="Confirm Password") }}
+                </div>
               </div>
 
-            <div class="col-sm-4">
-            </div>  
+            <div class="col-sm-4"></div>
             <div class="col-sm-8">
-                    <button type="submit" class="btn btn-primary btn-block">Change Password</button>
+              <button type="submit" class="btn btn-primary btn-block">Change Password</button>
             </div>
-            
-            </form>
-          </div>
+
+          </form>
         </div>
+      </div>
     </div>
   </div> <!-- row -->
 </div> <!-- container -->

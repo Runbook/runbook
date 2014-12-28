@@ -16,7 +16,8 @@ class CheckForm(DatacenterCheckForm):
     host = TextField(
         "host",
         validators=[
-            DataRequired(message='Host is a required field and should be a hostname or IP address'),
+            DataRequired(message='Host is a required field and \
+                                  should be a hostname or IP address'),
             Regexp(pattern, message="Invalid IP or Hostname format")
         ]
     )

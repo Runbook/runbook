@@ -7,4 +7,4 @@ Just a heads up, we rate limit failure emails to a minimum of 15 minutes. You ca
 - Runbook
 
 https://runbook.io
-https://twitter.com/cloudroutes
+https://twitter.com/runbookio

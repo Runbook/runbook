@@ -7,7 +7,7 @@ import rethinkdb as r
 from rethinkdb.errors import RqlDriverError
 
 from flask import g, Blueprint, render_template, request, \
-    url_for, redirect, abort
+    url_for, redirect, abort, flash
 
 import stathat
 from monitors import Monitor
@@ -29,9 +29,10 @@ def before_request():
         g.rdb_conn = r.connect(
             host=app.config['DBHOST'], port=app.config['DBPORT'],
             auth_key=app.config['DBAUTHKEY'], db=app.config['DATABASE'])
-    except RqlDriverError:
+    except RqlDriverError:                      # pragma: no cover
         # If no connection possible throw 503 error
-        abort(503, "No Database Connection Could be Established.")
+        abort(503, "No Database Connection \
+                    Could be Established.")     # pragma: no cover
 
 
 @member_blueprint.teardown_app_request
@@ -39,9 +40,14 @@ def teardown_request(exception):
     ''' This function closes the database connection when done '''
     try:
         g.rdb_conn.close()
-    except AttributeError:
+    except AttributeError:  # pragma: no cover
         # Who cares?
-        pass
+        pass                # pragma: no cover
+
+
+#############################
+### Member View Functions ###
+#############################
 
 
 # Dashboard Home
@@ -102,6 +108,7 @@ def dashboard_page():
                 'member/screen-o-death.html', data=data, form=form)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
@@ -154,10 +161,10 @@ def modsub_page():
                             data=json_payload, verify=True)
                     except:
                         print("Critical Error making request to ASM Payments")
-                        data['msg'] = "There was an error processing your card details"
-                        data['error'] = True
-                    print(
-                        "Got %d status code from Assembly") % result.status_code
+                        flash('There was an error processing \
+                              your card details.', 'danger')
+                    print("Got {0} status code from Assembly".format(
+                        result.status_code))
                     if result.status_code >= 200 and result.status_code <= 299:
                         rdata = json.loads(result.text)
                         user.stripeid = rdata['id']
@@ -179,12 +186,11 @@ def modsub_page():
                             data['subplans'] = newdata['subplans']
                             data['cost'] = newdata['cost']
                             data['subscription'] = newdata['subscription']
-                            data['msg'] = "Subscription successfully created"
-                            data['error'] = False
+                            flash('Subscription successfully created.',
+                                  'success')
                         else:
-                            data[
-                                'msg'] = "Subscription not successfully created"
-                            data['error'] = True
+                            flash('Subscription not successfully created.',
+                                  'danger')
         # Increase subscription
         if data['acttype'] != "Lite":
             form = subscribe.AddPackForm(request.form)
@@ -212,22 +218,24 @@ def modsub_page():
                                     url=url, headers=headers,
                                     data=json_payload, verify=True)
                             except:
-                                data['msg'] = "An error occured while processing the form"
-                                data['error'] = True
-                                print("Critical Error making request to ASM Payments")
+                                print("Critical Error making \
+                                      request to ASM Payments")
+                                flash('An error occured while \
+                                      processing the form.', 'danger')
                         else:
-                            data['msg'] = "An error occured while processing the form"
-                            data['error'] = True
+                            flash('An error occured while \
+                                  processing the form.', 'danger')
                     except:
-                        data['msg'] = "An error occured while processing the form"
-                        data['error'] = True
                         print("Critical Error making request to ASM Payments")
-                    print(
-                        "Got %d status code from Assembly") % result.status_code
+                        flash('An error occured \
+                              while processing the form.', 'danger')
+                    print("Got {0} status code from Assembly".format(
+                        result.status_code))
                     if result.status_code >= 200 and result.status_code <= 299:
                         user.subplans = add_packs
                         # Save user config
-                        print("Setting subscription count to %d for user %s") % (add_packs, user.uid)
+                        print("Setting subscription count to \
+                              {0} for user {1}".format(add_packs, user.uid))
                         subres = user.setSubscription(g.rdb_conn)
                         if subres:
                             newdata = startData(user)
@@ -236,15 +244,16 @@ def modsub_page():
                             data['acttype'] = newdata['acttype']
                             data['subplans'] = newdata['subplans']
                             data['cost'] = newdata['cost']
-                            data['msg'] = "Subscription successfully modified"
-                            data['error'] = False
+                            flash('Subscription successfully modified.',
+                                  'success')
                         else:
-                            data['msg'] = "Unknown error modifing subscription"
-                            data['error'] = True
+                            flash('Unknown error modifing subscription.',
+                                  'danger')
 
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
@@ -273,16 +282,16 @@ def userpref_page():
                 if form.validate():
                     result = user.setPass(form.password.data, g.rdb_conn)
                     if result:
-                        data['msg'] = "Password successfully changed"
                         print("/dashboard/user-preferences - Password changed")
-                        data['error'] = False
+                        flash('Password successfully changed.', 'success')
                     else:
-                        data['msg'] = "Password change was unsuccessful"
-                        print("/dashboard/user-preferences - Password change failed")
-                        data['error'] = True
+                        print("/dashboard/user-preferences - \
+                              Password change failed")
+                        flash('Password change was unsuccessful.', 'danger')
             data['url'] = '/dashboard/user-preferences'
             tmpl = 'member/user-preferences.html'
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))

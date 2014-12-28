@@ -30,7 +30,8 @@ def webCheck(request, monitor, urldata, rdb):
             monitor.healthcheck = "false"
             result = monitor.webCheck(rdb)
             if result:
-                print("cr-api: change of webCheck for monitor %s was successful") % cid
+                print("cr-api: change of webCheck for \
+                      monitor {0} was successful".format(cid))
                 rdata['result'] = "success"
             else:
                 print("cr-api: could not set webCheck for monitor %s") % cid
@@ -39,7 +40,8 @@ def webCheck(request, monitor, urldata, rdb):
             monitor.healthcheck = "true"
             result = monitor.webCheck(rdb)
             if result:
-                print("cr-api: change of webCheck for monitor %s was successful") % cid
+                print("cr-api: change of webCheck for \
+                      monitor {0} was successful".format(cid))
                 rdata['result'] = "success"
             else:
                 print("cr-api: could not set webCheck for monitor %s") % cid
