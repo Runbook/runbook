@@ -17,14 +17,23 @@ sed -i "s/6000/$ACTIONBROKER_PORT_6000_TCP_PORT/" /config/config.yml
 sed -i "s/sink_host$/$ACTIONBROKER_PORT_6001_TCP_ADDR/" /config/config.yml
 sed -i "s/6001/$ACTIONBROKER_PORT_6001_TCP_PORT/" /config/config.yml
 
-echo "[BOOTSTRAP] Running create_db.py"
-echo "-------------------------------------------------"
-python /code/mgmtscripts/create_db.py /config/config.yml
-if [ $? -eq 0 ]
-then
-  echo "[BOOTSTRAP] Starting bridge.py"
-  echo "-------------------------------------------------"
-  python /code/bridge.py /config/config.yml
+if [ -z "$1" ] ; then
+    echo "[BOOTSTRAP] Running create_db.py"
+    echo "-------------------------------------------------"
+    python /code/mgmtscripts/create_db.py /config/config.yml
+    if [ $? -eq 0 ] ; then
+	echo "[BOOTSTRAP] Starting bridge.py"
+	echo "-------------------------------------------------"
+	python /code/bridge.py /config/config.yml
+    else
+	exit 1
+    fi
 else
-  exit 1
+    script="/code/mgmtscripts/$1.py"
+    if [ -e "$script" ] ; then
+	"$script" /config/config.yml
+    else
+	echo "Exiting: Cannot execute '$script'"
+	exit 1
+    fi
 fi
