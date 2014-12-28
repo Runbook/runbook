@@ -20,8 +20,7 @@ def check(data):
                'Content-Type': 'application/json'}
     url = "https://api.digitalocean.com/v2/droplets/%s/actions" % str(
         data['data']['dropletid'])
-    msg = {"type": "snapshot",
-           "name": data['data']['snapname']}
+    msg = {"type": "snapshot"}
     payload = json.dumps(msg)
     try:
         req = requests.post(
@@ -29,10 +28,12 @@ def check(data):
     except:
         return False
     if req.status_code >= 200 and req.status_code < 300:
-        line = "digitalocean-snapshot: Reqeust to %s sent for monitor %s - Successful" % (url, data['cid'])
+        line = "digitalocean-snapshot: Reqeust to {0} \
+               sent for monitor {1} - Successful".format(url, data['cid'])
         syslog.syslog(syslog.LOG_INFO, line)
         return True
     else:
-        line = "digitalocean-snapshot: Request to %s sent for monitor %s - False" % (url, data['cid'])
+        line = "digitalocean-snapshot: Request to {0} \
+               sent for monitor {1} - False".format(url, data['cid'])
         syslog.syslog(syslog.LOG_INFO, line)
         return False

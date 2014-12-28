@@ -4,7 +4,7 @@
 # Health Check - Forms Class
 ######################################################################
 
-from wtforms import TextField, SelectField
+from wtforms import TextField
 from wtforms.validators import DataRequired, NumberRange
 from ..datacenter import DatacenterCheckForm
 
@@ -24,10 +24,6 @@ class CheckForm(DatacenterCheckForm):
                         message="Droplet ID should be a numeric ID number")
         ]
     )
-    call_on = SelectField(
-        "Call On",
-        choices=[('false', 'False Monitors'), ('true', 'True Monitors')],
-        validators=[DataRequired(message='Call On is a required field')])
 
 
 if __name__ == '__main__':
