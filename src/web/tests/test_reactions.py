@@ -4,8 +4,11 @@
 # Tests - reactions
 ######################################################################
 
-
+import datetime
 import unittest
+import rethinkdb as r
+
+from flask import g
 
 from base import BaseTestCase
 
@@ -75,6 +78,39 @@ class ReactionTests(BaseTestCase):
             self.assertEqual(response.status_code, 200)
             self.assertIn(
                 'Reaction &#34;test&#34; successfully added.', response.data)
+
+    def test_user_can_edit_reaction(self):
+        # Ensure that a logged in user can edit an existing reaction.
+        timestamp = str(datetime.datetime.now())
+        with self.client:
+            self.client.post(
+                '/login',
+                data=dict(email="test@tester.com", password="password456"),
+                follow_redirects=True
+            )
+            self.client.post(
+                '/dashboard/reactions/enotify',
+                data=dict(name=timestamp, trigger=1,
+                          frequency=1, email="test@tester.com",
+                          send_true=True),
+                follow_redirects=True
+            )
+            results = r.table('reactions').filter(
+                {'name': timestamp}).run(g.rdb_conn)
+            for result in results:
+                reaction_id = result['id']
+                break
+            new_timestamp = str(datetime.datetime.now())
+            response = self.client.post(
+                '/dashboard/edit-reactions/enotify/{0}'.format(reaction_id),
+                data=dict(name=new_timestamp, trigger=1,
+                          frequency=1, email="test@tester.com",
+                          send_true=True),
+                follow_redirects=True
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('Reaction successfully edited.'.format(
+                new_timestamp), response.data)
 
 if __name__ == '__main__':
     unittest.main()

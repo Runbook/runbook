@@ -102,8 +102,8 @@ class MonitorTests(BaseTestCase):
                 follow_redirects=True
             )
             self.assertEqual(response.status_code, 200)
-            self.assertIn('Monitor &#34;{0}&#34; successfully edited'.format(
-                new_timestamp), response.data)
+            self.assertIn('Monitor &#34;{0}&#34; successfully edited'
+                .format(new_timestamp), response.data)
 
 
 if __name__ == '__main__':
