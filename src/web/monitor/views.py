@@ -314,8 +314,8 @@ def monitors_page():
 @monitor_blueprint.route('/dashboard/action-checks/<cid>/<action>')
 def checkaction_page(cid, action):
     '''
-    Dashboard Delete Checks:
-    This will delete health checks via the url parameters
+    Dashboard Update Checks:
+    This will update health checks via the url parameters
     '''
     verify = verifyLogin(
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
@@ -326,7 +326,7 @@ def checkaction_page(cid, action):
             pass
         else:
 
-            # Delete the Monitor
+            # Update the Monitor
             monitor = Monitor(cid)
             monitor.get(cid, g.rdb_conn)
             if user.uid == monitor.uid:
@@ -340,7 +340,7 @@ def checkaction_page(cid, action):
                     result = monitor.webCheck(g.rdb_conn)
                 if result:
                     print("/dashboard/action-checks - Manual monitor queued")
-                    flash('Health check status change is queued', 'success')
+                    flash('Health check status change is queued.', 'success')
                 else:
                     print("/dashboard/action-checks - \
                           Manual monitor action failed")
@@ -376,7 +376,7 @@ def delcheck_page(cid):
             result = monitor.deleteMonitor(user.uid, cid, g.rdb_conn)
             if result:
                 print("/dashboard/delete-checks - Delete successful")
-                flash('Health Check was successfully deleted', 'success')
+                flash('Health Check was successfully deleted.', 'success')
             else:
                 print("/dashboard/delete-checks - Delete failed")
                 flash('Health Check was not deleted', 'danger')

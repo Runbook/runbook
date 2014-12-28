@@ -18,12 +18,6 @@ class MemberTests(BaseTestCase):
         self.assertIn('Login', response.data)
         self.assertIn('Please Login.', response.data)
 
-    def test_dashboard_reactions_route_login(self):
-        # Ensure that /dashboard/reactions requires user login.
-        response = self.client.get(
-            '/dashboard/reactions', follow_redirects=True)
-        self.assertIn('Login', response.data)
-
     def test_dashboard_route(self):
         # Ensure registered user can access dashboard route.
         with self.client:
@@ -34,19 +28,6 @@ class MemberTests(BaseTestCase):
             )
             self.assertTrue(response.status_code == 200)
             self.assertIn('User Preferences', response.data)
-
-    def test_dashboard_reaction_route(self):
-        # Ensure registered user can access dashboard/reaction route.
-        with self.client:
-            self.client.post(
-                '/login',
-                data=dict(email="test@tester.com", password="password456"),
-                follow_redirects=True
-            )
-            response = self.client.get(
-                '/dashboard/reactions', follow_redirects=True)
-            self.assertTrue(response.status_code == 200)
-            self.assertIn('Create Reactions', response.data)
 
     def test_dashboard_subscription_route(self):
         # Ensure registered user can access dashboard/mod-subscription route.

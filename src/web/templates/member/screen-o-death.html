@@ -10,13 +10,7 @@
       <div class="page-header">
         <h1><i class="fa fa-sitemap fa-1x"></i> Status</h1>
       </div>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-          <p class="alert alert-{{category}}">{{message}}</p>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
+
         {% if data['welcome'] %}
           <p class="lead">Getting paged in the middle of the night sucks. To start creating a self healing environment you should first add a few <a href="/dashboard/reactions">Reactions</a> to resolve issues; and a few <a href="/dashboard/monitors">Monitors</a> to trigger when to run them.</p>
           <p class="lead">Then you can rest easy knowing that our system is keeping a watchful eye on your servers and applications, and if we see something wrong we will take care of it.</p>
@@ -116,7 +110,7 @@
                 </div>
             </div>
           </div>
-          
+
           <div class="tab-pane" id="manage">
         <div class="panel panel-primary">
           <div class="panel-heading">
@@ -141,17 +135,17 @@
             {%- else -%}
             <tr class="warning">
               <td><i class="fa fa-circle"></i></td>
-            {%- endif -%} 
+            {%- endif -%}
               <td>{{ monitor['name'] }}</td>
               <td>{{ monitor['status']|capitalize }}</td>
               <td>
 {%- if "true" in monitor['status'] or "monitored" in monitor['status'] %}
-<a href="/dashboard/action-checks/{{ cid }}/false" class="btn btn-danger btn-xs" role="button"><i class="fa fa-exclamation-triangle"></i> Mark False</a> 
+<a href="/dashboard/action-checks/{{ cid }}/false" class="btn btn-danger btn-xs" role="button"><i class="fa fa-exclamation-triangle"></i> Mark False</a>
 {%- endif %}
 {%- if "false" in monitor['status'] or "monitored" in monitor['status'] %}
-<a href="/dashboard/action-checks/{{ cid }}/true" class="btn btn-success btn-xs" role="button"><i class="fa fa-check-circle"></i> Mark True</a> 
+<a href="/dashboard/action-checks/{{ cid }}/true" class="btn btn-success btn-xs" role="button"><i class="fa fa-check-circle"></i> Mark True</a>
 {%- endif %}
-<a href="/dashboard/delete-checks/{{ cid }}" class="btn btn-danger btn-xs" role="button"><i class="fa fa-trash-o"></i> Delete</a> 
+<a href="/dashboard/delete-checks/{{ cid }}" class="btn btn-danger btn-xs" role="button"><i class="fa fa-trash-o"></i> Delete</a>
 <a href="/dashboard/edit-monitors/{{ monitor['ctype'] }}/{{ cid }}" class="btn btn-primary btn-xs" role="button"><i class="fa fa-edit"></i> Edit</a>
 <a href="/dashboard/view-history/{{ cid }}/0/200" class="btn btn-primary btn-xs" role="button"><i class="fa fa-book"></i> History</a>
 
