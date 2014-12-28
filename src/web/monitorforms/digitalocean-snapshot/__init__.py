@@ -5,7 +5,7 @@
 ######################################################################
 
 from wtforms import TextField
-from wtforms.validators import DataRequired, NumberRange
+from wtforms.validators import DataRequired
 from ..datacenter import DatacenterCheckForm
 
 
@@ -16,14 +16,6 @@ class CheckForm(DatacenterCheckForm):
     apikey = TextField(
         "API Key",
         validators=[DataRequired(message='API Key is a required field')])
-    dropletid = TextField(
-        "Droplet ID#",
-        validators=[
-            DataRequired(message='Droplet ID# is a required field'),
-            NumberRange(min=1, max=None,
-                        message="Droplet ID should be a numeric ID number")
-        ]
-    )
 
 
 if __name__ == '__main__':
