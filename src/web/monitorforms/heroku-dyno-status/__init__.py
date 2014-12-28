@@ -14,9 +14,11 @@ class CheckForm(DatacenterCheckForm):
     ''' Creates a wtforms form object for monitors '''
     apikey = TextField(
         "API Key",
-        validators=[DataRequired(message='API Key is a required field')])
+        validators=[DataRequired(
+            message='API Key is a required field')])
     appname = TextField(
-        "Application Name", validators=[DataRequired(message='Application Name is a required field')])
+        "Application Name", validators=[DataRequired(
+            message='Application Name is a required field')])
 
 if __name__ == '__main__':
     pass
