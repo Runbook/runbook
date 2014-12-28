@@ -4,6 +4,7 @@ import time
 
 import rethinkdb as r
 
+from rethinkdb.errors import RqlRuntimeError, RqlDriverError
 
 if len(sys.argv) != 2:
     print("Hey, thats not how you launch this...")
@@ -17,10 +18,21 @@ config = yaml.safe_load(cfh)
 cfh.close()
 
 # Establish Connection
-host = config['rethink_host']
 database = config['rethink_db']
-auth_key = config['rethink_authkey']
-conn = r.connect(host, 28015, auth_key=auth_key).repl()
+
+try:
+    if config['rethink_authkey']:
+        conn = r.connect(
+            host=config['rethink_host'], port=config['rethink_port'],
+            auth_key=config['rethink_authkey'], db=config['rethink_db']).repl()
+    else:
+        conn = r.connect(
+            host=config['rethink_host'], port=config['rethink_port'],
+            db=config['rethink_db']).repl()
+    print "Connecting to RethinkDB"
+except RqlDriverError:
+    print "Cannot connect to rethinkdb, shutting down"
+    sys.exit(1)
 
 userdata = {
     'username': 'test@tester.com',
