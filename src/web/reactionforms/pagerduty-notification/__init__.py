@@ -4,7 +4,7 @@
 # Reaction - Forms Class for PagerDuty notification
 ######################################################################
 
-from wtforms import TextField, TextAreaField
+from wtforms import TextField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Optional
 from ..base import BaseReactForm
 
