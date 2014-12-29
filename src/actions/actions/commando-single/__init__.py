@@ -5,7 +5,6 @@
 # Actions Module
 ######################################################################
 
-import syslog
 import requests
 import json
 import time
@@ -15,6 +14,7 @@ def action(**kwargs):
     ''' This method is called to action a reaction '''
     redata = kwargs['redata']
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -29,12 +29,12 @@ def action(**kwargs):
         run = False
 
     if run:
-        return call(redata, jdata)
+        return call(redata, jdata, logger)
     else:
         return None
 
 
-def call(redata, jdata):
+def call(redata, jdata, logger):
     ''' Perform actual call '''
     url = "https://api.commando.io/v1/recipes/%s/execute" % redata['data']['recipe_id']
     payload = {
@@ -48,11 +48,11 @@ def call(redata, jdata):
         return False
     if req.status_code == 202:
         line = "commando-single: Reqeust to %s sent for monitor %s - Successful - %d" % (url, jdata['cid'], req.status_code)
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return True
     else:
         line = "commando-single: Request to %s sent for monitor %s - False - %d" % (url, jdata['cid'], req.status_code)
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         line = "commando-single: Debug Reply: %s" % req.text
-        syslog.syslog(syslog.LOG_DEBUG, line)
+        logger.debug(line)
         return False
