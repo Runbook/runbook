@@ -31,7 +31,7 @@ if [ -z "$1" ] ; then
 else
     script="/code/mgmtscripts/$1.py"
     if [ -e "$script" ] ; then
-	"$script" /config/config.yml
+	env python "$script" /config/config.yml
     else
 	echo "Exiting: Cannot execute '$script'"
 	exit 1
