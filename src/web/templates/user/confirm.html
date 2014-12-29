@@ -1,0 +1,9 @@
+<p>Dear {{ user }},</p>
+
+<p>Welcome to Runbook! Please follow this link to activate your account:</p>
+
+<p>{{ url_for('auth.confirm', token=token, _external=True) }}</p>
+
+<br>
+
+<p>Cheers!</p>
