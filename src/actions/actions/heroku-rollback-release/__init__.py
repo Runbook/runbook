@@ -5,7 +5,6 @@
 # Actions Module
 ######################################################################
 
-import syslog
 import time
 import json
 import base64
@@ -16,6 +15,8 @@ def action(**kwargs):
     ''' This method is called to action a reaction '''
     redata = kwargs['redata']
     jdata = kwargs['jdata']
+    r_server = kwargs['r_server']
+    logger = kwargs['logger']
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -30,12 +31,12 @@ def action(**kwargs):
         run = False
 
     if run:
-        return callAction(redata, jdata)
+        return callAction(redata, jdata, r_server, logger)
     else:
         return None
 
 
-def callAction(redata, jdata, r_server):
+def callAction(redata, jdata, r_server, logger):
     ''' Perform Heroku Actions '''
     # Ready API Request Data
     # Generate Base64 encoded API Key
@@ -65,12 +66,12 @@ def callAction(redata, jdata, r_server):
         # If fail return False to mark reaction false
         line = ("heroku-rollback-release:"
                " Could not connect to Heroku for reaction %s") % redata['id']
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return False
     # Log heroku results for troubleshooting later
     line = ("heroku-rollback-release: Got status code reply %d "
             "from Heroku for reaction %s") % (result.status_code, redata['id'])
-    syslog.syslog(syslog.LOG_DEBUG, line)
+    logger.debug(line)
 
     # if we get a good return
     if result.status_code == 200:
@@ -107,7 +108,7 @@ def callAction(redata, jdata, r_server):
                 line = ("heroku-rollback-release:"
                         " Could not get list of releases"
                         " for reaction %s") % redata['id']
-                syslog.syslog(syslog.LOG_DEBUG, line)
+                logger.debug(line)
                 return False
 
             # Get unique id for release to rollback to
@@ -122,7 +123,7 @@ def callAction(redata, jdata, r_server):
                 line = ("heroku-rollback-release:"
                         " Could not get info on release"
                         " for reaction %s") % redata['id']
-                syslog.syslog(syslog.LOG_DEBUG, line)
+                logger.debug(line)
                 return False
 
             # If we got value let's continue
@@ -144,14 +145,14 @@ def callAction(redata, jdata, r_server):
                     # errors
                     line = ("heroku-rollback-release: Could not connect to "
                             "Heroku for reaction %s") % redata['id']
-                    syslog.syslog(syslog.LOG_INFO, line)
+                    logger.info(line)
                     return False
                 # Process results
                 # Log heroku results for troubleshooting later
                 line = ("heroku-rollback-release: Got status code reply %d "
                        "from Heroku for reaction"
                        " %s") % (result.status_code, redata['id'])
-                syslog.syslog(syslog.LOG_DEBUG, line)
+                logger.debug(line)
                 # Verify we got a 200 and set as success, or set as failure
                 if result.status_code == 201:
                     # If everything is good set the rollback release
@@ -163,23 +164,23 @@ def callAction(redata, jdata, r_server):
                     line = ("heroku-rollback-release: Reaction %s got %s "
                             "from Heroku after making a request"
                             " to %s") % (redata['id'], result.text, url)
-                    syslog.syslog(syslog.LOG_DEBUG, line)
+                    logger.debug(line)
                     return False
             else:
                 line = ("heroku-rollback-release:"
                         " Could not get releases info"
                         " for reaction %s") % redata['id']
-                syslog.syslog(syslog.LOG_DEBUG, line)
+                logger.debug(line)
                 return False
         else:
             line = ("heroku-rollback-release: Reaction %s is already "
                     "rolled back to the min_release"
                     " %s") % (redata['id'], int(redata['data']['min_release']))
-            syslog.syslog(syslog.LOG_DEBUG, line)
+            logger.debug(line)
             return None
     else:
         line = ("heroku-rollback-release: Reaction %s got %s from "
                 "Heroku after making a request to "
                 "%s") % (redata['id'], result.text, url)
-        syslog.syslog(syslog.LOG_DEBUG, line)
+        logger.debug(line)
         return False
