@@ -241,7 +241,6 @@ body {
 }
 
 .footer-action-section {
-  height: 230px;
 	padding: 20px 0px;
 	background: url('/static/img/footer-action.png');
 	background-size: cover;
