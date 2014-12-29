@@ -5,7 +5,6 @@
 # Actions Module
 ######################################################################
 
-import syslog
 import requests
 import json
 import time
@@ -15,6 +14,7 @@ def action(**kwargs):
     ''' This method is called to action a reaction '''
     redata = kwargs['redata']
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -29,12 +29,12 @@ def action(**kwargs):
         run = False
 
     if run:
-        return callDO(redata, jdata)
+        return callDO(redata, jdata, logger)
     else:
         return None
 
 
-def callDO(redata, jdata):
+def callDO(redata, jdata, logger):
     ''' Perform actual call '''
     headers = {'Authorization': 'Bearer ' + redata['data']['apikey'],
                'Content-Type': 'application/json'}
@@ -49,9 +49,9 @@ def callDO(redata, jdata):
         return False
     if req.status_code >= 200 and req.status_code < 300:
         line = "digitalocean-poweroff: Reqeust to %s sent for monitor %s - Successful" % (url, jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return True
     else:
         line = "digitalocean-poweroff: Request to %s sent for monitor %s - False" % (url, jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return False
