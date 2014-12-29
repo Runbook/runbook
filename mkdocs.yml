@@ -13,6 +13,7 @@ pages:
 - ['monitors/web-applications.md', 'Monitors', "Web Applications"]
 - ['monitors/ssl.md', 'Monitors', "SSL Certificates"]
 - ['monitors/heroku.md', 'Monitors', "Heroku"]
+- ['monitors/digitalocean.md', 'Monitors', "DigitalOcean"]
 - ['monitors/datadog.md', 'Monitors', "Datadog"]
 - ['monitors/papertrail.md', 'Monitors', "Papertrail"]
 - ['monitors/logentries.md', 'Monitors', "Logentries"]

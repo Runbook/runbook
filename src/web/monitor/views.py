@@ -27,9 +27,10 @@ def before_request():
         g.rdb_conn = r.connect(
             host=app.config['DBHOST'], port=app.config['DBPORT'],
             auth_key=app.config['DBAUTHKEY'], db=app.config['DATABASE'])
-    except RqlDriverError:
+    except RqlDriverError:                      # pragma: no cover
         # If no connection possible throw 503 error
-        abort(503, "No Database Connection Could be Established.")
+        abort(503, "No Database Connection \
+                    Could be Established.")     # pragma: no cover
 
 
 @monitor_blueprint.teardown_app_request
@@ -37,12 +38,14 @@ def teardown_request(exception):
     ''' This function closes the database connection when done '''
     try:
         g.rdb_conn.close()
-    except AttributeError:
+    except AttributeError:  # pragma: no cover
         # Who cares?
-        pass
+        pass                # pragma: no cover
 
 
-# Monitors
+##############################
+### Monitor View Functions ###
+##############################
 
 
 # Add a new Monitor
@@ -98,28 +101,33 @@ def addcheck_page(cname):
                         results = "toomany"
 
                     if results == "exists":
-                        data['msg'] = "This monitor seems to already exist, try using a different name: %s" % monitor.name
-                        print("/dashboard/monitors/%s - Monitor already exists") % cname
-                        data['error'] = True
+                        print("/dashboard/monitors/{0} - \
+                              Monitor already exists".format(cname))
+                        flash('{0} seems to already exist. \
+                              Try using a different name.'.format(
+                              monitor.name), 'danger')
                     elif results is False:
-                        data['msg'] = "Could not create monitor"
-                        print("/dashboard/monitors/%s - Monitor creation failed") % cname
-                        data['error'] = True
+                        print("/dashboard/monitors/{0} - \
+                            Monitor creation failed".format(cname))
+                        flash('Could not create monitor.', 'danger')
                     elif results == 'toomany':
                         stathat.ez_count(
                             app.config['STATHAT_EZ_KEY'],
                             app.config['ENVNAME'] + ' Too many health checks',
                             1)
-                        data['msg'] = "You have too many monitors [%d] to add another. Please upgrade your plan or clean up old ones." % data['limit']
-                        print("/dashboard/monitors/%s - Monitor creation failed: toomany") % cname
-                        data['error'] = True
+                        flash('You have too many monitors. \
+                              Please upgrade your plan or clean \
+                              up old ones.', 'danger')
+                        print("/dashboard/monitors/{0} - \
+                              Monitor creation failed: toomany".format(cname))
                     else:
                         stathat.ez_count(
                             app.config['STATHAT_EZ_KEY'],
                             app.config['ENVNAME'] + ' Monitor Added', 1)
-                        data['msg'] = 'Monitor "%s" successfully added' % monitor.name
-                        print("/dashboard/monitors/%s - Monitor creation successful") % cname
-                        data['error'] = False
+                        print("/dashboard/monitors/%s - \
+                              Monitor creation successful") % cname
+                        flash('Monitor "{0}" successfully added.'.format(
+                            monitor.name), 'success')
                         newmonitor = Monitor()
                         newmonitor.get(results, g.rdb_conn)
                         if newmonitor.uid == user.uid:
@@ -132,17 +140,19 @@ def addcheck_page(cname):
                                 'data': newmonitor.data
                             }
                 else:
-                    print("/dashboard/monitors/%s - Monitor creation failed: Form invalid") % cname
-                    data['msg'] = "Form is not valid"
-                    data['error'] = True
+                    print("/dashboard/monitors/{0} - \
+                          Monitor creation failed: Form invalid".format(cname))
+                    flash('Form is not valid.', 'danger')
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
 # Edit a Monitor
-@monitor_blueprint.route('/dashboard/edit-monitors/<cname>/<cid>', methods=['GET', 'POST'])
+@monitor_blueprint.route(
+    '/dashboard/edit-monitors/<cname>/<cid>', methods=['GET', 'POST'])
 def editcheck_page(cname, cid):
     verify = verifyLogin(
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
@@ -226,34 +236,43 @@ def editcheck_page(cname, cid):
                         results = monitor.editMonitor(g.rdb_conn)
                     else:
                         results = "NotYours"
-                        data['msg'] = "This Monitor doesn't appear to be yours"
-                        print("/dashboard/edit-monitors/%s - Monitor edit failed: not users") % cname
-                        data['error'] = True
+                        print("/dashboard/edit-monitors/{0} - \
+                              Monitor edit failed: not users".format(cname))
+                        flash("This Monitor doesn't appear to be yours.",
+                              'danger')
                     if results == "exists":
-                        data['msg'] = "This monitor seems to already exist, try using a different name: %s" % monitor.name
-                        print("/dashboard/edit-monitors/%s - Monitor edit failed: exists") % cname
-                        data['error'] = True
+                        print("/dashboard/edit-monitors/{0} - \
+                              Monitor edit failed: exists".format(cname))
+                        flash('This monitor seems to already exist. \
+                               Try using a different name.', 'danger')
                     elif results is False:
-                        data['msg'] = "Could not edit monitor"
-                        print("/dashboard/edit-monitors/%s - Monitor edit failed: unknown reason") % cname
-                        data['error'] = True
+                        print("/dashboard/edit-monitors/{0} - Monitor \
+                              edit failed: unknown reason".format(cname))
+                        flash('Could not edit monitor.', 'danger')
                     elif results == 'toomany':
                         stathat.ez_count(
                             app.config['STATHAT_EZ_KEY'],
                             app.config['ENVNAME'] + ' Too many health checks',
                             1)
-                        data['msg'] = "You have too many monitors [%d] to add another. Please upgrade your plan or clean up old ones." % data['limit']
-                        print("/dashboard/edit-monitors/%s - Monitor edit failed: too many") % cname
-                        data['error'] = True
+                        print("/dashboard/edit-monitors/{0} - \
+                              Monitor edit failed: too many".format(cname))
+                        flash('You have too many monitors. \
+                              Please upgrade your plan or clean \
+                              up old ones.', 'danger')
                     else:
-                        stathat.ez_count(app.config['STATHAT_EZ_KEY'], app.config['ENVNAME'] + ' Monitor Added', 1)
-                        data['msg'] = 'Monitor "%s" successfully edited' % monitor.name
-                        print("/dashboard/edit-monitors/%s - Monitor edit successful") % cname
-                        data['error'] = False
+                        stathat.ez_count(
+                            app.config['STATHAT_EZ_KEY'],
+                            app.config['ENVNAME'] + ' Monitor Added',
+                            1
+                        )
+                        print("/dashboard/edit-monitors/{0} - \
+                              Monitor edit successful").format(cname)
+                        flash('Monitor "{0}" successfully edited'.format(
+                            monitor.name), 'success')
                 else:
-                    data['msg'] = "Form is not valid"
-                    print("/dashboard/edit-monitors/%s - Monitor edit failed: Form invalid") % cname
-                    data['error'] = True
+                    print("/dashboard/edit-monitors/{0} - \
+                          Monitor edit failed: Form invalid".format(cname))
+                    flash('Form is not valid.', 'danger')
             # Process form to display defaults
             if form.__contains__("timer"):
                 form.timer.default = data['monitor']['data']['timer']
@@ -262,6 +281,7 @@ def editcheck_page(cname, cid):
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
@@ -286,6 +306,7 @@ def monitors_page():
         page = render_template(tmpl, data=data)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
@@ -293,8 +314,8 @@ def monitors_page():
 @monitor_blueprint.route('/dashboard/action-checks/<cid>/<action>')
 def checkaction_page(cid, action):
     '''
-    Dashboard Delete Checks:
-    This will delete health checks via the url parameters
+    Dashboard Update Checks:
+    This will update health checks via the url parameters
     '''
     verify = verifyLogin(
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
@@ -305,7 +326,7 @@ def checkaction_page(cid, action):
             pass
         else:
 
-            # Delete the Monitor
+            # Update the Monitor
             monitor = Monitor(cid)
             monitor.get(cid, g.rdb_conn)
             if user.uid == monitor.uid:
@@ -317,18 +338,18 @@ def checkaction_page(cid, action):
                     monitor.healthcheck = "web-true"
                     print("/dashboard/action-checks - Manual monitor true")
                     result = monitor.webCheck(g.rdb_conn)
-
                 if result:
                     print("/dashboard/action-checks - Manual monitor queued")
-                    flash('Health check status change is queued', 'success')
+                    flash('Health check status change is queued.', 'success')
                 else:
-                    print("/dashboard/action-checks - Manual monitor action failed")
-                    flash(
-                        'Something went wrong. Could not modify health check',
-                        'danger')
+                    print("/dashboard/action-checks - \
+                          Manual monitor action failed")
+                    flash('Something went wrong. \
+                          Could not modify health check.', 'danger')
             else:
-                print("/dashboard/action-checks - Manual monitor action failed: do not own")
-                flash('It does not appear you own this health check', 'danger')
+                print("/dashboard/action-checks - \
+                      Manual monitor action failed: do not own")
+                flash('It does not appear you own this health check.', 'danger')
 
     return redirect(url_for('member.dashboard_page'))
 
@@ -355,7 +376,7 @@ def delcheck_page(cid):
             result = monitor.deleteMonitor(user.uid, cid, g.rdb_conn)
             if result:
                 print("/dashboard/delete-checks - Delete successful")
-                flash('Health Check was successfully deleted', 'success')
+                flash('Health Check was successfully deleted.', 'success')
             else:
                 print("/dashboard/delete-checks - Delete failed")
                 flash('Health Check was not deleted', 'danger')
@@ -369,7 +390,8 @@ def delcheck_page(cid):
 @monitor_blueprint.route(
     '/api/<atype>/<cid>/<check_key>',
     methods=['POST'], defaults={'action': None})
-@monitor_blueprint.route('/api/<atype>/<cid>/<check_key>/<action>', methods=['POST'])
+@monitor_blueprint.route(
+    '/api/<atype>/<cid>/<check_key>/<action>', methods=['POST'])
 def checkapi_page(atype, cid, check_key, action):
     ''' Web based API for various health checks '''
     monitor = Monitor(cid)
@@ -397,7 +419,8 @@ def checkapi_page(atype, cid, check_key, action):
 ## History and Tracking
 
 # View Monitor History
-@monitor_blueprint.route('/dashboard/view-history/<cid>/<start>/<limit>', methods=['GET'])
+@monitor_blueprint.route(
+    '/dashboard/view-history/<cid>/<start>/<limit>', methods=['GET'])
 def viewhistory_page(cid, start, limit):
     verify = verifyLogin(
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
@@ -429,7 +452,6 @@ def viewhistory_page(cid, start, limit):
                 data['monitor-history'] = monitor.history(
                     method="mon-history", time=chktime,
                     start=int(start), limit=int(limit), rdb=g.rdb_conn)
-                data['error'] = False
                 data['monitor-history-paging'] = []
                 data['monitor-history-paging-start'] = int(start)
                 cur = 0
@@ -437,16 +459,17 @@ def viewhistory_page(cid, start, limit):
                     cur = cur + 200
                     data['monitor-history-paging'].append(cur)
             else:
-                data['msg'] = "This monitor does not belong to your user"
-                data['error'] = True
+                flash('This monitor does not belong to your user.', 'warning')
         page = render_template(tmpl, data=data)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))
 
 
 # Detail Monitor History
-@monitor_blueprint.route('/dashboard/detail-history/<cid>/<hid>', methods=['GET'])
+@monitor_blueprint.route(
+    '/dashboard/detail-history/<cid>/<hid>', methods=['GET'])
 def detailhistory_page(cid, hid):
     verify = verifyLogin(
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
@@ -474,11 +497,10 @@ def detailhistory_page(cid, hid):
                 }
                 data['monitor-history'] = monitor.history(
                     method="detail-history", hid=hid, rdb=g.rdb_conn)
-                data['error'] = False
             else:
-                data['msg'] = "This monitor does not belong to your user"
-                data['error'] = True
+                flash('This monitor does not belong to your user.', 'warning')
         page = render_template(tmpl, data=data)
         return page
     else:
+        flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))

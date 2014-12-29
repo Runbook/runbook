@@ -28,11 +28,6 @@ class FunctionalTests(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('DevOps, automated', response.data)
 
-    def test_dashboard_route_login(self):
-        # Ensure that /dashboard requires user login
-        response = self.client.get('/dashboard', follow_redirects=True)
-        self.assertIn('Login', response.data)
-
     def test_login_page_loads(self):
         # Ensure that the login page loads correctly
         response = self.client.get('/login')
@@ -45,78 +40,10 @@ class FunctionalTests(BaseTestCase):
         self.assertIn('Sign up', response.data)
         self.assertEqual(response.status_code, 200)
 
-    def test_dashboard_route_requires_login(self):
-        # Ensure main route requres logged in user.
-        response = self.client.get('/dashboard', follow_redirects=True)
-        self.assertIn('Login', response.data)
-
     def test_logout_route_requires_login(self):
         # Ensure logout route requres logged in user.
         response = self.client.get('/logout', follow_redirects=True)
         self.assertIn('Login', response.data)
-
-    def test_dashboard_route(self):
-        # Ensure registered user can access dashboard route.
-        with self.client:
-            response = self.client.post(
-                '/login',
-                data=dict(email="test@tester.com", password="password456"),
-                follow_redirects=True
-            )
-            self.assertTrue(response.status_code == 200)
-            self.assertIn('User Preferences', response.data)
-
-    def test_dashboard_monitor_route(self):
-        # Ensure registered user can access dashboard/monitor route.
-        with self.client:
-            self.client.post(
-                '/login',
-                data=dict(email="test@tester.com", password="password456"),
-                follow_redirects=True
-            )
-            response = self.client.get(
-                '/dashboard/monitors', follow_redirects=True)
-            self.assertTrue(response.status_code == 200)
-            self.assertIn('Create Monitors', response.data)
-
-    def test_dashboard_reaction_route(self):
-        # Ensure registered user can access dashboard/reaction route.
-        with self.client:
-            self.client.post(
-                '/login',
-                data=dict(email="test@tester.com", password="password456"),
-                follow_redirects=True
-            )
-            response = self.client.get(
-                '/dashboard/reactions', follow_redirects=True)
-            self.assertTrue(response.status_code == 200)
-            self.assertIn('Create Reactions', response.data)
-
-    def test_dashboard_subscription_route(self):
-        # Ensure registered user can access dashboard/mod-subscription route.
-        with self.client:
-            self.client.post(
-                '/login',
-                data=dict(email="test@tester.com", password="password456"),
-                follow_redirects=True
-            )
-            response = self.client.get(
-                '/dashboard/mod-subscription', follow_redirects=True)
-            self.assertTrue(response.status_code == 200)
-            self.assertIn('Upgrade your subscription', response.data)
-
-    def test_dashboard_preferences_route(self):
-        # Ensure registered user can access dashboard/user-preferences route.
-        with self.client:
-            self.client.post(
-                '/login',
-                data=dict(email="test@tester.com", password="password456"),
-                follow_redirects=True
-            )
-            response = self.client.get(
-                '/dashboard/user-preferences', follow_redirects=True)
-            self.assertTrue(response.status_code == 200)
-            self.assertIn('User Preferences', response.data)
 
     def test_correct_login(self):
         # Ensure login behaves correctly with correct credentials

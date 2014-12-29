@@ -5,7 +5,7 @@ In general, Runbook consists of two types of Monitors:
 1. Monitors that run at a scheduled interval
 2. Monitors that listen for webhooks
 
-[Reactions](reactions/index.md) are automated tasks that are called when Monitors fail. When creating a Reaction, it is important to know what type of Monitor it is being attached to. In general, webhook Monitors will receive triggering events less often than Monitors that run at scheduled intervals.
+[Reactions](../reactions/index.md) are automated tasks that are called when Monitors fail. When creating a Reaction, it is important to know what type of Monitor it is being attached to. In general, webhook Monitors will receive triggering events less often than Monitors that run at scheduled intervals.
 
 * [Network Availability](network-availability.md)
 * [Web Applications](web-applications.md)

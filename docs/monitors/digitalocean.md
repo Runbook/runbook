@@ -1,7 +1,8 @@
-The DigitalOcean Monitors are designed to allow users to monitor tasks on [DigitalOcean](https://www.digitalocean.com/) cloud servers.
+The DigitalOcean monitors allow users to monitor the state of their DigitalOcean cloud servers (also known as Droplets). Using these monitors you can perform tasks such as detecting droplets that have been powered off or identify when a snapshot has completed.
 
 ---
 
-## Snapshot Droplet
+## Droplet Status
 
-The **Snapshot Droplet** Monitor allows users to watch for Snapshots. *Use case:* Since a Droplet shuts down during a Snapshot, you want to power it back on as soon as it's done to avoid unnecessary downtime.
+The Droplet Status allows you to monitor status changes to a specified Droplet. This monitor will request the droplet status from DigitalOcean via their API, if the droplet's status matches a selected status the monitor will return True. If the returned status is not selected the monitor will return False.
+

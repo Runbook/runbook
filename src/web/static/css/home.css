@@ -1,5 +1,5 @@
 /* Overwrite defaults */
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
 body {
 	background-color: #fff;
   font-family: "Open Sans", "Helvetica", sans-serif;
@@ -248,7 +248,6 @@ body {
 }
 
 .footer-action-section {
-  height: 230px;
 	padding: 20px 0px;
 	background: url('/static/img/footer-action.png');
 	background-size: cover;
