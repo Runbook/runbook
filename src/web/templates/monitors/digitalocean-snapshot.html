@@ -60,6 +60,22 @@
             </div>
               </div>
 
+                <div class="form-group">
+                <label for="Droplet ID#" class="col-sm-4 control-label">Droplet ID#</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <span class="input-group-btn">
+                  <button type="button" id="cl-email" class="btn btn-default" rel="popover" data-content="This field contains the ID of your DigitalOcean Droplet. This is the number in the URL that appears when you click on your Droplet in your DigitalOcean account (https://cloud.digitalocean.com/droplets/{{DROPLET_ID}}." title="DigitalOcean Droplet ID"><i class="fa fa-question"></i></button>
+                </span>
+              {% if data['edit'] %}
+              {{ form.dropletid(class_="form-control", value=data['monitor']['data']['dropletid']) }}
+              {% else %}
+              {{ form.dropletid(class_="form-control", placeholder="Droplet ID#") }}
+              {% endif %}
+              </div>
+            </div>
+              </div>
+
                 <p></p>
                 <button type="submit" class="btn btn-primary btn-block">Submit</button>
             </form>

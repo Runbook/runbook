@@ -38,7 +38,8 @@ def check(data):
             # and completed within the last 30 minutes
             if action['type'] == 'snapshot' and \
                     action['status'] == 'completed' \
-                    and time_difference <= datetime.timedelta(minutes=30):
+                    and time_difference <= datetime.timedelta(minutes=30) \
+                    and action['resource_id'] == data['data']['dropletid']:
                 return True
             else:
                 return False
