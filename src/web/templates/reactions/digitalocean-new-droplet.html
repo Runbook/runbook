@@ -1,0 +1,226 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+      {% if data['edit'] %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Manage Reaction</h1>
+      {% else %}
+        <h1><i class="fa fa-cogs fa-1x"></i> Add Reaction</h1>
+      {% endif %}
+      </div>
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            DigitalOcean - Create New Droplet
+          </div>
+          </div>
+          <div class="panel-body">
+            <form action="{{ data['url'] }}" method="post" name="reaction-form" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+
+            {% include 'reactions/base.html' %}
+            {% include 'reactions/callon.html' %}
+
+            <hr>
+
+
+            <div class="form-group">
+                <label for="API Key" class="col-sm-4 control-label">API Key</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="digitalocean-new-droplet-api_key" class="btn btn-default" rel="popover" data-content="Your DigitalOcean API Key" title="API Key">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.api_key(class_="form-control", value=data['reaction']['data']['api_key']) }}
+                        {% else %}
+                            {{ form.api_key(class_="form-control", placeholder="api_key") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="Name Prefix" class="col-sm-4 control-label">Name Prefix</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="digitalocean-new-droplet-name_prefix" class="btn btn-default" rel="popover" data-content="Name prefix for the droplet name. The name is automatically suffixed with a timestamp to make it unique. For example, if you specify the prefix as foo, your droplet will be named foo-19700101000000" title="API Secret">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.name_prefix(class_="form-control", value=data['reaction']['data']['name_prefix']) }}
+                        {% else %}
+                            {{ form.name_prefix(class_="form-control", placeholder="example") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="Region" class="col-sm-4 control-label">Region</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="digitalocean-new-droplet-region" class="btn btn-default" rel="popover" data-content="DigitalOcean region where your droplet should be deployed" title="Region">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.region(class_="form-control", value=data['reaction']['data']['region']) }}
+                        {% else %}
+                            {{ form.region(class_="form-control", placeholder="nyc3") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="Size" class="col-sm-4 control-label">Size</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="digitalocean-new-droplet-size" class="btn btn-default" rel="popover" data-content="Size of the droplet" title="Size">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.size(class_="form-control", value=data['reaction']['data']['size']) }}
+                        {% else %}
+                            {{ form.size(class_="form-control", placeholder="512mb") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="Image" class="col-sm-4 control-label">Image</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="digitalocean-new-droplet-image" class="btn btn-default" rel="popover" data-content="Base image ID for the droplet" title="Image">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.image(class_="form-control", value=data['reaction']['data']['image']) }}
+                        {% else %}
+                            {{ form.image(class_="form-control", placeholder="ubuntu-14-04-x64") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="SSH Keys" class="col-sm-4 control-label">SSH Keys</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="digitalocean-new-droplet-ssh_keys" class="btn btn-default" rel="popover" data-content="List of SSH Keys ID or fingerprints which are embedded in droplet's root account upon creation. Give one ID/fingerprint per line." title="SSH Keys">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.ssh_keys(class_="form-control", value=data['reaction']['data']['ssh_keys']) }}
+                        {% else %}
+                            {{ form.ssh_keys(class_="form-control", placeholder="fingerprint1\nfingerprint2") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Enable backups?" class="col-sm-4 control-label">Enable backups?</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="digitalocean-new-droplet-backups" class="btn btn-default" rel="popover" data-content="Enable automated backups for the droplet" title="Enable backups?">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.backups(class_="select", value=data['reaction']['data']['backups']) }}
+                        {% else %}
+                            {{ form.backups(class_="select", placeholder="Enable backups?") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Enable IPv6?" class="col-sm-4 control-label">Enable IPv6?</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="digitalocean-new-droplet-ipv6" class="btn btn-default" rel="popover" data-content="Enable IPv6 for the droplet" title="Enable IPv6?">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.ipv6(class_="select", value=data['reaction']['data']['ipv6']) }}
+                        {% else %}
+                            {{ form.ipv6(class_="select", placeholder="Enable IPv6?") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Enable private networking?" class="col-sm-4 control-label">Enable private networking?</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" id="digitalocean-new-droplet-private_networking" class="btn btn-default" rel="popover" data-content="Enable private networking for the droplet" title="Enable private networking?">
+                                <i class="fa fa-question"></i>
+                            </button>
+                        </span>
+                        {% if data['edit'] %}
+                            {{ form.private_networking(class_="select", value=data['reaction']['data']['private_networking']) }}
+                        {% else %}
+                            {{ form.private_networking(class_="select", placeholder="Enable private networking?" ) }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      <div class="panel-group" id="accordion">
+
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}

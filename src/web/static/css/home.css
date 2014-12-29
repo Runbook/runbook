@@ -1,0 +1,291 @@
+/* Overwrite defaults */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+body {
+	background-color: #fff;
+  font-family: "Open Sans", "Helvetica", sans-serif;
+  font-weight: 400;
+}
+
+.container.header {
+	max-width: 1003px !important;
+  vertical-align: middle;
+}
+
+.navbar-header {
+  vertical-align: middle;
+}
+
+/* Header customizations */
+.navigation-menu {
+	background-color: rgba(0,0,0,0.7);
+}
+
+.navigation-menu .header-logo {
+	max-width: 120px;
+	display: inline-block;
+}
+
+.navigation-menu .header-logo img {
+	width: 100%;
+	display: block;
+}
+
+.navigation-nav {
+	padding-top: 25px;
+}
+
+.navigation-nav li.active a {
+	background-color: transparent !important;
+	font-weight: bold;
+}
+
+.navigation-nav li a:hover {
+	background-color: transparent !important;
+	text-decoration: underline;
+}
+
+.navigation-nav li a.text-danger:hover {
+  color: #a94442;
+}
+
+/* Hero customizations */
+.hero-section {
+  height: 700px;
+	padding: 20px 0px;
+	padding-top: 220px;
+  margin-top: -95px;
+	background: url('/static/img/header_bg.jpg');
+	background-size: cover;
+}
+
+.hero-section .hero-vp {
+  text-align: center;
+  font-weight: 700;
+  font-size: 380%;
+  color: #fff;
+}
+
+.hero-section .hero-explain {
+  text-align: center;
+  font-weight: 300 !important;
+  font-size: 170%;
+  color: #fff;
+}
+
+.hero-section .btn.hero-call-to-action {
+  color: #fff;
+  font-size: 200%;
+  padding: 10px;
+  display: block;
+  max-width: 500px;
+  margin: 40px auto;
+  box-shadow: 0px 4px 10px 3px rgba(0,0,0,0.4) !important;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-o-border-radius: 10px;
+}
+
+@media screen and (min-width: 500px) {
+  .hero-section .btn.hero-call-to-action {
+    font-size: 280%;
+    padding: 20px 80px;
+  }
+}
+
+.btn.btn-action {
+	padding: 8px 15px;
+	margin: 5px;
+	font-size: 100%;
+  color: #fff;
+	background-color: rgba(8, 174, 234, 1) !important;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	box-shadow: 0px 1px 3px rgba(0,0,0,0.25) !important;
+}
+
+.btn.btn-action:hover, .btn.btn-action:focus {
+	background-color: rgba(8, 174, 234, 0.95) !important;
+	text-decoration: none;
+}
+
+.section {
+  padding: 30px 0px;
+  background-color: transparent;
+}
+
+.explain-section {
+  background-color: transparent;
+}
+
+.diagram-section {
+  background-color: rgba(32, 109, 179, 1);
+}
+
+.diagram {
+  max-width: 100%;
+  margin-bottom: 40px;
+}
+
+.diagram-section .subtitle {
+  color: #fff;
+}
+
+.diagram-section .diagram-subtitle {
+  color: #fff;
+  font-size: 120%;
+  font-style: italic;
+  text-align: center;
+}
+
+.diagram-subtitle a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.subtitle {
+  text-align: center;
+  color: #707070;
+  font-size: 230%;
+  font-weight: 300;
+  padding-bottom: 40px;
+}
+
+.sub-section {
+  display: block;
+  padding: 20px 0px;
+  text-align: center;
+}
+
+.sub-section .description {
+  margin: 20px 0px;
+  max-width: 410px;
+  padding: 10px;
+}
+
+.sub-section .description h3 {
+  font-size: 220%;
+  font-weight: 400;
+  color: #707070;
+}
+
+.sub-section .description {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.sub-section .description .more {
+  vertical-align: middle;
+}
+
+.sub-section .description .more .btn.btn-action {
+  color: #fff !important;
+}
+
+.sub-section.left .description {
+  margin-left: 80px;
+  text-align: left;
+}
+
+.sub-section.right .description {
+  margin-right: 80px;
+  text-align: right;
+}
+
+.quote-block {
+  display: block;
+  padding: 50px 0px;
+}
+
+.quote-block .quote-block-info {
+  display: table;
+  margin: 0px auto;
+}
+
+.quote-block .author-thumb {
+  max-width: 250px;
+  margin-top: -20px;
+  float: left;
+  vertical-align: middle;
+}
+
+.quote-block .quote-info {
+  float: left;
+  max-width: 600px;
+  margin-left: 60px;
+  vertical-align: middle;
+}
+
+.quote-info .quote-text {
+  font-size: 180%;
+  font-weight: 300;
+  text-align: left;
+  color: #707070;
+}
+
+.quote-info .quote-divisor {
+  max-width: 200px;
+  display: block;
+  height: 5px;
+  background-color: rgba(32, 109, 179, 1);
+}
+
+.quote-info .quote-author {
+  font-size: 100%;
+  font-weight: 300;
+  text-transform: uppercase;
+  text-align: left;
+  color: #707070;
+}
+
+.quote-info .quote-position {
+  font-size: 100%;
+  font-weight: 300;
+  text-align: left;
+  color: #707070;
+}
+
+.footer-action-section {
+	padding: 20px 0px;
+	background: url('/static/img/footer-action.png');
+	background-size: cover;
+}
+
+.footer-action-section h4 {
+  font-size: 130%;
+  font-weight: 300;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0px 1px 2px rgba(0,0,0,0.8);
+}
+
+.footer-action-section .call-to-action {
+  color: #fff;
+  font-size: 200% !important;
+  padding: 10px 80px !important;
+  display: block;
+  max-width: 400px;
+  margin: 40px auto;
+  box-shadow: 0px 4px 10px 3px rgba(0,0,0,0.4) !important;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-o-border-radius: 10px;
+}
+
+.footer-action-section h5 {
+  color: #fff;
+  text-align: center;
+  text-shadow: 0px 1px 2px rgba(0,0,0,0.8);
+}
+
+.footer-action-section h5 a {
+  color: #4FC6ED;
+}
+
+.footer-action-section h5 a:hover {
+  color: #fff;
+  text-decoration: underline;
+}

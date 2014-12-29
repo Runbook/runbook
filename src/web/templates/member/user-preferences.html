@@ -1,0 +1,61 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+        <h1><i class="fa fa-user fa-1x"></i> User Preferences</h1>
+      </div>
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            Reset Password
+          </div>
+          </div>
+          <div class="panel-body">
+            <form action="/dashboard/user-preferences" method="post" name="add-domain" target="_self" class="form-horizontal" role="form">
+              {{ form.csrf_token }}
+              <div class="form-group">
+                <label for="Password" class="col-sm-4 control-label">New Password</label>
+                <div class="col-sm-8">
+                   {{ form.password(class_="form-control", Placeholder="Password") }}
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="Confirm" class="col-sm-4 control-label">Confirm</label>
+                <div class="col-sm-8">
+                   {{ form.confirm(class_="form-control", Placeholder="Confirm Password") }}
+                </div>
+              </div>
+
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
+              <button type="submit" class="btn btn-primary btn-block">Change Password</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}

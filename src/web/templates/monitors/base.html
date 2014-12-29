@@ -1,0 +1,27 @@
+                <div class="form-group">
+                <label for="Name" class="col-sm-4 control-label">Name</small></label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="base-name" class="btn btn-default" rel="popover" data-content="Must be unique within your account. Allows for Alpha and Numeric characters." title="Monitor Name"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.name(class_="form-control", value=data['monitor']['name']) }}
+              {% else %}
+              {{ form.name(class_="form-control", placeholder="Health Check Name") }}
+              {% endif %}
+            </div>
+            </div>
+              </div>
+
+                <div class="form-group">
+                <label for="Reaction" class="col-sm-4 control-label">Reactions</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="base-reactions" class="btn btn-default" rel="popover" data-content="Select actions that should be performed when the monitor returns true or false. Allows for multiple selections." title="Monitor Reactions"><i class="fa fa-question"></i></button>
+              </span>
+              {{ form.reactions(class_="multiselect", placeholder="Reactions") }}
+            </div>
+            </div>
+              </div>  

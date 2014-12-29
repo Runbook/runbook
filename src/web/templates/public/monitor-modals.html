@@ -1,0 +1,452 @@
+      <!-- Start Row 45 -->
+      <div class="row">
+        <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><a href="" data-target=".cr-mon-network-modal-lg" data-toggle="modal"><img src="/static/img/buttons/ping-150.png" border=0 class="img-responsive"></a></center>
+            <h4>Network Availability</h4>
+            <p>Monitor network and service availability.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+        </div>
+
+
+        <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><a href="" data-target=".cr-mon-webapp-modal-lg" data-toggle="modal"><img src="/static/img/buttons/http-150.png" border=0 class="img-responsive"></a></center>
+            <h4>Web Applications</h4>
+            <p>Monitors for Web Applications.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+        </div>
+
+
+        <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><a href="" data-target=".cr-mon-heroku-modal-lg" data-toggle="modal"><img src="/static/img/buttons/heroku-150.png" border=0 class="img-responsive"></a></center>
+            <h4>Heroku</h4>
+            <p>Monitors for Heroku Applications.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+        </div>
+          
+      </div>
+      <div class="row">
+
+        <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><a href="" data-target=".cr-mon-datadog-modal-lg" data-toggle="modal"><img src="/static/img/buttons/datadog-150.png" border=0 class="img-responsive"></a></center>
+            <h4>Datadog</h4>
+            <p>Integrate with DataDog.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+        </div>
+          
+
+        <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><a href="" data-target=".cr-mon-papertrail-modal-lg" data-toggle="modal"><img src="/static/img/buttons/papertrail-150.png" border=0 class="img-responsive"></a></center>
+            <h4>Papertrail</h4>
+            <p>Integrate with Papertrail.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+        </div>
+
+
+        <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><a href="" data-target=".cr-mon-logentries-modal-lg" data-toggle="modal"><img src="/static/img/buttons/logentries-150.png" border=0 class="img-responsive"></a></center>
+            <h4>Logentries</h4>
+            <p>Integrate with Logentries.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+        </div>
+
+      </div>
+      <div class="row">
+
+        <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><a href="" data-target=".cr-mon-api-modal-lg" data-toggle="modal"><img src="/static/img/buttons/webhooks-150.png" border=0 class="img-responsive"></a></center>
+            <h4>Runbook Webhooks</h4>
+            <p>Call Runbook from your app with webhooks.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+        </div>
+        <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><a href="" data-target=".cr-mon-ssl-modal-lg" data-toggle="modal"><img src="/static/img/buttons/lock-150.png" border=0 class="img-responsive"></a></center>
+            <h4>SSL Certificates</h4>
+            <p>Monitor and validate SSL Certificates.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+        </div>
+
+        <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><a href="" data-target=".cr-mon-do-modal-lg" data-toggle="modal"><img src="/static/img/buttons/digitalocean-150.png" border=0 class="img-responsive"></a></center>
+            <h4>DigitalOcean</h4>
+            <p>Monitor DigitalOcean Droplets.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+        </div>
+
+
+      </div> <!-- end row -->
+
+<div class="modal fade cr-mon-network-modal-lg" tabindex="-1" role="dialog" aria-labelledby="NetworkMonitorModal" aria=hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-close fa-1x"></i></span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">Network Availability Monitors</h4>
+      </div>
+      <div class="modal-body">
+        <!-- Begin Modal Body -->
+        <div class="row">
+          <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/tcpip-150.png" class="img-responsive"></center>
+            <h4>TCP <small>Custom Port</small></h4>
+            <p>This monitor connects to a specified address and port to validate connectivity.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+          <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/ping-150.png" class="img-responsive"></center>
+            <h4>Ping <small>ICMP Ping</small></h4>
+            <p>This monitor will perform a single ICMP ping request and validate the host responds.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+        </div>
+        <!-- End Modal Body --> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Start Modal -->
+<div class="modal fade cr-mon-webapp-modal-lg" tabindex="-1" role="dialog" aria-labelledby="WebAppModal" aria=hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-close fa-1x"></i></span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">Web Application Monitors</h4>
+      </div>
+      <div class="modal-body">
+        <!-- Begin Modal Body -->
+        <div class="row">
+          <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/http-150.png" class="img-responsive"></center>
+            <h4>HTTP/S GET <small>Status Code</small></h4>
+            <p>This monitor will perform a HTTP or HTTPS GET request and validate the status code is expected.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+          <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/http-150.png" class="img-responsive"></center>
+            <h4>HTTP/S GET <small>Keyword Search</small></h4>
+            <p>This monitor will perform a HTTP or HTTPS GET request and search for the specified text or regular expression.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+          <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/http-150.png" class="img-responsive"></center>
+            <h4>HTTP/S POST</h4>
+            <p>This monitor will perform a HTTP or HTTPS POST request and validate status codes, headers and perform regular expression searches on content.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+        </div>
+        <!-- End Modal Body -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-md" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Start Modal -->
+<div class="modal fade cr-mon-heroku-modal-lg" tabindex="-1" role="dialog" aria-labelledby="HerokuModal" aria=hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-close fa-1x"></i></span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">Heroku Monitors</h4>
+      </div>
+      <div class="modal-body">
+        <!-- Begin Modal Body -->
+        <div class="row">
+          <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/heroku-150.png" class="img-responsive"></center>
+            <h4>Heroku <small>Dyno Status (Single)</small></h4>
+            <p>This monitor will watch the status of a specific Dyno.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+          <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/heroku-150.png" class="img-responsive"></center>
+            <h4>Heroku <small>Dyno Status</small></h4>
+            <p>This monitor will watch the status of all Dynos.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+          <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/heroku-150.png" class="img-responsive"></center>
+            <h4>Heroku <small>Dyno Not Idle (Single)</small></h4>
+            <p>This monitor will trigger when a Dyno is in idle state.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/heroku-150.png" class="img-responsive"></center>
+            <h4>Heroku <small>Dyno Not Idle</small></h4>
+            <p>This monitor will will trigger when any Dyno is in an idle state.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+        </div>
+        <!-- End Modal Body -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-md" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Start Modal -->
+<div class="modal fade cr-mon-datadog-modal-lg" tabindex="-1" role="dialog" aria-labelledby="DatadogModal" aria=hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-close fa-1x"></i></span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">Datadog Monitors</h4>
+      </div>
+      <div class="modal-body">
+        <!-- Begin Modal Body -->
+        <div class="row">
+          <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/datadog-150.png" class="img-responsive"></center>
+            <h4>Datadog Alerts <small>Webhooks Integration</small></h4>
+            <p>Use Datadog's webhook integration and metric alerts to trigger reactions.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+        </div>
+        <!-- End Modal Body -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-md" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Start Modal -->
+<div class="modal fade cr-mon-papertrail-modal-lg" tabindex="-1" role="dialog" aria-labelledby="PapertrailModal" aria=hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-close fa-1x"></i></span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">Papertrail Monitors</h4>
+      </div>
+      <div class="modal-body">
+        <!-- Begin Modal Body -->
+        <div class="row">
+          <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/papertrail-150.png" class="img-responsive"></center>
+            <h4>Papertrail <small>Webhooks</small></h4>
+            <p>Use Papertrail Alerts to trigger Runbook reactions.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+        </div>
+        <!-- End Modal Body -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-md" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Start Modal -->
+<div class="modal fade cr-mon-logentries-modal-lg" tabindex="-1" role="dialog" aria-labelledby="LogentriesModal" aria=hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-close fa-1x"></i></span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">Logentries Monitors</h4>
+      </div>
+      <div class="modal-body">
+        <!-- Begin Modal Body -->
+        <div class="row">
+          <div class="col-md-4">
+          <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/logentries-150.png" class="img-responsive"></center>
+            <h4>Logentries <small>Webhooks</small></h4>
+            <p>Use Logentries Alerts to trigger Runbook reactions.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+        </div>
+        <!-- End Modal Body -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-md" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Start Modal -->
+<div class="modal fade cr-mon-api-modal-lg" tabindex="-1" role="dialog" aria-labelledby="APIModal" aria=hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-close fa-1x"></i></span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">Runbook Webhook Monitors</h4>
+      </div>
+      <div class="modal-body">
+        <!-- Begin Modal Body -->
+        <div class="row">
+          <div class="col-md-4">
+         <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/webhooks-150.png" class="img-responsive"></center>
+            <h4>Runbook Webhooks</h4>
+            <p>Call Runbook from your app with webhooks.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+        </div>
+        <!-- End Modal Body -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-md" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Start Modal -->
+<div class="modal fade cr-mon-ssl-modal-lg" tabindex="-1" role="dialog" aria-labelledby="SSLModal" aria=hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-close fa-1x"></i></span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">SSL Certificates</h4>
+      </div>
+      <div class="modal-body">
+        <!-- Begin Modal Body -->
+        <div class="row">
+          <div class="col-md-4">
+         <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/lock-150.png" class="img-responsive"></center>
+            <h4>SSL Certificate Not Expired</h4>
+            <p>Monitor SSL certificate expiration.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+          <div class="col-md-4">
+         <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/lock-150.png" class="img-responsive"></center>
+            <h4>Validate SSL Certificate Common Name</h4>
+            <p>Validate SSL certificate common name.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+        </div>
+        <!-- End Modal Body -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-md" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Start Modal -->
+<div class="modal fade cr-mon-do-modal-lg" tabindex="-1" role="dialog" aria-labelledby="DOModal" aria=hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-close fa-1x"></i></span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="ModalLabel">DigitalOcean</h4>
+      </div>
+      <div class="modal-body">
+        <!-- Begin Modal Body -->
+        <div class="row">
+          <div class="col-md-4">
+         <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/digitalocean-150.png" class="img-responsive"></center>
+            <h4>DigitalOcean <small>Droplet Status</small></h4>
+            <p>Monitor DigitalOcean servers (droplets) for status changes.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+          <div class="col-md-4">
+         <!-- Start Health Check -->
+          <div class="well">
+            <center><img src="/static/img/buttons/digitalocean-150.png" class="img-responsive"></center>
+            <h4>DigitalOcean <small>Snapshot Created</small></h4>
+            <p>Returns True if a snapshot was recently created for a specified droplet.</p>
+          </div>
+          <!-- End Health Check 8 lines -->
+          </div>
+        </div>
+        <!-- End Modal Body -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-md" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

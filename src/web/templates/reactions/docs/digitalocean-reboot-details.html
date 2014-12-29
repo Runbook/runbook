@@ -1,0 +1,46 @@
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <div class="panel-title">
+          <i class="fa fa-cogs fa-1x"></i> DigitalOcean: Reboot Droplet <a data-toggle="collapse" class="pull-right" data-parent="#accordion" href="#main-react-Collapse"><i class="fa fa-expand"></i></a>
+          </div>
+          </div>
+          <div id="main-react-Collapse" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <h3>Overview</h3>
+            <p>The DigitalOcean: Reboot Droplet reaction can be used to reboot cloud servers (aka Droplets) hosted with DigitalOcean.</p>
+
+            <p>In most circumstances rebooting a server is a last ditch effort. However when using automation to resolve issues it is a viable solution to issues that are not resolved by other reactions. For example, if you have a monitor checking the status of Apache. This first reaction of that monitor for failure should be to restart Apache, a reasonable trigger time for this is 3 with a frequency of 300 seconds. If after 40 false monitors Apache is still not responding, it is not unreasonable to reboot the server rather than wake someone up.<p>
+
+ 
+            <p></p>
+            <h3>Reaction Actions</h3>
+
+            <p>This reaction will only perform a single reaction, this reaction can be configured to occur on "False Monitors" or "True Monitors" but is not designed to be executed on both. In order to setup this reaction to have an action for "True Monitors" and a different action for "False Monitors" you can create two reactions and attach them to the same Monitor.</p>
+
+            <p></p>
+            <h4>False Monitors</h4>
+            <p><b>If this reaction's Call On field is set to "False Monitors".</b></p>
+            <p>When this reaction receives a "False Monitor" the reaction will send an API request to DigitalOcean requesting a reboot of the droplet specified.</p>
+            <p><b>If this reaction's Call On field is set to "True Monitors".</b></p>
+            <p>This reaction will perform no tasks when it receives a "False Monitor"</p>
+            <p></p>
+            <h4>True Monitors</h4>
+            <p><b>If this reaction's Call On field is set to "True Monitors".</b></p>
+            <p>When this reaction receives a "True Monitor" the reaction will send an API request to DigitalOcean requesting a reboot of the droplet specified.</p>
+            <p><b>If this reaction's Call On field is set to "False Monitors".</b></p>
+            <p>This reaction will perform no tasks when it receives a "True Monitor"</p>
+            <p></p>
+            <h3>Reaction Form Details</h3>
+
+            <h4>API Key</h4>
+            <p>The API Key field should contain your API key in the new version of DigitalOcean's API this is called a <a href="https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-api-v2" target="_blank">Personal Access Token</a>.</p>
+<p></p>
+
+            <h4>Droplet ID#</h4>
+            <p>The Droplet ID# field should contain the ID number of the droplet you wish to reboot, this can be found in the <a href="https://www.digitalocean.com/community/questions/droplet-id-number-to-place-in-variable" target="_blank">URL of the droplet details</a>.</p>
+<p></p>
+
+
+          </div>
+          </div>
+        </div>

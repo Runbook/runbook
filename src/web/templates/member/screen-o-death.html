@@ -1,0 +1,203 @@
+{% include 'base-header.html' %}
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+        <h1><i class="fa fa-sitemap fa-1x"></i> Status</h1>
+      </div>
+
+        {% if data['welcome'] %}
+          <p class="lead">Getting paged in the middle of the night sucks. To start creating a self healing environment you should first add a few <a href="/dashboard/reactions">Reactions</a> to resolve issues; and a few <a href="/dashboard/monitors">Monitors</a> to trigger when to run them.</p>
+          <p class="lead">Then you can rest easy knowing that our system is keeping a watchful eye on your servers and applications, and if we see something wrong we will take care of it.</p>
+          <h2>Monitors:</h2>
+          <hr>
+          {% include 'monitors/monitors.html' %}
+          <h2>Reactions:</h2>
+          <hr>
+          {% include 'reactions/reactions.html' %}
+        {% endif %}
+
+
+        {% if data['mons'] %}
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#tactical" role="tab" data-toggle="tab">Tactical View</a></li>
+            <li><a href="#false" role="tab" data-toggle="tab">False Monitors</a></li>
+            <li><a href="#manage" role="tab" data-toggle="tab">Manage Monitors/Reactions</a></li>
+          </ul>
+
+          <div class="tab-content">
+          <!-- Start Tab -->
+          <div class="tab-pane" id="false">
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <div class="panel-title">
+                      False Monitors
+                    </div>
+                  </div>
+                    {% if data['monstats']['false'] == 0 %}
+                    <div class="panel-body">
+                      All Monitors are true
+                    </div>
+                    {% else %}
+                    <table class="table table-condensed table-striped" width="100%">
+                      {% for cid, monitor in data['monitors'].iteritems() %}
+                      {% if "false" in monitor['status'] %}
+                      <tr class="danger">
+                        <td><i class="fa fa-exclamation-triangle"></i></td>
+                        <td>{{ monitor['name'] }}
+                        <td>
+                          <a href="/dashboard/view-history/{{ cid }}/0/200" class="btn btn-primary btn-xs" role="button"><i class="fa fa-book"></i> Detailed History</a>
+                        </td>
+                      </tr>
+                      {% endif %}
+                      {% endfor %}
+                    </table>
+                    {% endif %}
+         </div>
+         </div>
+
+          <div class="tab-pane active" id="tactical">
+              <div class="row">
+              <div class="panel panel-primary">
+                <div class="panel-heading">
+                <div class="panel-title">
+                  Monitor Overview
+                </div>
+                </div>
+                <div class="panel-body">
+                  <div id="chart" align="center"></div>
+                </div>
+                  <table class="table table-condensed table-striped" width="100%">
+                    <tr>
+                      <td>False</td><td>{{ data['monstats']['false'] }}</td>
+                    </tr>
+                    <tr>
+                      <td>True</td><td>{{ data['monstats']['true'] }}</td>
+                    </tr>
+                    <tr>
+                      <td>Other</td><td>{{ data['monstats']['unknown'] }}</td>
+                    </tr>
+                  </table>
+              </div>
+              {% if data['upgraded'] %}
+              {% include 'forms/addpacks.html' %}
+              {% else %}
+              {% include 'forms/stripe.html' %}
+              {% endif %}
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                  <div class="panel-title">
+                    Last 50 Events
+                  </div>
+                  </div>
+                  {% if data['moneventsnum'] == 0 %}
+                  <div class="panel-body">
+                    No Recent Events Found
+                  </div>
+                  {% else %}
+                  <table class="table table-condensed table-striped" width="100%">
+                    {% for event in data['monevents'] %}
+                    <td>{%- if "true" in event['status'] -%}<span class="label label-success">{%- elif "false" in event['status'] -%}<span class="label label-danger">{%- else -%}<span class="label label-warning">{%- endif -%}{{ event['time_friendly'] }}</span></td><td>Monitor <b>{{ event['name'] }}</b> changed from <b>{{ event['prev_status']|capitalize }}</b> to <b>{{ event['status']|capitalize }}</b>. This monitor was <b>{{ event['prev_status'] }}</b> for <b>{{ event['prev_failcount'] }}</b> checks.</td>
+                  </tr>
+                    {% endfor %}
+                  </table>
+                  {% endif %}
+                </div>
+            </div>
+          </div>
+
+          <div class="tab-pane" id="manage">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            Monitors
+          </div>
+          </div>
+          <table width="100%" border="0" class="table table-condensed">
+            <tr class="active">
+              <td></td>
+              <td><h5>Name</h5></td>
+              <td><h5>Status</h5></td>
+              <td><h5>Actions</h5></td>
+            </tr>
+            {% for cid, monitor in data['monitors'].iteritems() %}
+            {%- if "true" in monitor['status'] -%}
+            <tr class="success">
+              <td><i class="fa fa-check-circle"></i></td>
+            {%- elif "false" in monitor['status'] -%}
+            <tr class="danger">
+              <td><i class="fa fa-exclamation-triangle"></i></td>
+            {%- else -%}
+            <tr class="warning">
+              <td><i class="fa fa-circle"></i></td>
+            {%- endif -%}
+              <td>{{ monitor['name'] }}</td>
+              <td>{{ monitor['status']|capitalize }}</td>
+              <td>
+{%- if "true" in monitor['status'] or "monitored" in monitor['status'] %}
+<a href="/dashboard/action-checks/{{ cid }}/false" class="btn btn-danger btn-xs" role="button"><i class="fa fa-exclamation-triangle"></i> Mark False</a>
+{%- endif %}
+{%- if "false" in monitor['status'] or "monitored" in monitor['status'] %}
+<a href="/dashboard/action-checks/{{ cid }}/true" class="btn btn-success btn-xs" role="button"><i class="fa fa-check-circle"></i> Mark True</a>
+{%- endif %}
+<a href="/dashboard/delete-checks/{{ cid }}" class="btn btn-danger btn-xs" role="button"><i class="fa fa-trash-o"></i> Delete</a>
+<a href="/dashboard/edit-monitors/{{ monitor['ctype'] }}/{{ cid }}" class="btn btn-primary btn-xs" role="button"><i class="fa fa-edit"></i> Edit</a>
+<a href="/dashboard/view-history/{{ cid }}/0/200" class="btn btn-primary btn-xs" role="button"><i class="fa fa-book"></i> History</a>
+
+</td>
+            </tr>
+              {% for rid in monitor['data']['reactions'] %}
+              <tr class="active">
+                <td></td>
+                <td><i class="fa fa-gear"></i> {{ data['reactions'][rid]['name'] }}</td>
+                <td></td>
+                <td></td>
+              </tr>
+              {% endfor %}
+            {% endfor %}
+          </table>
+        </div>
+        {% endif %}
+
+
+        {% if data['reacts'] %}
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            Reactions
+          </div>
+          </div>
+          <table width="100%" border="0" class="table table-condensed">
+            <tr class="active">
+              <td></td>
+              <td><h5>Name</h5></td>
+              <td><h5>Actions</h5></td>
+            </tr>
+            {% for rid, reaction in data['reactions'].iteritems() %}
+            <tr class="default">
+              <td><i class="fa fa-gear"></i></td>
+              <td>{{ reaction['name'] }}</td>
+              <td>
+<a href="/dashboard/delete-reaction/{{ rid }}" class="btn btn-danger btn-xs" role="button"><i class="fa fa-trash-o"></i> Delete</a>
+<a href="/dashboard/edit-reactions/{{ reaction['rtype'] }}/{{ rid }}" class="btn btn-primary btn-xs" role="button"><i class="fa fa-edit"></i> Edit</a>
+</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        {% endif %}
+
+    </div>
+    </div> <!-- Tab Content -->
+        </div>
+
+
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}

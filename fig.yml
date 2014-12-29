@@ -1,0 +1,103 @@
+db:
+  image: dockerfile/rethinkdb
+  ports:
+    - "8080:8080"
+redis:
+  image: dockerfile/redis
+web:
+  build: src/web/
+  command: bash /code/bootstrap.sh
+  volumes:
+    - src/web:code:ro
+  ports:
+    - "8000:8000"
+  links:
+    - db
+    - bridge
+bridge:
+  build: src/bridge/
+  command: bash /code/bootstrap.sh
+  volumes:
+    - src/bridge:code:ro
+  links:
+    - redis
+    - db
+    - actionbroker
+actionbroker:
+  build: src/actions/
+  command: bash /code/bootstrap-broker.sh
+  volumes:
+    - src/actions:code:ro
+  ports:
+    - 6000
+    - 6001
+actioner:
+  build: src/actions/
+  command: bash /code/bootstrap-actioner.sh
+  volumes:
+    - src/actions:code:ro
+  links:
+    - redis
+    - db
+    - actionbroker
+    - bridge
+monitorbroker:
+  build: src/monitors/
+  command: bash /code/bootstrap-broker.sh
+  volumes:
+    - src/monitors:code:ro
+  ports:
+    - 5879
+    - 5878
+monitor5min:
+  build: src/monitors/
+  command: bash /code/bootstrap-control.sh
+  volumes:
+    - src/monitors:code:ro
+  links:
+    - redis
+    - monitorbroker
+  environment:
+    MONITORINTERVAL: 5mincheck
+    SLEEPTIMER: 300
+monitor30min:
+  build: src/monitors/
+  command: bash /code/bootstrap-control.sh
+  volumes:
+    - src/monitors:code:ro
+  links:
+    - redis
+    - monitorbroker
+  environment:
+    MONITORINTERVAL: 30mincheck
+    SLEEPTIMER: 1800
+monitor2min:
+  build: src/monitors/
+  command: bash /code/bootstrap-control.sh
+  volumes:
+    - src/monitors:code:ro
+  links:
+    - redis
+    - monitorbroker
+  environment:
+    MONITORINTERVAL: 2mincheck
+    SLEEPTIMER: 120
+monitor30sec:
+  build: src/monitors/
+  command: bash /code/bootstrap-control.sh
+  volumes:
+    - src/monitors:code:ro
+  links:
+    - redis
+    - monitorbroker
+  environment:
+    MONITORINTERVAL: 30seccheck
+    SLEEPTIMER: 30
+monitorworker:
+  build: src/monitors/
+  command: bash /code/bootstrap-worker.sh
+  volumes:
+    - src/monitors:code:ro
+  links:
+    - monitorbroker
+    - actionbroker

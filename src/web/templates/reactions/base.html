@@ -1,0 +1,47 @@
+              <div class="form-group">
+                <label for="Name" class="col-sm-4 control-label">Name</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+              <button type="button" id="base-name" class="btn btn-default" rel="popover" data-content="Must be unique within your account. The name field allows for Alpha and Numeric input." title="Reaction Name"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.name(class_="form-control", value=data['reaction']['name']) }}
+              {% else %}
+              {{ form.name(class_="form-control", placeholder="Reaction Name") }}
+              {% endif %}
+              </div>
+            </div>
+              </div>
+
+              <div class="form-group">
+                <label for="Trigger" class="col-sm-4 control-label">Trigger</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="base-trigger" class="btn btn-default" rel="popover" data-content="Define the number of true or false monitors before reacting." title="Reaction Trigger"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.trigger(class_="form-control", value=data['reaction']['trigger']) }}
+              {% else %}
+              {{ form.trigger(class_="form-control", placeholder="Trigger on # monitor true/false returns") }}
+              {% endif %}
+              </div>
+            </div>
+              </div>
+
+              <div class="form-group">
+                <label for="Frequency" class="col-sm-4 control-label">Frequency</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button" id="base-frequency" class="btn btn-default" rel="popover" data-content="Define the number of Seconds between each execution of this reaction. Acceptable Range is 0 - 999999." title="Execution Frequency"><i class="fa fa-question"></i></button>
+              </span>
+              {% if data['edit'] %}
+              {{ form.frequency(class_="form-control", value=data['reaction']['frequency']) }}
+              {% else %}
+              {{ form.frequency(class_="form-control", placeholder="Frequency in Seconds") }}
+              {% endif %}
+              </div>
+            </div>
+              </div>

@@ -4,6 +4,8 @@ Runbook
 | Facility | Develop | Master |
 | --------- | --------| ------------ |
 | Travis-CI | [![Build Status](https://travis-ci.org/asm-products/cloudroutes-service.svg?branch=develop)](https://travis-ci.org/asm-products/cloudroutes-service) | [![Build Status](https://travis-ci.org/asm-products/cloudroutes-service.svg?branch=master)](https://travis-ci.org/asm-products/cloudroutes-service)
+| Coverage | [![Coverage Status](https://img.shields.io/coveralls/asm-products/cloudroutes-service.svg)](https://coveralls.io/r/asm-products/cloudroutes-service?branch=develop) | N/A |
+| Contribute | <a href="https://assembly.com/runbook/bounties"><img src="https://asm-badger.herokuapp.com/runbook/badges/tasks.svg" height="20px" alt="Open Bounties" /> | N/A |
 
 ## What is Runbook
 

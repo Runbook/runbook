@@ -1,0 +1,57 @@
+{% include 'base-header.html' %}
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+        <h1><i class="fa fa-book fa-1x"></i> Monitor History</h1>
+      </div>
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            {{ data['monitor']['name'] }} - {{ data['monitor-history'][0]['starttime'] }} - {{ data['monitor-history'][0]['zone'] }}
+          </div>
+          </div>
+          <table width="100%" border="0" class="table table-condensed">
+            {% for monitor in data['monitor-history'] %}
+            <tr>
+              <td><b>Status:</b></td>
+            {%- if "true" in monitor['status'] -%}
+              <td><span class="label label-success">True</span></td>
+            {%- elif "false" in monitor['status'] -%}
+              <td><span class="label label-danger">False</span></td>
+            {%- else -%}
+              <td><span class="label label-warning">{{ monitor['status'] }}</span></td>
+            {%- endif -%} 
+            </tr>
+            <tr><td><b>Start Time:</b></td><td>{{ monitor['starttime'] }}</td></tr>
+            <tr><td><b>Method:</b></td><td>{{ monitor['method'] }}</td></tr>
+            <tr><td><b>Monitor Zone:</b></td><td>{{ monitor['zone'] }}</td></tr>
+            <tr><td><b>Count:</b></td><td>{{ monitor['failcount'] }}</td></tr>
+            <tr><td colspan="2"><b>Reactions:</b>
+                <ul class="list-group">
+            {%- for react in monitor['reactions'] -%}
+                  {% if react['rstatus'] == "Executed" %}
+                  <li class="list-group-item"><span class="label label-success">{{ react['rstatus'] }}</span> {{ react['name'] }}</li>
+                  {% elif react['rstatus'] == "Skipped" %}
+                  <li class="list-group-item"><span class="label label-default">{{ react['rstatus'] }}</span> {{ react['name'] }}</li>
+                  {% elif react['rstatus'] == "False" %}
+                  <li class="list-group-item"><span class="label label-danger">{{ react['rstatus'] }}</span> {{ react['name'] }}</li>
+                  {% else %}
+                  <li class="list-group-item"><span class="label label-default">{{ react['rstatus'] }}</span> {{ react['name'] }}</li>
+                  {% endif %}
+            {%- endfor -%}
+                </ul>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}

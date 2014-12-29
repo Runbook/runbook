@@ -1,0 +1,23 @@
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <div class="panel-title">
+          <i class="fa fa-eye-slash fa-1x"></i> ICMP Ping <a data-toggle="collapse" class="pull-right" data-parent="#accordion" href="#HealthMonCollapse"><i class="fa fa-expand"></i></a>
+          </div>
+          </div>
+          <div id="HealthMonCollapse" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <h3>Overview</h3>
+            <p>The ICMP Ping health check can be used to validate the status of a server by performing an ICMP Ping request.</p>
+
+            <h3>Monitor Details</h3>
+            
+            <p>This monitor will attempt to send one ICMP Ping request per run, if the request is replied to the monitor will return true. If for any reason the request fails the monitor will return false.</p>
+
+            <h4>Host</h4>
+
+            <p>This field can be either an IP Address or Hostname. The IP or Hostname supplied must be resolvable and addressable via the internet.</p>
+            <p class="text-warning">Broadcast pings are not allowed and will always return false.</p>
+
+          </div>
+          </div>
+        </div>
