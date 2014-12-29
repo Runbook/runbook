@@ -14,7 +14,7 @@
 #####################################################################
 
 # Data sources
-import syslog
+
 # Action Helpers
 import cloudflail
 
@@ -24,15 +24,16 @@ def action(**kwargs):
     ''' This method is called to action a reaction '''
     # This method can be used for legacy reactions that have
     # a different function based on true/false
+    logger = kwargs['logger']
     if "false" in kwargs['jdata']['check']['status']:
         return false(kwargs['redata'], kwargs['jdata'],
-            kwargs['rdb'], kwargs['r_server'])
+            kwargs['rdb'], kwargs['r_server'], logger)
     if "true" in kwargs['jdata']['check']['status']:
         return true(kwargs['redata'], kwargs['jdata'],
-            kwargs['rdb'], kwargs['r_server'])
+            kwargs['rdb'], kwargs['r_server'], logger)
 
 
-def false(redata, jdata, rdb, r_server):
+def false(redata, jdata, rdb, r_server, logger):
     ''' This method will be called when a monitor has false '''
     run = True
     # Check for Trigger
@@ -45,13 +46,13 @@ def false(redata, jdata, rdb, r_server):
         run = False
 
     if run:
-        remove(redata, jdata, r_server)
+        remove(redata, jdata, r_server, logger)
         return True
     else:
         return None
 
 
-def true(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server, logger):
     ''' This method will be called when a monitor has passed '''
     run = True
     # Check for Trigger
@@ -64,7 +65,7 @@ def true(redata, jdata, rdb, r_server):
         run = False
 
     if run:
-        readd(redata, jdata, r_server)
+        readd(redata, jdata, r_server, logger)
         return True
     else:
         return None
@@ -72,7 +73,7 @@ def true(redata, jdata, rdb, r_server):
 
 # Locals
 
-def remove(redata, jdata, r_server):
+def remove(redata, jdata, r_server, logger):
     ''' Perform the ip removal '''
     usrdata = [
         ('z', redata['data']['domain']),
@@ -86,7 +87,7 @@ def remove(redata, jdata, r_server):
     numrecs = len(falserecs)
     if numrecs > 0:
         line = "cloudflare-ip-remove: %d records found to remove" % numrecs
-        syslog.syslog(syslog.LOG_DEBUG, line)
+        logger.debug(line)
         for rec in falserecs:
             result = cloudflail.delRecord(rec, usrdata)
             if result:
@@ -99,18 +100,18 @@ def remove(redata, jdata, r_server):
                     'domains:' + jdata['cid'] + ':' + zone + ':' + rdata["content"] + ':deleted', rec)
                 # Log in jdata success
                 line = "cloudflare-ip-remove: Removal of record %s successful" % rec
-                syslog.syslog(syslog.LOG_INFO, line)
+                logger.info(line)
             else:
                 line = "cloudflare-ip-remove: Removal of record %s false" % rec
-                syslog.syslog(syslog.LOG_INFO, line)
+                logger.info(line)
     else:
         line = "cloudflare-ip-remove: IP %s not found in zone" % redata[
             'data']['ip']
-        syslog.syslog(syslog.LOG_DEBUG, line)
+        logger.debug(line)
     return True
 
 
-def readd(redata, jdata, r_server, replaceip=None):
+def readd(redata, jdata, r_server, replaceip=Non, logger):
     ''' Perform the ip readd '''
 
     usrdata = [
@@ -165,11 +166,11 @@ def readd(redata, jdata, r_server, replaceip=None):
                 result = cloudflail.addRecord(add_data, usrdata)
             if result:
                 line = "cloudflare-ip-remove: Readding record %s to zone %s successful" % (name, zone)
-                syslog.syslog(syslog.LOG_INFO, line)
+                logger.info(line)
             else:
                 line = "cloudflare-ip-remove: Readding record %s to zone %s false" % (name, zone)
-                syslog.syslog(syslog.LOG_INFO, line)
+                logger.info(line)
     except TypeError:
         line = "cloudflare-ip-remove: No records for ip %s in deleted queue for zone %s" % (ip, zone)
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
     return True
