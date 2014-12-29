@@ -37,3 +37,11 @@ The **Shutdown Droplet** Reaction is designed to allow a user to shut down a Dig
 The **Snapshot Droplet** Reaction allows users to create a snapshot of a DigitalOcean cloud server. This Reaction may be useful for creating a quick backup of a misbehaving system for later analysis.
 
 ---
+
+## Create Droplet
+
+The **Create Droplet** Reaction allows users to create a new DigitalOcean cloud server. This reaction can be useful for giving infrastructure the ability to autoscale during issues or events.
+
+### Name Prefix
+
+The name prefix field allows you to specify a prefix for the droplet name. The name will also contain a timestamp to avoid creating droplets with duplicate names.
