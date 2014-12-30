@@ -6,22 +6,22 @@
 ######################################################################
 
 import jinja2
-import syslog
 import time
 
 def action(**kwargs):
     ''' This method is called to action a reaction '''
     # This method can be used for legacy reactions that have
     # a different function based on true/false
+    logger = kwargs['logger']
     if "false" in kwargs['jdata']['check']['status']:
         return false(kwargs['redata'], kwargs['jdata'],
-            kwargs['rdb'], kwargs['r_server'], kwargs['config'])
+            kwargs['rdb'], kwargs['r_server'], kwargs['config'], logger)
     if "true" in kwargs['jdata']['check']['status']:
         return true(kwargs['redata'], kwargs['jdata'],
-            kwargs['rdb'], kwargs['r_server'], kwargs['config'])
+            kwargs['rdb'], kwargs['r_server'], kwargs['config'], logger)
 
 
-def false(redata, jdata, rdb, r_server, config):
+def false(redata, jdata, rdb, r_server, config, logger):
     ''' This method will be called when a monitor has false '''
     run = True
     # Check for Trigger
@@ -34,24 +34,24 @@ def false(redata, jdata, rdb, r_server, config):
         run = False
 
     if run:
-        result = emailNotify(redata, jdata, "false.msg", config)
+        result = emailNotify(redata, jdata, "false.msg", config, logger)
         if result:
             line = "enotify: Sent %s email notification for monitor %s" % (
                 jdata['check']['status'], jdata['cid'])
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info(line)
             return True
         else:
             line = "enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
-            syslog.syslog(syslog.LOG_ERR, line)
+            logger.error(line)
             return False
     else:
         line = "enotify: Skipping %s email notification for monitor %s" % (
             jdata['check']['status'], jdata['cid'])
-        syslog.syslog(syslog.LOG_ERR, line)
+        logger.error(line)
         return None
 
 
-def true(redata, jdata, rdb, r_server, config):
+def true(redata, jdata, rdb, r_server, config, logger):
     ''' This method will be called when a monitor has passed '''
     run = True
     if "true" in jdata['check']['prev_status']:
@@ -62,24 +62,24 @@ def true(redata, jdata, rdb, r_server, config):
             run = False
 
     if run:
-        result = emailNotify(redata, jdata, "true.msg", config)
+        result = emailNotify(redata, jdata, "true.msg", config, logger)
         if result:
             line = "enotify: Sent %s email notification for monitor %s" % (
                 jdata['check']['status'], jdata['cid'])
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info(line)
             return True
         else:
             line = "enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
-            syslog.syslog(syslog.LOG_ERR, line)
+            logger.error(line)
             return False
     else:
         line = "enotify: Skipping %s email notification for monitor %s" % (
             jdata['check']['status'], jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return None
 
 
-def emailNotify(redata, jdata, tfile, config):
+def emailNotify(redata, jdata, tfile, config, logger):
     '''
     This method will be called to notify a user via email of status changes
     '''
@@ -120,4 +120,5 @@ def emailNotify(redata, jdata, tfile, config):
     else:
         line = "enotify: Got status code %d from mandrill for monitor %s" % (
             result.status_code, jdata['cid'])
+        logger.warning(line)
         return False

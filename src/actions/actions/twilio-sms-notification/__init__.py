@@ -1,6 +1,5 @@
 """Twilio SMS Notification Reaction"""
 
-import syslog
 import time
 from twilio.rest import TwilioRestClient
 
@@ -34,8 +33,7 @@ def action(**kwargs):
         return __action(**kwargs)
     except Exception, e:
         redata = kwargs['redata']
-        syslog.syslog(
-            syslog.LOG_WARNING,
-            'twilio-sms-notification: Reaction {id} failed: {message}'.format(
-                id=redata['id'], message=e.message))
+        logger = kwargs['logger']
+        logger.warning('twilio-sms-notification: Reaction {id} failed: {message}'.format(
+            id=redata['id'], message=e.message))
         return False

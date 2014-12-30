@@ -5,7 +5,6 @@
 # Actions Module
 ######################################################################
 
-import syslog
 import time
 
 import pygerduty
@@ -15,6 +14,7 @@ def action(**kwargs):
     ''' This method is called to action a reaction '''
     redata = kwargs['redata']
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -29,12 +29,12 @@ def action(**kwargs):
         run = False
 
     if run:
-        return actionPDTrigger(redata, jdata)
+        return actionPDTrigger(redata, jdata, logger)
     else:
         return None
 
 
-def actionPDTrigger(redata, jdata):
+def actionPDTrigger(redata, jdata, logger):
     ''' Perform EC2 Actions '''
     try:
         pager = pygerduty.PagerDuty(
@@ -57,5 +57,5 @@ def actionPDTrigger(redata, jdata):
             return False
     except:
         line = "pagerduty-notification: Could not connect to PagerDuty for monitor %s" % jdata['cid']
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return False

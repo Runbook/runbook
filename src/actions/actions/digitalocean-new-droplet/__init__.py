@@ -2,7 +2,6 @@
 
 import json
 import requests
-import syslog
 import time
 
 _HTTP_TIMEOUT = 10.0  # in seconds

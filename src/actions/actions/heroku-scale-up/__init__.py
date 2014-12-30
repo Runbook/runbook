@@ -5,7 +5,6 @@
 # Actions Module
 ######################################################################
 
-import syslog
 import time
 import json
 import base64
@@ -16,6 +15,7 @@ def action(**kwargs):
     ''' This method is called to action a reaction '''
     redata = kwargs['redata']
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -30,12 +30,12 @@ def action(**kwargs):
         run = False
 
     if run:
-        return callAction(redata, jdata)
+        return callAction(redata, jdata, logger)
     else:
         return None
 
 
-def callAction(redata, jdata):
+def callAction(redata, jdata, logger):
     ''' Perform Heroku Actions '''
     # Ready API Request Data
     # Generate Base64 encoded API Key
@@ -57,14 +57,14 @@ def callAction(redata, jdata):
         # If fail return False to mark reaction false
         return False
         line = "heroku-scale-up: Could not connect to Heroku for reaction %s" % redata['id']
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
     # Log heroku results for troubleshooting later
     line = "heroku-scale-up: Got status code reply %d from Heroku for reaction %s" % (result.status_code, redata['id'])
-    syslog.syslog(syslog.LOG_DEBUG, line)
+    logger.debug(line)
 
     # if we get a good return
     if result.status_code == 200:
-        retdata = json.loads(result.text)    
+        retdata = json.loads(result.text)
         current_size = None
         current_quantity = None
         for formation in retdata:
@@ -80,7 +80,7 @@ def callAction(redata, jdata):
 
         run = False
         # If the current quantity is greater than min_quantity let's scale it!
-        if current_size < int(redata['data']['max_size']): 
+        if current_size < int(redata['data']['max_size']):
           if current_size == 1:
             new_size = "2X"
           else:
@@ -99,23 +99,23 @@ def callAction(redata, jdata):
                 # errors
                 return False
                 line = "heroku-scale-up: Could not connect to Heroku for reaction %s" % redata['id']
-                syslog.syslog(syslog.LOG_INFO, line)
+                logger.info(line)
             # Process results
             # Log heroku results for troubleshooting later
             line = "heroku-scale-up: Got status code reply %d from Heroku for reaction %s" % (result.status_code, redata['id'])
-            syslog.syslog(syslog.LOG_DEBUG, line)
+            logger.debug(line)
             # Verify we got a 200 and set as success, or set as failure
             if result.status_code == 200:
                 return True
             else:
                 line = "heroku-scale-up: Reaction %s got %s from Heroku after making a request to %s" % (redata['id'], result.text, url)
-                syslog.syslog(syslog.LOG_DEBUG, line)
+                logger.debug(line)
                 return False
         else:
             line = "heroku-scale-up: Reaction %s is already scaled to the max size %d" % (redata['id'], int(redata['data']['max_size']))
-            syslog.syslog(syslog.LOG_DEBUG, line)
+            logger.debug(line)
             return None
     else:
         line = "heroku-scale-up: Reaction %s got %s from Heroku after making a request to %s" % (redata['id'], result.text, url)
-        syslog.syslog(syslog.LOG_DEBUG, line)
+        logger.debug(line)
         return False
