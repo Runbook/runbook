@@ -77,7 +77,7 @@ def true(redata, jdata, rdb, r_server, logger):
     else:
         line = "growth-enotify: Skipping %s email notification for monitor %s" % (
             jdata['check']['status'], jdata['cid'])
-        logger.error(line)
+        logger.info(line)
         return None
 
 def emailNotify(redata, jdata, tfile, logger):

@@ -111,7 +111,7 @@ def remove(redata, jdata, r_server, logger):
     return True
 
 
-def readd(redata, jdata, r_server, replaceip=Non, logger):
+def readd(redata, jdata, r_server, logger, replaceip=None):
     ''' Perform the ip readd '''
 
     usrdata = [

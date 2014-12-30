@@ -43,7 +43,7 @@ def false(redata, jdata, rdb, r_server, logger):
         run = False
 
     if run:
-        edit(redata, jdata, r_server, failback=False, logger)
+        edit(redata, jdata, r_server, logger, failback=False)
         return True
     else:
         return None
@@ -64,7 +64,7 @@ def true(redata, jdata, rdb, r_server, logger):
     if run:
         if "failback" in redata['data']:
             if redata['data']['failback'] == "automatic":
-                edit(redata, jdata, r_server, failback=True, logger)
+                edit(redata, jdata, r_server, logger, failback=True)
         else:
             # Do nothing to prevent unplanned failback
             line = "cloudflare-ip-replace: Monitor is true, nothing to do"
@@ -75,7 +75,7 @@ def true(redata, jdata, rdb, r_server, logger):
 
 
 # Locals
-def edit(redata, jdata, r_server, failback=False, logger):
+def edit(redata, jdata, r_server, logger, failback=False):
     ''' Edit DNS Records '''
     usrdata = {'z': redata['data']['domain'],
                'tkn': redata['data']['apikey'],
