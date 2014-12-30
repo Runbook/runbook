@@ -1,7 +1,6 @@
 """Nexmo SMS Notification Reaction"""
 
 import requests
-import syslog
 import time
 
 NEXMO_URL_TEMPLATE = 'https://rest.nexmo.com/sms/json?api_key={api_key}&api_secret={api_secret}&from={from_address}&to={to_address}&text={text}'
@@ -39,8 +38,7 @@ def action(**kwargs):
         return __action(**kwargs)
     except Exception, e:
         redata = kwargs['redata']
-        syslog.syslog(
-            syslog.LOG_WARNING,
-            'nexmo-sms-notification: Reaction {id} failed: {message}'.format(
-                id=redata['id'], message=e.message))
+        logger = kwargs['logger']
+        logger.warning('nexmo-sms-notification: Reaction {id} failed: {message}'.format(
+            id=redata['id'], message=e.message))
         return False
