@@ -11,9 +11,24 @@ import rethinkdb as r
 from flask import g
 
 from base import BaseTestCase
+from users import User
+from reactions import Reaction
 
 
 class ReactionTests(BaseTestCase):
+
+    def test_dashboard_reactions_route(self):
+        # Ensure registered user can access dashboard/reactions route.
+        with self.client:
+            self.client.post(
+                '/login',
+                data=dict(email="test@tester.com", password="password456"),
+                follow_redirects=True
+            )
+            response = self.client.get(
+                '/dashboard/reactions', follow_redirects=True)
+            self.assertTrue(response.status_code == 200)
+            self.assertIn('Create Reactions', response.data)
 
     def test_dashboard_reactions_route_login(self):
         # Ensure that /dashboard/reactions requires user login.
@@ -140,6 +155,33 @@ class ReactionTests(BaseTestCase):
             self.assertEqual(response.status_code, 200)
             self.assertIn('Reaction was successfully deleted.',
                           response.data)
+
+    def test_getRID_works(self):
+        # Ensure that getRID() works as expected.
+        with self.client:
+            self.client.post(
+                '/login',
+                data=dict(email="test@tester.com", password="password456"),
+                follow_redirects=True
+            )
+            self.client.post(
+                '/dashboard/reactions/enotify',
+                data=dict(name="testing12345", trigger=1,
+                          frequency=1, email="test@tester.com",
+                          send_true=True),
+                follow_redirects=True
+            )
+            user = User()
+            user_id = user.getUID('test@tester.com', g.rdb_conn)
+            get_reaction_id = Reaction()
+            response = get_reaction_id.getRID(
+                'testing12345:'+user_id, g.rdb_conn)
+            results = r.table('reactions').filter(
+                {'name': 'testing12345'}).run(g.rdb_conn)
+            for result in results:
+                reaction_id = result['id']
+                break
+            self.assertEqual(response, reaction_id)
 
 
 if __name__ == '__main__':
