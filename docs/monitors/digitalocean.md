@@ -5,3 +5,4 @@ The DigitalOcean monitors allow users to monitor the state of their DigitalOcean
 ## Droplet Status
 
 The Droplet Status allows you to monitor status changes to a specified Droplet. This monitor will request the droplet status from DigitalOcean via their API, if the droplet's status matches a selected status the monitor will return True. If the returned status is not selected the monitor will return False.
+

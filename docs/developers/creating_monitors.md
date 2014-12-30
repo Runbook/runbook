@@ -18,8 +18,8 @@ Runbook is written using the [Flask](http://flask.pocoo.org/) framework. A commo
 
 For this document, we will create a new Monitor named `some-monitor`; the first step of creating a Monitor is to create the web form needed for users. To start the web form we will create a directory in `web/monitorforms/` called `some-monitor`. Within that directory we will create a `__init__.py` file containing a class that defines the required form fields.
 
-    $ mkdir web/monitorforms/some-monitor
-    $ vi web/monitorforms/some-monitor/__init__.py
+    $ mkdir src/web/monitorforms/some-monitor
+    $ vi src/web/monitorforms/some-monitor/__init__.py
 
 Within this file is the actual wtforms code. You can use the [http-keyword](https://github.com/asm-products/cloudroutes-service/blob/master/src/web/monitorforms/http-keyword/__init__.py) Monitor as an example.
 
