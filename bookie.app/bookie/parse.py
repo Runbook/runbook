@@ -23,24 +23,6 @@ print "Optimized libyaml: %s" % optimized_yaml
 
 
 
-def f3():
-    data=yaml.load(stream)
-
-    print reaction
-
-    print title
-
-    for attr in data['attributes']:
-        attribute=attr['attribute']
-        if attribute != 'call_on':
-            type=attr['type']
-            name=attr['name']
-            desc=attr['desc']
-            validators=attr['validators']
-
-        print '%s | %s | %s | %s | %s |' % (attribute, type, name, desc, validators)
-
-
 # Thanks to tzot ( http://stackoverflow.com/questions/600268/mkdir-p-functionality-in-python )
 def mkdir_p(path):
     try:
@@ -56,9 +38,11 @@ class Models:
     def model_template():
         return open("templates/model.jinja", 'r').read()
 
+    @staticmethod
     def view_template():
         return open("templates/view.jinja", 'r').read()
 
+    @staticmethod
     def controller_template():
         return
 
@@ -74,6 +58,31 @@ class ReactionScaffold:
 
         self.reaction = self.data['reaction']['name']
 
+        self.vclasses = set()
+        self.tclasses = set()
+        
+        self.has_call_on = False
+        
+        for attr in self.data['attributes']:
+            attribute=attr['attribute']
+            if attribute != 'call_on':
+                name=attr['name']
+                desc=attr['desc']
+                
+                type=attr['type']
+                self.tclasses.add(type)
+                
+                validators=attr['validators']
+                for v in validators:
+                    vclass=re.sub("([^\(]*).*",r"\1", v)
+                    self.vclasses.add(vclass)
+                else:
+                    self.has_call_on = True
+                    self.tclasses.add('SelectField')
+                    self.vclasses.add('DataRequired')
+        
+        
+        
 
     def can_write(self, filename):
         print "checking filename: %s" % filename
@@ -98,29 +107,6 @@ class ReactionScaffold:
         filename='%s/__init__.py' % basedir
         
         if self.can_write(filename):
-            vclasses = set()
-            tclasses = set()
-            
-            has_call_on = False
-
-	    for attr in self.data['attributes']:
-	        attribute=attr['attribute']
-	        if attribute != 'call_on':
-	            name=attr['name']
-	            desc=attr['desc']
-
-	            type=attr['type']
-                    tclasses.add(type)
-
-	            validators=attr['validators']
-                    for v in validators:
-                        vclass=re.sub("([^\(]*).*",r"\1", v)
-                        vclasses.add(vclass)
-                else:
-                    has_call_on = True
-                    tclasses.add('SelectField')
-                    vclasses.add('DataRequired')
-	
 #                print '%s | %s | %s | %s | %s |' % (attribute, type, name, desc, validators)
 
             mkdir_p(basedir)
@@ -130,7 +116,7 @@ class ReactionScaffold:
 #            print "template = %s" % template_file
 
             template = Template(template_file)
-            output = template.render({"data":self.data, "vclasses": vclasses, "tclasses":tclasses, "has_call_on":has_call_on} )
+            output = template.render({"data":self.data, "vclasses": self.vclasses, "tclasses":self.tclasses, "has_call_on":self.has_call_on} )
 
 #            print("=====data: %s" % self.data)
 	
@@ -144,12 +130,25 @@ class ReactionScaffold:
     def generate_view(self):
         reaction=self.data['reaction']['name']
         
-        basedir='src/web/reactionforms/%s' % reaction
-        
-        filename='%s/__init__.py' % basedir
-        
-        if self.can_write(filename):
-            print
+        basedir='src/web/templates/reactions'
+        html_filename = '%s/%s.html' % (basedir, reaction)
+        js_filename = '%s/%s.js' % (basedir, reaction)
+
+        if self.can_write(html_filename):
+            mkdir_p(basedir)
+            f = open(html_filename, 'w')
+            template_file = Models.view_template()
+
+#            print "template = %s" % template_file
+
+            template = Template(template_file)
+            output = template.render({"data":self.data, "vclasses": self.vclasses, "tclasses":self.tclasses, "has_call_on":self.has_call_on} )
+
+#            print("=====data: %s" % self.data)
+	
+#            print("validators : %s" % vclasses)
+#            print("types : %s" % tclasses)
+            f.write(output)
 
             
 r=ReactionScaffold(sys.argv[1], True)
