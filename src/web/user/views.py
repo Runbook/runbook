@@ -2,7 +2,6 @@
 
 
 import time
-import datetime
 import stathat
 import cookies
 import rethinkdb as r
@@ -188,18 +187,23 @@ def confirm_email(token):
         user = User()
         user.get('uid', verify, g.rdb_conn)
         if user.confirmed:
-            return redirect(url_for('member.dashboard_page'))  # still need to test
+            flash('Account already confirmed. Thank you.', 'success')
+            return redirect(url_for('member.dashboard_page'))
         else:
             try:
                 email = confirm_token(token)
                 if user.email == email[0]:
-                    user.confirmed = True
-                    user.confirmed_on = datetime.datetime.now()
+                    r.table('users').get(verify).update(
+                        {'confirmed': True}).run(g.rdb_conn)
+                    flash('You have confirmed your account. Thanks!', 'success')
                     return redirect(url_for('member.dashboard_page'))
                 else:
-                    return redirect(url_for('user.login_page'))  # still need to test
+                    flash('The confirmation link is invalid.', 'danger')
+                    return redirect(url_for('user.login_page'))
             except:
-                print "error message here"  # still need to test
+                flash('The confirmation link is invalid or has expired.',
+                      'danger')
+                return redirect(url_for('user.login_page'))
     else:
         flash('Please Login.', 'warning')
         return redirect(url_for('user.login_page'))

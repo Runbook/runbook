@@ -158,6 +158,8 @@ class ReactionTests(BaseTestCase):
 
     def test_getRID_works(self):
         # Ensure that getRID() works as expected.
+        timestamp = str(datetime.datetime.now())
+        new_timestamp = timestamp.replace(":", "")
         with self.client:
             self.client.post(
                 '/login',
@@ -166,7 +168,7 @@ class ReactionTests(BaseTestCase):
             )
             self.client.post(
                 '/dashboard/reactions/enotify',
-                data=dict(name="testing12345", trigger=1,
+                data=dict(name=new_timestamp, trigger=1,
                           frequency=1, email="test@tester.com",
                           send_true=True),
                 follow_redirects=True
@@ -175,9 +177,9 @@ class ReactionTests(BaseTestCase):
             user_id = user.getUID('test@tester.com', g.rdb_conn)
             get_reaction_id = Reaction()
             response = get_reaction_id.getRID(
-                'testing12345:'+user_id, g.rdb_conn)
+                new_timestamp+':'+user_id, g.rdb_conn)
             results = r.table('reactions').filter(
-                {'name': 'testing12345'}).run(g.rdb_conn)
+                {'name': new_timestamp}).run(g.rdb_conn)
             for result in results:
                 reaction_id = result['id']
                 break
