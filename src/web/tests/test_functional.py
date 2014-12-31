@@ -40,36 +40,6 @@ class FunctionalTests(BaseTestCase):
         self.assertIn('Sign up', response.data)
         self.assertEqual(response.status_code, 200)
 
-    def test_logout_route_requires_login(self):
-        # Ensure logout route requres logged in user.
-        response = self.client.get('/logout', follow_redirects=True)
-        self.assertIn('Login', response.data)
-
-    def test_correct_login(self):
-        # Ensure login behaves correctly with correct credentials
-        with self.client:
-            self.client.post(
-                '/login',
-                data=dict(email="test@tester.com", password="password456"),
-                follow_redirects=True
-            )
-            user = User()
-            user = user.get('username', 'test@tester.com', g.rdb_conn)
-            active = user.is_active('test@tester.com', g.rdb_conn)
-            self.assertTrue(user.email == "test@tester.com")
-            self.assertTrue(active)
-
-    def test_logout_behaves_correctly(self):
-        # Ensure logout behaves correctly, regarding the session
-        with self.client:
-            self.client.post(
-                '/login',
-                data=dict(email="test@tester.com", password="password456"),
-                follow_redirects=True
-            )
-            response = self.client.get('/logout', follow_redirects=True)
-            self.assertIn('Login', response.data)
-
     def test_404_behaves_correctly(self):
         # Ensure 404 error handlers behaves correctly
         response = self.client.get('/not_a_real_page', follow_redirects=True)
