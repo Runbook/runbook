@@ -16,7 +16,7 @@ class ReactionScaffold:
     def __init__(self, logger):
         self.log = logger
 
-    def generate(self, reaction):
+    def generate(self, reaction, force_overwrite=False):
         ret = collections.namedtuple('Return', ['status', 'logs'])
         status = 0
         logs = ['line 1', 'line 2']

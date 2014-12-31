@@ -12,12 +12,14 @@ class Reaction(Command):
 
     def get_parser(self, prog_name):
         parser = super(Reaction, self).get_parser(prog_name)
+        parser.add_argument('--force-overwrite', '-f', action='store_true')
         parser.add_argument('reaction', nargs='?', default='')
         return parser
 
     def take_action(self, parsed_args):
         reaction = parsed_args.reaction
-        
+        force_overwrite = parsed_args.force_overwrite
+
         if reaction == '':
             raise RuntimeError('Cannot create a new reaction without a reaction model')
 
@@ -27,7 +29,7 @@ class Reaction(Command):
         
         scaf = ReactionScaffold(self.log)
 
-        ret = scaf.generate(reaction)
+        ret = scaf.generate(reaction, force_overwrite)
 
 
         
