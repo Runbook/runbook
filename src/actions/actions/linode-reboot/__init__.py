@@ -39,8 +39,8 @@ def call_linode(redata, jdata, logger):
     url = 'https://api.linode.com/'
     params = {
         "api_action": "linode.reboot",
-        "LinodeID": redata['data']['linodeid'],
-        "api_key": redata['data']['apikey']
+        "LinodeID": redata['data']['linode_id'],
+        "api_key": redata['data']['api_key']
     }
     payload = json.dumps(params)
     try:
