@@ -150,11 +150,9 @@ Steps #1 and #2 were specifically related to creating the web elements of a Reac
 
 #### Creating a new Reaction
 
-<<<<<<< HEAD
 Reactions are essentially python modules that are called by another process. To create a new Reaction you will first need to create a directory using the short-name in the `actions/actions` directory, then create a `__init__.py` file that contains the Reaction code.
-=======
+
 Reactions are essentially Python modules that are called by another process. To create a new Reaction you will first need to create a directory using the short-name in the `actions/actions` directory, then create a `__init__.py` file that contains the Reaction code.
->>>>>>> 2efd73d919d73651f28eb9ea43ee51a389980405
 
     $ mkdir actions/actions/some-reaction
     $ vi actions/actions/some-reaction/__init__.py
@@ -264,15 +262,15 @@ This example is an excerpt of the [aws-ec2restart](https://github.com/asm-produc
         # Check for Trigger
         if redata['trigger'] > jdata['failcount']:
             run = False
-    
+
         # Check for lastrun
         checktime = time.time() - float(redata['lastrun'])
         if checktime < redata['frequency']:
             run = False
-    
+
         if redata['data']['call_on'] not in jdata['check']['status']:
             run = False
-    
+
         if run:
             return actionEC2(redata, jdata)
         else:
