@@ -3,88 +3,101 @@
 
 <div class="container">
   <div class="row">
-  <p></p>
+
+    <p></p>
+
     <!-- sidebar -->
     {% include 'sidebar.html' %}
+
     <!-- content -->
     <div class="col-md-8">
+
+      <!-- header -->
       <div class="page-header">
-      {% if data['edit'] %}
-        <h1><i class="fa fa-cogs fa-1x"></i> Manage Reaction</h1>
-      {% else %}
-        <h1><i class="fa fa-cogs fa-1x"></i> Add Reaction</h1>
-      {% endif %}
+        {% if data['edit'] %}
+          <h1><i class="fa fa-cogs fa-1x"></i> Manage Reaction</h1>
+        {% else %}
+          <h1><i class="fa fa-cogs fa-1x"></i> Add Reaction</h1>
+        {% endif %}
       </div>
+
+      <!-- errors -->
       {% if data['error'] %}
-      <p class="alert alert-danger">{{ data['msg'] }}</p>
+        <p class="alert alert-danger">{{ data['msg'] }}</p>
       {% elif data['msg'] and data['error'] == False %}
-      <p class="alert alert-success">{{ data['msg'] }}</p>
+        <p class="alert alert-success">{{ data['msg'] }}</p>
       {% endif %}
+
+      <!-- form errors -->
       {% if form.errors %}
-      {% for field, error in form.errors.items() %}
-      {% for msg in error %}
-      <p class="alert alert-danger">{{msg}}</p>
-      {% endfor %}
-      {% endfor %}
+        {% for field, error in form.errors.items() %}
+          {% for msg in error %}
+            <p class="alert alert-danger">{{msg}}</p>
+          {% endfor %}
+        {% endfor %}
       {% endif %}
 
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-          <div class="panel-title">
-            Linode: Reboot a Linode Server
-          </div>
-          </div>
-          <div class="panel-body">
-            <form action="{{ data['url'] }}" method="post" name="reaction-form" target="_self" class="form-horizontal" role="form">
-            {{ form.csrf_token }}
+      <!-- title -->
+      <div class="panel panel-primary">
 
-            {% include 'reactions/base.html' %}
-            {% include 'reactions/callon.html' %}
+        <div class="panel-heading">
+          <div class="panel-title">Linode: Reboot a Linode Server</div>
+        </div>
 
-            <hr>
+      <!-- form -->
+      <div class="panel-body">
+        <form action="{{ data['url'] }}" method="post" name="reaction-form" target="_self" class="form-horizontal" role="form">
+          {{ form.csrf_token }}
 
-                <div class="form-group">
-                <label for="API Key" class="col-sm-4 control-label">API Key</label>
+          {% include 'reactions/base.html' %}
+          {% include 'reactions/callon.html' %}
+
+          <hr>
+
+          <div class="form-group">
+            <label for="API Key" class="col-sm-4 control-label">API Key</label>
             <div class="col-sm-8">
-              <div class="input-group">
-                <span class="input-group-btn">
-                  <button type="button" id="cl-email" class="btn btn-default" rel="popover" data-content="This field contains your Linode API Token. This can be found in the 'My Profile » API Keys' section in your Linod account." title="Linode API Token"><i class="fa fa-question"></i></button>
-                </span>
-              {% if data['edit'] %}
-              {{ form.apikey(class_="form-control", value=data['reaction']['data']['apikey']) }}
-              {% else %}
-              {{ form.apikey(class_="form-control", placeholder="API Key") }}
-              {% endif %}
-              </div>
+                <div class="input-group">
+                  <span class="input-group-btn">
+                    <button type="button" id="cl-email" class="btn btn-default" rel="popover" data-content="This field contains your Linode API Token. This can be found in the 'My Profile » API Keys' section in your Linod account." title="Linode API Token"><i class="fa fa-question"></i></button>
+                  </span>
+                  {% if data['edit'] %}
+                    {{ form.apikey(class_="form-control", value=data['reaction']['data']['apikey']) }}
+                  {% else %}
+                    {{ form.apikey(class_="form-control", placeholder="API Key") }}
+                  {% endif %}
+                </div>
             </div>
-              </div>
+          </div>
 
-                <div class="form-group">
-                <label for="Droplet ID#" class="col-sm-4 control-label">Linode ID#</label>
+          <div class="form-group">
+            <label for="Linode ID#" class="col-sm-4 control-label">Linode ID#</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <span class="input-group-btn">
                   <button type="button" id="cl-email" class="btn btn-default" rel="popover" data-content="This field contains the ID of your Linode Server." title="LinodeID#"><i class="fa fa-question"></i></button>
                 </span>
-              {% if data['edit'] %}
-              {{ form.dropletid(class_="form-control", value=data['reaction']['data']['dropletid']) }}
-              {% else %}
-              {{ form.dropletid(class_="form-control", placeholder="Droplet ID#") }}
-              {% endif %}
+                {% if data['edit'] %}
+                  {{ form.dropletid(class_="form-control", value=data['reaction']['data']['dropletid']) }}
+                {% else %}
+                  {{ form.dropletid(class_="form-control", placeholder="Droplet ID#") }}
+                {% endif %}
               </div>
             </div>
-              </div>
-
-                <p></p>
-                <button type="submit" class="btn btn-primary btn-block">Submit</button>
-            </form>
           </div>
-        </div>
-      <div class="panel-group" id="accordion">
-    {% include 'reactions/docs/linode-reboot-details.html' %}
 
-      </div>
+          <p></p>
+
+          <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
+      </div><!-- form -->
+    </div><!--  -->
+
+    <div class="panel-group" id="accordion">
+      {% include 'reactions/docs/linode-reboot-details.html' %}
     </div>
+
+    </div> <!-- content -->
   </div> <!-- row -->
 </div> <!-- container -->
 
