@@ -62,9 +62,9 @@
                     <button type="button" id="cl-email" class="btn btn-default" rel="popover" data-content="This field contains your Linode API Token. This can be found in the 'My Profile » API Keys' section in your Linod account." title="Linode API Token"><i class="fa fa-question"></i></button>
                   </span>
                   {% if data['edit'] %}
-                    {{ form.apikey(class_="form-control", value=data['reaction']['data']['apikey']) }}
+                    {{ form.api_key(class_="form-control", value=data['reaction']['data']['api_key']) }}
                   {% else %}
-                    {{ form.apikey(class_="form-control", placeholder="API Key") }}
+                    {{ form.api_key(class_="form-control", placeholder="API Key") }}
                   {% endif %}
                 </div>
             </div>
@@ -78,9 +78,9 @@
                   <button type="button" id="cl-email" class="btn btn-default" rel="popover" data-content="This field contains the ID of your Linode Server." title="LinodeID#"><i class="fa fa-question"></i></button>
                 </span>
                 {% if data['edit'] %}
-                  {{ form.dropletid(class_="form-control", value=data['reaction']['data']['dropletid']) }}
+                  {{ form.linode_id(class_="form-control", value=data['reaction']['data']['linode_id']) }}
                 {% else %}
-                  {{ form.dropletid(class_="form-control", placeholder="Droplet ID#") }}
+                  {{ form.linode_id(class_="form-control", placeholder="Linode ID#") }}
                 {% endif %}
               </div>
             </div>
@@ -94,7 +94,7 @@
     </div><!--  -->
 
     <div class="panel-group" id="accordion">
-      {% include 'reactions/docs/linode-reboot-details.html' %}
+      <!-- {% include 'reactions/docs/linode-reboot-details.html' %} -->
     </div>
 
     </div> <!-- content -->
