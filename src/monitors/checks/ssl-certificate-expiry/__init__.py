@@ -6,11 +6,10 @@ Note: works only on TLSv1 and higher.
 
 import datetime
 import ssl
-import syslog
 import OpenSSL
 
 
-def _check(jdata):
+def _check(jdata, logger):
     """Checks server SSL certificate for expiry."""
     hostname = jdata['data']['hostname']
     port = int(jdata['data'].get('port', 443))
@@ -22,15 +21,16 @@ def _check(jdata):
     expiry = datetime.datetime.strptime(expiry_date[:8], '%Y%m%d')
     now = datetime.datetime.now()
     days_left = (expiry - now).days
-    syslog.syslog(syslog.LOG_DEBUG, 'Days left in cert expiry: %d' % days_left)
+    logger.debug('Days left in cert expiry: %d' % days_left)
     return days_left > num_days
 
 
 def check(**kwargs):
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     try:
-        return _check(jdata)
+        return _check(jdata, logger)
     except Exception, e:
-        syslog.syslog(syslog.LOG_WARNING, e.message)
+        logger.warning(e.message)
         return False
 
