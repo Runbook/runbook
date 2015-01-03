@@ -105,6 +105,35 @@ class MonitorTests(BaseTestCase):
             self.assertIn('Monitor &#34;{0}&#34; successfully edited'
                 .format(new_timestamp), response.data)
 
+    def test_user_can_edit_monitor_login(self):
+        # Ensure that a editing a monitor  requires user login.
+        timestamp = str(datetime.datetime.now())
+        with self.client:
+            self.client.post(
+                '/login',
+                data=dict(email="test@tester.com", password="password456"),
+                follow_redirects=True
+            )
+            self.client.post(
+                '/dashboard/monitors/cr-api',
+                data=dict(name=timestamp),
+                follow_redirects=True
+            )
+            results = r.table('monitors').filter(
+                {'name': timestamp}).run(g.rdb_conn)
+            for result in results:
+                monitor_id = result['id']
+                break
+            self.client.get('/logout', follow_redirects=True)
+            response = self.client.post(
+                '/dashboard/edit-monitors/cr-api/{0}'.format(monitor_id),
+                data=dict(name="test"),
+                follow_redirects=True
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('Login', response.data)
+            self.assertIn('Please Login.', response.data)
+
     def test_user_can_update_monitor(self):
         # Ensure that a logged in user can update an existing monitor.
         timestamp = str(datetime.datetime.now())
