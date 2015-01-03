@@ -14,18 +14,19 @@
 import requests
 
 
-def check(data):
+def check(**kwargs):
     """ Perform a http get request and validate the return code """
-    headers = {'host': data['data']['host']}
+    jdata = kwargs['jdata']
+    headers = {'host': jdata['data']['host']}
     timeout = 3.00
-    url = data['data']['url']
+    url = jdata['data']['url']
     try:
         result = requests.get(
             url, timeout=timeout, headers=headers, verify=False)
     except:
         return False
     rcode = str(result.status_code)
-    if rcode in data['data']['codes']:
+    if rcode in jdata['data']['codes']:
         return True
     else:
         return False

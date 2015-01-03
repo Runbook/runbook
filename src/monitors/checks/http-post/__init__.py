@@ -27,14 +27,14 @@ def ParseHeaders(headers_str):
     return headers
 
 
-def _check(data):
-    url = data['data']['url']
-    host = data['data']['host']
-    payload = data['data']['payload'] or ''
-    extra_headers = data['data']['extra_headers'] or ''
-    status_codes = data['data']['status_codes'] or []
-    response_regex = data['data']['response_regex'] or ''
-    response_headers = data['data']['response_headers'] or ''
+def _check(jdata):
+    url = jdata['data']['url']
+    host = jdata['data']['host']
+    payload = jdata['data']['payload'] or ''
+    extra_headers = jdata['data']['extra_headers'] or ''
+    status_codes = jdata['data']['status_codes'] or []
+    response_regex = jdata['data']['response_regex'] or ''
+    response_headers = jdata['data']['response_headers'] or ''
     assert url, "URL field not present"
     assert host, "Host field not present"
     headers = ParseHeaders(extra_headers)
@@ -51,9 +51,10 @@ def _check(data):
     return True
 
 
-def check(data):
+def check(**kwargs):
+    jdata = kwargs['jdata']
     try:
-        return _check(data)
+        return _check(jdata)
     except Exception, e:
-        syslog.syslog(syslog.LOG_WARNING, 'http-post: {cid} - {message}'.format(cid=data['cid'],message=e.message))
+        syslog.syslog(syslog.LOG_WARNING, 'http-post: {cid} - {message}'.format(cid=jdata['cid'],message=e.message))
         return False
