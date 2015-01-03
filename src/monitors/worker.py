@@ -102,7 +102,7 @@ while True:
     # Load health check module and run it
     monitor = __import__(
         "checks." + jdata['ctype'], globals(), locals(), ['check'], -1)
-    result = monitor.check(jdata)
+    result = monitor.check(jdata=jdata, logger=logger)
     if result is True:
         # Log it
         stat = "[%s] True Checks" % config['envname']
