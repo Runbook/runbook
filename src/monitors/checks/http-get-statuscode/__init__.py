@@ -14,18 +14,29 @@
 import requests
 
 
-def check(data):
+def check(**kwargs):
     """ Perform a http get request and validate the return code """
-    headers = {'host': data['data']['host']}
+    jdata = kwargs['jdata']
+    logger = kwargs['logger']
+    headers = {'host': jdata['data']['host']}
     timeout = 3.00
-    url = data['data']['url']
+    url = jdata['data']['url']
     try:
         result = requests.get(
             url, timeout=timeout, headers=headers, verify=False)
-    except:
+    except Exception as e:
+        line = 'http-get-statuscode: Reqeust to {0} sent for monitor {1} - ' \
+               'had an exception: {2}'.format(url, jdata['cid'], e)
+        logger.error(line)
         return False
     rcode = str(result.status_code)
-    if rcode in data['data']['codes']:
+    if rcode in jdata['data']['codes']:
+        line = 'http-get-statuscode: Reqeust to {0} sent for monitor {1} - ' \
+               'Successful'.format(url, jdata['cid'])
+        logger.info(line)
         return True
     else:
+        line = 'http-get-statuscode: Reqeust to {0} sent for monitor {1} - ' \
+               'Failure'.format(url, jdata['cid'])
+        logger.info(line)
         return False

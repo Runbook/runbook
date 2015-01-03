@@ -16,13 +16,14 @@ import os
 import re
 
 
-def check(data):
+def check(**kwargs):
     """ Perform a icmp ping to the specified IP or hostname """
+    jdata = kwargs['jdata']
     run = True
     # Search for bad stuff
     pattern = [".*255$"]
     for regex in pattern:
-        match = re.search(regex, data['data']['host'])
+        match = re.search(regex, jdata['data']['host'])
         if match:
             run = False
 
@@ -31,7 +32,7 @@ def check(data):
     else:
         DEVNULL = open(os.devnull, 'wb')
         # ping -c 1 check, -W 3 second timeout, -q quietish
-        cmd = ['/bin/ping', '-c', '1', '-W', '3', '-q', data['data']['host']]
+        cmd = ['/bin/ping', '-c', '1', '-W', '3', '-q', jdata['data']['host']]
         result = subprocess.call(
             cmd, shell=False, stdout=DEVNULL, stderr=subprocess.STDOUT)
         DEVNULL.close()
