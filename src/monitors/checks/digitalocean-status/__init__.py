@@ -10,7 +10,6 @@
 ######################################################################
 
 import requests
-import syslog
 
 
 http_timeout = 5.0
@@ -20,6 +19,7 @@ do_droplet_info_url = 'https://api.digitalocean.com/v2/droplets/{0}'
 def check(**kwargs):
     ''' Perform a DigitalOcean droplet info retrieval and check status '''
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     headers = {'Content-Type': 'application/json',
                'Authorization': 'Bearer {0}'.format(jdata['data']['apikey'])}
     url = do_droplet_info_url.format(jdata['data']['dropletid'])
@@ -30,23 +30,23 @@ def check(**kwargs):
     except Exception as e:
         line = 'digitalocean-status: Reqeust to {0} sent for monitor {1} - ' \
                'had an exception: {2}'.format(url, jdata['cid'], e)
-        syslog.syslog(syslog.LOG_ERR, line)
+        logger.error(line)
         return False
 
     if req.status_code < 200 or req.status_code >= 300:
         line = 'digitalocean-status: Reqeust to {0} sent for monitor {1} - ' \
                'non-success HTTP code'.format(url, jdata['cid'])
-        syslog.syslog(syslog.LOG_WARNING, line)
+        logger.warning(line)
         return False
 
     status = req.json()['droplet']['status']
     if status in jdata['data']['status']:
         line = 'digitalocean-status: Reqeust to {0} sent for monitor {1} - ' \
                'Successful'.format(url, jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return True
     else:
         line = 'digitalocean-status: Reqeust to {0} sent for monitor {1} - ' \
                'Failure'.format(url, jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return False

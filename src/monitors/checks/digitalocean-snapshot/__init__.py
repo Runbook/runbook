@@ -10,13 +10,13 @@
 
 
 import requests
-import syslog
 import datetime
 
 
 def check(**kwargs):
     """ Checks Digital Ocean's api status for all actions"""
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     headers = {'Authorization': 'Bearer ' + jdata['data']['apikey'],
                'Content-Type': 'application/json'}
     url = "https://api.digitalocean.com/v2/actions"
@@ -30,7 +30,7 @@ def check(**kwargs):
     if req.status_code >= 200 and req.status_code < 300:
         line = "digitalocean-snapshot: Reqeust to {0} \
                sent for monitor {1} - Successful".format(url, jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         # loop through all actions
         for action in all_actions:
             time_difference = current_time - datetime.datetime.strptime(
@@ -47,5 +47,5 @@ def check(**kwargs):
     else:
         line = "digitalocean-snapshot: Request to {0} \
                sent for monitor {1} - False".format(url, jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return False
