@@ -3,7 +3,6 @@
 
 import re
 import requests
-import syslog
 
 
 _HTTP_REQUEST_TIMEOUT = 10.0  # in seconds
@@ -53,8 +52,9 @@ def _check(jdata):
 
 def check(**kwargs):
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     try:
         return _check(jdata)
     except Exception, e:
-        syslog.syslog(syslog.LOG_WARNING, 'http-post: {cid} - {message}'.format(cid=jdata['cid'],message=e.message))
+        logger.warning('http-post: {cid} - {message}'.format(cid=jdata['cid'],message=e.message))
         return False
