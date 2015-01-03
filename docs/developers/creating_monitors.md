@@ -195,11 +195,11 @@ Much like using the wtforms module in step #1 to create a new Monitor, simply cr
     $ mkdir monitors/checks/some-monitor
     $ vi monitors/checks/some-monitor/__init__.py
 
-The only requirement for this Monitor is to have a single method called `check`. This method will be given `data` which is a dictionary that contains the Monitor information from the database as well as some extra information from the `monitors/control.py` process.
+The only requirement for this Monitor is to have a single method called `check()` defined. The `check()` method is a keyword arguments defined method. When `src/monitors/worker.py` calls the `check()` method, it specifies values for `jdata` and `logger`.
 
-#### Example of `data`
+#### Example of `jdata`
 
-Below is an example of what the `data` dictionary contains.
+Below is an example of what the `jdata` dictionary contains.
 
     data = {
       "status": "false",
@@ -234,7 +234,7 @@ Below is an example of what the `data` dictionary contains.
       "name": "Some Monitor"
     }
 
-The key item of this Monitor is the `data['data']` dictionary. The `data['data']` dictionary holds all of the form values from steps #1 and #2. For most Monitors, the details are located in this dictionary.
+The key item of this Monitor is the `jdata['data']` dictionary. The `jdata['data']` dictionary holds all of the form values from steps #1 and #2. For most Monitors, the details are located in this dictionary.
 
 #### What to do after the health check is performed
 
@@ -244,26 +244,38 @@ The actual code to perform the health check really depends on the health check i
 
 The following Monitor code is from the `http-get-statuscode` Monitor and can be used as a guide on how to write a `monitors`-based Monitor.
 
-    def check(data):
-      """ Perform a http get request and validate the return code """
-      headers = { 'host' : data['data']['host'] }
-      timeout = 3.00
-      url = data['data']['url']
-      try:
-        result = requests.get(url, timeout=timeout, headers=headers, verify=False)
-      except:
-        return False
-      rcode = str(result.status_code)
-      if rcode in data['data']['codes']:
-        return True
-      else:
-        return False
+    def check(**kwargs):
+        """ Perform a http get request and validate the return code """
+        jdata = kwargs['jdata']
+        logger = kwargs['logger']
+        headers = {'host': jdata['data']['host']}
+        timeout = 3.00
+        url = jdata['data']['url']
+        try:
+            result = requests.get(
+                url, timeout=timeout, headers=headers, verify=False)
+        except Exception as e:
+            line = 'http-get-statuscode: Reqeust to {0} sent for monitor {1} - ' \
+                   'had an exception: {2}'.format(url, jdata['cid'], e)
+            logger.error(line)
+            return False
+        rcode = str(result.status_code)
+        if rcode in jdata['data']['codes']:
+            line = 'http-get-statuscode: Reqeust to {0} sent for monitor {1} - ' \
+                   'Successful'.format(url, jdata['cid'])
+            logger.info(line)
+            return True
+        else:
+            line = 'http-get-statuscode: Reqeust to {0} sent for monitor {1} - ' \
+                   'Failure'.format(url, jdata['cid'])
+            logger.info(line)
+            return False
 
 ###### Example Health Check: always-true
 
 The following Monitor code will always return `True`, which means the Monitor itself will always be `true`.
 
-    def check(data):
+    def check(**kwargs):
       ''' Always return true '''
       return True
 
