@@ -201,7 +201,7 @@ The only requirement for this Monitor is to have a single method called `check()
 
 Below is an example of what the `jdata` dictionary contains.
 
-    data = {
+    jdata = {
       "status": "false",
       "uid": "1232131231231231231-111-15888dd98382",
       "zone": "Digital Ocean - sfo1",
