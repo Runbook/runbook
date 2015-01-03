@@ -11,12 +11,12 @@
 import requests
 import json
 import base64
-import syslog
 
 
 def check(**kwargs):
     """ Checks Heroku's api status for a specified dyno """
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     basekey = base64.b64encode(":" + jdata['data']['apikey'])
     headers = {
         "Accept": "application/vnd.heroku+json; version=3",
@@ -31,7 +31,7 @@ def check(**kwargs):
     except:
         return None
     line = "heroku-dyno-status-single: Got response from heroku for monitor - %s" % (result.text)
-    syslog.syslog(syslog.LOG_DEBUG, line)
+    logger.debug(line)
     retdata = json.loads(result.text)
     if "state" in retdata:
         if retdata['state'] == "up" or retdata['state'] == "idle":
