@@ -1,0 +1,10 @@
+Dear {{ user }},
+
+Welcome to Runbook! Please follow this link to activate your account:
+
+{{ url_for('auth.confirm', token=token, _external=True) }}
+
+
+Cheers!
+
+https://twitter.com/runbookio
