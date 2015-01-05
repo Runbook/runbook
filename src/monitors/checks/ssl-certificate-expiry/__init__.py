@@ -14,7 +14,8 @@ def _check(jdata, logger):
     hostname = jdata['data']['hostname']
     port = int(jdata['data'].get('port', 443))
     num_days = int(jdata['data'].get('num_days', 7))
-    cert = ssl.get_server_certificate((hostname, port), ssl_version=ssl.PROTOCOL_TLSv1)
+    cert = ssl.get_server_certificate(
+        (hostname, port), ssl_version=ssl.PROTOCOL_TLSv1)
     x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
     expiry_date = x509.get_notAfter()
     assert expiry_date, "Cert doesn't have an expiry date."

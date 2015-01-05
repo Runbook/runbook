@@ -30,7 +30,8 @@ def check(**kwargs):
             url, timeout=timeout, headers=headers, verify=True)
     except:
         return None
-    line = "heroku-dyno-status-single: Got response from heroku for monitor - %s" % (result.text)
+    line = "heroku-dyno-status-single: Got response from heroku for monitor \
+        - %s" % (result.text)
     logger.debug(line)
     retdata = json.loads(result.text)
     if "state" in retdata:

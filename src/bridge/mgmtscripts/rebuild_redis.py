@@ -4,8 +4,8 @@
 # ------------------------------------------------------------------
 # Description:
 # ------------------------------------------------------------------
-# This is a semi quicky designed to rebuild the redis queues from
-# the RethinkDB database
+# This is designed to rebuild the redis queues from the RethinkDB
+# database
 # ------------------------------------------------------------------
 # Version: Alpha.20140729
 # Original Author: Benjamin J. Cane - madflojo@cloudrout.es
