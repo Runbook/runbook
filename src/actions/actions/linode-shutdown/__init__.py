@@ -6,7 +6,6 @@
 ######################################################################
 
 import requests
-import json
 import time
 
 
@@ -42,10 +41,9 @@ def call_linode(redata, jdata, logger):
         "LinodeID": int(redata['data']['linode_id']),
         "api_key": str(redata['data']['api_key'])
     }
-    payload = json.dumps(params)
     try:
         req = requests.post(
-            url, timeout=3.0, data=payload, verify=True)
+            url, timeout=3.0, data=params, verify=True)
     except:
         return False
     if req.status_code >= 200 and req.status_code < 300:
