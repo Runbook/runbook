@@ -11,18 +11,19 @@
 import requests
 import json
 import base64
-import syslog
 
 
-def check(data):
+def check(**kwargs):
     """ Checks Heroku's api status for dyno status"""
-    basekey = base64.b64encode(":" + data['data']['apikey'])
+    jdata = kwargs['jdata']
+    logger = kwargs['logger']
+    basekey = base64.b64encode(":" + jdata['data']['apikey'])
     headers = {
         "Accept": "application/vnd.heroku+json; version=3",
         "Authorization": basekey
     }
     timeout = 5.00
-    url = "https://api.heroku.com/apps/" + data['data']['appname'] + "/dynos"
+    url = "https://api.heroku.com/apps/" + jdata['data']['appname'] + "/dynos"
     try:
         result = requests.get(
             url, timeout=timeout, headers=headers, verify=True)
@@ -30,7 +31,7 @@ def check(data):
         return None
     line = "heroku-dyno-status: Got response from heroku for monitor - %s" % (
         result.text)
-    syslog.syslog(syslog.LOG_DEBUG, line)
+    logger.debug(line)
     retdata = json.loads(result.text)
     false = 0
     if result.status_code >= 200 and result.status_code <= 299:
