@@ -13,7 +13,8 @@ def _check(jdata, logger):
     host = jdata['data']['host']
     port = int(jdata['data'].get('port', 443))
     expected_hostname = jdata['data']['expected_hostname']
-    cert = ssl.get_server_certificate((host, port), ssl_version=ssl.PROTOCOL_TLSv1)
+    cert = ssl.get_server_certificate(
+        (host, port), ssl_version=ssl.PROTOCOL_TLSv1)
     x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
     actual_hostname = x509.get_subject().CN
     logger.debug('Hostname in certificate: %s' % actual_hostname)

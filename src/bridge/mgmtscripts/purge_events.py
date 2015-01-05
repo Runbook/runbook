@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------
 # Description:
 # ------------------------------------------------------------------
-# This is a semi quickly designed to remove anything from the events
+# This is designed to remove anything from the events
 # table exceeding the 'events_retention' threshold set within the
 # bridge config.
 # ------------------------------------------------------------------
