@@ -44,7 +44,7 @@ class Models:
 
     @staticmethod
     def controller_template():
-        return
+        return open("templates/controller.jinja", 'r').read()
 
 
 class ReactionScaffold:
@@ -96,7 +96,7 @@ class ReactionScaffold:
 
         self.generate_model()
         self.generate_view()
-#        self.generate_controller(data)
+        self.generate_controller()
 
         return True
 
@@ -149,6 +149,33 @@ class ReactionScaffold:
 #            print("validators : %s" % vclasses)
 #            print("types : %s" % tclasses)
             f.write(output)
+
+
+    def generate_controller(self):
+        basedir='src/actions/actions/%s' % self.reaction
+        
+        filename='%s/__init__.py' % basedir
+        
+        if self.can_write(filename):
+#                print '%s | %s | %s | %s | %s |' % (attribute, type, name, desc, validators)
+
+            mkdir_p(basedir)
+            f = open(filename, 'w')
+            template_file = Models.controller_template()
+
+#            print "template = %s" % template_file
+
+            template = Template(template_file)
+            output = template.render({"data":self.data, "vclasses": self.vclasses, "tclasses":self.tclasses, "has_call_on":self.has_call_on} )
+
+#            print("=====data: %s" % self.data)
+	
+#            print("validators : %s" % vclasses)
+#            print("types : %s" % tclasses)
+            f.write(output)
+            
+
+        return True
 
             
 r=ReactionScaffold(sys.argv[1], True)
