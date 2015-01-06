@@ -41,12 +41,15 @@ def _check(jdata):
     r = requests.post(url, timeout=_HTTP_REQUEST_TIMEOUT, headers=headers,
                       data=payload, verify=False)
     status_codes = [int(code) for code in status_codes]
-    assert not status_codes or r.status_code in status_codes, "Invalid HTTP Response status code."
+    assert not status_codes or \
+        r.status_code in status_codes, "Invalid HTTP Response status code."
     assert re.search(response_regex, unicode(r.text)), "Response doesn't match"
     response_headers = ParseHeaders(response_headers)
     for header_name, header_value in response_headers.iteritems():
-        assert header_name in r.headers, "Header %s not found in response" % header_name
-        assert header_value.lower() == r.headers[header_name].lower(), "Header value for %s doesn't match" % header_name
+        assert header_name in r.headers, \
+            "Header %s not found in response" % header_name
+        assert header_value.lower() == r.headers[header_name].lower(), \
+            "Header value for %s doesn't match" % header_name
     return True
 
 
@@ -56,5 +59,6 @@ def check(**kwargs):
     try:
         return _check(jdata)
     except Exception, e:
-        logger.warning('http-post: {cid} - {message}'.format(cid=jdata['cid'],message=e.message))
+        logger.warning('http-post: {cid} - {message}'.format(
+            cid=jdata['cid'], message=e.message))
         return False

@@ -28,8 +28,8 @@ class ReactForm(BaseReactForm):
     call_on = SelectField(
         "Call On",
         choices=[
-        ('false', 'False Monitors'),
-        ('true', 'True Monitors')],
+            ('false', 'False Monitors'),
+            ('true', 'True Monitors')],
         validators=[DataRequired(message='Call On is a required field')])
 
 
