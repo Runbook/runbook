@@ -3,39 +3,43 @@
 
 <div class="container">
   <div class="row">
-  <p></p>
-    <!-- sidebar -->
+
+    <br>
+
     {% include 'sidebar.html' %}
-    <!-- content -->
+
     <div class="col-md-8">
+
       <div class="page-header">
-      {% if data['edit'] %}
-        <h1><i class="fa fa-cogs fa-1x"></i> Manage Reaction</h1>
-      {% else %}
-        <h1><i class="fa fa-cogs fa-1x"></i> Add Reaction</h1>
-      {% endif %}
-      </div>
+        {% if data['edit'] %}
+          <h1><i class="fa fa-cogs fa-1x"></i> Manage Reaction</h1>
+        {% else %}
+          <h1><i class="fa fa-cogs fa-1x"></i> Add Reaction</h1>
+        {% endif %}
+      </div><!-- page-header -->
+
       {% if data['error'] %}
-      <p class="alert alert-danger">{{ data['msg'] }}</p>
+        <p class="alert alert-danger">{{ data['msg'] }}</p>
       {% elif data['msg'] and data['error'] == False %}
-      <p class="alert alert-success">{{ data['msg'] }}</p>
-      {% endif %}
-      {% if form.errors %}
-      {% for field, error in form.errors.items() %}
-      {% for msg in error %}
-      <p class="alert alert-danger">{{msg}}</p>
-      {% endfor %}
-      {% endfor %}
+        <p class="alert alert-success">{{ data['msg'] }}</p>
       {% endif %}
 
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-          <div class="panel-title">
-            Amazon Web Services: Restart EC2 Instance
-          </div>
-          </div>
-          <div class="panel-body">
-            <form action="{{ data['url'] }}" method="post" name="reaction-form" target="_self" class="form-horizontal" role="form">
+      {% if form.errors %}
+        {% for field, error in form.errors.items() %}
+        {% for msg in error %}
+          <p class="alert alert-danger">{{msg}}</p>
+        {% endfor %}
+        {% endfor %}
+      {% endif %}
+
+      <div class="panel panel-primary">
+
+        <div class="panel-heading">
+          <div class="panel-title">Amazon Web Services: Restart EC2 Instance</div>
+        </div>
+
+        <div class="panel-body">
+          <form action="{{ data['url'] }}" method="post" name="reaction-form" target="_self" class="form-horizontal" role="form">
             {{ form.csrf_token }}
 
             {% include 'reactions/base.html' %}
@@ -43,81 +47,83 @@
 
             <hr>
 
-                <div class="form-group">
-                <label for="AWS Region" class="col-sm-4 control-label">AWS Region</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-              <span class="input-group-btn">
-                <button type="button" id="aws-region" class="btn btn-default" rel="popover" data-content="This field should contain the AWS Region the instance resides in. If your region is 'us-west-2a' simply put 'us-west-2'." title="AWS Region"><i class="fa fa-question"></i></button>
-              </span>
-              {% if data['edit'] %}
-              {{ form.region(class_="form-control", value=data['reaction']['data']['region']) }}
-              {% else %}
-              {{ form.region(class_="form-control", placeholder="AWS Region") }}
-              {% endif %}
+            <div class="form-group">
+              <label for="AWS Region" class="col-sm-4 control-label">AWS Region</label>
+              <div class="col-sm-8">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                    <button type="button" id="aws-region" class="btn btn-default" rel="popover" data-content="This field should contain the AWS Region the instance resides in. If your region is 'us-west-2a' simply put 'us-west-2'." title="AWS Region"><i class="fa fa-question"></i></button>
+                  </span>
+                  {% if data['edit'] %}
+                    {{ form.region(class_="form-control", value=data['reaction']['data']['region']) }}
+                  {% else %}
+                    {{ form.region(class_="form-control", placeholder="AWS Region") }}
+                  {% endif %}
+                </div>
               </div>
             </div>
-              </div>  
 
-                <div class="form-group">
-                <label for="AWS Access Key" class="col-sm-4 control-label">AWS Access Key</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-              <span class="input-group-btn">
-                <button type="button" id="aws-access-key" class="btn btn-default" rel="popover" data-content="This field should contain your AWS Access Key, which can be obtained from the AWS Management Console." title="AWS Access Key"><i class="fa fa-question"></i></button>
-              </span>
-              {% if data['edit'] %}
-              {{ form.aws_access_key(class_="form-control", value=data['reaction']['data']['aws_access_key']) }}
-              {% else %}
-              {{ form.aws_access_key(class_="form-control", placeholder="AWS Access Key") }}
-              {% endif %}
+            <div class="form-group">
+              <label for="AWS Access Key" class="col-sm-4 control-label">AWS Access Key</label>
+              <div class="col-sm-8">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                    <button type="button" id="aws-access-key" class="btn btn-default" rel="popover" data-content="This field should contain your AWS Access Key, which can be obtained from the AWS Management Console." title="AWS Access Key"><i class="fa fa-question"></i></button>
+                  </span>
+                  {% if data['edit'] %}
+                    {{ form.aws_access_key(class_="form-control", value=data['reaction']['data']['aws_access_key']) }}
+                  {% else %}
+                    {{ form.aws_access_key(class_="form-control", placeholder="AWS Access Key") }}
+                  {% endif %}
+                </div>
               </div>
             </div>
-              </div>  
 
-                <div class="form-group">
-                <label for="AWS Secret Key" class="col-sm-4 control-label">AWS Secret Key</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-              <span class="input-group-btn">
-                <button type="button" id="aws-secret-key" class="btn btn-default" rel="popover" data-content="This field should contain your AWS Secret Key, which can be obtained from the AWS Management Console." title="AWS Secret Key"><i class="fa fa-question"></i></button>
-              </span>
-              {% if data['edit'] %}
-              {{ form.aws_secret_key(class_="form-control", value=data['reaction']['data']['aws_secret_key']) }}
-              {% else %}
-              {{ form.aws_secret_key(class_="form-control", placeholder="AWS Secret Key") }}
-              {% endif %}
-              </div>  
+            <div class="form-group">
+              <label for="AWS Secret Key" class="col-sm-4 control-label">AWS Secret Key</label>
+              <div class="col-sm-8">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                    <button type="button" id="aws-secret-key" class="btn btn-default" rel="popover" data-content="This field should contain your AWS Secret Key, which can be obtained from the AWS Management Console." title="AWS Secret Key"><i class="fa fa-question"></i></button>
+                  </span>
+                  {% if data['edit'] %}
+                    {{ form.aws_secret_key(class_="form-control", value=data['reaction']['data']['aws_secret_key']) }}
+                  {% else %}
+                    {{ form.aws_secret_key(class_="form-control", placeholder="AWS Secret Key") }}
+                  {% endif %}
+                </div>
+              </div>
             </div>
-              </div>  
-                
 
-                <div class="form-group">
-                <label for="Instance ID" class="col-sm-4 control-label">Instance ID</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-              <span class="input-group-btn">
-                <button type="button" id="aws-instance-id" class="btn btn-default" rel="popover" data-content="This field should contain the instance id of the instance you wish to perform this action against." title="Instance ID"><i class="fa fa-question"></i></button>
-              </span>
-              {% if data['edit'] %}
-              {{ form.instance_id(class_="form-control", value=data['reaction']['data']['instance_id']) }}
-              {% else %}
-              {{ form.instance_id(class_="form-control", placeholder="Instance ID") }}
-              {% endif %}
-              </div>  
+            <div class="form-group">
+              <label for="Instance ID" class="col-sm-4 control-label">Instance ID</label>
+              <div class="col-sm-8">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                    <button type="button" id="aws-instance-id" class="btn btn-default" rel="popover" data-content="This field should contain the instance id of the instance you wish to perform this action against." title="Instance ID"><i class="fa fa-question"></i></button>
+                  </span>
+                  {% if data['edit'] %}
+                  {{ form.instance_id(class_="form-control", value=data['reaction']['data']['instance_id']) }}
+                  {% else %}
+                  {{ form.instance_id(class_="form-control", placeholder="Instance ID") }}
+                  {% endif %}
+                </div>
+              </div>
             </div>
-              </div>  
 
-                <p></p>
-                <button type="submit" class="btn btn-primary btn-block">Submit</button>
-            </form>
-          </div>
-        </div>
+            <br>
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+          </form>
+
+        </div><!-- panel-body -->
+
+      </div><!-- panel panel-primary -->
+
       <div class="panel-group" id="accordion">
-    {% include 'reactions/docs/aws-ec2restart-details.html' %}
-
+        {% include 'reactions/docs/aws-ec2restart-details.html' %}
       </div>
-    </div>
+
+    </div><!-- col-md-8 -->
   </div> <!-- row -->
 </div> <!-- container -->
 

@@ -1,3 +1,6 @@
+# save this file/folder to /src/actions/actions/some-reaction
+
+
 #!/usr/bin/python
 ######################################################################
 # Cloud Routes Bridge
@@ -5,7 +8,6 @@
 # Actions Module
 ######################################################################
 
-import boto.ec2
 import time
 
 
@@ -28,27 +30,20 @@ def action(**kwargs):
         run = False
 
     if run:
-        return actionEC2(redata, jdata, logger)
+        return actionName(redata, jdata, logger)
     else:
         return None
 
 
-def actionEC2(redata, jdata, logger):
-    ''' Perform EC2 Actions '''
+def actionName(redata, jdata, logger):
+    ''' Perform Some Action(s) '''
     try:
-        conn = boto.ec2.connect_to_region(
-            redata['data']['region'],
-            aws_access_key_id=redata['data']['aws_access_key'],
-            aws_secret_access_key=redata['data']['aws_secret_key'])
-        try:
-            instances = conn.get_only_instances(
-                instance_ids=[redata['data']['instance_id']])
-            instances[0].reboot()
-            return True
-        except:
-            return False
-    except:
-        line = 'aws-ec2restart: Could not connect to AWR for \
-            monitor {0}'.format(jdata['cid'])
-        logger.info(line)
-        return False
+        react = reaction.action(
+            redata=kwargs['redata'],
+            jdata=kwargs['jdata'],
+            rdb=kwargs['rdb'],
+            r_server=kwargs['r_server'],
+            config=kwargs['config'])
+    except Exception as e:
+        logger.error("Got error when attempting to run reaction {0} \
+            for monitor {1}".format(redata['rtype'], jdata['cid']))
