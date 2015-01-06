@@ -47,7 +47,7 @@ def call_linode(redata, jdata, logger):
     except:
         return False
     if req.status_code >= 200 and req.status_code < 300:
-        if len(req.json['ERRORARRAY']) > 0:
+        if len(req.json()['ERRORARRAY']) > 0:
             try:
                 error_message = str(req.json()['ERRORARRAY'][0]['ERRORMESSAGE'])
             except:
