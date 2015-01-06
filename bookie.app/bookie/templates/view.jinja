@@ -49,3 +49,45 @@
             {% include 'reactions/callon.html' %}
 {% endraw %}
 {% endif %}
+
+            <hr>
+
+{% for attr in data['attributes'] %}
+{% if attr['attribute'] != 'call_on' %}
+	      <div class="form-group">
+		<label for="{{attr['name']}}" class="col-sm-4 control-label">{{attr['name']}}</label>
+	      <div class="col-sm-8">
+	      <div class="input-group">
+		<span class="input-group-btn">
+		<button type="button" id="{{attr['attribute']}}" class="btn btn-default" rel="popover" data-content="{{attr['desc']}}" title="{{attr['name']}}"><i class="fa fa-question"></i></button>
+		</span>
+{% raw %}
+		{% if data['edit'] %}
+		{{ form.subdomain(class_="form-control", value=data['reaction']['data']['{% endraw %}{{attr['attribute']}}{% raw %}']) }}
+		{% else %}
+		{{ form.subdomain(class_="form-control", placeholder="{% endraw %}{{attr['name']}}{% raw %}") }}
+		{% endif %}
+	      </div>
+	      </div>
+	      </div>
+{% endraw %}
+{% endif %}
+{% endfor %}
+
+{% raw %}
+	      
+	      
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      <div class="panel-group" id="accordion">
+
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}
+{% endraw %}
