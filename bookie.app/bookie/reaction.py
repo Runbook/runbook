@@ -23,18 +23,18 @@ class Reaction(Command):
         if model == '':
             raise RuntimeError('Cannot create a new reaction without a reaction model')
 
-        self.log.debug('Reaction processing...\n')
+        self.log.debug('reaction processing started...\n')
         
         scaf = ReactionScaffold(self.log, model, force_overwrite)
 
         ret = scaf.generate()
 
-        self.log.debug('Reaction processing done...\n')
+        self.log.debug('reaction processing done.\n')
 
         if ret == True:
-            self.log.info('Successfully created scaffolding for reaction templates from model "' + model + '"')
+            self.log.info('successfully created scaffolding for reaction templates from model "' + model + '"')
         else:
-            self.log.info('Scaffolding for reaction from model "' + model + '" failed')
+            self.log.info('scaffolding for reaction from model "' + model + '" failed!')
         
         
         
