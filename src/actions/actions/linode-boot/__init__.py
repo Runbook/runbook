@@ -48,12 +48,8 @@ def call_linode(redata, jdata, logger):
         return False
     if req.status_code >= 200 and req.status_code < 300:
         if len(req.json()['ERRORARRAY']) > 0:
-            try:
-                error_message = str(req.json()['ERRORARRAY'][0]['ERRORMESSAGE'])
-            except:
-                error_message = "Unknown Error"
             line = 'linode-reboot: Request to {0} sent for monitor {1} - \
-                False - {3}'.format(url, jdata['cid'], error_message)
+                False'.format(url, jdata['cid'])
             logger.info(line)
             return False
         else:
