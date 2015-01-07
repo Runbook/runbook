@@ -104,3 +104,25 @@ PACKAGES = {
         'upgraded' : True
     },
 }
+SUBSCRIPTIONS = {
+    'default' : {
+        'cost': 4.99,
+        'interval': 'month'
+    },
+    'ec663ba0-c8a9-446a-95b3-0ddbe34d1e85_runbook_499_monthly' : {
+        'cost': 4.99,
+        'interval': 'month'
+    },  
+    'ec663ba0-c8a9-446a-95b3-0ddbe34d1e85_runbook_4999_yearly' : {
+        'cost': 49.99,
+        'interval': 'year'
+    },  
+    'cloudroutes_cr_yearly_2' : {
+        'cost': 9.00,
+        'interval': 'year'
+    },  
+    'cloudroutes_cr_monthly' : {
+        'cost': 1.00,
+        'interval': 'month'
+    }
+}
