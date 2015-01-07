@@ -37,7 +37,7 @@ def call_linode(redata, jdata, logger):
     ''' Perform actual call '''
     url = 'https://api.linode.com/'
     params = {
-        "api_action": "linode.shutdown",
+        "api_action": "linode.reboot",
         "LinodeID": int(redata['data']['linode_id']),
         "api_key": str(redata['data']['api_key'])
     }
@@ -47,12 +47,13 @@ def call_linode(redata, jdata, logger):
     except:
         return False
     if req.status_code >= 200 and req.status_code < 300:
-        line = 'linode-shutdown: Request to {0} sent for monitor {1} - \
-                Successful'.format(url, jdata['cid'])
-        logger.info(line)
-        return True
-    else:
-        line = 'linode-shutdown: Request to {0} sent for monitor {1} - \
+        if len(req.json()['ERRORARRAY']) > 0:
+            line = 'linode-reboot: Request to {0} sent for monitor {1} - \
                 False'.format(url, jdata['cid'])
-        logger.info(line)
-        return False
+            logger.info(line)
+            return False
+        else:
+            line = 'linode-reboot: Request to {0} sent for monitor {1} - \
+                Successful'.format(url, jdata['cid'])
+            logger.info(line)
+        return True
