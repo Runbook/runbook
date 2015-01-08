@@ -37,7 +37,7 @@
           </div>
           <table width="100%" border="0" class="table table-striped table-condensed">
             <tr>
-              <td><b>Purchased Monitors</b></td><td>{{ data['limit'] }}</td><td><b>Billing Cycle</b></td><td>{%- if "yearly" in data['subscription'] -%}Annual{%- elif data['upgraded'] == False -%}None{%- else -%}Monthly{%- endif -%}</td>
+              <td><b>Purchased Monitors</b></td><td>{{ data['limit'] }}</td><td><b>Billing Cycle</b></td><td>{%- if "year" in data['subscription_plan']['interval'] -%}Annual{%- elif data['upgraded'] == False -%}None{%- else -%}Monthly{%- endif -%}</td>
             </tr>
             <tr>
               <td><b>Purchased Reactions</b></td><td>{{ data['rlimit'] }}</td><td><b>Subscription Fees</b></td><td>{%- if data['upgraded'] == False -%}Free{%- else -%}${{ '%0.2f' | format(data['cost']|float) }}{%- endif -%}</td>

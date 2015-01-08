@@ -65,12 +65,11 @@ def startData(user=None):
         data['acttype'] = app.config['PACKAGES'][user.acttype]['acttype']
         data['upgraded'] = app.config['PACKAGES'][user.acttype]['upgraded']
         if data['upgraded'] is True:
-            if "yearly" in user.subscription:
-                data['cost'] = app.config['PACKAGES'][user.acttype]['cost_yearly'] * user.subplans
-            else:
-                data['cost'] = app.config['PACKAGES'][user.acttype]['cost_monthly'] * user.subplans
+            data['subscription_plan'] = app.config['SUBSCRIPTIONS'][user.subscription]
+            data['cost'] = data['subscription_plan']['cost'] * user.subplans
         else:
             data['cost'] = 'Free'
+            data['subscription_plan'] = app.config['SUBSCRIPTIONS']['default']
         data['stripe_pubkey'] = app.config['STRIPE_PUBKEY']
         data['subplans'] = user.subplans
         data['subscription'] = user.subscription
