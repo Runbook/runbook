@@ -13,6 +13,12 @@
 
 import requests
 import re
+import cStringIO
+
+# currently the http get size limit is 2MB
+# change the following function to allow for per user, size limit
+def get_max_size():
+    return 2*1024*1024 
 
 
 def check(data):
@@ -22,8 +28,19 @@ def check(data):
     url = data['data']['url']
     try:
         result = requests.get(
-            url, timeout=timeout, headers=headers, verify=False)
-        retext = unicode(result.text)
+            url, timeout=timeout, headers=headers, verify=False, stream=True)
+
+        stream = cStringIO.StringIO()
+        length = 0
+        for chunk in result.iter_content(2048, decode_unicode=True):
+            stream.write(chunk)
+            length += len(chunk)
+            if length > get_max_size():
+                break
+        
+        retext = stream.getvalue()
+        stream.close()
+        result.close()
     except:
         return False
     if data['data']['regex'] == "True":
