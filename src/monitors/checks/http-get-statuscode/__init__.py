@@ -21,10 +21,11 @@ def check(data):
     url = data['data']['url']
     try:
         result = requests.get(
-            url, timeout=timeout, headers=headers, verify=False)
+            url, timeout=timeout, headers=headers, verify=False, stream=True)
     except:
         return False
     rcode = str(result.status_code)
+    result.close()
     if rcode in data['data']['codes']:
         return True
     else:
