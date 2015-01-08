@@ -33,7 +33,7 @@ def check(**kwargs):
         
         stream = cStringIO.StringIO()
         length = 0
-        for chunk in result.iter_content(2048, decode_unicode=True):
+        for chunk in result.iter_content(8192, decode_unicode=True):
             stream.write(chunk)
             length += len(chunk)
             if length > get_max_size():
