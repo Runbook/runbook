@@ -23,13 +23,14 @@ def check(**kwargs):
     url = jdata['data']['url']
     try:
         result = requests.get(
-            url, timeout=timeout, headers=headers, verify=False)
+            url, timeout=timeout, headers=headers, verify=False, stream=True)
     except Exception as e:
         line = 'http-get-statuscode: Reqeust to {0} sent for monitor {1} - ' \
                'had an exception: {2}'.format(url, jdata['cid'], e)
         logger.error(line)
         return False
     rcode = str(result.status_code)
+    result.close()
     if rcode in jdata['data']['codes']:
         line = 'http-get-statuscode: Reqeust to {0} sent for monitor {1} - ' \
                'Successful'.format(url, jdata['cid'])
