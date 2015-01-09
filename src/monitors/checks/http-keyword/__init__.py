@@ -30,7 +30,7 @@ def check(**kwargs):
     try:
         result = requests.get(
             url, timeout=timeout, headers=headers, verify=False, stream=True)
-        
+
         stream = cStringIO.StringIO()
         length = 0
         for chunk in result.iter_content(8192, decode_unicode=True):
