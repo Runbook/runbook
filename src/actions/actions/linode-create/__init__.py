@@ -33,6 +33,22 @@ def action(**kwargs):
         return None
 
 
+def get_current_linodes(redata):
+    ''' Perform actual call '''
+    url = 'https://api.linode.com/'
+    params = {
+        "api_action": "linode.list",
+        "api_key": str(redata['data']['api_key'])
+    }
+    try:
+        req = requests.post(
+            url, timeout=3.0, data=params, verify=True
+        )
+    except:
+        return False
+    return len(req.json()["DATA"])
+
+
 def call_linode(redata, jdata, logger):
     ''' Perform actual call '''
     url = 'https://api.linode.com/'
@@ -44,7 +60,8 @@ def call_linode(redata, jdata, logger):
     }
     try:
         req = requests.post(
-            url, timeout=3.0, data=params, verify=True)
+            url, timeout=3.0, data=params, verify=True
+        )
     except:
         return False
     if req.status_code >= 200 and req.status_code < 300:
@@ -54,7 +71,7 @@ def call_linode(redata, jdata, logger):
             logger.info(line)
             return False
         else:
-            if int(redata['data']['upper_limit']) < "TOTAL_CURRENT_LINODES":
+            if int(redata['data']['upper_limit']) < get_current_linodes(redata):
                 line = 'linode-boot: Request to {0} sent for monitor {1} - \
                     Successful'.format(url, jdata['cid'])
                 logger.info(line)
