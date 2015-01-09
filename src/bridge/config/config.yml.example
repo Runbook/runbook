@@ -17,6 +17,8 @@ rethink_db: "crdb"
 sink_ip: sink_host
 sink_port: 6000
 sink_worker_port: 6001
+## Events Retention
+events_retention: 3888000
 ## History Retention
 history_retention: 18000
 ## MailChimp

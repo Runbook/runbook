@@ -5,7 +5,6 @@
 # Actions Module
 ######################################################################
 
-import syslog
 import requests
 import json
 import time
@@ -16,6 +15,7 @@ def action(**kwargs):
     ''' This method is called to action a reaction '''
     redata = kwargs['redata']
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -30,11 +30,11 @@ def action(**kwargs):
         run = False
 
     if run:
-        return call_action(redata, jdata)
+        return call_action(redata, jdata, logger)
     else:
         return None
 
-def call_action(redata, jdata):
+def call_action(redata, jdata, logger):
     ''' Perform actual call '''
 
     # Authenticate with Rackspace ID service
@@ -78,21 +78,21 @@ def call_action(redata, jdata):
                     headers=headers, verify=True)
             except:
                 line = "rackspace-powercycle: False Rackspace API Call for reaction %s" % (redata['id'])
-                syslog.syslog(syslog.LOG_INFO, line)
+                logger.info(line)
                 return False
         else:
             line = "rackspace-powercycle: False Rackspace Authenticaiton for reaction %s" % (redata['id'])
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info(line)
             return False
     except:
         line = "rackspace-powercycle: False Rackspace Authenticaiton for reaction %s" % (redata['id'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return False
     if req.status_code == 202:
         line = "rackspace-powercycle: Reqeust to %s sent for monitor %s - Successful" % (url, jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return True
     else:
         line = "rackspace-powercycle: Request to %s sent for monitor %s - False" % (url, jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return False

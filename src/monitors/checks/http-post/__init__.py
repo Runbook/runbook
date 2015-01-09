@@ -3,7 +3,6 @@
 
 import re
 import requests
-import syslog
 import cStringIO
 
 # currently the http get size limit is 2MB
@@ -33,14 +32,14 @@ def ParseHeaders(headers_str):
     return headers
 
 
-def _check(data):
-    url = data['data']['url']
-    host = data['data']['host']
-    payload = data['data']['payload'] or ''
-    extra_headers = data['data']['extra_headers'] or ''
-    status_codes = data['data']['status_codes'] or []
-    response_regex = data['data']['response_regex'] or ''
-    response_headers = data['data']['response_headers'] or ''
+def _check(jdata):
+    url = jdata['data']['url']
+    host = jdata['data']['host']
+    payload = jdata['data']['payload'] or ''
+    extra_headers = jdata['data']['extra_headers'] or ''
+    status_codes = jdata['data']['status_codes'] or []
+    response_regex = jdata['data']['response_regex'] or ''
+    response_headers = jdata['data']['response_headers'] or ''
     assert url, "URL field not present"
     assert host, "Host field not present"
     headers = ParseHeaders(extra_headers)
@@ -57,19 +56,25 @@ def _check(data):
     retext = stream.getvalue()
     stream.close()
     status_codes = [int(code) for code in status_codes]
-    assert not status_codes or r.status_code in status_codes, "Invalid HTTP Response status code."
+    assert not status_codes or \
+        r.status_code in status_codes, "Invalid HTTP Response status code."
     assert re.search(response_regex, retext), "Response doesn't match"
     response_headers = ParseHeaders(response_headers)
     for header_name, header_value in response_headers.iteritems():
-        assert header_name in r.headers, "Header %s not found in response" % header_name
-        assert header_value.lower() == r.headers[header_name].lower(), "Header value for %s doesn't match" % header_name
+        assert header_name in r.headers, \
+            "Header %s not found in response" % header_name
+        assert header_value.lower() == r.headers[header_name].lower(), \
+            "Header value for %s doesn't match" % header_name
     r.close()
     return True
 
 
-def check(data):
+def check(**kwargs):
+    jdata = kwargs['jdata']
+    logger = kwargs['logger']
     try:
-        return _check(data)
+        return _check(jdata)
     except Exception, e:
-        syslog.syslog(syslog.LOG_WARNING, 'http-post: {cid} - {message}'.format(cid=data['cid'],message=e.message))
+        logger.warning('http-post: {cid} - {message}'.format(
+            cid=jdata['cid'], message=e.message))
         return False

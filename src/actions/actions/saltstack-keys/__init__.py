@@ -5,7 +5,6 @@
 # Actions Module
 ######################################################################
 
-import syslog
 import requests
 import time
 
@@ -14,6 +13,7 @@ def action(**kwargs):
     ''' This method is called to action a reaction '''
     redata = kwargs['redata']
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -28,12 +28,12 @@ def action(**kwargs):
         run = False
 
     if run:
-        return callSalt(redata, jdata)
+        return callSalt(redata, jdata, logger)
     else:
         return None
 
 
-def callSalt(redata, jdata):
+def callSalt(redata, jdata, logger):
     ''' Perform actual call '''
     url = redata['data']['url']
     payload = redata['data']
@@ -43,9 +43,9 @@ def callSalt(redata, jdata):
         return False
     if req.status_code == 200:
         line = "saltstack-keys: Reqeust to %s sent for monitor %s - Successful" % (url, jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return True
     else:
         line = "saltstack-keys: Request to %s sent for monitor %s - False" % (url, jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return False

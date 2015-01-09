@@ -11,26 +11,28 @@
 import requests
 import json
 import base64
-import syslog
 
 
-def check(data):
+def check(**kwargs):
     """ Checks Heroku's api status for a specified dyno """
-    basekey = base64.b64encode(":" + data['data']['apikey'])
+    jdata = kwargs['jdata']
+    logger = kwargs['logger']
+    basekey = base64.b64encode(":" + jdata['data']['apikey'])
     headers = {
         "Accept": "application/vnd.heroku+json; version=3",
         "Authorization": basekey
     }
     timeout = 5.00
     url = "https://api.heroku.com/apps/" + \
-        data['data']['appname'] + "/dynos/" + data['data']['dynoname']
+        jdata['data']['appname'] + "/dynos/" + jdata['data']['dynoname']
     try:
         result = requests.get(
             url, timeout=timeout, headers=headers, verify=True)
     except:
         return None
-    line = "heroku-dyno-status-single: Got response from heroku for monitor - %s" % (result.text)
-    syslog.syslog(syslog.LOG_DEBUG, line)
+    line = "heroku-dyno-status-single: Got response from heroku for monitor \
+        - %s" % (result.text)
+    logger.debug(line)
     retdata = json.loads(result.text)
     if "state" in retdata:
         if retdata['state'] == "up" or retdata['state'] == "idle":

@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------
 # Description:
 # ------------------------------------------------------------------
-# This is a semi quicky designed to rebuild the redis queues from
+# This quicky designed to rebuild the redis queues from
 # the RethinkDB database
 # ------------------------------------------------------------------
 # Version: Alpha.20140729

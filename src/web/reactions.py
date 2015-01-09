@@ -101,13 +101,16 @@ class Reaction(object):
             return False
 
     def getRID(self, searchstring, rdb):
-        ''' This will lookup a reaction by name and uid and return the rid '''
+        '''
+        This will lookup a reaction by name and uid (name:uid)
+        and return the rid
+        '''
         strings = searchstring.split(":")
         result = r.table('reactions').filter(
             {'name': strings[0], 'uid': strings[1]}).run(rdb)
         xdata = {}
         for x in result:
-            key = '%s:$s' % (x['name'], x['uid'])
+            key = '{0}:{1}'.format(x['name'], x['uid'])
             xdata[key] = x['id']
         return xdata[searchstring]
 

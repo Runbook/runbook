@@ -7,6 +7,7 @@
 
 import unittest
 import time
+import rethinkdb as r
 
 from flask import g, request
 
@@ -16,7 +17,7 @@ from web import app, verifyLogin
 from user.token import generate_confirmation_token, confirm_token
 
 
-class TestUser(BaseTestCase):
+class TestUserRegistration(BaseTestCase):
 
     def test_user_registration(self):
         # Ensure user registration behaves correctly.
@@ -134,6 +135,59 @@ class TestUser(BaseTestCase):
         self.assertFalse(user_test.acttype == "pro")
 
 
+class TestUserLogin(BaseTestCase):
+
+    def test_logout_route_requires_login(self):
+        # Ensure logout route requres logged in user.
+        response = self.client.get('/logout', follow_redirects=True)
+        self.assertIn('Login', response.data)
+
+    def test_correct_login(self):
+        # Ensure login behaves correctly with correct credentials
+        with self.client:
+            self.client.post(
+                '/login',
+                data=dict(email="test@tester.com", password="password456"),
+                follow_redirects=True
+            )
+            user = User()
+            user = user.get('username', 'test@tester.com', g.rdb_conn)
+            active = user.is_active('test@tester.com', g.rdb_conn)
+            self.assertTrue(user.email == "test@tester.com")
+            self.assertTrue(active)
+
+    def test_incorrect_login(self):
+        # Ensure login behaves correctly with incorrect data
+        with self.client:
+            response = self.client.post(
+                '/login',
+                data=dict(email="not@right.com", password="incorrect"),
+                follow_redirects=True
+            )
+            self.assertIn('Uhh... User not found.', response.data)
+
+    def test_incorrect_login_form(self):
+        # Ensure login behaves correctly with missing data
+        with self.client:
+            response = self.client.post(
+                '/login',
+                data=dict(password="incorrect"),
+                follow_redirects=True
+            )
+            self.assertIn('Form is not valid.', response.data)
+
+    def test_logout_behaves_correctly(self):
+        # Ensure logout behaves correctly, regarding the session
+        with self.client:
+            self.client.post(
+                '/login',
+                data=dict(email="test@tester.com", password="password456"),
+                follow_redirects=True
+            )
+            response = self.client.get('/logout', follow_redirects=True)
+            self.assertIn('Login', response.data)
+
+
 class TestUserConfirmation(BaseTestCase):
 
     def test_generate_confirmation_token(self):
@@ -177,8 +231,68 @@ class TestUserConfirmation(BaseTestCase):
             ), follow_redirects=True)
             response = self.client.get(
                 '/confirm/'+str(token), follow_redirects=True)
+            user = User()
+            user = user.get('username', 'test@tester.com', g.rdb_conn)
+            self.assertTrue(user.confirmed)
             self.assertEqual(response.status_code, 200)
             self.assertIn('Dashboard', response.data)
+            self.assertIn('You have confirmed your account. Thanks!',
+                          response.data)
+
+    def test_already_confirmed(self):
+        # Ensure user is redirected if already confirmed
+        timestamp = time.time()
+        token = generate_confirmation_token(
+            'test@tester.com', 1, timestamp)
+        with self.client:
+            self.client.post('/login', data=dict(
+                email='test@tester.com', password='password456'
+            ), follow_redirects=True)
+            user = User()
+            user = user.get('username', 'test@tester.com', g.rdb_conn)
+            r.table('users').get(user.uid).update(
+                {'confirmed': True}).run(g.rdb_conn)
+            response = self.client.get(
+                '/confirm/'+str(token), follow_redirects=True)
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('Dashboard', response.data)
+            self.assertIn('Account already confirmed. Thank you.',
+                          response.data)
+
+    def test_validate_confirmation_token_invalid_email(self):
+        # Ensure invalid email cannot be successfully confirmed in the views
+        timestamp = time.time()
+        token = generate_confirmation_token(
+            'incorrect@email.com', 1, timestamp)
+        with self.client:
+            self.client.post('/login', data=dict(
+                email='test@tester.com', password='password456'
+            ), follow_redirects=True)
+            response = self.client.get(
+                '/confirm/'+str(token), follow_redirects=True)
+            user = User()
+            user = user.get('username', 'test@tester.com', g.rdb_conn)
+            self.assertFalse(user.confirmed)
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('Login', response.data)
+            self.assertIn('The confirmation link is invalid',
+                          response.data)
+
+    def test_validate_confirmation_token_invalid(self):
+        # Ensure invalid token cannot be successfully confirmed in the views
+        with self.client:
+            self.client.post('/login', data=dict(
+                email='test@tester.com', password='password456'
+            ), follow_redirects=True)
+            response = self.client.get(
+                '/confirm/incorrect', follow_redirects=True)
+            user = User()
+            user = user.get('username', 'test@tester.com', g.rdb_conn)
+            self.assertFalse(user.confirmed)
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('Login', response.data)
+            self.assertIn('The confirmation link is invalid or has expired.',
+                          response.data)
 
     def test_validate_confirmation_token_not_logged_in(self):
         # Ensure valid token cannot be successfully confirmed in the views

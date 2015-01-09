@@ -18,14 +18,15 @@ import cStringIO
 # currently the http get size limit is 2MB
 # change the following function to allow for per user, size limit
 def get_max_size():
-    return 2*1024*1024 
+    return 2*1024*1024
 
 
-def check(data):
+def check(**kwargs):
     """ Perform a http get request and validate the return code """
-    headers = {'host': data['data']['host']}
+    jdata = kwargs['jdata']
+    headers = {'host': jdata['data']['host']}
     timeout = 3.00
-    url = data['data']['url']
+    url = jdata['data']['url']
     try:
         result = requests.get(
             url, timeout=timeout, headers=headers, verify=False, stream=True)
@@ -43,26 +44,26 @@ def check(data):
         result.close()
     except:
         return False
-    if data['data']['regex'] == "True":
-        match = re.search(data['data']['keyword'], retext)
+    if jdata['data']['regex'] == "True":
+        match = re.search(jdata['data']['keyword'], retext)
         if match:
-            if data['data']['present'] == "True":
+            if jdata['data']['present'] == "True":
                 return True
             else:
                 return False
         else:
-            if data['data']['present'] == "False":
+            if jdata['data']['present'] == "False":
                 return True
             else:
                 return False
     else:
-        if data['data']['keyword'] in retext:
-            if data['data']['present'] == "True":
+        if jdata['data']['keyword'] in retext:
+            if jdata['data']['present'] == "True":
                 return True
             else:
                 return False
         else:
-            if data['data']['present'] == "False":
+            if jdata['data']['present'] == "False":
                 return True
             else:
                 return False

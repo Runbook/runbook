@@ -5,7 +5,6 @@
 # Actions Module
 ######################################################################
 
-import syslog
 import time
 import json
 import base64
@@ -16,6 +15,7 @@ def action(**kwargs):
     ''' This method is called to action a reaction '''
     redata = kwargs['redata']
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     run = True
     # Check for Trigger
     if redata['trigger'] > jdata['failcount']:
@@ -30,11 +30,11 @@ def action(**kwargs):
         run = False
 
     if run:
-        return callAction(redata, jdata)
+        return callAction(redata, jdata, logger)
     else:
         return None
 
-def callAction(redata, jdata):
+def callAction(redata, jdata, logger):
     ''' Perform Heroku Actions '''
     # Ready API Request
     # Generate Base64 encoded API Key
@@ -61,18 +61,18 @@ def callAction(redata, jdata):
         return False
         line = ("heroku-restart-dyno: Could not connect to Heroku"
                 " for monitor %s") % jdata['cid']
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
 
     # Process results
     # Log heroku results for troubleshooting later
     line = ("heroku-restart-dyno: Got status code reply %d from Heroku"
             " for monitor %s") % (result.status_code, jdata['cid'])
-    syslog.syslog(syslog.LOG_DEBUG, line)
+    logger.debug(line)
     # Verify we got a 201 and set as success, or set as failure
     if result.status_code == 202:
         return True
     else:
         line = ("heroku-restart-dyno: Monitor %s got %s from Heroku after"
                 " making a request to %s") % (jdata['cid'], result.text, url)
-        syslog.syslog(syslog.LOG_DEBUG, line)
+        logger.debug(line)
         return False

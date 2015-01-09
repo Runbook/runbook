@@ -7,7 +7,6 @@
 
 import rethinkdb as r
 from rethinkdb.errors import RqlRuntimeError, RqlDriverError
-import syslog
 import time
 import datetime
 import json
@@ -18,18 +17,19 @@ def action(**kwargs):
     jdata = kwargs['jdata']
     rdb = kwargs['rdb']
     r_server = kwargs['r_server']
+    logger = kwargs['logger']
 
     run = True
     if jdata['check']['prev_status'] == jdata['check']['status']:
-         run = False 
+         run = False
 
     if run:
-        return logit(jdata, rdb, r_server)
+        return logit(jdata, rdb, r_server, logger)
     else:
         return None
 
 
-def logit(jdata, rdb, r_server):
+def logit(jdata, rdb, r_server, logger):
     ''' This method will be called to log monitor transaction history '''
     etime = time.time()
     transaction = {
@@ -63,9 +63,9 @@ def logit(jdata, rdb, r_server):
         cacheonly = True
         line = "logit-events: RethinkDB is inaccessible cannot log %s, sending to redis" % jdata[
             'cid']
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         line = "logit-events: RethinkDB Error: %s" % e.message
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         try:
             # Then set redis cache
             ldata = json.dumps(transaction)
@@ -74,6 +74,6 @@ def logit(jdata, rdb, r_server):
         except:
             line = "logit-events: Redis is inaccessible cannot log %s, via redis" % jdata[
                 'cid']
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info(line)
             success = False
     return success

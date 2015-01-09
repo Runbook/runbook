@@ -14,7 +14,6 @@
 #####################################################################
 
 # Data sources
-import syslog
 import requests
 import json
 import time
@@ -23,14 +22,15 @@ def action(**kwargs):
     ''' This method is called to action a reaction '''
     # This method can be used for legacy reactions that have
     # a different function based on true/false
+    logger = kwargs['logger']
     if "false" in kwargs['jdata']['check']['status']:
         return false(kwargs['redata'], kwargs['jdata'],
-            kwargs['rdb'], kwargs['r_server'])
+            kwargs['rdb'], kwargs['r_server'], logger)
     if "true" in kwargs['jdata']['check']['status']:
         return true(kwargs['redata'], kwargs['jdata'],
-            kwargs['rdb'], kwargs['r_server'])
+            kwargs['rdb'], kwargs['r_server'], logger)
 
-def false(redata, jdata, rdb, r_server):
+def false(redata, jdata, rdb, r_server, logger):
     ''' This method will be called when a monitor has false '''
     run = True
     # Check for Trigger
@@ -43,13 +43,13 @@ def false(redata, jdata, rdb, r_server):
         run = False
 
     if run:
-        edit(redata, jdata, r_server, failback=False)
+        edit(redata, jdata, r_server, logger, failback=False)
         return True
     else:
         return None
 
 
-def true(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server, logger):
     ''' This method will be called when a monitor has passed '''
     run = True
     # Check for Trigger
@@ -64,18 +64,18 @@ def true(redata, jdata, rdb, r_server):
     if run:
         if "failback" in redata['data']:
             if redata['data']['failback'] == "automatic":
-                edit(redata, jdata, r_server, failback=True)
+                edit(redata, jdata, r_server, logger, failback=True)
         else:
             # Do nothing to prevent unplanned failback
             line = "cloudflare-ip-replace: Monitor is true, nothing to do"
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info(line)
         return True
     else:
         return None
 
 
 # Locals
-def edit(redata, jdata, r_server, failback=False):
+def edit(redata, jdata, r_server, logger, failback=False):
     ''' Edit DNS Records '''
     usrdata = {'z': redata['data']['domain'],
                'tkn': redata['data']['apikey'],
@@ -97,20 +97,20 @@ def edit(redata, jdata, r_server, failback=False):
                     r_server.srem(skey, rec)
                     line = "cloudflare-ip-replace: Record %s changed to IP %s" % (
                         data['id'], data['content'])
-                    syslog.syslog(syslog.LOG_DEBUG, line)
+                    logger.debug(line)
                 else:
                     line = "cloudflare-ip-replace: False to change record %s" % data['id']
-                    syslog.syslog(syslog.LOG_DEBUG, line)
+                    logger.debug(line)
             else:
                 skey = key + ":deleted"
                 r_server.srem(skey, rec)
                 line = "cloudflare-ip-replace: False to change record %s - Not found in Redis, removed from record list" % rec
-                syslog.syslog(syslog.LOG_DEBUG, line)
+                logger.debug(line)
             runcount = runcount + 1
     else:
         falsedata, failcount = checkZone(redata['data']['ip'], usrdata)
         line = "cloudflare-ip-replace: Found %d false records" % failcount
-        syslog.syslog(syslog.LOG_DEBUG, line)
+        logger.debug(line)
         for rec in falsedata.keys():
             data = usrdata
             for item in falsedata[rec].keys():
@@ -125,14 +125,14 @@ def edit(redata, jdata, r_server, failback=False):
                     r_server.sadd(key + ":deleted", rec)
                 line = "cloudflare-ip-replace: Record %s changed to IP %s" % (
                     data['id'], data['content'])
-                syslog.syslog(syslog.LOG_DEBUG, line)
+                logger.debug(line)
             else:
                 line = "cloudflare-ip-replace: False to edit record %s" % data[
                     'id']
-                syslog.syslog(syslog.LOG_DEBUG, line)
+                logger.debug(line)
             runcount = runcount + 1
     line = "cloudflare-ip-replace: Actioned %d records" % runcount
-    syslog.syslog(syslog.LOG_DEBUG, line)
+    logger.debug(line)
     return True
 
 

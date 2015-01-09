@@ -7,7 +7,6 @@
 
 import smtplib
 import jinja2
-import syslog
 import time
 
 
@@ -15,15 +14,16 @@ def action(**kwargs):
     ''' This method is called to action a reaction '''
     # This method can be used for legacy reactions that have
     # a different function based on true/false
+    logger = kwargs['logger']
     if "false" in kwargs['jdata']['check']['status']:
         return false(kwargs['redata'], kwargs['jdata'],
-            kwargs['rdb'], kwargs['r_server'])
+            kwargs['rdb'], kwargs['r_server'], logger)
     if "true" in kwargs['jdata']['check']['status']:
         return true(kwargs['redata'], kwargs['jdata'],
-            kwargs['rdb'], kwargs['r_server'])
+            kwargs['rdb'], kwargs['r_server'], logger)
 
 
-def false(redata, jdata, rdb, r_server):
+def false(redata, jdata, rdb, r_server, logger):
     ''' This method will be called when a monitor has false '''
     run = True
     # Check for Trigger
@@ -36,24 +36,24 @@ def false(redata, jdata, rdb, r_server):
         run = False
 
     if run:
-        result = emailNotify(redata, jdata, "growth-false.msg")
+        result = emailNotify(redata, jdata, "growth-false.msg", logger)
         if result:
             line = "growth-enotify: Sent %s email notification for monitor %s" % (
                 jdata['check']['status'], jdata['cid'])
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info(line)
             return True
         else:
             line = "growth-enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
-            syslog.syslog(syslog.LOG_ERR, line)
+            logger.error(line)
             return False
     else:
         line = "growth-enotify: Skipping %s email notification for monitor %s" % (
             jdata['check']['status'], jdata['cid'])
-        syslog.syslog(syslog.LOG_ERR, line)
+        logger.error(line)
         return None
 
 
-def true(redata, jdata, rdb, r_server):
+def true(redata, jdata, rdb, r_server, logger):
     ''' This method will be called when a monitor has passed '''
     run = True
     if "true" in jdata['check']['prev_status']:
@@ -64,23 +64,23 @@ def true(redata, jdata, rdb, r_server):
             run = False
 
     if run:
-        result = emailNotify(redata, jdata, "growth-true.msg")
+        result = emailNotify(redata, jdata, "growth-true.msg", logger)
         if result:
             line = "growth-enotify: Sent %s email notification for monitor %s" % (
                 jdata['check']['status'], jdata['cid'])
-            syslog.syslog(syslog.LOG_INFO, line)
+            logger.info(line)
             return True
         else:
             line = "growth-enotify: False to send %s email notification for monitor %s" % (jdata['check']['status'], jdata['cid'])
-            syslog.syslog(syslog.LOG_ERR, line)
+            logger.error(line)
             return False
     else:
         line = "growth-enotify: Skipping %s email notification for monitor %s" % (
             jdata['check']['status'], jdata['cid'])
-        syslog.syslog(syslog.LOG_INFO, line)
+        logger.info(line)
         return None
 
-def emailNotify(redata, jdata, tfile):
+def emailNotify(redata, jdata, tfile, logger):
     '''
     This method will be called to notify a user via email of status changes
     '''
@@ -128,4 +128,5 @@ def emailNotify(redata, jdata, tfile):
     else:
         line = "enotify: Got status code %d from mandrill for monitor %s" % (
             result.status_code, jdata['cid'])
+        logger.warning(line)
         return False
