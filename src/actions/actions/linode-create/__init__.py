@@ -41,9 +41,7 @@ def get_current_linodes(redata):
         "api_key": str(redata['data']['api_key'])
     }
     try:
-        req = requests.post(
-            url, timeout=3.0, data=params, verify=True
-        )
+        req = requests.post(url, timeout=3.0, data=params, verify=True)
     except:
         return False
     return len(req.json()["DATA"])
@@ -51,30 +49,31 @@ def get_current_linodes(redata):
 
 def call_linode(redata, jdata, logger):
     ''' Perform actual call '''
-    url = 'https://api.linode.com/'
-    params = {
-        "api_action": "linode.create",
-        "DatacenterID": int(redata['data']['datacenter_id']),
-        "PlanID": int(redata['data']['plan_id']),
-        "api_key": str(redata['data']['api_key'])
-    }
-    try:
-        req = requests.post(
-            url, timeout=3.0, data=params, verify=True
-        )
-    except:
-        return False
-    if req.status_code >= 200 and req.status_code < 300:
-        if len(req.json()['ERRORARRAY']) > 0:
-            line = 'linode-boot: Request to {0} sent for monitor {1} - \
-                False'.format(url, jdata['cid'])
-            logger.info(line)
+    if int(redata['data']['upper_limit']) < get_current_linodes(redata):
+        url = 'https://api.linode.com/'
+        params = {
+            "api_action": "linode.create",
+            "DatacenterID": int(redata['data']['datacenter_id']),
+            "PlanID": int(redata['data']['plan_id']),
+            "api_key": str(redata['data']['api_key'])
+        }
+        try:
+            req = requests.post(url, timeout=3.0, data=params, verify=True)
+        except:
             return False
-        else:
-            if int(redata['data']['upper_limit']) < get_current_linodes(redata):
-                line = 'linode-boot: Request to {0} sent for monitor {1} - \
+        if req.status_code >= 200 and req.status_code < 300:
+            if len(req.json()['ERRORARRAY']) > 0:
+                line = 'linode-create: Request to {0} sent for monitor {1} - \
+                    False'.format(url, jdata['cid'])
+                logger.info(line)
+                return False
+            else:
+                line = 'linode-create: Request to {0} sent for monitor {1} - \
                     Successful'.format(url, jdata['cid'])
                 logger.info(line)
-                return True
-            else:
-                return False
+            return True
+    else:
+        line = 'linode-create: Request to {0} sent for monitor {1} - \
+            False'.format(url, jdata['cid'])
+        logger.info(line)
+        return False
