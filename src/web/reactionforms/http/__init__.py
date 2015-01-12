@@ -3,7 +3,7 @@
 from wtforms import SelectField, TextAreaField, TextField
 from wtforms.validators import DataRequired, Optional, URL, ValidationError
 from ..base import BaseReactForm
-from ..utils import HeaderList
+from ..utils import http
 
 
 class PayloadValidator(object):
@@ -28,7 +28,7 @@ class ReactForm(BaseReactForm):
                     URL(message='Invalid URL format.')])
     extra_headers = TextAreaField(
         'extra_headers',
-        validators=[HeaderList()])
+        validators=[http.HeaderList()])
     payload = TextAreaField(
         'payload',
         validators=[PayloadValidator()])

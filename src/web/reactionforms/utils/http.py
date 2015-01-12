@@ -1,4 +1,4 @@
-"""Collection of common utility classes and functions."""
+"""Collection of HTTP utility classes and functions."""
 
 from wtforms.validators import ValidationError
 
