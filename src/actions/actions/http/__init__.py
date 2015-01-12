@@ -2,7 +2,7 @@
 
 import requests
 import syslog
-from ..utils import ParseHeaders, ShouldRun
+from ..utils import http, ShouldRun
 
 _HTTP_REQUEST_TIMEOUT = 10.0  # in seconds
 
@@ -14,7 +14,7 @@ def __action(**kwargs):
         http_verb = redata['data']['http_verb'] or 'GET'
         url = redata['data']['url']
         assert url, 'URL is required.'
-        extra_headers = ParseHeaders(redata['data']['extra_headers'] or '')
+        extra_headers = http.ParseHeaders(redata['data']['extra_headers'] or '')
         if http_verb == 'GET':
             status = http_get(url, extra_headers)
         elif http_verb == 'POST':
