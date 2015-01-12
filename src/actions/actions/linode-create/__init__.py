@@ -60,6 +60,9 @@ def call_linode(redata, jdata, logger):
         try:
             req = requests.post(url, timeout=3.0, data=params, verify=True)
         except:
+            line = 'linode-create: Request to {0} sent for monitor {1} - \
+                False (error making API call)'.format(url, jdata['cid'])
+            logger.info(line)
             return False
         if req.status_code >= 200 and req.status_code < 300:
             if len(req.json()['ERRORARRAY']) > 0:
