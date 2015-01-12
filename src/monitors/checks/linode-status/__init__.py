@@ -2,7 +2,7 @@
 ######################################################################
 # Cloud Routes Availability Manager: linode-status module
 # ------------------------------------------------------------------
-# This is a module for performing Linode  status checks.
+# This is a module for performing Linode server status checks.
 # This will return true if if the Linode's current status is one
 # of those expected by the monitor, false otherwise. Anything other
 # than 2xx HTTP status from Linode will return false.
