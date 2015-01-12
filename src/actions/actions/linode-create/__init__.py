@@ -74,6 +74,6 @@ def call_linode(redata, jdata, logger):
             return True
     else:
         line = 'linode-create: Request to {0} sent for monitor {1} - \
-            False'.format(url, jdata['cid'])
+            Skipped (upper_limit >= current linodes)'.format(url, jdata['cid'])
         logger.info(line)
-        return False
+        return None
