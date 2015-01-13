@@ -6,33 +6,14 @@ The Vagrant setup in this guide is optional; however you will need to have an en
 
 ### Prerequisites
 
-Before starting you must first install Vagrant.
+Before starting you must first install:
 
-1. [Install Vagrant](https://docs.vagrantup.com/v2/installation/)
-
-### Initialize Vagrant
-
-This guide will use the Ubuntu Trusty 64 bit image, you can utilize other images however they must support both Docker and Fig. To initialize your setup simply run the following command.
-
-    $ vagrant init ubuntu/trusty64
-
-### Enable a private network
-
-To make testing easier you can setup and utilize a private network. This will allow you to access the Runbook web interface by simply typing an IP and port in your browser. To set this up you will need to edit your `Vagrantfile`.
-
-    $ vi Vagrantfile
-
-**Find:**
-
-      # config.vm.network "private_network", ip: "192.168.33.10"
-
-**Uncomment:**
-
-      config.vm.network "private_network", ip: "192.168.33.10"
+* [Vagrant](https://docs.vagrantup.com/v2/installation/)
+* [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 
 ### Start the vm
 
-Once you are ready you can startup the vm.
+Once Vagrant and Virtualbox are installed, you can startup the vm. Run this command from the directory that contains the `Vagrantfile`:
 
     $ vagrant up
 
@@ -89,7 +70,7 @@ To access the web application you can simply enter the IP of the vm into your br
 
 **Example:**
 
-    http://192.168.33.10:8080
+    http://192.168.33.10:8000
 
 ### Finding the IP
 
