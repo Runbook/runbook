@@ -41,7 +41,7 @@ def get_current_linodes(redata):
         "api_key": str(redata['data']['api_key'])
     }
     try:
-        req = requests.post(url, timeout=3.0, data=params, verify=True)
+        req = requests.post(url, timeout=10.0, data=params, verify=True)
     except:
         return False
     return len(req.json()["DATA"])
@@ -49,8 +49,8 @@ def get_current_linodes(redata):
 
 def call_linode(redata, jdata, logger):
     ''' Perform actual call '''
-    if int(redata['data']['upper_limit']) < get_current_linodes(redata):
-        url = 'https://api.linode.com/'
+    url = 'https://api.linode.com/'
+    if int(redata['data']['upper_limit']) > get_current_linodes(redata):
         params = {
             "api_action": "linode.create",
             "DatacenterID": int(redata['data']['datacenter_id']),
@@ -58,10 +58,10 @@ def call_linode(redata, jdata, logger):
             "api_key": str(redata['data']['api_key'])
         }
         try:
-            req = requests.post(url, timeout=3.0, data=params, verify=True)
-        except:
+            req = requests.post(url, timeout=10.0, data=params, verify=True)
+        except Exception as e:
             line = 'linode-create: Request to {0} sent for monitor {1} - \
-                False (error making API call)'.format(url, jdata['cid'])
+                False (error making API call: {2})'.format(url, jdata['cid'], e)
             logger.info(line)
             return False
         if req.status_code >= 200 and req.status_code < 300:
@@ -77,6 +77,6 @@ def call_linode(redata, jdata, logger):
             return True
     else:
         line = 'linode-create: Request to {0} sent for monitor {1} - \
-            Skipped (upper_limit >= current linodes)'.format(url, jdata['cid'])
+            Skipped (upper_limit < current linodes)'.format(url, jdata['cid'])
         logger.info(line)
         return None
