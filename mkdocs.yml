@@ -35,3 +35,5 @@ pages:
 - ['developers/creating_monitors.md', 'Developers', 'Creating Monitors']
 - ['developers/creating_reactions.md', 'Developers', 'Creating Reactions']
 - ['community-tutorials/index.md', 'Community Tutorials']
+- ['community-tutorials/using-commando-to-restart-nginx.md', 'Community Tutorials', "Using Runbook and Commando to monitor and restart nginx"]
+
