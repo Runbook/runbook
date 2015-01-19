@@ -29,13 +29,15 @@ def __action(**kwargs):
 
 def http_get(url, extra_headers):
     r = requests.get(url, timeout=_HTTP_REQUEST_TIMEOUT, headers=extra_headers,
-                     verify=False)
+                     verify=False, stream=True)
+    r.close()
     return r.status_code
 
 
 def http_post(url, extra_headers, payload):
     r = requests.post(url, timeout=_HTTP_REQUEST_TIMEOUT, headers=extra_headers,
-                      data=payload, verify=False)
+                      data=payload, verify=False, stream=True)
+    r.close()
     return r.status_code
 
 
