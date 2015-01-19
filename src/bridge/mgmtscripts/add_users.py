@@ -50,7 +50,6 @@ userdata = {
     'subplans': 2 ,
     'subscribed_to_newsletter': False ,
     'subscription':  'Free' ,
-    'username': 'mail@mail.com',
 }
 
 # Add Dummy User
