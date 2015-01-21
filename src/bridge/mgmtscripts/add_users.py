@@ -2,6 +2,7 @@ import sys
 import yaml
 import time
 
+from werkzeug.security import generate_password_hash
 import rethinkdb as r
 
 from rethinkdb.errors import RqlRuntimeError, RqlDriverError
@@ -36,14 +37,19 @@ except RqlDriverError:
 
 userdata = {
     'username': 'test@tester.com',
-    'password': 'password456321',
+    'password': generate_password_hash('password456321'),
     'email': 'test@tester.com',
     'status': 'active',
     'company': 'runbook',
     'contact': 'tester',
     'acttype': 'lite-v2',
     'creation_time': time.time(),
-    'confirmed': True
+    'confirmed': True,
+    'stripe': None,
+    'stripeid': None ,
+    'subplans': 2 ,
+    'subscribed_to_newsletter': False ,
+    'subscription':  'Free' ,
 }
 
 # Add Dummy User

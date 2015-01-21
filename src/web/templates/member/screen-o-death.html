@@ -145,7 +145,7 @@
 {%- if "false" in monitor['status'] or "monitored" in monitor['status'] %}
 <a href="/dashboard/action-checks/{{ cid }}/true" class="btn btn-success btn-xs" role="button"><i class="fa fa-check-circle"></i> Mark True</a>
 {%- endif %}
-<a href="/dashboard/delete-checks/{{ cid }}" class="btn btn-danger btn-xs" role="button"><i class="fa fa-trash-o"></i> Delete</a>
+<a href="/dashboard/delete-checks/{{ cid }}" class="btn btn-danger btn-xs btn-delete-monitor" data="{{monitor['name']}}" role="button"><i class="fa fa-trash-o"></i> Delete</a>
 <a href="/dashboard/edit-monitors/{{ monitor['ctype'] }}/{{ cid }}" class="btn btn-primary btn-xs" role="button"><i class="fa fa-edit"></i> Edit</a>
 <a href="/dashboard/view-history/{{ cid }}/0/200" class="btn btn-primary btn-xs" role="button"><i class="fa fa-book"></i> History</a>
 
@@ -183,7 +183,7 @@
               <td><i class="fa fa-gear"></i></td>
               <td>{{ reaction['name'] }}</td>
               <td>
-<a href="/dashboard/delete-reaction/{{ rid }}" class="btn btn-danger btn-xs" role="button"><i class="fa fa-trash-o"></i> Delete</a>
+<a href="/dashboard/delete-reaction/{{ rid }}" class="btn btn-danger btn-xs btn-delete-reaction" data="{{reaction['name']}}" role="button"><i class="fa fa-trash-o"></i> Delete</a>
 <a href="/dashboard/edit-reactions/{{ reaction['rtype'] }}/{{ rid }}" class="btn btn-primary btn-xs" role="button"><i class="fa fa-edit"></i> Edit</a>
 </td>
             </tr>
@@ -199,5 +199,6 @@
 
   </div> <!-- row -->
 </div> <!-- container -->
+
 
 {% include 'dash-footer.html' %}
