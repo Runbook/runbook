@@ -29,7 +29,7 @@ if [ -z "$1" ] ; then
 	exit 1
     fi
 else
-    script="/code/mgmtscripts/$1.py"
+    script="/code/mgmtscripts/$1"
     if [ -e "$script" ] ; then
 	env python "$script" /config/config.yml
     else
