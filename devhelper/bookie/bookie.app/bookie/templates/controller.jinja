@@ -1,0 +1,52 @@
+#!/usr/bin/python
+######################################################################
+# Cloud Routes Bridge
+# -------------------------------------------------------------------
+# Action Module for {{data['reaction']['title']}}
+######################################################################
+
+import time
+
+# Custom imports go here
+
+
+# The following action() implementation provides sensible behavior
+# you can change the action() behavior to suit your specific reaction
+def action(**kwargs):
+    ''' This method is called to action the {{data['reaction']['title']}} reaction '''
+    redata = kwargs['redata']
+    jdata = kwargs['jdata']
+    logger = kwargs['logger']
+    run = True
+    # Check for Trigger
+    if redata['trigger'] > jdata['failcount']:
+        run = False
+
+    # Check for lastrun
+    checktime = time.time() - float(redata['lastrun'])
+    if checktime < redata['frequency']:
+        run = False
+
+    if redata['data']['call_on'] not in jdata['check']['status']:
+        run = False
+
+    if run:
+        return custom_action(redata, jdata, logger)
+    else:
+        return None
+
+
+
+
+def custom_action(redata, jdata, logger):
+    ''' Perform {{data['reaction']['title']}} Action '''
+    try:
+
+        # your action code goes here
+
+        return True
+    except:
+        line = "change_me: some error occured here %s" % jdata['cid']
+        logger.info(line)
+        return False
+
