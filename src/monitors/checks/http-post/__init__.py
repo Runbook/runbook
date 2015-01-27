@@ -44,16 +44,21 @@ def _check(jdata):
     assert host, "Host field not present"
     headers = ParseHeaders(extra_headers)
     headers['host'] = host
-    r = requests.post(url, timeout=_HTTP_REQUEST_TIMEOUT, headers=headers,
-                      data=payload, verify=False, stream=True)
+    try:
+        r = requests.post(url, timeout=_HTTP_REQUEST_TIMEOUT, headers=headers,
+                          data=payload, verify=False, stream=True)
+    except Exception as e:
+        assert e, "Error making request"
+        return False
     stream = cStringIO.StringIO()
     length = 0
-    for chunk in r.iter_content(8192, decode_unicode=True):
+    for chunk in r.iter_content(8192, decode_unicode=False):
         stream.write(chunk)
         length += len(chunk)
         if length > get_max_size():
             break
     retext = stream.getvalue()
+    retext = unicode(retext)
     stream.close()
     status_codes = [int(code) for code in status_codes]
     assert not status_codes or \
