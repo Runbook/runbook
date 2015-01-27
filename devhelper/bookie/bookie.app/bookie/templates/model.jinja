@@ -1,0 +1,27 @@
+######################################################################
+# Runbook Web Application
+# -------------------------------------------------------------------
+# Reaction - Forms Class for {{data['reaction']['title']}}
+######################################################################
+
+from wtforms import TextField {% for class in tclasses %},{{class}} {% endfor%}
+from wtforms.validators import DataRequired {% for class in vclasses %},{{class}} {% endfor%}
+from ..base import BaseReactForm
+
+
+class ReactForm(BaseReactForm):
+
+    ''' Class that creates a Reaction form for the dashboard '''
+
+{% for attr in data['attributes'] %}
+    {{attr['attribute']}} = {{attr['type']}}(
+        "{{attr['name']}}",
+	{% if attr['type']  == 'SelectField' %}choices={{attr['choices']}},
+	{% endif -%}
+        validators=[{% for v in attr['validators'] %}{{v}}, {%endfor -%}])
+{% endfor %}
+
+
+if __name__ == '__main__':
+    pass
+

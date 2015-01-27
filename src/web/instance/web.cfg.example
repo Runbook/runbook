@@ -29,7 +29,9 @@ PACKAGES = {
     'lite' : {
         'choices' : {
             ('30mincheck', 'Every 30 Minutes'),
-            ('5mincheck', 'Every 5 Minutes')
+            ('5mincheck', 'Every 5 Minutes'),
+            ('2mincheck', 'Every 2 Minutes'),
+            ('30seccheck', 'Every 30 Seconds')
         },
         'reaction_multiplier' : 5,
         'data_retention' : 86400,
@@ -41,7 +43,9 @@ PACKAGES = {
     'free' : {
         'choices' : {
             ('30mincheck', 'Every 30 Minutes'),
-            ('5mincheck', 'Every 5 Minutes')
+            ('5mincheck', 'Every 5 Minutes'),
+            ('2mincheck', 'Every 2 Minutes'),
+            ('30seccheck', 'Every 30 Seconds')
         },
         'reaction_multiplier' : 5,
         'data_retention' : 86400,
@@ -53,7 +57,9 @@ PACKAGES = {
     'lite-v2' : {
         'choices' : {
             ('30mincheck', 'Every 30 Minutes'),
-            ('5mincheck', 'Every 5 Minutes')
+            ('5mincheck', 'Every 5 Minutes'),
+            ('2mincheck', 'Every 2 Minutes'),
+            ('30seccheck', 'Every 30 Seconds')
         },
         'reaction_multiplier' : 2,
         'data_retention' : 86400,
@@ -66,7 +72,8 @@ PACKAGES = {
         'choices' : {
             ('30mincheck', 'Every 30 Minutes'),
             ('5mincheck', 'Every 5 Minutes'),
-            ('2mincheck', 'Every 2 Minutes')
+            ('2mincheck', 'Every 2 Minutes'),
+            ('30seccheck', 'Every 30 Seconds')
         },
         'reaction_multiplier' : 2,
         'data_retention' : 86400,

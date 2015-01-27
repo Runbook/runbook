@@ -37,6 +37,19 @@ To pull the repository to your local machine simply run the following.
 
     $ git clone <url of your repo>
 
+
+### Setting up your development environment
+
+`devhelpers/` provides you with helper tools to ease your development effort.
+
+It is advisable to get a custom Python `virtualenv` setup for your runbook development.
+
+To install the `devhelpers/` tools, run the following
+
+
+    $ cd devhelpers
+    $ make dev-env
+
 #### Creating a feature branch
 
 We have two branches `develop` and `master`, all new code must be submitted to the `develop` branch. This branch is considered our testing branch; once all of the features in the `develop` branch are ready for production they will be merged to the `master` branch.
