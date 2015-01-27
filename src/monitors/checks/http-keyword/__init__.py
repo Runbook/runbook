@@ -24,26 +24,31 @@ def get_max_size():
 def check(**kwargs):
     """ Perform a http get request and validate the return code """
     jdata = kwargs['jdata']
+    logger = kwargs['logger']
     headers = {'host': jdata['data']['host']}
     timeout = 3.00
     url = jdata['data']['url']
     try:
         result = requests.get(
-            url, timeout=timeout, headers=headers, verify=False, stream=True)
-
-        stream = cStringIO.StringIO()
-        length = 0
-        for chunk in result.iter_content(8192, decode_unicode=True):
-            stream.write(chunk)
-            length += len(chunk)
-            if length > get_max_size():
-                break
-        
-        retext = stream.getvalue()
-        stream.close()
-        result.close()
-    except:
+            url, timeout=timeout, headers=headers, allow_redirects=True, verify=False, stream=True)
+    except Exception as e:
+        line = 'http-keyword: Reqeust to {0} sent for monitor {1} - ' \
+               'had an exception: {2}'.format(url, jdata['cid'], e)
+        logger.debug(line)
         return False
+        
+    stream = cStringIO.StringIO()
+    length = 0
+    for chunk in result.iter_content(8192, decode_unicode=False):
+        stream.write(chunk)
+        length += len(chunk)
+        if length > get_max_size():
+            break
+        
+    retext = stream.getvalue()
+    stream.close()
+    result.close()
+    retext = unicode(retext)
     if jdata['data']['regex'] == "True":
         match = re.search(jdata['data']['keyword'], retext)
         if match:
