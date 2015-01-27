@@ -48,7 +48,7 @@ def check(**kwargs):
     retext = stream.getvalue()
     stream.close()
     result.close()
-    retext = unicode(retext)
+    retext = retext.decode('utf8')
     if jdata['data']['regex'] == "True":
         match = re.search(jdata['data']['keyword'], retext)
         if match:
