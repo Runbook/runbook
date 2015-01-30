@@ -1,4 +1,4 @@
-# Using Runbook and Commando to monitor and automatically restart nginx
+# Using Runbook and Commando.io to monitor and automatically restart nginx
 
 ## Introduction
 
@@ -7,44 +7,47 @@ In this tutorial you will learn how to setup a Runbook recipe that will ensure t
 At the end of this tutorial you will have a recipe setup that performs the following tasks.
 
 1. Monitor nginx with an HTTP GET request
-2. If the request fails or does not reply with `200 OK` restart nginx by executing a predefined Commando recipe
+2. If the request fails or does not reply with `200 OK` restart nginx by executing a predefined Commando.io recipe
 
 ## Pre-requisites
 
 This tutorial assumes the following:
 
 * You already have at minimum a free account on [Runbook](https://dash.runbook.io/signup)
-* You already have an account with [Commnado](https://commando.io) that has API access (required for Runbook integration)
-* You have already defined and connected the servers in question on Commando
-    * If this step is not already complete you can follow this [walk-through from Commando](http://vimeo.com/73097569)
-* You already have a Commando API Key generated and available
+* You already have an account with [Commando.io](https://commando.io) that has API access (required for Runbook integration)
+* You have already defined and connected the servers in question on Commando.io
+    * If this step is not already complete you can follow this [walk-through from Commando.io](http://vimeo.com/73097569)
+* You already have a Commando.io API Key generated and available
     * API Key generation instructions can be found on [the Commando.io API walk-through video](http://vimeo.com/107547330)
 
-### Setting up the Commando Recipe
+### Setting up the Commando.io Recipe
 
-Before setting up the Runbook recipe we will need to first create a Commando recipe to restart nginx. Before moving forward first log into your [Commando account](https://commando.io/lookup.html).
+Before setting up the Runbook recipe we will need to first create a Commando.io recipe to restart nginx. Before moving forward first log into your [Commando.io account](https://commando.io/lookup.html).
 
 To create the nginx restart recipe navigate to the Recipes page.
 
 ![Recipe link](img/usertuts/http-commando-recipe/recipe.jpg)
 
-Once on the recipe page click the **Add Recipe** button, after the page loads page you will be taken to a page where you can input the recipe. You can make a recipe that executes any type of script or command. For our example we will use the following command.
+Once on the recipe page click the **Add Recipe** button, after the page loads page you will be taken to a page where you can input the recipe. You can make a recipe that executes any type of script or command. For our example we will use the following script.
 
-    # /usr/bin/sudo /etc/init.d/nginx restart
+    if /usr/bin/sudo /usr/bin/service --status-all | /bin/grep -q 'nginx'
+    then    
+        /usr/bin/sudo service nginx restart   
+    fi
 
 After filling out the form simply click **Add Recipe** again.
 
 ![Create Recipe](img/usertuts/http-commando-recipe/create-recipe.jpg)
 
-The Commando recipe used for this example to restart nginx is a public recipe and can be found [here](http://public.recipes/4euvOE). 
+The Commando.io recipe used for this example to restart nginx is a public recipe and can be found [here](http://public.recipes/4euvOE). 
 
-## Creating a Commando Reaction on Runbook
+## Creating a Commando.io Reaction on Runbook
 
-For this section you will need to be logged in to both the Commando and Runbook dashboards. This section will guide you through creating a Runbook reaction that causes Commando to execute a Recipe on a defined server.
+For this section you will need to be logged in to both the Commando.io and Runbook dashboards. This section will guide you through creating a Runbook reaction that causes Commando.io to execute a Recipe on a defined server.
 
-### How the Commando Execute Recipe Reaction works
+### How the Commando.io Execute Recipe Reaction works
 
-This reaction works by sending an API request on your behalf to Commando. This reaction will take the API Key, Server ID and Recipe ID provided and send an API request to Commando. The request will tell Commando to execute the specified recipe on the specified server.
+This reaction works by sending an API request on your behalf to Commando.io. This reaction will take the API Key, Server ID and Recipe ID provided and send an API request to Commando.io. The request will tell Commando.io to execute the specified recipe on the specified server.
 
 ### Reaction Creation
 
@@ -52,23 +55,23 @@ Once logged into Runbook's dashboard click the **Add Reactions** link in the sid
 
 ![Add Reaction](img/usertuts/http-commando-recipe/runbook-add-reactions.jpg)
 
-Once on the create reactions page simply click the Commando button.
+Once on the create reactions page simply click the Commando.io button.
 
-![Select Commando](img/usertuts/http-commando-recipe/runbook-select-commando.jpg)
+![Select Commando.io](img/usertuts/http-commando-recipe/runbook-select-commando.jpg)
 
-_This tutorial covers creating a Commando reaction that executes on a single server, by replacing the single server id with a group id these same steps can be followed for groups of servers._
+_This tutorial covers creating a Commando.io reaction that executes on a single server, by replacing the single server id with a group id these same steps can be followed for groups of servers._
 
-For a single server click the **Create** button under the "Execute Recipe (Single Server) via Commando" reaction.
+For a single server click the **Create** button under the "Execute Recipe (Single Server) via Commando.io" reaction.
 
 ![Single Server](img/usertuts/http-commando-recipe/runbook-select-execution-type.jpg)
 
-At this point you should be on the creation page for the Commando reaction. If you already know the details required for the reaction you can fill out the form and click **Submit**. You can then skip to the next section of this tutorial. If you do no not have all of the details than follow the steps below.
+At this point you should be on the creation page for the Commando.io reaction. If you already know the details required for the reaction you can fill out the form and click **Submit**. You can then skip to the next section of this tutorial. If you do no not have all of the details than follow the steps below.
 
 ### Creating the Reaction
 
 ![Create Reaction](img/usertuts/http-commando-recipe/runbook-create-reaction.jpg)
 
-The below details are a walk-through of what to put into the Commando reaction form. The values are generic and can be changed to meet your requirements.
+The below details are a walk-through of what to put into the Commando.io reaction form. The values are generic and can be changed to meet your requirements.
 
 #### Name
 
@@ -76,7 +79,7 @@ The name field is generic field that allows you to put a custom name to this rea
 
 #### Trigger
 
-The trigger field allows you to define the number of instances a monitor must return the desired result before executing the reaction. To put it simply our HTTP monitor will need to return `False` the number of times defined in this field before Runbook will tell Commando to execute the recipe.
+The trigger field allows you to define the number of instances a monitor must return the desired result before executing the reaction. To put it simply our HTTP monitor will need to return `False` the number of times defined in this field before Runbook will tell Commando.io to execute the recipe.
 
 For this tutorial we will set the trigger value to `2`.
 
@@ -94,15 +97,15 @@ From the above settings our reaction should only be called after the monitor has
 
 #### API Key
 
-The API Key field is a simple field that should contain your Commando API Key. If you have not generated an API Key yet, you can follow the instructions on [Commando's API Walk-through video](http://vimeo.com/107547330).
+The API Key field is a simple field that should contain your Commando.io API Key. If you have not generated an API Key yet, you can follow the instructions on [Commando.io's API Walk-through video](http://vimeo.com/107547330).
 
 #### Account Alias
 
-The account alias field should contain your account alias (commonly your company name) from Commando. If you are unfamiliar with this value you can find it in the URL of the dashboard, the Commando format is `https://<accountalias>.commando.io`.
+The account alias field should contain your account alias (commonly your company name) from Commando.io. If you are unfamiliar with this value you can find it in the URL of the dashboard, the Commando.io format is `https://<accountalias>.commando.io`.
 
 #### Server ID
 
-The server id field should contain the unique ID value of the server you want to execute the recipe on. To obtain this value on the Commando Dashboard navigate to the **"Servers"** page and click the server in question.
+The server id field should contain the unique ID value of the server you want to execute the recipe on. To obtain this value on the Commando.io Dashboard navigate to the **"Servers"** page and click the server in question.
 
 ![Select Server](img/usertuts/http-commando-recipe/select-server.jpg)
 
@@ -112,7 +115,7 @@ Once the server is selected you should see a pop-up with the servers details, sc
 
 #### Recipe ID
 
-The recipe id field should contain the unique ID value of the recipe you want to execute. To obtain this value on the Commando Dashboard navigate to the **"Recipes"** page and click on the recipe in question.
+The recipe id field should contain the unique ID value of the recipe you want to execute. To obtain this value on the Commando.io Dashboard navigate to the **"Recipes"** page and click on the recipe in question.
 
 ![Select Recipe](img/usertuts/http-commando-recipe/select-recipe.jpg)
 
@@ -122,13 +125,13 @@ Once on the recipe page you can find the recipe ID in the upper right hand corne
 
 #### Halt on Error
 
-The halt on error fields value is sent to Commando, if the recipe called returns with an error this value will tell Commando whether or not to stop executing the recipe on other servers. For this tutorial we will leave this field at the default of `False`.
+The halt on error fields value is sent to Commando.io, if the recipe called returns with an error this value will tell Commando.io whether or not to stop executing the recipe on other servers. For this tutorial we will leave this field at the default of `False`.
 
 Once the reaction creation form has been completed click the **Submit** button to create the form. On successful creation you should see a Green notification box at the top of the Runbook Dashboard.
 
 ## Creating an HTTP GET Monitor on Runbook 
 
-At this point you will no longer need to be logged into the Commando Dashboard and all items referenced will be from the Runbook Dashboard. This section will cover setting up a monitor that requests a URL and looks for specified response codes.
+At this point you will no longer need to be logged into the Commando.io Dashboard and all items referenced will be from the Runbook Dashboard. This section will cover setting up a monitor that requests a URL and looks for specified response codes.
 
 ### How the HTTP GET Monitor works
 
@@ -203,15 +206,15 @@ Once on the Manage tab simply find the monitor created as part of this tutorial 
 
 ![Test False](img/usertuts/http-commando-recipe/runbook-test-failed.jpg)
 
-After a few minutes you should receive an email from Commando stating that the execution was successful.
+After a few minutes you should receive an email from Commando.io stating that the execution was successful.
 
-![Commando Email](img/usertuts/http-commando-recipe/commando-email.jpg)
+![Commando.io Email](img/usertuts/http-commando-recipe/commando-email.jpg)
 
 To reset the monitor simply click the **Mark True* button on the Manage tab.
 
 ## Summary
 
-At this point we have a working HTTP GET monitor that will monitor our web application for `200 OK` response codes. If the monitor detects that the web application is not replying with a `200 OK` for 10 minutes it will execute a reaction that makes an API request to Commando and execute a recipe that simply restarts nginx. This recipe will repeat every 10 minutes until the web application replies with a `200 OK` status code.
+At this point we have a working HTTP GET monitor that will monitor our web application for `200 OK` response codes. If the monitor detects that the web application is not replying with a `200 OK` for 10 minutes it will execute a reaction that makes an API request to Commando.io and execute a recipe that simply restarts nginx. This recipe will repeat every 10 minutes until the web application replies with a `200 OK` status code.
 
 ## Runbook Community Tutorials
 
