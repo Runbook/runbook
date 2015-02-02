@@ -29,6 +29,8 @@ import logconfig
 import zmq
 import json
 import time
+import importlib
+from actions import BaseReaction
 
 # Load Configuration
 # ------------------------------------------------------------------
@@ -107,16 +109,40 @@ signal.signal(signal.SIGTERM, killhandle)
 # ------------------------------------------------------------------
 
 
+def runOldStyleAction(**kwargs):
+    redata = kwargs['redata']
+    reaction = __import__(
+        "actions." + redata['rtype'],
+        globals(), locals(),
+        ['action'], -1)
+    return reaction.action(
+        redata=kwargs['redata'],
+        jdata=kwargs['jdata'],
+        rdb=kwargs['rdb'],
+        r_server=kwargs['r_server'],
+        config=kwargs['config'],
+        logger=kwargs['logger'])
+
+
+def runNewStyleAction(**kwargs):
+    redata = kwargs['redata']
+    module = importlib.import_module('actions.' + redata['rtype'])
+    if 'Reaction' in dir(module):
+        assert issubclass(module.Reaction, BaseReaction)
+        reaction = module.Reaction(**kwargs)
+        return reaction.Run()
+    else:
+        return runOldStyleAction(**kwargs)
+
+
 def runAction(**kwargs):
     ''' Run reactions in a function '''
+    # TODO: Once the old style actions are killed, we can fold all the logging
+    # logic in the BaseReaction class itself.
     redata = kwargs['redata']
     jdata = kwargs['jdata']
-    reaction = __import__(
-        "actions." + redata['rtype'], globals(), locals(), ['action'], -1)
     try:
-        react = reaction.action(redata=kwargs['redata'], jdata=kwargs['jdata'],
-            rdb=kwargs['rdb'], r_server=kwargs['r_server'], config=kwargs['config'],
-            logger=kwargs['logger'])
+        react = runNewStyleAction(**kwargs)
     except Exception as e:
         logger.error("Got error when attempting to run reaction %s for monitor %s" % (
             redata['rtype'], jdata['cid']))
