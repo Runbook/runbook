@@ -36,6 +36,7 @@ except RqlDriverError:
     sys.exit(1)
 
 userdata = {
+    'id' : 1,
     'username': 'test@tester.com',
     'password': generate_password_hash('password456321'),
     'email': 'test@tester.com',
