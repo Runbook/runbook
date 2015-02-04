@@ -47,6 +47,7 @@ except (RqlDriverError, RqlRuntimeError, socket.error) as e:
     sys.exit(1)
 
 if travis == True:
+    print("Setting RethinkDB auth key")
     try:
         r.db('rethinkdb').table('cluster_config').get('auth').update({'auth_key' : auth_key}).run(conn)
     except (RqlDriverError, RqlRuntimeError, socket.error) as e:
