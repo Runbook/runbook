@@ -14,9 +14,9 @@ def createTable(dbname, tablename, conn):
         print("RethinkDB Error: %s") % e.message
         print("Table %s not created") % tablename
 
-if len(sys.argv) != 2:
+if len(sys.argv) < 2:
     print("Hey, thats not how you launch this...")
-    print("%s <config file>") % sys.argv[0]
+    print("%s <config file> [--travis]") % sys.argv[0]
     sys.exit(1)
 
 # Open Config File and Parse Config Data
@@ -25,19 +25,32 @@ cfh = open(configfile, "r")
 config = yaml.safe_load(cfh)
 cfh.close()
 
+if sys.argv[2] 
+    if sys.argv[2] == "--travis":
+      travis = True
+    else:
+      print("Didn't understand second command line argument.."
+            "Assuming non-Travis environment")
+
 # Establish Connection
 host = config['rethink_host']
 port = config['rethink_port']
 database = config['rethink_db']
 auth_key = config['rethink_authkey']
 try:
-    if auth_key:
+    if auth_key && travis == False:
         conn = r.connect(host, port, auth_key=auth_key).repl()
     else:
         conn = r.connect(host, port).repl()
 except (RqlDriverError, RqlRuntimeError, socket.error) as e:
     print("RethinkDB Error on Connection: %s") % e.message
     sys.exit(1)
+
+if travis == True:
+    try:
+        r.db('rethinkdb').table('cluster_config').get('auth').update({ 'auth_key' : auth_key }).run(conn)
+    except (RqlDriverError, RqlRuntimeError, socket.error) as e:
+        print("RethinkDB Error setting auth key: %s") % e.message
 
 result = r.db_list().run(conn)
 if database in result:
