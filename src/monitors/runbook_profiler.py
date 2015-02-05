@@ -13,43 +13,79 @@ from guppy import hpy
 Runbook profiler is a very lightweight memory and time usage profiler.
 It is intended to be used with long running processes.
 
+## Design choice
+
+Other profilers including `cProfile`, `line_profiler`, `memory_profiler`, `yappi` 
+and others are not well suited for long running processes and runtime toggling of 
+profiling.
+
+Runbook profiler is intended to be as lightweight as possible while providing 
+internal memory usage metrics, as opposed to external memory usage metrics such 
+as `psutil`.
+
+While `psutil` would have been a lot faster than the currently used `guppy/heapy`,
+it would not have been precise enough, since garbage collection would bias our 
+metrics.
+
+The current implementation doesn't allow for runtime toggling of profiling yet, but 
+this would only require changing the value of the global vars `FULL_PROFILE`, 
+`TIME_PROFILE`, `MEM_PROFILE` at runtime.
+
+The use of environment vars allows for toggling profiling by setting the 
+environment vars in `fig.yml`.
+
+
+## Logging metrics
+
+Currently the metrics are printed on `stdout`, in an easy to parse CSV format.
+
+The next version is expected to use either `logconfig` and/or an asynchronous event 
+logging facility.
+
 
 ## Performance impact
 
 The time profiler incurs virtually no performance hit.
 The memory profiler incurs a moderate to high hit ranging from:
-. 30% for heavy memory/cpu usage functions 
-. 250% for light memory/cpu usage ones
+- 30% for **heavy** memory/cpu usage functions 
+- 250%-400% for **light** memory/cpu usage ones
 
 
 ## Installing
 
 Additional pip requirements are:
+```
 guppy==0.1.10
-
+```
 
 ## Usage
 
 To use the profiler, you need to do the following import:
+```python
 from runbook_profiler import time_profile, mem_profile, full_profile
+```
 
 Currently, the profiler allows for functions of interest to be 
 profiled by using one of the following decorators:
+```python
 @time_profile # time only profiling
 @mem_profile  # memory only profiling
 @full_profile # time and memory profiling
+```
 
 To enable each of those decorators, the following environment variables 
 have to be set:
+```bash
 FULL_PROFILE=1
 TIME_PROFILE=1
 MEM_PROFILE=1
-
+```
 
 ## Running runbook_profiler
 
 ### using primes(10000000)
 
+```bash
 $ time FULL_PROFILE=1 python src/monitors/runbook_profile.py 
 primes;2799.772 ms;'(10000000,)'
 primes;23783.38 KB;20717.55 KB;'(10000000,)'
@@ -91,10 +127,12 @@ call_time;2832.31 KB;0.07 KB;'()'
 real	0m4.102s
 user	0m3.887s
 sys	0m0.192s
-
+```
 
 ### using primes(100000000)
 
+
+```bash
 $ time  python src/monitors/runbook_profile.py 
 
 real	0m29.124s
@@ -109,6 +147,8 @@ call_time;2832.32 KB;0.07 KB;'()'
 real	0m40.977s
 user	0m39.421s
 sys	0m1.461s
+```
+
 
 """
 
