@@ -27,6 +27,9 @@ While `psutil` would have been a lot faster than the currently used `guppy/heapy
 it would not have been precise enough, since garbage collection would bias our 
 metrics.
 
+It would make sense in the future to allow the user to choose between internal and 
+external memory usage metrics gathering.
+
 The current implementation doesn't allow for runtime toggling of profiling yet, but 
 this would only require changing the value of the global vars `FULL_PROFILE`, 
 `TIME_PROFILE`, `MEM_PROFILE` at runtime.
@@ -46,10 +49,13 @@ logging facility.
 ## Performance impact
 
 The time profiler incurs virtually no performance hit.
-The memory profiler incurs a moderate to high hit ranging from:
+
+The memory profiler incurs a moderate to high performance hit ranging from:
 - 30% for **heavy** memory/cpu usage functions 
 - 250%-400% for **light** memory/cpu usage ones
 
+This is due to the choice of *accurate slow internal instrumentation* vs. 
+*inaccurate fast external instrumentation*.
 
 ## Installing
 
