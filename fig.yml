@@ -101,3 +101,10 @@ monitorworker:
   links:
     - monitorbroker
     - actionbroker
+rediscommander:
+  build: devhelper/inspect/redis/
+  command: redis-commander --redis-host redis --redis-port 6379 --redis-db 0
+  links:
+   - redis
+  ports:
+    - "8081:8081"
