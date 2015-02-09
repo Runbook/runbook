@@ -24,6 +24,8 @@ import rethinkdb as r
 from rethinkdb.errors import RqlDriverError
 import time
 
+from runbookdb import RunbookDB
+
 
 # Load Configuration
 # ------------------------------------------------------------------
@@ -33,27 +35,21 @@ if len(sys.argv) != 2:
     print("%s <config file>") % sys.argv[0]
     sys.exit(1)
 
-# Open Config File and Parse Config Data
 configfile = sys.argv[1]
-cfh = open(configfile, "r")
-config = yaml.safe_load(cfh)
-cfh.close()
 
+with open(configfile, 'r') as cfh:
+    config = yaml.safe_load(cfh)
+
+
+# Open Config File and Parse Config Data
+db=RunbookDB(configfile)
+conn=db.connect()
 
 # Open External Connections
 # ------------------------------------------------------------------
 
 # RethinkDB Server
-try:
-    rdb_server = r.connect(
-        host=config['rethink_host'], port=config['rethink_port'],
-        auth_key=config['rethink_authkey'], db=config['rethink_db'])
-    line = "Connecting to RethinkDB"
-    print line
-except RqlDriverError:
-    line = "Cannot connect to rethinkdb, shutting down"
-    print line
-    sys.exit(1)
+
 
 # Helper Functions
 # ------------------------------------------------------------------
@@ -62,6 +58,12 @@ except RqlDriverError:
 # Execute
 # ------------------------------------------------------------------
 
-chktime = time.time() - config['history_retention']
-results = r.table('history').filter(
-    (r.row['starttime'] < chktime)).delete().run(rdb_server)
+def purge_old_history():
+    chktime = time.time() - config['history_retention']
+    results = r.table('history').filter(
+        (r.row['starttime'] < chktime)).delete().run(conn)
+
+
+purge_old_history()
+
+db.close()
