@@ -26,6 +26,7 @@ import time
 
 from runbookdb import RunbookDB
 
+from runbook_profiler import time_profile, mem_profile, full_profile
 
 # Load Configuration
 # ------------------------------------------------------------------
@@ -39,7 +40,6 @@ configfile = sys.argv[1]
 
 with open(configfile, 'r') as cfh:
     config = yaml.safe_load(cfh)
-
 
 # Open Config File and Parse Config Data
 db=RunbookDB(configfile)
@@ -58,6 +58,7 @@ conn=db.connect()
 # Execute
 # ------------------------------------------------------------------
 
+@full_profile
 def purge_old_history():
     chktime = time.time() - config['history_retention']
     results = r.table('history').filter(
