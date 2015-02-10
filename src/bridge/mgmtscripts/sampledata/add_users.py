@@ -9,27 +9,25 @@ from rethinkdb.errors import RqlRuntimeError, RqlDriverError
 
 from runbookdb import RunbookDB
 
-
 if len(sys.argv) != 2:
     print("Hey, thats not how you launch this...")
     print("%s <config file>") % sys.argv[0]
     sys.exit(1)
 
+# Open Config File and Parse Config Data
 configfile = sys.argv[1]
 
 with open(configfile, 'r') as cfh:
     config = yaml.safe_load(cfh)
 
-
-# Open Config File and Parse Config Data
-db=RunbookDB(configfile)
-conn=db.connect()
-
-
 # Establish Connection
 database = config['rethink_db']
 
+db=RunbookDB(configfile)
+conn=db.connect()
+
 userdata = {
+    'id' : 'uid_1',
     'username': 'test@tester.com',
     'password': generate_password_hash('password456321'),
     'email': 'test@tester.com',
