@@ -24,6 +24,9 @@ import rethinkdb as r
 from rethinkdb.errors import RqlDriverError, RqlRuntimeError
 import requests
 import json
+import pprint
+
+from runbookdb import RunbookDB
 
 # Load Configuration
 # ------------------------------------------------------------------
@@ -33,25 +36,18 @@ if len(sys.argv) < 2:
     print("%s <config file>") % sys.argv[0]
     sys.exit(1)
 
-# Open Config File and Parse Config Data
 configfile = sys.argv[1]
-cfh = open(configfile, "r")
-config = yaml.safe_load(cfh)
-cfh.close()
+
+with open(configfile, 'r') as cfh:
+    config = yaml.safe_load(cfh)
 
 # Open External Connections
 # ------------------------------------------------------------------
 
 # RethinkDB Server
-# TODO move default connection into module
-try:
-    rdb_server = r.connect(host=config[
-        'rethink_host'], port=config['rethink_port'],
-        auth_key=config['rethink_authkey'], db=config['rethink_db'])
-except RqlDriverError:
-    line = "Cannot connect to rethinkdb, shutting down"
-    print line
-    sys.exit(1)
+# [DONE] TODO move default connection into module
+db=RunbookDB(configfile)
+conn=db.connect()
 
 # Helper Functions
 # ------------------------------------------------------------------
@@ -67,7 +63,7 @@ msg = {
 
 # Get user count
 try:
-    result = r.table('users').count().run(rdb_server)
+    result = r.table('users').count().run(conn)
 except (RqlDriverError, RqlRuntimeError) as e:
     print("Got error while performing query: %s") % e.message
     print("Exiting...")
@@ -81,7 +77,7 @@ msg['data'].append({
 
 # Get upgraded user count and monitor count
 try:
-    result = r.table('users').filter({'acttype': 'pro'}).run(rdb_server)
+    result = r.table('users').filter({'acttype': 'pro'}).run(conn)
 except (RqlDriverError, RqlRuntimeError) as e:
     print("Got error while performing query: %s") % e.message
     print("Exiting...")
@@ -138,7 +134,7 @@ msg['data'].append({
 
 # Get monitor count
 try:
-    result = r.table('monitors').count().run(rdb_server)
+    result = r.table('monitors').count().run(conn)
 except (RqlDriverError, RqlRuntimeError) as e:
     print("Got error while performing query: %s") % e.message
     print("Exiting...")
@@ -152,7 +148,7 @@ msg['data'].append({
 
 # Get reaction count
 try:
-    result = r.table('reactions').count().run(rdb_server)
+    result = r.table('reactions').count().run(conn)
 except (RqlDriverError, RqlRuntimeError) as e:
     print("Got error while performing query: %s") % e.message
     print("Exiting...")
@@ -163,6 +159,7 @@ msg['data'].append({
     "value" : result
 })
 
+pprint.pprint(msg)
 payload = json.dumps(msg)
 headers = { 'Content-Type': 'application/json' }
 

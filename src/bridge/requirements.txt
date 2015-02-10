@@ -7,3 +7,4 @@ requests==1.2.3
 rethinkdb==1.13.0-3
 Werkzeug==0.9.6
 twilio>=3.6.0
+guppy==0.1.10
