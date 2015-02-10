@@ -48,7 +48,6 @@
               <td><h5>Time</h5></td>
               <td><h5>Method</h5></td>
               <td><h5>Monitoring Zone</h5></td>
-              <td><h5>Count</h5></td>
               <td></td>
             </tr>
             {% for monitor in data['monitor-history'] %}
@@ -65,7 +64,6 @@
               <td>{{ monitor['starttime'] }}</td>
               <td>{{ monitor['method'] }}</td>
               <td>{{ monitor['zone'] }}</td>
-              <td>{{ monitor['failcount'] }}</td>
               <td><a href="/dashboard/detail-history/{{ monitor['cid'] }}/{{ monitor['id'] }}" class="btn btn-default btn-xs" role="button">Details</a></td>
             </tr>
               {% for react in monitor['reactions'] %}
