@@ -1,0 +1,105 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+  <p></p>
+    <!-- sidebar -->
+    {% include 'sidebar.html' %}
+    <!-- content -->
+    <div class="col-md-8">
+      <div class="page-header">
+      {% if data['edit'] %}
+        <h1><i class="fa fa-eye-slash fa-1x"></i> Manage Monitor</h1>
+      {% else %}
+        <h1><i class="fa fa-eye-slash fa-1x"></i> Add Monitor</h1>
+      {% endif %}
+      </div>
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <div class="panel-title">
+            Linode: Status of a server
+            </div>
+          </div>
+          <div class="panel-body">
+            <form action="{{ data['url'] }}" method="post" name="tcp-check" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+
+            {% include 'monitors/base.html' %}
+            {% include 'monitors/timer.html' %}
+            {% include 'monitors/datacenter.html' %}
+            <hr>
+                
+                <div class="form-group">
+                <label for="API Key" class="col-sm-4 control-label">API Key</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <span class="input-group-btn">
+                  <button type="button" id="linode-status-apikey" class="btn btn-default" rel="popover" data-content="This field contains your Linode API Token. This can be found in the 'my profile' section in your Linode account under the 'API Keys' tab." title="Linode API Token"><i class="fa fa-question"></i></button>
+                </span>
+              {% if data['edit'] %}
+              {{ form.apikey(class_="form-control", value=data['monitor']['data']['apikey']) }}
+              {% else %}
+              {{ form.apikey(class_="form-control", placeholder="API Key") }}
+              {% endif %}
+              </div>
+            </div>
+              </div>
+
+                <div class="form-group">
+                <label for="Linode ID#" class="col-sm-4 control-label">Linode ID#</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <span class="input-group-btn">
+                  <button type="button" id="linode-status-linodeid" class="btn btn-default" rel="popover" data-content="This field contains the ID of your Linode server. This is the number assigned to your server when it was created. It may only contains digits." title="Linode ID"><i class="fa fa-question"></i></button>
+                </span>
+              {% if data['edit'] %}
+              {{ form.linodeid(class_="form-control", value=data['monitor']['data']['linodeid']) }}
+              {% else %}
+              {{ form.linodeid(class_="form-control", placeholder="Linode ID#") }}
+              {% endif %}
+              </div>
+            </div>
+              </div>  
+
+                <div class="form-group">
+                <label for="Status" class="col-sm-4 control-label">Status</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <span class="input-group-btn">
+                  <button type="button" id="linode-status-server-status" class="btn btn-default" rel="popover" data-content="Specifies which status to expect for your Linode server. You can select multiple statuses." title="Linode Server Status"><i class="fa fa-question"></i></button>
+                </span>
+              {% if data['edit'] %}
+              {{ form.status(class_="multiselect", value=data['monitor']['data']['status']) }}
+              {% else %}
+              {{ form.status(class_="multiselect", placeholder="Status") }}
+              {% endif %}
+              </div>
+            </div>
+              </div>  
+                
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+      <div class="panel-group" id="accordion">
+
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+
+{% include 'dash-footer.html' %}
