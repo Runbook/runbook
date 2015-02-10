@@ -10,6 +10,7 @@
 ######################################################################
 
 import requests
+import json
 
 http_timeout = 5.0
 url = 'https://api.linode.com/'
@@ -20,8 +21,8 @@ def check(**kwargs):
     logger = kwargs['logger']
     params = {
         "api_action": "linode.list",
-        "LinodeID": int(redata['data']['linode_id']),
-        "api_key": str(redata['data']['api_key'])
+        "LinodeID": int(jdata['data']['linodeid']),
+        "api_key": str(jdata['data']['apikey'])
     }
     
     try:
@@ -39,10 +40,15 @@ def check(**kwargs):
         logger.warning(line)
         return False
 
-    # TODO: Add exception handling in case api returns a malformed/unexpected
-    #       json object that does not contain ['DATA'][0]['STATUS'] key.
-    status = req.jsonstatus['DATA'][0]['STATUS']
-    if status in jdata['DATA']['STATUS']:
+    nodereply = json.loads(req.text)
+    try:
+      status = nodereply['DATA'][0]['STATUS']
+    except:
+      line = 'linode-status: Recieved invalid json response for' \
+              ' monitor {0}, {1}'.format(jdata['cid'], req.text)
+      logger.debug(line)
+      return False
+    if str(status) in jdata['data']['status']:
         line = 'linode-status: Reqeust to {0} sent for monitor {1} - ' \
                'Successful'.format(url, jdata['cid'])
         logger.info(line)

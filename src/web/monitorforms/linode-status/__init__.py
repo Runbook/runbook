@@ -15,13 +15,13 @@ class CheckForm(DatacenterCheckForm):
     for the dashboard '''
 
     choices = [
-        (-2, 'Boot Failed (not in use)'),
-        (-1, 'Being Created'),
-        (0,  'Brand New'),
-        (1,  'Running'),
-        (2,  'Powered Off'),
-        (3,  'Shutting Down (not in use)'),
-        (4,  'Saved to Disk (not in use)')
+        ('-2', 'Boot Failed (not in use)'),
+        ('-1', 'Being Created'),
+        ('0',  'Brand New'),
+        ('1',  'Running'),
+        ('2',  'Powered Off'),
+        ('3',  'Shutting Down (not in use)'),
+        ('4',  'Saved to Disk (not in use)')
     ]
 
     apikey = TextField(
