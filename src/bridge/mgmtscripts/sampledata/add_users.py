@@ -20,7 +20,6 @@ configfile = sys.argv[1]
 with open(configfile, 'r') as cfh:
     config = yaml.safe_load(cfh)
 
-
 # Establish Connection
 database = config['rethink_db']
 
@@ -54,7 +53,7 @@ for user in cursor:
     print user
 
 # Remove Data
-# r.db(database).table('users').delete().run(conn)
+#r.db(database).table('users').delete().run(conn)
 
 # Close Connection
 conn.close()
