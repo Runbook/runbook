@@ -199,10 +199,10 @@ def sample_arg_extractor(*args, **kwargs):
 
 
 def time_log(name, secs, args):
-    print "{0};{1} ms;'{2}'".format(name, secs*1000, args)
+    print "time_profiling;{0};{1} ms;'{2}'".format(name, secs*1000, args)
 
 def mem_log(name, totmembytes, memdiffbytes, args):
-    print "{0};{1:.2f} KB;{2:.2f} KB;'{3}'".format(name, float(totmembytes)/1024, float(memdiffbytes)/1024, args)
+    print "mem_profiling;{0};{1:.2f} KB;{2:.2f} KB;'{3}'".format(name, float(totmembytes)/1024, float(memdiffbytes)/1024, args)
 
 class memory_profiling_decorator(object):
     def __init__(self, arg_extractor):
