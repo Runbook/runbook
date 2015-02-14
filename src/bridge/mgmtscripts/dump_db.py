@@ -26,15 +26,16 @@ db=RunbookDB(configfile)
 conn=db.connect()
 
 
-tables = {
+tables = [
+    "users",
+    "reactions" ,
+    "monitors" ,
     "dc1queue" ,
     "dc2queue" ,
     "events" ,
     "history" ,
-    "reactions" ,
     "subscription_history" ,
-    "users",
-    }
+    ]
 
 for table in tables:
     print "==========TABLE %s" % table
