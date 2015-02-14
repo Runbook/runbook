@@ -3,6 +3,8 @@ import yaml
 
 import rethinkdb as r
 
+from runbookdb import RunbookDB
+
 if len(sys.argv) != 2:
     print("Hey, thats not how you launch this...")
     print("%s <config file>") % sys.argv[0]
@@ -10,15 +12,17 @@ if len(sys.argv) != 2:
 
 # Open Config File and Parse Config Data
 configfile = sys.argv[1]
-cfh = open(configfile, "r")
-config = yaml.safe_load(cfh)
-cfh.close()
+with open(configfile, "r") as h:
+    config = yaml.safe_load(h)
+
 
 # Establish Connection
 host = config['rethink_host']
 database = config['rethink_db']
-auth_key = config['rethink_authkey']
-conn = r.connect(host, 28015, auth_key=auth_key).repl()
+
+
+db=RunbookDB(configfile)
+conn=db.connect()
 
 # Drop Database
 r.db_drop(database).run(conn)
