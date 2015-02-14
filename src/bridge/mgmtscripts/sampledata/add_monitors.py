@@ -37,7 +37,7 @@ monitordata = {
         'host':  'runbook.io' ,
         'name':  'my_monitor' ,
         'reactions': [ 'rid_1' ],
-        'timer':  '2mincheck' , # 30seccheck 
+        'timer':  '30seccheck' , # 30seccheck , 2mincheck
         'url': 'http://runbook.io', 
         } ,
     'failcount': 2 ,
