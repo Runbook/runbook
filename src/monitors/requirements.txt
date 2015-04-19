@@ -4,6 +4,6 @@ redis==2.10.3
 requests==1.2.3
 cffi>=0.8
 cryptography==0.5.4
-pyOpenSSL==0.14
-ndg-httpsclient==0.3.3
-pyasn1==0.1.7
+pyOpenSSL
+ndg-httpsclient
+pyasn1
