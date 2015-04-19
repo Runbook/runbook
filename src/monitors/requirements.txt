@@ -1,9 +1,9 @@
 PyYAML==3.10
 pyzmq==13.1.0
 redis==2.10.3
-requests==1.2.3
+requests
 cffi>=0.8
-cryptography==0.5.4
+cryptography
 pyOpenSSL
 ndg-httpsclient
 pyasn1
