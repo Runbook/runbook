@@ -3,11 +3,11 @@ PyYAML==3.10
 boto==2.32.1
 pyzmq==13.1.0
 redis==2.10.3
-requests==1.2.3
+requests
 rethinkdb==1.13.0-3
 pygerduty==0.24
 twilio
 mandrill
-pyOpenSSL==0.14
-ndg-httpsclient==0.3.3
-pyasn1==0.1.7
+pyOpenSSL
+ndg-httpsclient
+pyasn1
