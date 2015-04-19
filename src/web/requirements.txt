@@ -10,7 +10,7 @@ WTForms==2.0.1
 Werkzeug==0.9.6
 coverage==4.0a1
 itsdangerous==0.24
-requests==1.2.3
+requests
 rethinkdb==1.13.0-3
 stripe==1.19.0
 wsgiref==0.1.2
