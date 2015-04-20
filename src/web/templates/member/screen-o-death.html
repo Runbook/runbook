@@ -45,7 +45,7 @@
                     </div>
                     {% else %}
                     <table class="table table-condensed table-striped" width="100%">
-                      {% for cid, monitor in data['monitors'].iteritems() %}
+                      {% for cid, monitor in data['monitors']|dictsort(true, 'value') %}
                       {% if "false" in monitor['status'] %}
                       <tr class="danger">
                         <td><i class="fa fa-exclamation-triangle"></i></td>
@@ -125,7 +125,7 @@
               <td><h5>Status</h5></td>
               <td><h5>Actions</h5></td>
             </tr>
-            {% for cid, monitor in data['monitors'].iteritems() %}
+            {% for cid, monitor in data['monitors']|dictsort(true, 'value') %}
             {%- if "true" in monitor['status'] -%}
             <tr class="success">
               <td><i class="fa fa-check-circle"></i></td>
@@ -178,7 +178,7 @@
               <td><h5>Name</h5></td>
               <td><h5>Actions</h5></td>
             </tr>
-            {% for rid, reaction in data['reactions'].iteritems() %}
+            {% for rid, reaction in data['reactions']|dictsort(true, 'value') %}
             <tr class="default">
               <td><i class="fa fa-gear"></i></td>
               <td>{{ reaction['name'] }}</td>
