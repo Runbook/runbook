@@ -7,15 +7,12 @@
 from wtforms import SelectMultipleField
 from wtforms.validators import DataRequired
 from timer import TimerCheckForm
-
+from web import app
 
 class DatacenterCheckForm(TimerCheckForm):
 
     ''' Class that creates an datacenter form for the dashboard '''
-    dc_choices = [
-        ("dc1queue", 'DigitalOcean - nyc2'),
-        ("dc2queue", 'DigitalOcean - sfo1')
-    ]
+    dc_choices = app.config['DATACENTERS']['choices']
 
     datacenter = SelectMultipleField(
         "Datacenter",
