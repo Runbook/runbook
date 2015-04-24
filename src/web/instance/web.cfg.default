@@ -132,3 +132,9 @@ SUBSCRIPTIONS = {
         'interval': 'month'
     }
 }
+DATACENTERS = {
+    'choices' : {
+        ("dc1queue", 'DigitalOcean - nyc2'),
+        ("dc2queue", 'DigitalOcean - sfo1')
+    }
+}
