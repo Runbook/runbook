@@ -277,6 +277,11 @@ def reactions_page():
             tmpl = 'member/mod-subscription.html'
         else:
             pass
+        data['reactions'] = user.getReactions(g.rdb_conn)
+        if len(data['reactions']) < 1:
+            data['reacts'] = False
+        else:
+            data['reacts'] = True
         page = render_template(tmpl, data=data)
         return page
     else:
