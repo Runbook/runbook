@@ -86,7 +86,7 @@ $ docker-compose rm
 
 ## Accessing the Web Application
 
-To access the web application you can simply enter the IP of the vm into your browser targeting port 8000 - i.e., [http://192.168.33.10:8000](http://192.168.33.10:8000)
+To access the web application you can simply enter the IP of the vm into your browser targeting port 8000 - i.e., [http://192.168.33.10](http://192.168.33.10)
 
 You can find the vm's IP with:
 
