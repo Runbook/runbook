@@ -48,7 +48,7 @@ docker-compose 1.2.0
 
 Now that Docker Machine and Compose are installed we can use Compose to launch, sync, and manage the containers. All Compose commands must be run from the same directory that the *docker-compose.yml* file is in. In our case this is the main (or root) directory, `cloudroutes-service`.
 
-### Starting up the environment with Fig
+### Starting up the environment with Compose
 
 ```sh
 $ docker-compose build
@@ -57,7 +57,7 @@ $ docker-compose up -d
 
 During boot the `bridge` container will run `src/bridge/mgmtscripts/create_db.py` which will connect to RethinkDB and create the required database structure.
 
-### Stopping Fig
+### Stopping Docker Compose
 
 Run the following command to stop all servies:
 
@@ -69,7 +69,7 @@ Then run `docker-compose up -d` to start back up.
 
 ### Reading logs/output
 
-To review logs or container output you can use the `logs` option with fig.
+To review logs or container output you can use the `logs` option with compose.
 
 ```sh
 $ docker-compose logs
