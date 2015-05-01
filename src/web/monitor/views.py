@@ -303,6 +303,24 @@ def monitors_page():
             tmpl = 'member/mod-subscription.html'
         else:
             pass
+
+        data['monitors'] = user.getMonitors(g.rdb_conn)
+        data['reactions'] = user.getReactions(g.rdb_conn)
+        # If there are no monitors print a welcome message
+        if len(data['monitors']) < 1 and len(data['reactions']) < 1:
+            data['welcome'] = True
+        else:
+            data['welcome'] = False
+
+        if len(data['monitors']) < 1:
+            data['mons'] = False
+        else:
+            data['mons'] = True
+
+        if len(data['reactions']) < 1:
+            data['reacts'] = False
+        else:
+            data['reacts'] = True
         page = render_template(tmpl, data=data)
         return page
     else:
