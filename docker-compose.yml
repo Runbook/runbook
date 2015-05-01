@@ -1,16 +1,16 @@
 db:
-  image: dockerfile/rethinkdb
+  image: rethinkdb:latest
   ports:
     - "8080:8080"
 redis:
-  image: dockerfile/redis
+  image: redis:latest
 web:
   build: src/web/
   command: bash /code/bootstrap.sh
   volumes:
     - src/web:code:ro
   ports:
-    - "8000:8000"
+    - "80:8000"
   links:
     - db
     - bridge
