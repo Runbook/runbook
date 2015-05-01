@@ -5,13 +5,14 @@
 
 
 # Pull base image
-FROM dockerfile/ubuntu
+FROM ubuntu:latest
 
 # Update
 RUN apt-get update
 RUN apt-get upgrade -y
 
 # Install python
+RUN apt-get install -y build-essential libssl-dev libffi-dev python-dev
 RUN apt-get install -y python python-dev python-pip python-virtualenv wget unzip
 RUN rm -rf /var/lib/apt/lists/*
 
