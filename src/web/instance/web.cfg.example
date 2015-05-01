@@ -135,8 +135,8 @@ SUBSCRIPTIONS = {
 }
 DATACENTERS = {
     'choices' : {
-        ("dc1queue", 'DigitalOcean - nyc2'),
-        ("dc2queue", 'DigitalOcean - sfo1')
+        ("dc1queue", 'DevZone 1'),
+        ("dc2queue", 'DevZone 2'),
     }
 }
 

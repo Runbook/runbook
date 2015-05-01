@@ -1,0 +1,51 @@
+      {% if data['mons'] %}
+       <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            Monitors
+          </div>
+          </div>
+          <table width="100%" border="0" class="table table-condensed">
+            <tr class="active">
+              <td></td>
+              <td><h5>Name</h5></td>
+              <td><h5>Status</h5></td>
+              <td><h5>Actions</h5></td>
+            </tr>
+            {% for cid, monitor in data['monitors']|dictsort(true, 'value') %}
+            {%- if "true" in monitor['status'] -%}
+            <tr class="success">
+              <td><i class="fa fa-check-circle"></i></td>
+            {%- elif "false" in monitor['status'] -%}
+            <tr class="danger">
+              <td><i class="fa fa-exclamation-triangle"></i></td>
+            {%- else -%}
+            <tr class="warning">
+              <td><i class="fa fa-circle"></i></td>
+            {%- endif -%}
+              <td>{{ monitor['name'] }}</td>
+              <td>{{ monitor['status']|capitalize }}</td>
+              <td>
+{%- if "true" in monitor['status'] or "monitored" in monitor['status'] %}
+<a href="/dashboard/action-checks/{{ cid }}/false" class="btn btn-danger btn-xs" role="button"><i class="fa fa-exclamation-triangle"></i> Mark False</a>
+{%- endif %}
+{%- if "false" in monitor['status'] or "monitored" in monitor['status'] %}
+<a href="/dashboard/action-checks/{{ cid }}/true" class="btn btn-success btn-xs" role="button"><i class="fa fa-check-circle"></i> Mark True</a>
+{%- endif %}
+<a href="/dashboard/delete-checks/{{ cid }}" class="btn btn-danger btn-xs btn-delete-monitor" data="{{monitor['name']}}" role="button"><i class="fa fa-trash-o"></i> Delete</a>
+<a href="/dashboard/edit-monitors/{{ monitor['ctype'] }}/{{ cid }}" class="btn btn-primary btn-xs" role="button"><i class="fa fa-edit"></i> Edit</a>
+
+</td>
+            </tr>
+              {% for rid in monitor['data']['reactions'] %}
+              <tr class="active">
+                <td></td>
+                <td><i class="fa fa-gear"></i> {{ data['reactions'][rid]['name'] }}</td>
+                <td></td>
+                <td></td>
+              </tr>
+              {% endfor %}
+            {% endfor %}
+          </table>
+        </div>
+        {% endif %}
