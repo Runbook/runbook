@@ -1,0 +1,26 @@
+        {% if data['reacts'] %}
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            Reactions
+          </div>
+          </div>
+          <table width="100%" border="0" class="table table-condensed">
+            <tr class="active">
+              <td></td>
+              <td><h5>Name</h5></td>
+              <td><h5>Actions</h5></td>
+            </tr>
+            {% for rid, reaction in data['reactions']|dictsort(true, 'value') %}
+            <tr class="default">
+              <td><i class="fa fa-gear"></i></td>
+              <td>{{ reaction['name'] }}</td>
+              <td>
+<a href="/dashboard/delete-reaction/{{ rid }}" class="btn btn-danger btn-xs btn-delete-reaction" data="{{reaction['name']}}" role="button"><i class="fa fa-trash-o"></i> Delete</a>
+<a href="/dashboard/edit-reactions/{{ reaction['rtype'] }}/{{ rid }}" class="btn btn-primary btn-xs" role="button"><i class="fa fa-edit"></i> Edit</a>
+</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        {% endif %}
