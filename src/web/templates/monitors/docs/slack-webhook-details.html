@@ -1,0 +1,39 @@
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <div class="panel-title">
+          <i class="fa fa-eye-slash fa-1x"></i> Slack: Webhook Integration <a data-toggle="collapse" class="pull-right" data-parent="#accordion" href="#DetailsCollapse"><i class="fa fa-expand"></i></a>
+          </div>
+          </div>
+          <div id="DetailsCollapse" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <h3>Overview</h3>
+            <p>Users of Slack can define unique <a href="https://api.slack.com/outgoing-webhooks" target="_blank">Webhooks</a> or <a href="https://api.slack.com/slash-commands" target="_blank">Slack Commands</a> that call outside services such as Runbook. This monitor will create a unique webhook endpoint that you can configure Slack to call when triggered.</p>
+
+            <h3>Monitor Details</h3>
+
+            <p>Upon creation the below URL will be unique for the created monitor.</p>
+
+            {% if data['monitor'] %}
+            {% set apiid = data['monitor']['cid'] %}
+            {% set apikey = data['monitor']['url'] %}
+            {% else %}
+            {% set apiid = "example-api-id" %}
+            {% set apikey = "example-api-key" %}
+            {% endif %}
+
+            <p>
+            <b>Unique URL:</b>
+            </p>
+             <pre>https://dash.runbook.io/api/slack-webhook/{{ apiid }}/{{ apikey }}</pre>
+
+            {% if data['monitor'] %}
+            <p class="text-primary">The details above and below are unique to this monitor</p>
+            {% else %}
+            <p class="text-warning">When you create or edit a monitor these details will show the monitors unique information</p>
+            {% endif %}
+
+            <p>Within Slack you can specify whether the monitor is True or False by appending the string "True" or "False" to the trigger in chat. If neither is specified the monitor will default to True.</p>
+
+          </div>
+          </div>
+        </div>
