@@ -4,7 +4,7 @@
 
 
 # Pull base image
-FROM dockerfile/ubuntu
+FROM ubuntu:latest
 
 # Update
 RUN apt-get update
