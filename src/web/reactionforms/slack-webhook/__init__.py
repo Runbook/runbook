@@ -1,4 +1,4 @@
-"""Reactions form class for email notifications."""
+"""Reactions form class for slack notifications."""
 
 from wtforms import SelectField, TextAreaField, TextField
 from wtforms.validators import DataRequired, URL

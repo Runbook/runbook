@@ -1,4 +1,4 @@
-"""Twilio SMS Notification Reaction"""
+"""Slack Notification Reaction"""
 
 import time
 import requests
