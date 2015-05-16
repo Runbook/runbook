@@ -35,6 +35,7 @@ def webCheck(request, monitor, urldata, rdb):
 
     # Verify and then send web check Monitor
     monitor.get(urldata['cid'], rdb)
+    rdata['username'] = "Runbook"
     # Verify check_key and api_type matches monitor for cid
     if urldata['check_key'] == monitor.url and \
             urldata['atype'] == monitor.ctype and \
