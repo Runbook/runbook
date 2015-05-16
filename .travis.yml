@@ -30,3 +30,7 @@ script:
 
 after_success:
   coveralls
+
+notifications:
+  slack:
+    secure: gTj0AYyI7emZp/hAVyyjzTbqVpwo+PgMiZRCPokpBajXAKmarbt+L/9zD+zhI2u+Kv1/ho8U/9FFu4ZnpTpxG82Ndh3wCJKYFaPQo9M6EAaBatKet3IlC3MICjRIDZRlrt4xfz2pbSq09XNqBa/O5MOIf7SKvP8z/9NjXZdbzk8=
