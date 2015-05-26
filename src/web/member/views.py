@@ -132,7 +132,7 @@ def modsub_page():
             "Authorization": app.config['ASSEMBLY_PRIVATE_KEY']
         }
         from generalforms import subscribe
-        if data['acttype'] == "Lite":
+        if data['acttype'] != "Pro":
             # Upgrade Users
             if request.method == "POST" and \
                     "stripeToken" in request.form and "plan" in request.form:
