@@ -15,16 +15,23 @@ We use [rethinkDB](http://www.rethinkdb.com/) for persistence. New to rethink? [
 - IF driver < 1.13 THEN use server < 1.13
 - IF driver >= 1.13 THEN use server > 1.13
 
+Need to check your version?
+
+```sh
+$ rethinkdb --version
+rethinkdb 1.16.2-1 (CLANG 6.0 (clang-600.0.56))
+```
+
 Once installed, start the server in a new terminal window:
 
 ```sh
 $ rethinkdb
 ```
 
-Then with the server running, run the following in a new window to set the authentication key (which comes from "/src/web/instance/web.cfg.default"):
+Then with the server running, run the following script to set the authentication key:
 
 ```sh
-$ rethinkdb admin set auth cloudroutes
+$ python src/bridge/mgmtscripts/set_rethink_auth_key.py
 ```
 
 ## Redis Setup
@@ -53,7 +60,7 @@ There is a `create_db.py` script for initializing RethinkDB. Create the database
 
 ```sh
 $ python src/bridge/mgmtscripts/create_db.py src/bridge/config/config.yml.default
-$ python src/bridge/mgmtscripts/add_users.py src/bridge/config/config.yml.default
+$ python src/bridge/mgmtscripts/sampledata/add_users.py src/bridge/config/config.yml.default
 ```
 
 ## Run all processes
@@ -65,6 +72,8 @@ $ foreman start
 Now you can launch your browser and point it to http://localhost:8000/signup. Signup, create a monitor and a reaction, and then watch them execute.
 
 ## Run Tests
+
+Rename */src/web/instance/web.cfg.default* to */src/web/instance/web.cfg*. Now run the tests!
 
 Without coverage:
 
