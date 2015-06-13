@@ -127,10 +127,24 @@ def modsub_page():
         tmpl = 'member/mod-subscription.html'
         data['js_bottom'].append('forms/subscribe.js')
         form = []
-        headers = {
-            "content-type": "application/json",
-            "Authorization": app.config['ASSEMBLY_PRIVATE_KEY']
-        }
+
+        # Stripe vs ASM stuff
+        if user.payments == "ASM":
+            headers = {
+                "content-type": "application/json",
+                "Authorization": app.config['ASSEMBLY_PRIVATE_KEY']
+            }
+            paymenturl = app.config['ASSEMBLY_PAYMENTS_URL']
+        else:
+            from base64 import b64encode
+            api_key = b64encode(app.config['STRIPE_PRIVATE_KEY']).decode("ascii")
+            headers = {
+                "content-type": "application/json",
+                "Authorization": "Bearer " + api_key,
+            }
+            paymenturl = app.config['STRIPE_PAYMENTS_URL']
+
+            
         from generalforms import subscribe
         if data['acttype'] == "Lite":
             # Upgrade Users
@@ -148,19 +162,19 @@ def modsub_page():
                         'plan': plan
                     }
                     json_payload = json.dumps(payload)
-                    url = app.config['ASSEMBLY_PAYMENTS_URL'] + "/customers"
+                    url = paymenturl + "/customers"
                     print ("Making request to %s") % url
                     try:
-                        # Send Request to Assembly to create user and subscribe
+                        # Send Request to Payment system to create user and subscribe
                         # them to desired plan
                         result = requests.post(
                             url=url, headers=headers,
                             data=json_payload, verify=True)
                     except:
-                        print("Critical Error making request to ASM Payments")
+                        print("Critical Error making request to Payments")
                         flash('There was an error processing \
                               your card details.', 'danger')
-                    print("Got {0} status code from Assembly".format(
+                    print("Got {0} status code from Payments".format(
                         result.status_code))
                     if result.status_code >= 200 and result.status_code <= 299:
                         rdata = json.loads(result.text)
@@ -197,8 +211,7 @@ def modsub_page():
                     # Set subscription quantity to desired monitor count
                     payload = {'quantity': add_packs}
                     json_payload = json.dumps(payload)
-                    url = app.config[
-                        'ASSEMBLY_PAYMENTS_URL'] + "/customers/" + user.stripeid
+                    url = paymenturl + "/customers" + user.stripeid
                     print("Making request to %s") % url
                     try:
                         # Get Subscription ID

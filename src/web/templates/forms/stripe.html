@@ -6,12 +6,13 @@
 <div class="input-group">
   <select class="plan-select" id="plan" name="plan">
     {% if data['acttype'] == 'Promotional' %}
-    <option value="cloudroutes_cr_yearly_2" selected>Annual Subscription - $9/monitor</option>
-    <option value="cloudroutes_cr_monthly">Monthly Subscription - $1/monitor</option>
-    {% else %}
-    <option value="ec663ba0-c8a9-446a-95b3-0ddbe34d1e85_runbook_4999_yearly" selected>Annual Subscription</option>
-    <option value="ec663ba0-c8a9-446a-95b3-0ddbe34d1e85_runbook_499_monthly">Monthly Subscription</option>
+    <option value="pro_orig_yearly">Annual Legacy Subscription - $9/monitor</option>
+    <option value="pro_orig_monthly">Monthly Legacy Subscription - $1/monitor</option>
     {% endif %}
+    <option value="pro_plus_yearly" selected>Annual ProPlus Subscription</option>
+    <option value="pro_plus_monthly">Monthly ProPlus Subscription</option>
+    <option value="pro_yearly">Annual Pro Subscription</option>
+    <option value="pro_monthly">Monthly Pro Subscription</option>
   </select>
   <button class="btn btn-primary btn-sm" id="customButton">Upgrade</button>
 </div>
@@ -31,7 +32,7 @@
       StripeCheckout.open({
         key:         '{{ data['stripe_pubkey'] }}',
         name:        'Runbook',
-        description: 'Upgrade to Pro',
+        description: 'Unlock more features',
         panelLabel:  'Upgrade',
         token:       token
       });
