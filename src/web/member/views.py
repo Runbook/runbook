@@ -144,7 +144,7 @@ def modsub_page():
             paymenturl = app.config['STRIPE_PAYMENTS_URL']
 
         from generalforms import subscribe
-        if data['acttype'] == "Lite":
+        if data['acttype'] != "Pro":
             # Upgrade Users
             if request.method == "POST" and \
                     "stripeToken" in request.form and "plan" in request.form:
