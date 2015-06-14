@@ -27,7 +27,7 @@ class User(object):
         self.stripeid = None
         self.subplans = 2
         self.subscription = 'Free'
-        self.payments = 'ASM'
+        self.payments = 'Stripe'
         self.subscribed_to_newsletter = False
         self.confirmed = False
         self.confirmed_on = None

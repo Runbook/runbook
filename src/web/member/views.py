@@ -139,12 +139,10 @@ def modsub_page():
             from base64 import b64encode
             api_key = b64encode(app.config['STRIPE_PRIVATE_KEY']).decode("ascii")
             headers = {
-                "content-type": "application/json",
-                "Authorization": "Bearer " + api_key,
+                "Authorization": "Basic " + api_key,
             }
             paymenturl = app.config['STRIPE_PAYMENTS_URL']
 
-            
         from generalforms import subscribe
         if data['acttype'] == "Lite":
             # Upgrade Users
@@ -158,7 +156,7 @@ def modsub_page():
                     payload = {
                         'email': user.email,
                         'quantity': monitor.count(user.uid, g.rdb_conn),
-                        'card': stripeToken,
+                        'source': stripeToken,
                         'plan': plan
                     }
                     json_payload = json.dumps(payload)
@@ -169,7 +167,7 @@ def modsub_page():
                         # them to desired plan
                         result = requests.post(
                             url=url, headers=headers,
-                            data=json_payload, verify=True)
+                            params=payload, verify=True)
                     except:
                         print("Critical Error making request to Payments")
                         flash('There was an error processing \
@@ -182,7 +180,10 @@ def modsub_page():
                         user.stripe = stripeToken
                         user.subplans = payload['quantity']
                         user.subscription = payload['plan']
-                        user.acttype = "pro"
+                        if "pro_plus" in plan:
+                            user.acttype = "proplus"
+                        else:
+                            user.acttype = "pro"
                         print("Setting UID %s Subscription to: %s") % (
                             user.uid, user.acttype)
                         subres = user.setSubscription(g.rdb_conn)
@@ -202,8 +203,10 @@ def modsub_page():
                         else:
                             flash('Subscription not successfully created.',
                                   'danger')
+                    else:
+                        flash('Subscription not created got status code: %d' % result.status_code, 'danger')
         # Increase subscription
-        if data['acttype'] != "Lite":
+        if data['upgraded']:
             form = subscribe.AddPackForm(request.form)
             if request.method == "POST" and "stripeToken" not in request.form:
                 if form.validate():

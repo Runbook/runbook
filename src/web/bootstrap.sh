@@ -14,4 +14,4 @@ sed -i "s/localhost/$DB_PORT_28015_TCP_ADDR/" /config/web.cfg
 
 echo "[BOOTSTRAP] Starting web.py"
 echo "-------------------------------------------------"
-python /code/web.py /config/web.cfg
+python /code/web.py /config/web.cfg 
