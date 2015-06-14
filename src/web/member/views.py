@@ -144,7 +144,7 @@ def modsub_page():
             paymenturl = app.config['STRIPE_PAYMENTS_URL']
 
         from generalforms import subscribe
-        if data['acttype'] != "Pro":
+        if data['upgraded'] is False:
             # Upgrade Users
             if request.method == "POST" and \
                     "stripeToken" in request.form and "plan" in request.form:
@@ -214,7 +214,7 @@ def modsub_page():
                     # Set subscription quantity to desired monitor count
                     payload = {'quantity': add_packs}
                     json_payload = json.dumps(payload)
-                    url = paymenturl + "/customers" + user.stripeid
+                    url = paymenturl + "/customers/" + user.stripeid
                     print("Making request to %s") % url
                     try:
                         # Get Subscription ID
@@ -227,17 +227,22 @@ def modsub_page():
                             print("Making request to %s") % url
                             # Set Quantity
                             try:
-                                result = requests.put(
-                                    url=url, headers=headers,
-                                    data=json_payload, verify=True)
+                                if user.payments == "ASM":
+                                    result = requests.put(
+                                        url=url, headers=headers,
+                                        data=json_payload, verify=True)
+                                else:
+                                    result = requests.post(
+                                        url=url, headers=headers,
+                                        params=payload, verify=True)
                             except:
                                 print("Critical Error making \
                                       request to ASM Payments")
                                 flash('An error occured while \
-                                      processing the form.', 'danger')
+                                      requesting update to %s.' % url, 'danger')
                         else:
                             flash('An error occured while \
-                                  processing the form.', 'danger')
+                                  pulling subscription details - %d.' % result.status_code, 'danger')
                     except:
                         print("Critical Error making request to ASM Payments")
                         flash('An error occured \

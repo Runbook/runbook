@@ -14,9 +14,9 @@ ENVNAME = "[Alpha]"
 STATHAT_EZ_KEY = 'update_me!'
 STATHAT_USE_GEVENT = True
 STATHAT_GEVENT_POOL_SIZE = 10
-STRIPE_PUBKEY = "update_me!"
+STRIPE_PUBKEY = "pk_test_t07hfI3GqDaZAqsiNw1wo3AV"
 STRIPE_PRIVATE_KEY = "update_me!"
-STRIPE_PAYMENTS_URL = "update_me!"
+STRIPE_PAYMENTS_URL = "https://api.stripe.com/v1"
 ASSEMBLY_PRIVATE_KEY = "update_me!"
 ASSEMBLY_PAYMENTS_URL = "update_me!"
 STATIC_PAGES = {
@@ -103,7 +103,7 @@ PACKAGES = {
             ('30mincheck', 'Every 30 Minutes'),
             ('5mincheck', 'Every 5 Minutes'),
             ('2mincheck', 'Every 2 Minutes'),
-            ('30seccheck', 'Every 30 Seconds')
+            ('30seccheck', 'Every 30 Seconds'),
             ('5seccheck', 'Every 5 Seconds')
         },
         'reaction_multiplier' : 2,
@@ -118,7 +118,8 @@ PACKAGES = {
             ('30mincheck', 'Every 30 Minutes'),
             ('5mincheck', 'Every 5 Minutes'),
             ('2mincheck', 'Every 2 Minutes'),
-            ('30seccheck', 'Every 30 Seconds')
+            ('30seccheck', 'Every 30 Seconds'),
+            ('5seccheck', 'Every 5 Seconds')
         },
         'reaction_multiplier' : 2,
         'data_retention' : 604800,
@@ -140,6 +141,30 @@ SUBSCRIPTIONS = {
     'ec663ba0-c8a9-446a-95b3-0ddbe34d1e85_runbook_4999_yearly' : {
         'cost': 49.99,
         'interval': 'year'
+    },
+    'pro_yearly' : {
+        'cost' : 49.99,
+        'interval': 'year'
+    },
+    'pro_monthly' : {
+        'cost' : 4.99,
+        'interval': 'month'
+    },
+    'pro_plus_yearly' : {
+        'cost' : 89.99,
+        'interval': 'year'
+    },
+    'pro_plus_monthly' : {
+        'cost' : 8.99,
+        'interval': 'month'
+    },
+    'pro_orig_yearly' : {
+        'cost' : 9.00,
+        'interval': 'year'
+    },
+    'pro_orig_monthly' : {
+        'cost' : 1.00,
+        'interval': 'month'
     },
     'cloudroutes_cr_yearly_2' : {
         'cost': 9.00,
