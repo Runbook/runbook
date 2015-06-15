@@ -4,10 +4,10 @@
 
 
 # Pull base image
-FROM ubuntu:latest
+FROM ubuntu:14.04
 
 # Update
-RUN apt-get update
+RUN apt-get update --fix-missing
 RUN apt-get upgrade -y
 
 # Install python

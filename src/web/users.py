@@ -27,6 +27,7 @@ class User(object):
         self.stripeid = None
         self.subplans = 2
         self.subscription = 'Free'
+        self.payments = 'Stripe'
         self.subscribed_to_newsletter = False
         self.confirmed = False
         self.confirmed_on = None
@@ -56,6 +57,7 @@ class User(object):
         jsondata['stripe'] = self.stripe
         jsondata['stripeid'] = self.stripeid
         jsondata['subplans'] = self.subplans
+        jsondata['payments'] = self.payments
         jsondata['subscription'] = self.subscription
         jsondata['subscribed_to_newsletter'] = self.subscribed_to_newsletter
         jsondata['creation_time'] = time.time()
@@ -117,6 +119,7 @@ class User(object):
             self.stripeid = results['stripeid']
             self.stripe = results['stripe']
             self.subplans = results['subplans']
+            self.payments = results['payments']
             self.subscription = results['subscription']
             self.creation_time = results['creation_time']
             self.confirmed = results['confirmed']
