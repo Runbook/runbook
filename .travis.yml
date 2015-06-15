@@ -20,7 +20,7 @@ install:
 
 before_script:
   - rethinkdb &
-  - cp src/web/instance/web.cfg.example src/web/instance/web.cfg
+  - cp src/web/instance/web.cfg.default src/web/instance/web.cfg
   - python src/bridge/mgmtscripts/create_db.py src/bridge/config/config.yml.default --travis
   - python src/web/web.py &
 
