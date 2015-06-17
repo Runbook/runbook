@@ -293,19 +293,23 @@ def userpref_page():
             data['url'] = '/dashboard/mod-subscription'
             tmpl = 'member/mod-subscription.html'
         else:
-
             # Start processing the change password form
             form = ChangePassForm(request.form)
             if request.method == 'POST':
                 if form.validate():
-                    result = user.setPass(form.password.data, g.rdb_conn)
+                    result = user.checkPass(form.old_password.data, g.rdb_conn)
                     if result:
-                        print("/dashboard/user-preferences - Password changed")
-                        flash('Password successfully changed.', 'success')
+                        update = user.setPass(form.password.data, g.rdb_conn)
+                        if update:
+                            print("/dashboard/user-preferences - Password changed")
+                            flash('Password successfully changed.', 'success')
+                        else:
+                            print("/dashboard/user-preferences - \
+                                  Password change failed")
+                            flash('Password change was unsuccessful.', 'danger')
                     else:
-                        print("/dashboard/user-preferences - \
-                              Password change failed")
-                        flash('Password change was unsuccessful.', 'danger')
+                        print("/login - User change password error: wrong old password")
+                        flash('Old password does not seem valid.', 'danger')
             data['url'] = '/dashboard/user-preferences'
             tmpl = 'member/user-preferences.html'
         page = render_template(tmpl, data=data, form=form)
