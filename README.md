@@ -77,7 +77,7 @@ Runbook is a very fast paced application, we are making major code changes frequ
 
 To synchronize with the upstream repository you must first define it as an upstream source.
 
-    $ git remote add upstream git@github.com:asm-products/cloudroutes-service.git
+    $ git remote add upstream https://github.com/asm-products/cloudroutes-service.git
 
 ##### Fetching and Merging updates
 

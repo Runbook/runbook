@@ -127,12 +127,24 @@ def modsub_page():
         tmpl = 'member/mod-subscription.html'
         data['js_bottom'].append('forms/subscribe.js')
         form = []
-        headers = {
-            "content-type": "application/json",
-            "Authorization": app.config['ASSEMBLY_PRIVATE_KEY']
-        }
+
+        # Stripe vs ASM stuff
+        if user.payments == "ASM":
+            headers = {
+                "content-type": "application/json",
+                "Authorization": app.config['ASSEMBLY_PRIVATE_KEY']
+            }
+            paymenturl = app.config['ASSEMBLY_PAYMENTS_URL']
+        else:
+            from base64 import b64encode
+            api_key = b64encode(app.config['STRIPE_PRIVATE_KEY']).decode("ascii")
+            headers = {
+                "Authorization": "Basic " + api_key,
+            }
+            paymenturl = app.config['STRIPE_PAYMENTS_URL']
+
         from generalforms import subscribe
-        if data['acttype'] == "Lite":
+        if data['upgraded'] is False:
             # Upgrade Users
             if request.method == "POST" and \
                     "stripeToken" in request.form and "plan" in request.form:
@@ -144,23 +156,23 @@ def modsub_page():
                     payload = {
                         'email': user.email,
                         'quantity': monitor.count(user.uid, g.rdb_conn),
-                        'card': stripeToken,
+                        'source': stripeToken,
                         'plan': plan
                     }
                     json_payload = json.dumps(payload)
-                    url = app.config['ASSEMBLY_PAYMENTS_URL'] + "/customers"
+                    url = paymenturl + "/customers"
                     print ("Making request to %s") % url
                     try:
-                        # Send Request to Assembly to create user and subscribe
+                        # Send Request to Payment system to create user and subscribe
                         # them to desired plan
                         result = requests.post(
                             url=url, headers=headers,
-                            data=json_payload, verify=True)
+                            params=payload, verify=True)
                     except:
-                        print("Critical Error making request to ASM Payments")
+                        print("Critical Error making request to Payments")
                         flash('There was an error processing \
                               your card details.', 'danger')
-                    print("Got {0} status code from Assembly".format(
+                    print("Got {0} status code from Payments".format(
                         result.status_code))
                     if result.status_code >= 200 and result.status_code <= 299:
                         rdata = json.loads(result.text)
@@ -168,7 +180,10 @@ def modsub_page():
                         user.stripe = stripeToken
                         user.subplans = payload['quantity']
                         user.subscription = payload['plan']
-                        user.acttype = "pro"
+                        if "pro_plus" in plan:
+                            user.acttype = "proplus"
+                        else:
+                            user.acttype = "pro"
                         print("Setting UID %s Subscription to: %s") % (
                             user.uid, user.acttype)
                         subres = user.setSubscription(g.rdb_conn)
@@ -188,8 +203,10 @@ def modsub_page():
                         else:
                             flash('Subscription not successfully created.',
                                   'danger')
+                    else:
+                        flash('Subscription not created got status code: %d' % result.status_code, 'danger')
         # Increase subscription
-        if data['acttype'] != "Lite":
+        if data['upgraded']:
             form = subscribe.AddPackForm(request.form)
             if request.method == "POST" and "stripeToken" not in request.form:
                 if form.validate():
@@ -197,8 +214,7 @@ def modsub_page():
                     # Set subscription quantity to desired monitor count
                     payload = {'quantity': add_packs}
                     json_payload = json.dumps(payload)
-                    url = app.config[
-                        'ASSEMBLY_PAYMENTS_URL'] + "/customers/" + user.stripeid
+                    url = paymenturl + "/customers/" + user.stripeid
                     print("Making request to %s") % url
                     try:
                         # Get Subscription ID
@@ -211,17 +227,22 @@ def modsub_page():
                             print("Making request to %s") % url
                             # Set Quantity
                             try:
-                                result = requests.put(
-                                    url=url, headers=headers,
-                                    data=json_payload, verify=True)
+                                if user.payments == "ASM":
+                                    result = requests.put(
+                                        url=url, headers=headers,
+                                        data=json_payload, verify=True)
+                                else:
+                                    result = requests.post(
+                                        url=url, headers=headers,
+                                        params=payload, verify=True)
                             except:
                                 print("Critical Error making \
                                       request to ASM Payments")
                                 flash('An error occured while \
-                                      processing the form.', 'danger')
+                                      requesting update to %s.' % url, 'danger')
                         else:
                             flash('An error occured while \
-                                  processing the form.', 'danger')
+                                  pulling subscription details - %d.' % result.status_code, 'danger')
                     except:
                         print("Critical Error making request to ASM Payments")
                         flash('An error occured \

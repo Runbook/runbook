@@ -8,7 +8,7 @@
     <!-- content -->
     <div class="col-md-8">
       <div class="page-header">
-        <h1><i class="fa fa-sitemap fa-1x"></i> Status</h1>
+        <h1><i class="fa fa-area-chart fa-1x"></i> Status</h1>
       </div>
 
         {% if data['welcome'] %}
@@ -36,12 +36,13 @@
               <div class="panel panel-primary">
                 <div class="panel-heading">
                 <div class="panel-title">
-                  Overview
+                  Status of Runbooks
                 </div>
                 </div>
                 <div class="panel-body">
                   <div id="chart" align="center"></div>
                 </div>
+                  <!--
                   <table class="table table-condensed table-striped" width="100%">
                     <tr>
                       <td>False</td><td>{{ data['monstats']['false'] }}</td>
@@ -53,6 +54,7 @@
                       <td>Other</td><td>{{ data['monstats']['unknown'] }}</td>
                     </tr>
                   </table>
+                  -->
               </div>
               {% if data['upgraded'] %}
               {% include 'forms/addpacks.html' %}
