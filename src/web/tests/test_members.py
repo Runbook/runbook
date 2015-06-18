@@ -29,6 +29,12 @@ class MemberTests(BaseTestCase):
             self.assertTrue(response.status_code == 200)
             self.assertIn('User Preferences', response.data)
 
+    def test_dashboard_route_not_active(self):
+        # Ensure that /dashboard requires user login.
+        response = self.client.get('/dashboard', follow_redirects=True)
+        self.assertIn('Login', response.data)
+        self.assertIn('Please Login.', response.data)
+
     def test_dashboard_subscription_route(self):
         # Ensure registered user can access dashboard/mod-subscription route.
         with self.client:
@@ -79,11 +85,35 @@ class MemberTests(BaseTestCase):
             )
             response = self.client.post(
                 '/dashboard/user-preferences',
-                data=dict(password="tester678", confirm="tester678"),
+                data=dict(
+                    old_password="password456",
+                    password="tester678",
+                    confirm="tester678"
+                ),
                 follow_redirects=True
             )
             self.assertTrue(response.status_code == 200)
             self.assertIn('Password successfully changed.', response.data)
+
+    def test_password_change_unsuccessful(self):
+        # Ensure user cannot update password if wrong old password is used.
+        with self.client:
+            self.client.post(
+                '/login',
+                data=dict(email="test@tester.com", password="password456"),
+                follow_redirects=True
+            )
+            response = self.client.post(
+                '/dashboard/user-preferences',
+                data=dict(
+                    old_password="wrong",
+                    password="tester678",
+                    confirm="tester678"
+                ),
+                follow_redirects=True
+            )
+            self.assertTrue(response.status_code == 200)
+            self.assertIn('Old password does not seem valid.', response.data)
 
 
 if __name__ == '__main__':
