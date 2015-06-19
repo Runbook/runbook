@@ -4,7 +4,7 @@
         {% if data['url'] == '/dashboard' %}
         <li class="active"><a href="/dashboard"><i class="fa fa-area-chart fa-lg"></i>&nbsp;&nbsp;Status</a></li>
         {% else %}
-        <li><a href="/dashboard"><i class="fa fa-sitemap fa-lg"></i>&nbsp;&nbsp;Status</a></li>
+        <li><a href="/dashboard"><i class="fa fa-area-chart fa-lg"></i>&nbsp;&nbsp;Status</a></li>
         {% endif %}
         {% if "monitors" in data['url'] %}<li class="active">{%- else -%}<li>{%- endif -%}
         <a href="/dashboard/monitors"><i class="fa fa-book fa-lg"></i>&nbsp;&nbsp;Runbooks</a></li>

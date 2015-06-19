@@ -4,9 +4,27 @@
 # HTTP Keyword Health Check - Forms Class
 ######################################################################
 
-from wtforms import TextField, SelectField
+from wtforms import TextField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, URL
 from ..datacenter import DatacenterCheckForm
+
+class HeaderList(object):
+    """Custom wtform validator for headers."""
+
+    def __call__(self, form, field):
+        try:
+            for header in str.splitlines(str(field.data)):
+                header = header.strip()
+                # Ignore empty lines
+                if not header:
+                    continue
+                key, value = header.split(':')
+                key = key.strip()
+                value = value.strip()
+                assert key
+                assert value
+        except Exception:
+            raise ValidationError('Invalid headers. Use key:value format.')
 
 
 class CheckForm(DatacenterCheckForm):
@@ -36,6 +54,9 @@ class CheckForm(DatacenterCheckForm):
         "Present",
         choices=present_choices,
         validators=[DataRequired(message='Present is a required field')])
+    extra_headers = TextAreaField(
+        'extra_headers',
+        validators=[HeaderList()])
     regex = SelectField(
         "Regex",
         choices=regex_choices,

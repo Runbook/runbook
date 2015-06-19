@@ -20,12 +20,32 @@ import cStringIO
 def get_max_size():
     return 2*1024*1024
 
+# TODO: There should be a common lib where these utility functions can be
+# stored. For now, we duplicate code :-(
+def ParseHeaders(headers_str):
+    headers = {}
+    for header in str.splitlines(str(headers_str)):
+        header = header.strip()
+        # Ignore empty lines
+        if not header:
+            continue
+        key, value = header.split(':')
+        key = key.strip()
+        value = value.strip()
+        assert key
+        assert value
+        headers[key] = value
+    return headers
+
 
 def check(**kwargs):
     """ Perform a http get request and validate the return code """
     jdata = kwargs['jdata']
     logger = kwargs['logger']
-    headers = {'host': jdata['data']['host']}
+    headers = {}
+    if 'extra_headers' in jdata['data']:
+        headers = ParseHeaders(jdata['data']['extra_headers'])
+    headers['host'] = jdata['data']['host']
     timeout = 3.00
     url = jdata['data']['url']
     try:
