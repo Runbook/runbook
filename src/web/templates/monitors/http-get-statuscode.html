@@ -75,6 +75,26 @@
                     <p class="help-block">Specify the domain name to request (example: cloudrout.es).</p>
               </div>
 
+
+                <div class="form-group">
+                    <label for="Extra headers (in request)" class="col-sm-4 control-label">Extra headers (in request)</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" id="http-post-extra_headers" class="btn btn-default" rel="popover" data-content="Extra headers to pass to HTTP request. Enter one header per line as key:value" title="Extra headers (in request)">
+                                    <i class="fa fa-question"></i>
+                                </button>
+                            </span>
+                            {% if data['edit'] %}
+                                {{ form.extra_headers(class_="form-control", value=data['monitor']['data']['extra_headers']) }}
+                            {% else %}
+                                {{ form.extra_headers(class_="form-control", placeholder="header_key: header_value") }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+
              <div class="form-group">
                 <label for="Codes" class="col-sm-4 control-label">Expected response codes</label>
             <div class="col-sm-8">
