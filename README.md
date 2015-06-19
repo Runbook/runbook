@@ -47,7 +47,7 @@ It is advisable to get a custom Python `virtualenv` setup for your runbook devel
 To install the `devhelpers/` tools, run the following
 
 
-    $ cd devhelpers
+    $ cd devhelper
     $ make dev-env
 
 #### Creating a feature branch
