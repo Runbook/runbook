@@ -45,7 +45,7 @@
       <div class="container header">
         <div class="navbar-header">
           <a href="{{ url_for('public.index_redirect') }}" class="header-logo">
-          <img src="/static/img/logos/svg/runbook_white_logo_color_on_white.svg" width="100%" alt="Runbook">
+          <img src="/static/img/logos/png/runbook_white_logo_color_on_white_small.png" width="100%" alt="Runbook">
           </a>
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -85,10 +85,12 @@
   		</div>
     </div>
 
+    <br>
+
     <!-- messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-    <br>
+    <br><br>
     <div class="row">
       <div class="col-md-10 col-md-offset-1">
         {% for category, message in messages %}

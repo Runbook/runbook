@@ -1,9 +1,7 @@
 .pricing-hero {
   width: 100%;
-  padding: 50px 0px;
-  background: url("/static/img/pricing-hero.jpg");
-  background-position: center center;
-  background-size: cover;
+  padding: 50px 0;
+  background-color: black;
 }
 
 .pricing-hero .panel {
