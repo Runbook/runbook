@@ -7,7 +7,7 @@
           </div>
           <table width="100%" border="0" class="table table-condensed">
             <tr class="active">
-              <td><h5>Runbook Name</h5></td>
+              <td><h5></h5></td>
               <td><h5>Current Status</h5></td>
               <td><h5>Actions</h5></td>
             </tr>
@@ -19,7 +19,7 @@
             {%- else -%}
             <tr class="warning">
             {%- endif -%}
-              <td><b>{{ monitor['name'] }}</b></td>
+              <td><h5>{{ monitor['name'] }}</h5></td>
               {%- if "true" in monitor['status'] -%}
                   <td><button class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> {{ monitor['status']|capitalize }}</button></td>
               {%- elif "false" in monitor['status'] -%}
@@ -51,11 +51,11 @@
               {% if monitor['data']['reactions']|length < 1 %}
                 <p class="text-danger">No Reaction defined for this Runbook. <b><a href="/dashboard/reactions" class="text-danger">Create one</a></b>.</p>
               {% else %}
-                <p>
-                 <samp>monitor <b>{{ monitor['ctype'] }}</b>:<br>
+                <p class="text-primary">
+                 <samp>monitor <code><b>{{ monitor['ctype'] }}</b></code>:<br>
               {% for rid in monitor['data']['reactions'] %}
-                &nbsp;&nbsp;&nbsp;&nbsp;if monitor.status is <b>{{ data['reactions'][rid]['data']['call_on']|capitalize }}</b> and monitor.count >= <b>{{ data['reactions'][rid]['trigger'] }}</b>:<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run reaction <b>{{ data['reactions'][rid]['name'] }}</b> every <b>{{ data['reactions'][rid]['frequency'] }}</b> seconds<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;if monitor.status is <code><b>{{ data['reactions'][rid]['data']['call_on']|capitalize }}</b></code> and monitor.count >= <code><b>{{ data['reactions'][rid]['trigger'] }}</b></code>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run reaction <code><b>{{ data['reactions'][rid]['name'] }}</b></code> every <code><b>{{ data['reactions'][rid]['frequency'] }}</b></code> seconds<br>
               {% endfor %}
                 </samp></p>
               {% endif %}
