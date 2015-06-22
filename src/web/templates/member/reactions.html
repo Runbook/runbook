@@ -13,8 +13,7 @@
             </tr>
             {% for rid, reaction in data['reactions']|dictsort(true, 'value') %}
             <tr class="default">
-              <td><i class="fa fa-gear"></i></td>
-              <td>{{ reaction['name'] }}</td>
+              <td colspan="2"><h5>{{ reaction['name'] }}</h5></td>
               <td>
 <a href="/dashboard/delete-reaction/{{ rid }}" class="btn btn-danger btn-xs btn-delete-reaction" data="{{reaction['name']}}" role="button"><i class="fa fa-trash-o"></i> Delete</a>
 <a href="/dashboard/edit-reactions/{{ reaction['rtype'] }}/{{ rid }}" class="btn btn-primary btn-xs" role="button"><i class="fa fa-edit"></i> Edit</a>
