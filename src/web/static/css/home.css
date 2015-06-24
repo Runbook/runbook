@@ -1,13 +1,13 @@
 /* Overwrite defaults */
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
 body {
-	background-color: #f3f3f3;
+  background-color: #f3f3f3;
   font-family: "Open Sans", "Helvetica", sans-serif;
   font-weight: 400;
 }
 
 .container.header {
-	max-width: 1003px !important;
+  max-width: 1003px !important;
   vertical-align: middle;
 }
 
@@ -17,7 +17,13 @@ body {
 
 /* Header customizations */
 .navigation-menu {
-	background-color: rgba(0,0,0,0.7);
+  position: fixed;
+  top: 0;
+  background-color: black;
+  width: 100%;
+  border-image: linear-gradient(90deg, #1abc9c 15%, #2ecc71 15%, #2ecc71 12%, #3498db 12%, #3498db 32%, #9b59b6 32%, #9b59b6 35%, #34495e 35%, #34495e 55%, #f1c40f 55%, #f1c40f 59%, #e67e22 59%, #e67e22 63%, #e74c3c 63%, #e74c3c 82%, #ecf0f1 82%, #ecf0f1 92%, #95a5a6 92%);
+  border-image-slice: 1;
+  border-width: 0 0 3px 0;
 }
 
 .navigation-menu .header-logo {
@@ -26,12 +32,13 @@ body {
 }
 
 .navigation-menu .header-logo img {
-	width: 100%;
-	display: block;
+  padding-top: 10px;
+  width: 100%;
+  display: block;
 }
 
 .navigation-nav {
-	padding-top: 25px;
+  padding-top: 0;
 }
 
 .navigation-nav li.active a {
@@ -51,11 +58,10 @@ body {
 /* Hero customizations */
 .hero-section {
   height: 700px;
-	padding: 20px 0px;
-	padding-top: 220px;
+  padding: 20px 0px;
+  padding-top: 220px;
   margin-top: -95px;
-	background: url('/static/img/header_bg.jpg');
-	background-size: cover;
+  background-color: black;
 }
 
 .hero-section .hero-vp {
@@ -248,9 +254,8 @@ body {
 }
 
 .footer-action-section {
-	padding: 20px 0px;
-	background: url('/static/img/footer-action.png');
-	background-size: cover;
+  padding: 20px 0px;
+  background-color: black;
 }
 
 .footer-action-section h4 {
