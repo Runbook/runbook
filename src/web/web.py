@@ -57,6 +57,7 @@ def startData(user=None):
     data = {}
     if user:
         data['status'] = user.status
+        data['username'] = user.username
         data['company'] = user.company
         data['loggedin'] = True
         data['choices'] = app.config['PACKAGES'][user.acttype]['choices']

@@ -45,7 +45,7 @@
       <div class="container header">
         <div class="navbar-header">
           <a href="{{ url_for('public.index_redirect') }}" class="header-logo">
-          <img src="/static/img/logos/svg/runbook_white_logo_color_on_white.svg" width="100%" alt="Runbook">
+          <img src="/static/img/logos/png/runbook_white_logo_color_on_white_small.png" width="100%" alt="Runbook">
           </a>
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -73,22 +73,46 @@
                 <a href="{{ url_for('user.signup') }}" class="btn btn-action">Sign Up</a>
               </li>
             {% else %}
-              <li class="{{ 'active' if data['active'] == 'dashboard' }}">
-                <a href="{{ url_for('member.dashboard_page') }}">Dashboard</a>
-              </li>
-              <li>
-                <a href="{{ url_for('user.logout_page') }}" class="text-danger">Logout</a>
-              </li>
+{% if data['url'] == '/dashboard' %}
+        <li class="active"><a href="/dashboard">Status</a></li>
+        {% else %}
+        <li><a href="/dashboard">Status</a></li>
+        {% endif %}
+        {% if "monitors" in data['url'] %}<li class="active">{%- else -%}<li>{%- endif -%}
+        <a href="/dashboard/monitors">Runbooks</a></li>
+        {% if "reactions" in data['url'] %}<li class="active">{%- else -%}<li>{%- endif -%}
+        <a href="/dashboard/reactions">Reactions</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ data['username'] }} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            {% if data['url'] == '/dashboard/user-preferences' %}
+            <li class="active"><a href="/dashboard/user-preferences">Preferences</a></li>
+            {% else %}
+            <li><a href="/dashboard/user-preferences">Preferences</a></li>
+            {% endif %}
+            {% if data['url'] == '/dashboard/mod-subscription' %}
+            <li class="active"><a href="/dashboard/mod-subscription">Subscription</a></li>
+            {% else %}
+            <li><a href="/dashboard/mod-subscription">Subscription</a></li>
+            {% endif %}
+            <li><a href="mailto:support@runbook.io">Contact Support</a></li>
+            <li role="separator" class="divider"></li>
+            <li>
+              <a href="{{ url_for('user.logout_page') }}">Logout</a>
+            </li>
             {% endif %}
           </ul>
+        </li>
+        </ul>
   			</div>
   		</div>
     </div>
 
+    <br><br><br><br>
+
     <!-- messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-    <br>
     <div class="row">
       <div class="col-md-10 col-md-offset-1">
         {% for category, message in messages %}
