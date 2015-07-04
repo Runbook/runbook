@@ -1,38 +1,42 @@
       {% if data['mons'] %}
-       <div class="panel panel-primary">
-          <div class="panel-heading">
-          <div class="panel-title">
-            Runbooks
-          </div>
-          </div>
-          <table width="100%" border="0" class="table table-condensed">
-            <tr class="active">
-              <td><h5></h5></td>
-              <td><h5>Current Status</h5></td>
-              <td><h5>Actions</h5></td>
-            </tr>
+            {% set counter = 0 %}
+      <div class="row">
             {% for cid, monitor in data['monitors']|dictsort(true, 'value') %}
+      {% if counter == 2 %}
+      </div>
+      <div class="row">
+      <div class="col-md-6">
+      {% set counter = 1 %}
+      {% else %}
+      <div class="col-md-6">
+      {% set counter = counter + 1 %}
+      {% endif %}
             {%- if "true" in monitor['status'] -%}
-            <tr class="success">
+        <div class="panel panel-success">
             {%- elif "false" in monitor['status'] -%}
-            <tr class="danger">
+        <div class="panel panel-danger">
             {%- else -%}
-            <tr class="warning">
+        <div class="panel panel-warning">
             {%- endif -%}
-              <td><h5>{{ monitor['name'] }}</h5></td>
+            <div class="panel-heading">
+            <div class="panel-title">
+             <h3><i class="fa fa-cloud fa-1x pull-right"></i> {{ monitor['name']|capitalize }}</h3>
+            </div>
+            </div>
+            <table width="100%" border="0" class="table table-condensed">
+            <tr class="active">
+              <td colspan="3">
+               <h5>Runbook Details:</h5>
+              <td colspan="1">
+                <div class="btn-group pull-right">
               {%- if "true" in monitor['status'] -%}
-                  <td><button class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> {{ monitor['status']|capitalize }}</button></td>
+                  <button class="btn btn-success btn-sm dropdown-toggle"  data-toggle="dropdown" aria-expanded="false"><i class="fa fa-check-circle"></i> {{ monitor['status']|capitalize }} <span class="caret"></span></button>
               {%- elif "false" in monitor['status'] -%}
-                  <td><button class="btn btn-danger btn-sm"><i class="fa fa-exclamation-triangle"></i> {{ monitor['status']|capitalize }}</button></td>
+                  <button class="btn btn-danger btn-sm dropdown-toggle"  data-toggle="dropdown" aria-expanded="false"><i class="fa fa-exclamation-triangle"></i> {{ monitor['status']|capitalize }} <span class="caret"></span></button>
               {%- else -%}
-                  <td><button class="btn btn-default btn-sm"><i class="fa fa-circle"></i> {{ monitor['status']|capitalize }}</button></td>
+                  <button class="btn btn-default btn-sm dropdown-toggle"  data-toggle="dropdown" aria-expanded="false"><i class="fa fa-circle"></i> {{ monitor['status']|capitalize }} <span class="caret"></span></button>
               {%- endif -%}
-              <td>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    Action <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu">
+                <ul class="dropdown-menu" role="menu">
                 <li><a href="/dashboard/edit-monitors/{{ monitor['ctype'] }}/{{ cid }}"><i class="fa fa-edit"></i> Edit</a></li>
                 <li><a href="/dashboard/delete-checks/{{ cid }}"><i class="fa fa-trash-o"></i> Delete</a></li>
                 <li class="divider"></li>
@@ -43,11 +47,11 @@
                 <li><a href="/dashboard/action-checks/{{ cid }}/true"><i class="fa fa-check-circle"></i> Mark True</a></li>
                 {%- endif %}
                 </ul>
-                </div>
-              </td>
+                  </div>
+            </td>
             </tr>
-            <tr class="active">
-              <td colspan="3">
+            </table>
+            <div class="panel-body">
               {% if monitor['data']['reactions']|length < 1 %}
                 <p class="text-danger">No Reaction defined for this Runbook. <b><a href="/dashboard/reactions" class="text-danger">Create one</a></b>.</p>
               {% else %}
@@ -59,9 +63,26 @@
               {% endfor %}
                 </samp></p>
               {% endif %}
-              </td>
+            </div>
+            <table width="100%" border="0" class="table table-striped table-condensed">
+            <tr>
+            <td colspan="2" class="default"><h5>Events in the last 24 hours</h5></td>
             </tr>
+            <tr><td>11/11/2014</td><td>
+            Monitor changed from True to False
+            </td></tr>
+            <tr><td>11/11/2014</td><td>
+            Monitor changed from True to False
+            </td></tr>
+            <tr><td>11/11/2014</td><td>
+            Monitor changed from True to False
+            </td></tr>
+            <tr><td>11/11/2014</td><td>
+            Monitor changed from True to False
+            </td></tr>
+            </table>
+        </div>
+        </div>
             {% endfor %}
-          </table>
         </div>
         {% endif %}
