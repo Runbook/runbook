@@ -22,9 +22,9 @@ class ReactForm(BaseReactForm):
         "APIKey",
         validators=[DataRequired(message='API Key is a required field')])
     ip = TextField("IP",
-        validators=[IPAddress(message='Does not match IP address format'), DataRequired(message='IP is a required field')])
+        validators=[DataRequired(message='IP is a required field')])
     replaceip = TextField(
-        "ReplaceIP", validators=[IPAddress(message='Does not match IP address format'), DataRequired(message='Replace IP is a required field')])
+        "ReplaceIP", validators=[DataRequired(message='Replace IP is a required field')])
     failback = SelectField(
         "Failback",
         choices=[('manual', 'None'), ('automatic', 'Automatic')],

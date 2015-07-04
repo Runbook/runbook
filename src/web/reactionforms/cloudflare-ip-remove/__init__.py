@@ -24,7 +24,7 @@ class ReactForm(BaseReactForm):
         validators=[DataRequired(message='API Key is a required field')])
     ip = TextField(
         "IP",
-        validators=[IPAddress(message='Does not match IP address format'), DataRequired(message='IP is a required field')])
+        validators=[DataRequired(message='IP is a required field')])
 
 if __name__ == '__main__':
     pass
