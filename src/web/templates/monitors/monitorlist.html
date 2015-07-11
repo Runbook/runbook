@@ -1,0 +1,29 @@
+<div id="monitor-list">
+
+<input class="form-control search" placeholder="Filter" />
+<hr>
+  <ul class="list list-unstyled">
+    {% for category in data['monitor_list'].iterkeys() %}
+      {% for item in data['monitor_list'][category].iterkeys() %}
+      <li>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <div class="panel-title">
+            <h4 class="name"><i class="fa fa-cloud fa-1x pull-right"></i> {{ item }}</h4>
+          </div>
+        </div>
+        <table class="table">
+          <tr><td colspan=2><h4 class="pull-right"><small class="category">{{ category }}</small></h4></td></tr>
+          <tr class="active"><td>
+            <p class="description">{{ data['monitor_list'][category][item]['description'] }}</p>
+            </td><td width="25%"><div class="pull-right"><a href="{{ data['monitor_list'][category][item]['create_link'] }}" class="btn btn-primary">Create</a> <a href="{{ data['monitor_list'][category][item]['documentation_link'] }}" class="btn btn-primary">Documentation</a></div>
+          </td></tr>
+        </table>
+      </div> 
+      </li>
+      {% endfor %}
+    {% endfor %}
+  </ul>
+<hr>
+<ul class="pagination"></ul>
+</div>

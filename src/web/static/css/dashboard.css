@@ -1,0 +1,11 @@
+/* Overwrite defaults */
+.navigation-menu .header-logo {
+        max-width: 150px;
+        display: inline-block;
+}
+
+.navigation-menu .header-logo img {
+  padding-top: 10px;
+  width: 100%;
+  display: block;
+}

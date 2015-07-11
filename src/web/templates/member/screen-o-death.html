@@ -5,11 +5,8 @@
   <p></p>
     <!-- content -->
       <div class="page-header">
-        <h1><i class="fa fa-area-chart fa-1x"></i> Status</h1>
+        <h1><i class="fa fa-book fa-1x"></i> Runbooks</h1>
       </div>
-
-
-
         {% if data['mons'] %}
           <!-- Start Tab -->
               {% if data['upgraded'] %}
@@ -18,10 +15,15 @@
               {% include 'forms/stripe.html' %}
               {% endif %}
         {% include 'member/monitors.html' %}
-
-
-
+{% else %}
+<div class="col-md-12">
+<div class="well">
+  <p class="lead">Hi! It looks like you haven't created any Runbooks yet.</p>
+  <a href="/dashboard/monitors" class="btn btn-primary">Get Started</a>
+</div>
+</div>
 {% endif %}
+  
   </div> <!-- row -->
 </div> <!-- container -->
 

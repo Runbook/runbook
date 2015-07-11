@@ -1,16 +1,35 @@
       {% if data['mons'] %}
-            {% set counter = 0 %}
       <div class="row">
-            {% for cid, monitor in data['monitors']|dictsort(true, 'value') %}
-      {% if counter == 2 %}
+      <div id="monitor-list">
+      <hr>
+      <div class="row">
+      <div class="col-md-9">
+      <input class="form-control search" placeholder="Filter" />
       </div>
-      <div class="row">
-      <div class="col-md-6">
-      {% set counter = 1 %}
-      {% else %}
-      <div class="col-md-6">
-      {% set counter = counter + 1 %}
-      {% endif %}
+      <div class="col-md-3">
+      <div class="pull-right">
+      <div class="btn-group">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sort"></i> Sort <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li><a class="sort" data-sort="eventcount">by Event Count</a></li>
+          <li><a class="sort" data-sort="name">by Name</a></li>
+          <li><a class="sort" data-sort="status">by State</a></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus"></i> Create New <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="/dashboard/monitors"><i class="fa fa-book"></i> Runbook</a></li>
+            <li><a href="/dashboard/reactions"><i class="fa fa-flask"></i> Reaction</a></li>
+        </ul>
+      </div>
+      </div>
+      </div>
+      </div>
+      <hr>
+      <ul class="list list-unstyled">
+            {% for cid, monitor in data['monitors']|dictsort(true, 'value') %}
+        <li>
             {%- if "true" in monitor['status'] -%}
         <div class="panel panel-success">
             {%- elif "false" in monitor['status'] -%}
@@ -20,7 +39,7 @@
             {%- endif -%}
             <div class="panel-heading">
             <div class="panel-title">
-             <h3><i class="fa fa-cloud fa-1x pull-right"></i> {{ monitor['name']|capitalize }}</h3>
+             <h3 class="name"><i class="fa fa-cloud fa-1x pull-right"></i> {{ monitor['name']|capitalize }}</h3>
             </div>
             </div>
             <table width="100%" border="0" class="table table-condensed">
@@ -30,11 +49,11 @@
               <td colspan="1">
                 <div class="btn-group pull-right">
               {%- if "true" in monitor['status'] -%}
-                  <button class="btn btn-success btn-sm dropdown-toggle"  data-toggle="dropdown" aria-expanded="false"><i class="fa fa-check-circle"></i> {{ monitor['status']|capitalize }} <span class="caret"></span></button>
+                  <button class="status btn btn-success btn-sm dropdown-toggle"  data-toggle="dropdown" aria-expanded="false"><i class="fa fa-check-circle"></i> {{ monitor['status']|capitalize }} <span class="caret"></span></button>
               {%- elif "false" in monitor['status'] -%}
-                  <button class="btn btn-danger btn-sm dropdown-toggle"  data-toggle="dropdown" aria-expanded="false"><i class="fa fa-exclamation-triangle"></i> {{ monitor['status']|capitalize }} <span class="caret"></span></button>
+                  <button class="status btn btn-danger btn-sm dropdown-toggle"  data-toggle="dropdown" aria-expanded="false"><i class="fa fa-exclamation-triangle"></i> {{ monitor['status']|capitalize }} <span class="caret"></span></button>
               {%- else -%}
-                  <button class="btn btn-default btn-sm dropdown-toggle"  data-toggle="dropdown" aria-expanded="false"><i class="fa fa-circle"></i> {{ monitor['status']|capitalize }} <span class="caret"></span></button>
+                  <button class="status btn btn-warning btn-sm dropdown-toggle"  data-toggle="dropdown" aria-expanded="false"><i class="fa fa-circle"></i> {{ monitor['status']|capitalize }} <span class="caret"></span></button>
               {%- endif -%}
                 <ul class="dropdown-menu" role="menu">
                 <li><a href="/dashboard/edit-monitors/{{ monitor['ctype'] }}/{{ cid }}"><i class="fa fa-edit"></i> Edit</a></li>
@@ -55,8 +74,8 @@
               {% if monitor['data']['reactions']|length < 1 %}
                 <p class="text-danger">No Reaction defined for this Runbook. <b><a href="/dashboard/reactions" class="text-danger">Create one</a></b>.</p>
               {% else %}
-                <p class="text-primary">
-                 <samp>monitor <code><b>{{ monitor['ctype'] }}</b></code>:<br>
+                <p class="description text-primary">
+                 <samp>monitor <code class="monitor-type"><b>{{ monitor['ctype'] }}</b></code>:<br>
               {% for rid in monitor['data']['reactions'] %}
                 &nbsp;&nbsp;&nbsp;&nbsp;if monitor.status is <code><b>{{ data['reactions'][rid]['data']['call_on']|capitalize }}</b></code> and monitor.count >= <code><b>{{ data['reactions'][rid]['trigger'] }}</b></code>:<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run reaction <code><b>{{ data['reactions'][rid]['name'] }}</b></code> every <code><b>{{ data['reactions'][rid]['frequency'] }}</b></code> seconds<br>
@@ -66,23 +85,31 @@
             </div>
             <table width="100%" border="0" class="table table-striped table-condensed">
             <tr>
-            <td colspan="2" class="default"><h5>Events in the last 24 hours</h5></td>
+            <td colspan="2" class="default"><h5>Runbook Events: <span class="eventcounti badge pull-right">{{ data['monevents'][monitor['id']]|length }} events</span></h5></td>
             </tr>
-            <tr><td>11/11/2014</td><td>
-            Monitor changed from True to False
+            {% set event_display_counter = 0 %}
+            {% for event in data['monevents'][monitor['id']] %}
+            {% if event_display_counter < 25 %}
+            <tr>
+            {% if "true" in event['status'] %}
+            <td width="10%"><span class="label label-success">{{ event['time_friendly'] }} GMT</span></td><td>
+            {% elif "false" in event['status'] %}
+            <td width="10%"><span class="label label-danger">{{ event['time_friendly'] }} GMT</span></td><td>
+            {% else %}
+            <td width="10%"><span class="label label-primary">{{ event['time_friendly'] }} GMT</span></td><td>
+            {% endif %}
+            Monitor changed from {{ event['prev_status'] }} to {{ event['status'] }}
             </td></tr>
-            <tr><td>11/11/2014</td><td>
-            Monitor changed from True to False
-            </td></tr>
-            <tr><td>11/11/2014</td><td>
-            Monitor changed from True to False
-            </td></tr>
-            <tr><td>11/11/2014</td><td>
-            Monitor changed from True to False
-            </td></tr>
+            {% endif %}
+            {% set event_display_counter = event_display_counter + 1 %}
+            {% endfor %}
             </table>
         </div>
-        </div>
+        </li>
             {% endfor %}
+        </ul>
+        <hr>
+        <ul class="pagination"></ul>
         </div>
-        {% endif %}
+        </div>
+  {% endif %}

@@ -190,8 +190,14 @@ class User(object):
         ''' Returns a list of events from the events table for this user '''
         # Get Events
         results = r.table('events').filter({'uid': self.uid}).order_by(
-            r.desc('time')).limit(50).run(rdb)
-        return results
+            r.desc('time')).run(rdb)
+        eventsbycid = {}
+        for event in results:
+            if event['cid'] in eventsbycid:
+                eventsbycid[event['cid']].append(event)
+            else:
+                eventsbycid[event['cid']] = [ event ]
+        return eventsbycid
 
     def setSubscription(self, rdb):
         '''
