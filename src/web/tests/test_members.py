@@ -27,7 +27,7 @@ class MemberTests(BaseTestCase):
                 follow_redirects=True
             )
             self.assertTrue(response.status_code == 200)
-            self.assertIn('User Preferences', response.data)
+            self.assertIn('Preferences', response.data)
 
     def test_dashboard_route_not_active(self):
         # Ensure that /dashboard requires user login.
