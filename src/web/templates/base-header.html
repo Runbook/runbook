@@ -19,16 +19,21 @@
     <!-- <link rel="stylesheet" href="/static/css/carousel.css"> -->
     <!-- <link rel="stylesheet" href="/static/css/bootstrap-theme.css"> -->
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet">
-    <link href="{{url_for('static', filename='css/bootstrap-multiselect.css')}}" rel="stylesheet">
-    <link href="{{url_for('static', filename='css/colorwrap.css')}}" rel="stylesheet">
-    <link href="{{url_for('static', filename='css/c3.css')}}" rel="stylesheet">
-
-    <!-- Custom CSS load -->
-    <link href="{{url_for('static', filename='css/custom.css')}}" rel="stylesheet">
+{% if data['loggedin'] == True %}
+    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.5/darkly/bootstrap.min.css" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/dashboard.css')}}" rel="stylesheet">
+{% else %}
+    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.5/yeti/bootstrap.min.css" rel="stylesheet">
     <link href="{{url_for('static', filename='css/home.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/custom.css')}}" rel="stylesheet">
+    <!-- Custom CSS load -->
     <link href="{{url_for('static', filename='css/pricing.css')}}" rel="stylesheet">
     <link href="{{url_for('static', filename='css/faq.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/colorwrap.css')}}" rel="stylesheet">
+{% endif %}
+    <link href="{{url_for('static', filename='css/bootstrap-multiselect.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/c3.css')}}" rel="stylesheet">
+
 
     {% block css %}{% endblock %}
 
@@ -74,16 +79,21 @@
               </li>
             {% else %}
 {% if data['url'] == '/dashboard' %}
-        <li class="active"><a href="/dashboard">Status</a></li>
+        <li class="active"><a href="/dashboard"><i class="fa fa-book"></i> Runbooks</a></li>
         {% else %}
-        <li><a href="/dashboard">Status</a></li>
+        <li><a href="/dashboard"><i class="fa fa-book"></i> Runbooks</a></li>
         {% endif %}
-        {% if "monitors" in data['url'] %}<li class="active">{%- else -%}<li>{%- endif -%}
-        <a href="/dashboard/monitors">Runbooks</a></li>
-        {% if "reactions" in data['url'] %}<li class="active">{%- else -%}<li>{%- endif -%}
-        <a href="/dashboard/reactions">Reactions</a></li>
+        {% if "manage" in data['url'] %}<li class="active">{%- else -%}<li>{%- endif -%}
+        <a href="/dashboard/manage-reactions"><i class="fa fa-flask"></i> Reactions</a></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ data['username'] }} <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria=expanded="false"><i class="fa fa-plus"></i> Create New</a>
+          <ul class="dropdown-menu">
+            <li><a href="/dashboard/monitors"><i class="fa fa-book"></i> Runbook</a></li>
+            <li><a href="/dashboard/reactions"><i class="fa fa-flask"></i> Reaction</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> {{ data['username'] }} <span class="caret"></span></a>
           <ul class="dropdown-menu">
             {% if data['url'] == '/dashboard/user-preferences' %}
             <li class="active"><a href="/dashboard/user-preferences">Preferences</a></li>

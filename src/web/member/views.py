@@ -64,6 +64,7 @@ def dashboard_page():
         data['url'] = '/dashboard'
         data['js_bottom'].append("member/screen-o-death.js")
         data['js_bottom'].append("member/screen-o-death-chart.js")
+        data['js_bottom'].append("member/monitors.js")
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
             page = render_template('member/mod-subscription.html', data=data)

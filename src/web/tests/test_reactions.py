@@ -28,7 +28,7 @@ class ReactionTests(BaseTestCase):
             response = self.client.get(
                 '/dashboard/reactions', follow_redirects=True)
             self.assertTrue(response.status_code == 200)
-            self.assertIn('Create Reactions', response.data)
+            self.assertIn('Reactions', response.data)
 
     def test_dashboard_reactions_route_login(self):
         # Ensure that /dashboard/reactions requires user login.

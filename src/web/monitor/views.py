@@ -60,7 +60,7 @@ def addcheck_page(cname):
         data['active'] = 'dashboard'
         data['url'] = '/dashboard/monitors/' + cname
         tmpl = 'monitors/' + cname + '.html'
-        data['js_bottom'] = ['monitors/base.js', 'monitors/' + cname + '.js']
+        data['js_bottom'] = ['monitors/monitorlist.js', 'monitors/base.js', 'monitors/' + cname + '.js']
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
@@ -296,7 +296,9 @@ def monitors_page():
         data = startData(user)
         data['active'] = 'dashboard'
         data['url'] = '/dashboard/monitors/'
+        data['monitor_list'] = app.config['MONITORS']
         tmpl = 'monitors/index.html'
+        data['js_bottom'] = ['monitors/monitorlist.js',]
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'

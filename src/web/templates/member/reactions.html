@@ -1,25 +1,51 @@
+{% include 'base-header.html' %}
+
+<div class="container">
+ <div class="row">
         {% if data['reacts'] %}
+       <div id="reactions">
+       <div class="page-header">
+        <h1><i class="fa fa-flask fa-1x"></i> Manage Reactions</h1>
+      </div>
         <div class="panel panel-primary">
           <div class="panel-heading">
           <div class="panel-title">
             Reactions
           </div>
           </div>
-          <table width="100%" border="0" class="table table-condensed">
-            <tr class="active">
-              <td></td>
-              <td><h5>Name</h5></td>
-              <td><h5>Actions</h5></td>
-            </tr>
+          <div class="panel-body">
+            <input class="search form-control" placeholder="Filter" \>
+          </div>
+          <table width="100%" border="0" class="table table-striped table-condensed">
+            <tbody class="list">
             {% for rid, reaction in data['reactions']|dictsort(true, 'value') %}
-            <tr class="default">
-              <td colspan="2"><h5>{{ reaction['name'] }}</h5></td>
-              <td>
-<a href="/dashboard/delete-reaction/{{ rid }}" class="btn btn-danger btn-xs btn-delete-reaction" data="{{reaction['name']}}" role="button"><i class="fa fa-trash-o"></i> Delete</a>
-<a href="/dashboard/edit-reactions/{{ reaction['rtype'] }}/{{ rid }}" class="btn btn-primary btn-xs" role="button"><i class="fa fa-edit"></i> Edit</a>
-</td>
+            <tr>
+              <td colspan="2"><h5 class="name">{{ reaction['name'] }}</h5></td>
+              <td width="20%">
+              <a href="/dashboard/delete-reaction/{{ rid }}" class="btn btn-danger btn-xs btn-delete-reaction" data="{{reaction['name']}}" role="button"><i class="fa fa-trash-o"></i> Delete</a>
+              <a href="/dashboard/edit-reactions/{{ reaction['rtype'] }}/{{ rid }}" class="btn btn-primary btn-xs" role="button"><i class="fa fa-edit"></i> Edit</a>
+              </td>
             </tr>
             {% endfor %}
+            </tbody>
           </table>
+          <div class="panel-body">
+                <ul class="pagination"></ul>
+          </div>
         </div>
+        </div>
+        {% else %}
+
+    <div class="col-md-12">
+    <div class="well">
+      <p class="lead">It seems you haven't created a reaction just yet.</p>
+      <a href="/dashboard/reactions" class="btn btn-primary">Get Started</a>
+    </div>
+    </div>
         {% endif %}
+
+  </div> <!-- row -->
+</div> <!-- container -->
+
+
+{% include 'dash-footer.html' %}
