@@ -30,7 +30,7 @@ class TestUserRegistration(BaseTestCase):
                 confirm='test_user'
             ), follow_redirects=True)
             self.assertEqual(response.status_code, 200)
-            self.assertIn('Dashboard', response.data)
+            self.assertIn('Runbooks', response.data)
             user = User()
             user = user.get('username', 'test@user.com', g.rdb_conn)
             self.assertTrue(user.email == 'test@user.com')
@@ -235,7 +235,7 @@ class TestUserConfirmation(BaseTestCase):
             user = user.get('username', 'test@tester.com', g.rdb_conn)
             self.assertTrue(user.confirmed)
             self.assertEqual(response.status_code, 200)
-            self.assertIn('Dashboard', response.data)
+            self.assertIn('Runbooks', response.data)
             self.assertIn('You have confirmed your account. Thanks!',
                           response.data)
 
@@ -255,7 +255,7 @@ class TestUserConfirmation(BaseTestCase):
             response = self.client.get(
                 '/confirm/'+str(token), follow_redirects=True)
             self.assertEqual(response.status_code, 200)
-            self.assertIn('Dashboard', response.data)
+            self.assertIn('Runbooks', response.data)
             self.assertIn('Account already confirmed. Thank you.',
                           response.data)
 
