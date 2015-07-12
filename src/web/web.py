@@ -40,6 +40,8 @@ if len(sys.argv) > 1:
     configfile = sys.argv[1]
 print("Using config %s" % configfile)
 app.config.from_pyfile(configfile)
+app.config.from_pyfile(os.path.join('instance', 'monitors.cfg'))
+app.config.from_pyfile(os.path.join('instance', 'reactions.cfg'))
 
 
 # Common Functions

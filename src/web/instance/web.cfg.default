@@ -181,4 +181,3 @@ DATACENTERS = {
         ("dc2queue", 'DevZone 2'),
     }
 }
-

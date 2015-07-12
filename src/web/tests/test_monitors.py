@@ -33,7 +33,7 @@ class MonitorTests(BaseTestCase):
             response = self.client.get(
                 '/dashboard/monitors', follow_redirects=True)
             self.assertTrue(response.status_code == 200)
-            self.assertIn('Create Monitor', response.data)
+            self.assertIn('Runbook', response.data)
 
     def test_user_can_access_monitor(self):
         # Ensure that a logged in user can access a monitor.

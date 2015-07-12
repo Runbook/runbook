@@ -270,7 +270,40 @@ def reactions_page():
         data = startData(user)
         data['active'] = 'dashboard'
         data['url'] = '/dashboard/reactions/'
+        data['reaction_list'] = app.config['REACTIONS']
+        data['js_bottom'] = [ 'reactions/reactionlist.js' ]
         tmpl = 'reactions/index.html'
+        # Check Users Status
+        if user.status != "active":
+            data['url'] = '/dashboard/mod-subscription'
+            tmpl = 'member/mod-subscription.html'
+        else:
+            pass
+        data['reactions'] = user.getReactions(g.rdb_conn)
+        if len(data['reactions']) < 1:
+            data['reacts'] = False
+        else:
+            data['reacts'] = True
+        page = render_template(tmpl, data=data)
+        return page
+    else:
+        flash('Please Login.', 'warning')
+        return redirect(url_for('user.login_page'))
+
+
+# Reaction Index
+@reaction_blueprint.route('/dashboard/manage-reactions', methods=['GET', 'POST'])
+def managereactions_page():
+    verify = verifyLogin(
+        app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
+    if verify:
+        user = User()
+        user.get('uid', verify, g.rdb_conn)
+        data = startData(user)
+        data['active'] = 'dashboard'
+        data['url'] = '/dashboard/reactions/'
+        data['js_bottom'] = [ 'member/reactions.js' ]
+        tmpl = 'member/reactions.html'
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'

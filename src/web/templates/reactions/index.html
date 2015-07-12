@@ -5,22 +5,15 @@
   <div class="row">
   <p></p>
     <!-- sidebar -->
-    {% include 'sidebar.html' %}
     <!-- content -->
-    <div class="col-md-8">
-    {% if data['reacts'] %}
+    <div class="col-md-12">
       <div class="page-header">
-        <h1><i class="fa fa-eye-slash fa-1x"></i> Reactions</h1>
-      </div>
-    {% include 'member/reactions.html' %}
-    {% endif %}
-      <div class="page-header">
-        <h1><i class="fa fa-cogs fa-1x"></i> Create a Reaction</h1>
+        <h1><i class="fa fa-flask fa-1x"></i> Create a Reaction</h1>
       </div>
 
-      {% include 'reactions/reactions.html' %}
+      {% include 'reactions/reactionlist.html' %}
 
-    </div> <!-- col-md-8 -->
+    </div> <!-- col-md-12 -->
   </div> <!-- row -->
 </div> <!-- container -->
 
