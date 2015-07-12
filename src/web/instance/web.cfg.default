@@ -182,3 +182,5 @@ DATACENTERS = {
     }
 }
 
+import instance.monitors.cfg
+import instance.reactions.cfg

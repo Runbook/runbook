@@ -1,24 +1,24 @@
 <div class="well">
-<p class="lead">Need more monitors? Upgrade your {{ data['acttype'] }} account to a Pro account and you can add additional monitors for only $4.99 per monitor with our monthly subscription plan. You also get the ability to run monitors more frequently.</p>
+<p class="lead">Need more Runbooks? Upgrade your {{ data['acttype'] }} account to a Pro account and you can add additional runbooks for only $4.99 per monitor with our monthly subscription plan. You also get the ability to run monitors more frequently.</p>
 <div align="center">
 <form action="/dashboard/mod-subscription" method="post" id="subscribe-form" target="_self" class="form-horizontal" role="form">
 <div class="form-group">
 <div class="input-group">
   <select class="plan-select" id="plan" name="plan">
     {% if data['acttype'] == 'Promotional' %}
-    <option value="pro_orig_yearly">Annual Legacy Subscription - $9/monitor</option>
-    <option value="pro_orig_monthly">Monthly Legacy Subscription - $1/monitor</option>
+    <option value="pro_orig_yearly">Annual Legacy Subscription - $9/runbook</option>
+    <option value="pro_orig_monthly">Monthly Legacy Subscription - $1/runbook</option>
     {% endif %}
-    <option value="pro_plus_yearly" selected>Annual ProPlus Subscription - $89.99/monitor</option>
-    <option value="pro_plus_monthly">Monthly ProPlus Subscription - $8.99/monitor</option>
-    <option value="pro_yearly">Annual Pro Subscription - $49.99/monitor</option>
-    <option value="pro_monthly">Monthly Pro Subscription - $4.99/monitor</option>
+    <option value="pro_plus_yearly" selected>Annual ProPlus Subscription - $89.99/runbook</option>
+    <option value="pro_plus_monthly">Monthly ProPlus Subscription - $8.99/runbook</option>
+    <option value="pro_yearly">Annual Pro Subscription - $49.99/runbook</option>
+    <option value="pro_monthly">Monthly Pro Subscription - $4.99/runbook</option>
   </select>
   <button class="btn btn-primary btn-sm" id="customButton">Upgrade</button>
 </div>
 </div>
 </form>
-<p class="info">Annual subscribers only pay $49.99 per monitor each year, that is 12 months for the price of 10.</p>
+<p class="info">Annual subscribers only pay $49.99 per runbook each year, that is 12 months for the price of 10.</p>
 </div>
 </div>
  <script src="https://checkout.stripe.com/v2/checkout.js"></script>
