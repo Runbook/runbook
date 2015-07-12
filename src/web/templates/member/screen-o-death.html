@@ -2,12 +2,23 @@
 
 <div class="container">
   <div class="row">
-  <p></p>
     <!-- content -->
+        {% if data['mons'] %}
       <div class="page-header">
         <h1><i class="fa fa-book fa-1x"></i> Runbooks</h1>
       </div>
-        {% if data['mons'] %}
+      <div class="row">
+      <div class="col-md-6">
+        <div class="alert alert-success">
+          <p class="text-center" style="font-size: 5em">{{ data['monstats']['true'] }} True</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="alert alert-danger">
+          <p class="text-center" style="font-size: 5em">{{ data['monstats']['false'] }} False</p>
+        </div>
+      </div>
+      </div>
           <!-- Start Tab -->
               {% if data['upgraded'] %}
               {% include 'forms/addpacks.html' %}
