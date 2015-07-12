@@ -181,6 +181,3 @@ DATACENTERS = {
         ("dc2queue", 'DevZone 2'),
     }
 }
-
-import instance.monitors.cfg
-import instance.reactions.cfg
