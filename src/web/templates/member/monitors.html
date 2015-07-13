@@ -77,7 +77,12 @@
                 <p class="description text-primary">
                  <samp>monitor <code class="monitor-type"><b>{{ monitor['ctype'] }}</b></code>:<br>
               {% for rid in monitor['data']['reactions'] %}
-                &nbsp;&nbsp;&nbsp;&nbsp;if monitor.status is <code><b>{{ data['reactions'][rid]['data']['call_on']|capitalize }}</b></code> and monitor.count >= <code><b>{{ data['reactions'][rid]['trigger'] }}</b></code>:<br>
+              {% if "call_on" not in data['reactions'][rid]['data'] %}
+              {% set call_on = "false" %}
+              {% else %}
+              {% set call_on = data['reactions'][rid]['data']['call_on'] %}
+              {% endif %}
+                &nbsp;&nbsp;&nbsp;&nbsp;if monitor.status is <code><b>{{ call_on|capitalize }}</b></code> and monitor.count >= <code><b>{{ data['reactions'][rid]['trigger'] }}</b></code>:<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run reaction <code><b>{{ data['reactions'][rid]['name'] }}</b></code> every <code><b>{{ data['reactions'][rid]['frequency'] }}</b></code> seconds<br>
               {% endfor %}
                 </samp></p>
