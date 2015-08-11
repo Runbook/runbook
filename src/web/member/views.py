@@ -160,6 +160,9 @@ def modsub_page():
                         'source': stripeToken,
                         'plan': plan
                     }
+                    if payload['quantity'] == 0:
+                        ## Require 1 subscription initially
+                        payload['quantity'] = 1
                     json_payload = json.dumps(payload)
                     url = paymenturl + "/customers"
                     print ("Making request to %s") % url
