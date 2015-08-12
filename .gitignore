@@ -2,6 +2,7 @@
 web.cfg
 rethinkdb_data/
 tmp
+src/web/instance/web.cfg.example
 
 
 # Byte-compiled / optimized / DLL files
@@ -69,3 +70,6 @@ config.yml
 
 # Vagrant directory
 .vagrant/
+
+# Mac Junk
+*/.DS_Store
