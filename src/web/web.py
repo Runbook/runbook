@@ -69,9 +69,11 @@ def startData(user=None):
         data['acttype'] = app.config['PACKAGES'][user.acttype]['acttype']
         data['upgraded'] = app.config['PACKAGES'][user.acttype]['upgraded']
         if data['upgraded'] is True:
+            user.upgraded = True
             data['subscription_plan'] = app.config['SUBSCRIPTIONS'][user.subscription]
             data['cost'] = data['subscription_plan']['cost'] * user.subplans
         else:
+            user.upgrade = False
             data['cost'] = 'Free'
             data['subscription_plan'] = app.config['SUBSCRIPTIONS']['default']
         data['stripe_pubkey'] = app.config['STRIPE_PUBKEY']
@@ -134,6 +136,6 @@ def server_error_page(error):
 # ------------------------------------------------------------------
 
 if __name__ == '__main__':                  # pragma: no cover
-    app.debug = True                        # pragma: no cover
+    app.debug = app.config['DEBUG'] 
     app.run(host=app.config['BIND_IP'],
             port=app.config['BIND_PORT'])   # pragma: no cover
