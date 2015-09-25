@@ -3,9 +3,8 @@ Runbook
 
 | Facility | Develop | Staging | Master |
 | --------- | -------- | -------- | ------------ |
-| Travis-CI | [![Build Status](https://travis-ci.org/asm-products/cloudroutes-service.svg?branch=develop)](https://travis-ci.org/asm-products/cloudroutes-service) | [![Build Status](https://travis-ci.org/asm-products/cloudroutes-service.svg?branch=staging)](https://travis-ci.org/asm-products/cloudroutes-service) | [![Build Status](https://travis-ci.org/asm-products/cloudroutes-service.svg?branch=master)](https://travis-ci.org/asm-products/cloudroutes-service)
-| Coverage | [![Coverage Status](https://img.shields.io/coveralls/asm-products/cloudroutes-service.svg)](https://coveralls.io/r/asm-products/cloudroutes-service?branch=develop) | [![Coverage Status](https://img.shields.io/coveralls/asm-products/cloudroutes-service.svg)](https://coveralls.io/r/asm-products/cloudroutes-service?branch=staging) | [![Coverage Status](https://img.shields.io/coveralls/asm-products/cloudroutes-service.svg)](https://coveralls.io/r/asm-products/cloudroutes-service?branch=master) |
-| Contribute | <a href="https://assembly.com/runbook/bounties?utm_campaign=assemblage&utm_source=runbook&utm_medium=repo_badge"><img src="https://asm-badger.herokuapp.com/runbook/badges/tasks.svg" height="20px" alt="Open Bounties" /> | N/A | N/A |
+| Travis-CI | [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=develop)](https://travis-ci.org/Runbook/runbook) | [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=staging)](https://travis-ci.org/Runbook/runbook) | [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=master)](https://travis-ci.org/Runbook/runbook)
+| Coverage | [![Coverage Status](https://img.shields.io/coveralls/Runbook/runbook.svg)](https://coveralls.io/r/Runbook/runbook?branch=develop) | [![Coverage Status](https://img.shields.io/coveralls/Runbook/runbook.svg)](https://coveralls.io/r/Runbook/runbook?branch=staging) | [![Coverage Status](https://img.shields.io/coveralls/Runbook/runbook.svg)](https://coveralls.io/r/Runbook/runbook?branch=master) |
 
 ## What is Runbook
 
@@ -19,9 +18,7 @@ Developer and User docs can be found in the [docs](docs/) directory and on [Read
 
 ## Open Source
 
-Runbook is 100% open source and developed using the [Assembly](https://assembly.com/runbook) platform. Runbook runs as a SaaS application, there are both free and paid plans; with the Assembly platform all revenue from the product is funnelled into the project and it's contributors. Essentially, after subtracting the cost of business, 10% goes to Assembly as a fee and the rest is given back to the contributors based on a percentage of their contributions.
-
-Unlike other open source products, not only do you get the satisfaction of giving back to the community as a whole but you also get a cut of the profits. To get started simply join us on our [Assembly Project Page](https://assembly.com/runbook)
+Runbook is 100% Open Source. Currently the license is AGPL which essentially means you can run your own copy of Runbook but you can't run it as a service without open sourcing any changes you make.
 
 ## Contributing
 
@@ -77,7 +74,7 @@ Runbook is a very fast paced application, we are making major code changes frequ
 
 To synchronize with the upstream repository you must first define it as an upstream source.
 
-    $ git remote add upstream https://github.com/asm-products/cloudroutes-service.git
+    $ git remote add upstream https://github.com/Runbook/runbook.git
 
 ##### Fetching and Merging updates
 

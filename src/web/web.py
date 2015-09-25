@@ -134,6 +134,6 @@ def server_error_page(error):
 # ------------------------------------------------------------------
 
 if __name__ == '__main__':                  # pragma: no cover
-    app.debug = True                        # pragma: no cover
+    app.debug = app.config['DEBUG'] 
     app.run(host=app.config['BIND_IP'],
             port=app.config['BIND_PORT'])   # pragma: no cover
