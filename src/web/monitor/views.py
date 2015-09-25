@@ -98,7 +98,16 @@ def addcheck_page(cname):
                         # Create the monitor if all checks out
                         results = monitor.createMonitor(g.rdb_conn)
                     else:
-                        results = "toomany"
+                        if data['upgraded']:
+                            payment = __import__("payments." + user.payments, globals(),
+                                                 locals(), ['Payments'], -1)
+                            subscription = payment.Payments(user=user, config=app.config, rdb=g.rdb_conn)
+                            quantity = user.subplans + 1
+                            results = subscription.adjust(quantity=quantity)
+                            if results:
+                                results = monitor.createMonitor(g.rdb_conn)
+                        else:
+                            results = "toomany"
 
                     if results == "exists":
                         print("/dashboard/monitors/{0} - \

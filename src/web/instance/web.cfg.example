@@ -15,7 +15,7 @@ STATHAT_EZ_KEY = 'update_me!'
 STATHAT_USE_GEVENT = True
 STATHAT_GEVENT_POOL_SIZE = 10
 STRIPE_PUBKEY = "pk_test_t07hfI3GqDaZAqsiNw1wo3AV"
-STRIPE_PRIVATE_KEY = "update_me!"
+STRIPE_PRIVATE_KEY = "sk_test_vdJhIZiZkTkD8y6sSajBeu1C"
 STRIPE_PAYMENTS_URL = "https://api.stripe.com/v1"
 ASSEMBLY_PRIVATE_KEY = "update_me!"
 ASSEMBLY_PAYMENTS_URL = "update_me!"
@@ -99,6 +99,21 @@ PACKAGES = {
         'upgraded' : True
     },
     'proplus' : {
+        'choices' : {
+            ('30mincheck', 'Every 30 Minutes'),
+            ('5mincheck', 'Every 5 Minutes'),
+            ('2mincheck', 'Every 2 Minutes'),
+            ('30seccheck', 'Every 30 Seconds'),
+            ('5seccheck', 'Every 5 Seconds')
+        },
+        'reaction_multiplier' : 2,
+        'data_retention' : 604800,
+        'acttype' : "ProPlus",
+        'cost_monthly' : 8.99,
+        'cost_yearly' : 89.99,
+        'upgraded' : True
+    },
+    'pro_plus_yearly' : {
         'choices' : {
             ('30mincheck', 'Every 30 Minutes'),
             ('5mincheck', 'Every 5 Minutes'),

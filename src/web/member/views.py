@@ -128,150 +128,35 @@ def modsub_page():
         tmpl = 'member/mod-subscription.html'
         data['js_bottom'].append('forms/subscribe.js')
         form = []
-
-        # Stripe vs ASM stuff
-        if user.payments == "ASM":
-            headers = {
-                "content-type": "application/json",
-                "Authorization": app.config['ASSEMBLY_PRIVATE_KEY']
-            }
-            paymenturl = app.config['ASSEMBLY_PAYMENTS_URL']
-        else:
-            from base64 import b64encode
-            api_key = b64encode(app.config['STRIPE_PRIVATE_KEY']).decode("ascii")
-            headers = {
-                "Authorization": "Basic " + api_key,
-            }
-            paymenturl = app.config['STRIPE_PAYMENTS_URL']
-
         from generalforms import subscribe
-        if data['upgraded'] is False:
-            # Upgrade Users
-            if request.method == "POST" and \
-                    "stripeToken" in request.form and "plan" in request.form:
-                stripeToken = request.form['stripeToken']
-                plan = request.form['plan']
-                if stripeToken:
-                    result = None
-                    monitor = Monitor()
-                    payload = {
-                        'email': user.email,
-                        'quantity': monitor.count(user.uid, g.rdb_conn),
-                        'source': stripeToken,
-                        'plan': plan
-                    }
-                    if payload['quantity'] == 0:
-                        ## Require 1 subscription initially
-                        payload['quantity'] = 1
-                    json_payload = json.dumps(payload)
-                    url = paymenturl + "/customers"
-                    print ("Making request to %s") % url
-                    try:
-                        # Send Request to Payment system to create user and subscribe
-                        # them to desired plan
-                        result = requests.post(
-                            url=url, headers=headers,
-                            params=payload, verify=True)
-                    except:
-                        print("Critical Error making request to Payments")
-                        flash('There was an error processing \
-                              your card details.', 'danger')
-                    print("Got {0} status code from Payments".format(
-                        result.status_code))
-                    if result.status_code >= 200 and result.status_code <= 299:
-                        rdata = json.loads(result.text)
-                        user.stripeid = rdata['id']
-                        user.stripe = stripeToken
-                        user.subplans = payload['quantity']
-                        user.subscription = payload['plan']
-                        if "pro_plus" in plan:
-                            user.acttype = "proplus"
-                        else:
-                            user.acttype = "pro"
-                        print("Setting UID %s Subscription to: %s") % (
-                            user.uid, user.acttype)
-                        subres = user.setSubscription(g.rdb_conn)
-                        stathat.ez_count(
-                            app.config['STATHAT_EZ_KEY'],
-                            app.config['ENVNAME'] + ' User Upgrades', 1)
-                        if subres:
-                            newdata = startData(user)
-                            data['limit'] = newdata['limit']
-                            data['rlimit'] = newdata['rlimit']
-                            data['acttype'] = newdata['acttype']
-                            data['subplans'] = newdata['subplans']
-                            data['cost'] = newdata['cost']
-                            data['subscription'] = newdata['subscription']
-                            flash('Subscription successfully created.',
-                                  'success')
-                        else:
-                            flash('Subscription not successfully created.',
-                                  'danger')
-                    else:
-                        flash('Subscription not created got status code: %d' % result.status_code, 'danger')
-        # Increase subscription
-        if data['upgraded']:
-            form = subscribe.AddPackForm(request.form)
-            if request.method == "POST" and "stripeToken" not in request.form:
-                if form.validate():
-                    add_packs = int(form.add_packs.data)
-                    # Set subscription quantity to desired monitor count
-                    payload = {'quantity': add_packs}
-                    json_payload = json.dumps(payload)
-                    url = paymenturl + "/customers/" + user.stripeid
-                    print("Making request to %s") % url
-                    try:
-                        # Get Subscription ID
-                        result = requests.get(
-                            url=url, headers=headers, verify=True)
-                        if result.status_code == 200:
-                            rdata = json.loads(result.text)
-                            subsid = rdata['subscriptions']['data'][0]['id']
-                            url = url + "/subscriptions/" + subsid
-                            print("Making request to %s") % url
-                            # Set Quantity
-                            try:
-                                if user.payments == "ASM":
-                                    result = requests.put(
-                                        url=url, headers=headers,
-                                        data=json_payload, verify=True)
-                                else:
-                                    result = requests.post(
-                                        url=url, headers=headers,
-                                        params=payload, verify=True)
-                            except:
-                                print("Critical Error making \
-                                      request to ASM Payments")
-                                flash('An error occured while \
-                                      requesting update to %s.' % url, 'danger')
-                        else:
-                            flash('An error occured while \
-                                  pulling subscription details - %d.' % result.status_code, 'danger')
-                    except:
-                        print("Critical Error making request to ASM Payments")
-                        flash('An error occured \
-                              while processing the form.', 'danger')
-                    print("Got {0} status code from Assembly".format(
-                        result.status_code))
-                    if result.status_code >= 200 and result.status_code <= 299:
-                        user.subplans = add_packs
-                        # Save user config
-                        print("Setting subscription count to \
-                              {0} for user {1}".format(add_packs, user.uid))
-                        subres = user.setSubscription(g.rdb_conn)
-                        if subres:
-                            newdata = startData(user)
-                            data['limit'] = newdata['limit']
-                            data['rlimit'] = newdata['rlimit']
-                            data['acttype'] = newdata['acttype']
-                            data['subplans'] = newdata['subplans']
-                            data['cost'] = newdata['cost']
-                            flash('Subscription successfully modified.',
-                                  'success')
-                        else:
-                            flash('Unknown error modifing subscription.',
-                                  'danger')
 
+        payment = __import__("payments." + user.payments, globals(),
+                             locals(), ['Payments'], -1)
+
+        subscription = payment.Payments(user=user, config=app.config, rdb=g.rdb_conn)
+        if request.method == "POST":
+            if data['upgraded'] is True:
+                result = subscription.adjust(request)
+            else:
+                result = subscription.create(request)
+
+            if result is True:
+                if data['upgraded'] is True:
+                    flash('Adjustment to subscription successful', 'success')
+                else:
+                    data['upgraded'] = True
+                    flash('Successfully Subscribed!', 'success')
+                newdata = startData(user)
+                data['limit'] = newdata['limit']
+                data['rlimit'] = newdata['rlimit']
+                data['acttype'] = newdata['acttype']
+                data['subplans'] = newdata['subplans']
+                data['cost'] = newdata['cost']
+                data['subscription'] = newdata['subscription']
+            else:
+                flash('Unable to adjust subscription please notify support', 'danger')
+        if data['upgraded'] is True:
+            form = subscribe.AddPackForm(request.form)
         page = render_template(tmpl, data=data, form=form)
         return page
     else:
