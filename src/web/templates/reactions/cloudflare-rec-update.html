@@ -31,7 +31,7 @@
         <div class="panel panel-primary">
           <div class="panel-heading">
           <div class="panel-title">
-            CloudFlare: Add New DNS Record
+            CloudFlare: Replace DNS Record
           </div>
           </div>
           <div class="panel-body">
@@ -102,7 +102,7 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <span class="input-group-btn">
-                  <button type="button" id="cl-rectype" class="btn btn-default" rel="popover" data-content="Select the type of record to add." title="Record Type"><i class="fa fa-question"></i></button>
+                  <button type="button" id="cl-rectype" class="btn btn-default" rel="popover" data-content="Select the type of record to update." title="Record Type"><i class="fa fa-question"></i></button>
                 </span>
               {% if data['edit'] %}
               {{ form.rec_type(class_="select", value=data['reaction']['data']['rec_type']) }}
@@ -118,7 +118,7 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <span class="input-group-btn">
-                  <button type="button" id="cl-recname" class="btn btn-default" rel="popover" data-content="This field should contain the name of the record you want to add i.e. www.example.com or ftp.example.com" title="Record Name"><i class="fa fa-question"></i></button>
+                  <button type="button" id="cl-recname" class="btn btn-default" rel="popover" data-content="This field should contain the name of the record you want to update i.e. www.example.com or ftp.example.com" title="Record Name"><i class="fa fa-question"></i></button>
                 </span>
               {% if data['edit'] %}
               {{ form.rec_name(class_="form-control", value=data['reaction']['data']['rec_name']) }}
@@ -140,7 +140,7 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <span class="input-group-btn">
-                  <button type="button" id="cl-cname" class="btn btn-default" rel="popover" data-content="This field should contain the IP/CNAME you would like to add." title="IP/CNAME to add"><i class="fa fa-question"></i></button>
+                  <button type="button" id="cl-cname" class="btn btn-default" rel="popover" data-content="This field should contain the IP/CNAME you would like to replace." title="IP/CNAME to replace"><i class="fa fa-question"></i></button>
                 </span>
               {% if data['edit'] %}
               {{ form.content(class_="form-control", value=data['reaction']['data']['content']) }}
@@ -172,7 +172,7 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <span class="input-group-btn">
-                  <button type="button" id="cl-cname" class="btn btn-default" rel="popover" data-content="This field should contain the IP/CNAME you would like to add." title="IP/CNAME to add"><i class="fa fa-question"></i></button>
+                  <button type="button" id="cl-cname" class="btn btn-default" rel="popover" data-content="This field should contain the IP/CNAME you would like to replace with." title="IP/CNAME to replace with"><i class="fa fa-question"></i></button>
                 </span>
               {% if data['edit'] %}
               {{ form.new_content(class_="form-control", value=data['reaction']['data']['new_content']) }}
