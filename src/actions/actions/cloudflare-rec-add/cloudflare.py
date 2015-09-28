@@ -22,7 +22,7 @@ def validate_response(req, logger):
 
 def get_recs_by_domain(email, key, domain, logger):
     ''' Get the DNS Records for a domain by domain name '''
-    zoneid = get_zoneid(email, key, domain)
+    zoneid = get_zoneid(email, key, domain, logger)
     return get_recs(email, key, zoneid, logger)
     
 
