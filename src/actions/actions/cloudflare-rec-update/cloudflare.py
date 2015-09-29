@@ -16,15 +16,36 @@ def validate_response(req, logger):
         if data['success'] is True:
             return True
     else:
-        logger.debug("cloudflare: Response text: %s" % req.text) 
+        logger.debug("cloudflare: Response text: %s" % req.text)
+        return False
+
+def change_zone_settings(email, key, domain, logger, setting, value):
+    ''' Get the ZoneID for the specified domain '''
+    headers = {
+        'X-Auth-Email' : email,
+        'X-Auth-Key' : key,
+        'Content-Type' : 'application/json'
+    }
+    zoneid = get_zoneid(email, key, domain, logger)
+    url = "%s/zones/%s/settings/%s" % (baseurl,
+                                       zoneid, setting)
+    payload = json.dumps(value)
+    logger.debug("cloudflare: Requesting url " + url)
+    try:
+        req = requests.patch(url=url, headers=headers, data=payload)
+        if validate_response(req, logger):
+            return True
+        else:
+            return False
+    except:
         return False
 
 
 def get_recs_by_domain(email, key, domain, logger):
     ''' Get the DNS Records for a domain by domain name '''
-    zoneid = get_zoneid(email, key, domain)
+    zoneid = get_zoneid(email, key, domain, logger)
     return get_recs(email, key, zoneid, logger)
-    
+
 
 def get_zoneid(email, key, domain, logger):
     ''' Get the ZoneID for the specified domain '''
@@ -43,7 +64,7 @@ def get_zoneid(email, key, domain, logger):
                 if zone['name'] == domain:
                     return zone['id']
         else:
-            return None    
+            return None
     except:
         return None
 
@@ -76,8 +97,7 @@ def get_recs(email, key, zoneid, logger, page=1, search={}):
         return return_data
     except:
         return return_data
-        
-    
+
 def add_rec(email, key, zoneid, logger, rec):
     ''' Add a new DNS record using the rec dictionary as json data '''
     headers = {

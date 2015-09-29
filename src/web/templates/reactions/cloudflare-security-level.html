@@ -31,7 +31,7 @@
         <div class="panel panel-primary">
           <div class="panel-heading">
           <div class="panel-title">
-            CloudFlare: Replace DNS Record
+            CloudFlare: Change Security Level
           </div>
           </div>
           <div class="panel-body">
@@ -98,88 +98,18 @@
 
 
                 <div class="form-group">
-                <label for="Record Type" class="col-sm-4 control-label">Record Type</label>
+                <label for="Level" class="col-sm-4 control-label">Security Level</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <span class="input-group-btn">
-                  <button type="button" id="cl-rectype" class="btn btn-default" rel="popover" data-content="Select the type of record to update." title="Record Type"><i class="fa fa-question"></i></button>
+                  <button type="button" id="cl-action" class="btn btn-default" rel="popover" data-content="Select desired security level." title="Security Level"><i class="fa fa-question"></i></button>
                 </span>
               {% if data['edit'] %}
-              {{ form.rec_type(class_="select", value=data['reaction']['data']['rec_type']) }}
+              {{ form.action(class_="select", value=data['reaction']['data']['action']) }}
               {% else %}
-              {{ form.rec_type(class_="select", placeholder="Record Type") }}
+              {{ form.action(class_="select", placeholder="Setting") }}
               {% endif %}
             </div>
-            </div>
-              </div>
-
-                <div class="form-group">
-                <label for="Record Name" class="col-sm-4 control-label">Record Name</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-                <span class="input-group-btn">
-                  <button type="button" id="cl-recname" class="btn btn-default" rel="popover" data-content="This field should contain the name of the record you want to update i.e. www.example.com or ftp.example.com" title="Record Name"><i class="fa fa-question"></i></button>
-                </span>
-              {% if data['edit'] %}
-              {{ form.rec_name(class_="form-control", value=data['reaction']['data']['rec_name']) }}
-              {% else %}
-              {{ form.rec_name(class_="form-control", placeholder="www.example.com") }}
-              {% endif %}
-            </div>
-            </div>
-              </div>
-
-              <div class="col-sm-4">
-              </div>
-              <div class="col-sm-8">
-                    <p class="help-block">Ensure the record name field contains the fully qualified domain. If Record Name is left blank all records that match type and content will be replaced.</p>
-              </div>
-
-                <div class="form-group">
-                <label for="Content" class="col-sm-4 control-label">Record Content</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-                <span class="input-group-btn">
-                  <button type="button" id="cl-cname" class="btn btn-default" rel="popover" data-content="This field should contain the IP/CNAME you would like to replace." title="IP/CNAME to replace"><i class="fa fa-question"></i></button>
-                </span>
-              {% if data['edit'] %}
-              {{ form.content(class_="form-control", value=data['reaction']['data']['content']) }}
-              {% else %}
-              {{ form.content(class_="form-control", placeholder="IP/CNAME") }}
-              {% endif %}
-              </div>
-            </div>
-              </div>  
-
-                <div class="form-group">
-                <label for="New Record Type" class="col-sm-4 control-label">New Record Type</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-                <span class="input-group-btn">
-                  <button type="button" id="cl-rectype" class="btn btn-default" rel="popover" data-content="Select the type of record to update the record to." title="New Record Type"><i class="fa fa-question"></i></button>
-                </span>
-              {% if data['edit'] %}
-              {{ form.new_rec_type(class_="select", value=data['reaction']['data']['new_rec_type']) }}
-              {% else %}
-              {{ form.new_rec_type(class_="select", placeholder="Record Type") }}
-              {% endif %}
-            </div>
-            </div>
-              </div>
-
-                <div class="form-group">
-                <label for="Content" class="col-sm-4 control-label">New Record Content</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-                <span class="input-group-btn">
-                  <button type="button" id="cl-cname" class="btn btn-default" rel="popover" data-content="This field should contain the IP/CNAME you would like to replace with." title="IP/CNAME to replace with"><i class="fa fa-question"></i></button>
-                </span>
-              {% if data['edit'] %}
-              {{ form.new_content(class_="form-control", value=data['reaction']['data']['new_content']) }}
-              {% else %}
-              {{ form.new_content(class_="form-control", placeholder="IP/CNAME") }}
-              {% endif %}
-              </div>
             </div>
               </div>
 
