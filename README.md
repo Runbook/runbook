@@ -4,7 +4,7 @@ Runbook
 | Facility | Develop | Staging | Master |
 | --------- | -------- | -------- | ------------ |
 | Travis-CI | [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=develop)](https://travis-ci.org/Runbook/runbook) | [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=staging)](https://travis-ci.org/Runbook/runbook) | [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=master)](https://travis-ci.org/Runbook/runbook)
-| Coverage | [![Coverage Status](https://img.shields.io/coveralls/Runbook/runbook.svg)](https://coveralls.io/r/Runbook/runbook?branch=develop) | [![Coverage Status](https://img.shields.io/coveralls/Runbook/runbook.svg)](https://coveralls.io/r/Runbook/runbook?branch=staging) | [![Coverage Status](https://img.shields.io/coveralls/Runbook/runbook.svg)](https://coveralls.io/r/Runbook/runbook?branch=master) |
+| Coverage | [![Coverage Status](https://coveralls.io/repos/Runbook/runbook/badge.svg?branch=develop&service=github)](https://coveralls.io/github/Runbook/runbook?branch=develop) | [![Coverage Status](https://coveralls.io/repos/Runbook/runbook/badge.svg?branch=staging&service=github)](https://coveralls.io/github/Runbook/runbook?branch=staging) | [![Coverage Status](https://coveralls.io/repos/Runbook/runbook/badge.svg?branch=master&service=github)](https://coveralls.io/github/Runbook/runbook?branch=master) 
 
 ## What is Runbook
 
