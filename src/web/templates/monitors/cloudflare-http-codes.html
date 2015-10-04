@@ -30,7 +30,7 @@
         <div class="panel panel-primary">
           <div class="panel-heading">
             <div class="panel-title">
-            HTTP GET: Status Code
+            CloudFlare: HTTP Status Codes
             </div>
           </div>
           <div class="panel-body">
@@ -95,7 +95,7 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <span class="input-group-btn">
-                  <button type="button" id="cl-starttime" class="btn btn-default" rel="popover" data-content="Select the time span of HTTP Status statistics. Any value less than 1 hour requires a Cloudflare pro package" title="Time Span"><i class="fa fa-question"></i></button>
+                  <button type="button" id="cl-starttime" class="btn btn-default" rel="popover" data-content="Select the time span of HTTP Status statistics. Any value less than 1 hour requires a CloudFlare pro package" title="Time Span"><i class="fa fa-question"></i></button>
                 </span>
               {% if data['edit'] %}
               {{ form.start_time(class_="select", value=data['monitor']['data']['codes']) }}
@@ -105,6 +105,11 @@
             </div>
               </div>
               </div>  
+              <div class="col-sm-4">
+              </div>
+              <div class="col-sm-8">
+                    <p class="help-block">Any Time Span less than 1 Hour requires a CloudFlare Pro package</p>
+              </div>
 
              <div class="form-group">
                 <label for="Codes" class="col-sm-4 control-label">HTTP Status Codes</label>
