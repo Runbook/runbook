@@ -36,7 +36,7 @@ class CheckForm(DatacenterCheckForm):
         validators=[DataRequired(message='API Key is a required field')])
     threshold = TextField(
         "Threshold",
-        validators=[DataRequired(message='Threshold is a required field'), NumberRange(min=1, max=None, message="Threshold must be a number between 1 - 100") ])
+        validators=[DataRequired(message='Threshold is a required field'), NumberRange(min=1, message="Threshold must be a number between 1 - 100") ])
     start_time = SelectField(
         "Time Span",
         choices=start_choices,
