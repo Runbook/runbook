@@ -7,6 +7,8 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 import rethinkdb as r
 import time
+from monitors import Monitor
+from reactions import Reaction
 
 
 class User(object):
@@ -31,6 +33,9 @@ class User(object):
         self.subscribed_to_newsletter = False
         self.confirmed = False
         self.confirmed_on = None
+        self.upgraded = False
+        self.monitorCount = None
+        self.reactionCount = None
 
     def createUser(self, userdata, rdb):
         '''
@@ -123,6 +128,11 @@ class User(object):
             self.subscription = results['subscription']
             self.creation_time = results['creation_time']
             self.confirmed = results['confirmed']
+            ## Identify number of monitors and reactions
+            monitor = Monitor()
+            reaction = Reaction()
+            self.monitorCount = monitor.count(self.uid, rdb)
+            self.reactionCount = reaction.count(self.uid, rdb)
             return self
         else:
             return None

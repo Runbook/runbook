@@ -72,7 +72,7 @@
             </table>
             <div class="panel-body">
               {% if monitor['data']['reactions']|length < 1 %}
-                <p class="text-warning">No Reaction defined for this Runbook <a href="/dashboard/edit-monitors/{{ monitor['ctype'] }}/{{ cid }}" class="btn btn-sm btn-warning">Attach a Runbook</a> or <a href="/dashboard/reactions" class="btn-warning btn-sm btn">Create a new Reaction</a>.</p>
+                <p class="text-warning">No Reaction defined for this Runbook <a href="/dashboard/edit-monitors/{{ monitor['ctype'] }}/{{ cid }}" class="btn btn-sm btn-warning">Attach a Reaction</a> or <a href="/dashboard/reactions" class="btn-warning btn-sm btn">Create a new Reaction</a>.</p>
               {% else %}
                 <p class="description text-primary">
                  <samp>monitor <code class="monitor-type"><b>{{ monitor['ctype'] }}</b></code>:<br>

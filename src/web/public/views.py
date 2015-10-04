@@ -66,6 +66,12 @@ def static_pages(pagename):
 
     data = {
         'active': pagename,
-        'loggedin': False
+        'loggedin': False,
+        'monitor_list': app.config['MONITORS'],
+        'reaction_list' : app.config['REACTIONS'],
     }
+    if "monitor" in pagename:
+        data['js_bottom'] = ['monitors/monitorlist.js',]
+    if "reaction" in pagename:
+        data['js_bottom'] = ['reactions/reactionlist.js',]
     return render_template('public/'+rendpage, data=data), status_code
