@@ -1,6 +1,6 @@
 <div id="monitor-list">
 
-<input class="form-control search" placeholder="Filter" />
+<input class="form-control search" placeholder="Search" />
 <hr>
   <ul class="list list-unstyled">
     {% for category in data['monitor_list'].iterkeys() %}
@@ -13,7 +13,8 @@
           </div>
         </div>
         <table class="table">
-          <tr><td colspan=2><h4 class="pull-right"><small class="category">{{ category }}</small></h4></td></tr>
+          <tr><td colspan=3>
+            <h4 class="pull-right"><small class="category">{{ category }}</small></h4></td></tr>
           <tr class="active"><td>
             <p class="description">{{ data['monitor_list'][category][item]['description'] }}</p>
             </td><td width="25%"><div class="pull-right"><a href="{{ data['monitor_list'][category][item]['create_link'] }}" class="btn btn-primary">Create</a></div>
