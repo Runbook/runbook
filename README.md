@@ -1,15 +1,13 @@
 Runbook
 ===========
 
-+----------+---------+---------+--------+
-| Facility | Develop | Staging | Master |
-+----------+---------+---------+--------+
-| Travis-CI | [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=develop)](https://travis-ci.org/Runbook/runbook) | [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=staging)](https://travis-ci.org/Runbook/runbook) | [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=master)](https://travis-ci.org/Runbook/runbook)
-+----------+---------+---------+--------+
-| Coverage | [![Coverage Status](https://coveralls.io/repos/Runbook/runbook/badge.svg?branch=develop&service=github)](https://coveralls.io/github/Runbook/runbook?branch=develop) | [![Coverage Status](https://coveralls.io/repos/Runbook/runbook/badge.svg?branch=staging&service=github)](https://coveralls.io/github/Runbook/runbook?branch=staging) | [![Coverage Status](https://coveralls.io/repos/Runbook/runbook/badge.svg?branch=master&service=github)](https://coveralls.io/github/Runbook/runbook?branch=master) 
-+----------+---------+---------+--------+
-| Chat | [![Join the chat at https://gitter.im/Runbook/runbook](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Runbook/runbook?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
-+----------+---------+---------+--------+
+**Develop:** [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=develop)](https://travis-ci.org/Runbook/runbook) [![Coverage Status](https://coveralls.io/repos/Runbook/runbook/badge.svg?branch=develop&service=github)](https://coveralls.io/github/Runbook/runbook?branch=develop)
+
+**Staging:** [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=staging)](https://travis-ci.org/Runbook/runbook) [![Coverage Status](https://coveralls.io/repos/Runbook/runbook/badge.svg?branch=staging&service=github)](https://coveralls.io/github/Runbook/runbook?branch=staging)
+
+**Master:** [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=master)](https://travis-ci.org/Runbook/runbook) [![Coverage Status](https://coveralls.io/repos/Runbook/runbook/badge.svg?branch=master&service=github)](https://coveralls.io/github/Runbook/runbook?branch=master)
+
+[![Join the chat at https://gitter.im/Runbook/runbook](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Runbook/runbook?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
 
 ## What is Runbook
 
