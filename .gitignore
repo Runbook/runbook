@@ -72,4 +72,4 @@ config.yml
 .vagrant/
 
 # Mac Junk
-*/.DS_Store
+*.DS_Store
