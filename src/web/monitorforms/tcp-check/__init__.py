@@ -5,7 +5,7 @@
 ######################################################################
 
 from wtforms import TextField
-from wtforms.validators import IPAddress, NumberRange
+from wtforms.validators import IPAddress, NumberRange, DataRequired
 from ..datacenter import DatacenterCheckForm
 
 
@@ -14,8 +14,8 @@ class CheckForm(DatacenterCheckForm):
     ''' Class that creates an TCP Check form for the dashboard '''
     ip = TextField(
         "IP",
-        validators=[IPAddress(
-            message='Does not match IP address format')])
+        validators=[DataRequired(
+            message='IP or Hostname is required')])
     port = TextField(
         "Port",
         validators=[NumberRange(
