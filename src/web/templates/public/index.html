@@ -7,7 +7,21 @@
       Monitoring + Automated Remediation
     </h1>
     <h2 class="hero-explain">
-      Resolve DevOps alerts like a boss with IFTTT-style mitigation
+      <ul class="slick">
+      <li>If <b>HTTP: Keyword Search</b> is <b>False</b> then <b>CloudFlare: DNS Failover</b></li>
+      <li>If <b>HTTP: GET</b> is <b>False</b> then <b>DigitalOcean: Reboot Server</b></li>
+      <li>If <b>TCP: Port</b> is <b>True</b> then <b>CloudFlare: Add DNS Record</b></li>
+      <li>If <b>Heroku: Dyno Status</b> is <b>False</b> then <b>Heroku: Rollback Release</b></li>
+      <li>If <b>SSL: Expired</b> is <b>True</b> then <b>Slack: WebHook</b></li>
+      <li>If <b>Linode: Server Status</b> is <b>False</b> then <b>CloudFlare: Replace DNS Record </b></li>
+      <li>If <b>TCP: Port</b> is <b>False</b> then <b>SaltStack: HighState</b></li>
+      <li>If <b>CloudFlare: Traffic Decrease</b> is <b>True</b> then <b>AWS: EC2 Instance Stop</b></li>
+      <li>If <b>Ping</b> is <b>False</b> then <b>DigitalOcean: PowerCycle Server</b></li>
+      <li>If <b>PaperTrail: Webhook</b> is <b>True</b> then <b>CloudFlare: Modify Security Level</b></li>
+      <li>If <b>HTTP: GET</b> is <b>True</b> then <b>HTTP: POST</b></li>
+      <li>If <b>TCP: Port</b> is <b>False</b> then <b>Commando.io: Execute Recipe</b></li>
+      <li>If <b>CloudFlare: HTTP Status Codes</b> is <b>False</b> then <b>PagerDuty: Create Incident</b></li>
+      </ul>
     </h2>
 
     <a href="https://dash.runbook.io/signup" class="btn btn-action hero-call-to-action">Sign up for free</a>
@@ -20,43 +34,66 @@
   <div class="container">
 
     <a name="features"></a>
-    <h2 class="subtitle">Runbooks are as simple as one, two</h2>
+    <h2 class="subtitle">Runbook resolves DevOps issues automatically</h2>
 
-    <div class="sub-section left">
-
-      <img src="static/img/monitor-diagram.png" alt="Monitors"/>
-      <div class="description">
-        <h3>Monitors</h3>
-        <p>
-          Monitors are used to check the status of your environment. They can be webhooks from Slack, they can check AWS instance status, they can be ping requests. Or, you can setup our TCP custom port to validate connectivity.
-        </p>
-        <div class="more">
-          <a href="/pages/monitors">See the full list of available Monitors</a>
-          <a href="https://dash.runbook.io/signup" class="btn btn-action">Sign Up</a>
-        </div>
-      </div>
-      <div class="clearfix"></div>
-
+    <div class="sub-section">
+    <ul class="timeline">
+        <li>
+          <div class="timeline-badge danger"><i class="fa fa-fire"></i></div>
+          <div class="timeline-panel">
+            <div class="timeline-heading">
+              <h4 class="timeline-title">An issue occurs within your environment</h4>
+              <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> impact time</small></p>
+            </div>
+            <div class="timeline-body">
+              <p align="left">Most infrastructure and application monitoring tools are great at notifying operations teams when issues occur. However, even with a 24/7 staff watching over your environment the average time to remediate issues can be anywhere between 15 - 25 minutes.</p>
+            </div>
+          </div>
+        </li>
+        <li class="timeline-inverted">
+          <div class="timeline-badge warning"><i class="fa fa-heartbeat"></i></div>
+          <div class="timeline-panel">
+            <div class="timeline-heading">
+              <h4 class="timeline-title">Monitors</h4>
+              <p><small class="text-muted"><i class="fa fa-clock-o"></i> 5 seconds after impact</small></p>
+            </div>
+            <div class="timeline-body">
+              <p align="left">Runbook watches over your environment with custom monitors that detect when something goes wrong. These can be anything from Slack WebHooks to a TCP connection on a custom port.</p>
+              <br>
+              <a href="/pages/monitors" class="btn btn-action btn-block" role="button">All Monitors</a>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="timeline-badge info"><i class="fa fa-medkit"></i></div>
+          <div class="timeline-panel">
+            <div class="timeline-heading">
+              <h4 class="timeline-title">Reactions</h4>
+              <p><small class="text-muted"><i class="fa fa-clock-o"></i> 6 seconds after impact</small></p>
+            </div>
+            <div class="timeline-body">
+              <p align="left">When we detect an issue we execute a predefined reaction. These reactions can perform everything from DNS Failover with CloudFlare to rebooting servers.</p>
+              <br>
+              <a href="/pages/reactions" class="btn btn-action btn-block" role="button">All Reactions</a>
+            </div>
+          </div>
+        </li>
+        <li class="timeline-inverted">
+          <div class="timeline-badge success"><i class="fa fa-rocket"></i></div>
+          <div class="timeline-panel">
+            <div class="timeline-heading">
+              <h4 class="timeline-title">Crisis Averted</h4>
+              <p><small class="text-muted"><i class="fa fa-clock-o"></i> 7 seconds after impact</small></p>
+            </div>
+            <div class="timeline-body">
+              <p align="left">With our automated remediation service you can fix DevOps issues faster, stop fighting fires and get back to delivering your product.</p>
+              <br>
+              <a href="https://dash.runbook.io/signup" class="btn btn-action btn-block" role="button">Get Started</a>
+            </div>
+          </div>
+        </li>
+    </ul>
     </div>
-
-    <hr/>
-
-    <div class="sub-section right">
-
-      <div class="description">
-        <h3>Reactions</h3>
-        <p>
-          Reactions are automated tasks that are called when Monitors fail. It can be anything from starting or restarting servers on AWS, Rackspace, DigitalOcean, or elsewhere, to running a custom script or changing DNS entries with CloudFlare. You know, all the first things you try when you get a 4am wake-up call.
-        </p>
-        <div class="more">
-          <a href="/pages/reactions">See the full list of available Reactions</a>
-          <a href="https://dash.runbook.io/signup" class="btn btn-action">Sign Up</a>
-        </div>
-      </div>
-      <img src="static/img/reaction-diagram.png" alt="Reactions"/>
-      <div class="clearfix"></div>
-
-     </div>
 
   </div>
 </div>
@@ -66,11 +103,19 @@
 <div class="section diagram-section">
   <div class="container">
     
-    <h2 class="subtitle">Integrated with the tools you use today</h2>
+    <h2 class="subtitle">Integrated with the tools you already use</h2>
+    <div class="integrationslider">
+      <div><img src="/static/img/integrations/linode.png" class="img-responsive"></div>
+      <div><img src="/static/img/integrations/cloudflare.png" class="img-responsive"></div>
+      <div><img src="/static/img/integrations/slack.png" class="img-responsive"></div>
+      <div><img src="/static/img/integrations/digitalocean.png" class="img-responsive"></div>
+      <div><img src="/static/img/integrations/pagerduty.png" class="img-responsive"></div>
+      <div><img src="/static/img/integrations/datadog.png" class="img-responsive"></div>
+      <div><img src="/static/img/integrations/twilio.png" class="img-responsive"></div>
+      <div><img src="/static/img/integrations/saltstack.png" class="img-responsive"></div>
+      <div><img src="/static/img/integrations/heroku.png" class="img-responsive"></div>
+    </div>
 
-    <img src="static/img/integration-partners.png" class="diagram" width="100%"/>
-
-    <h3 class="diagram-subtitle">We support the systems above and <a href="/pages/reactions">many more</a>.</h3>
 
   </div>
 </div>
@@ -82,14 +127,12 @@
 
     <h2 class="subtitle">Don't take our word for it</h2>
 
+    <div class="slick">
+      <div>
     <!-- quote 1 -->
     <div class="quote-block">
 
       <div class="quote-block-info">
-        <div class="author-thumb">
-          <img src="static/img/quote-authors/chris.png" width="100%"/>
-        </div>
-
         <div class="quote-info">
           <p class="quote-text">
             "Runbook makes reacting to system issues fast and predictable. Without requiring manual intervention."
@@ -103,17 +146,12 @@
 
     </div>
     <!-- end quote 1 -->
-
-    <hr/>
-     
+      </div>
+      <div>
     <!-- quote 2 -->
     <div class="quote-block">
 
       <div class="quote-block-info">
-        <div class="author-thumb">
-          <img src="static/img/quote-authors/gopi.png" width="100%"/>
-        </div>
-
         <div class="quote-info">
           <p class="quote-text">
             "Runbook helped us get to 100% availability for our API, and 0% headaches with their simple integrations to existing services. Their team is absolutely awesome for support and new feature requests."
@@ -127,6 +165,8 @@
 
     </div>
     <!-- end quote 2 -->
+      </div>
+    </div>
 
   </div>
 
@@ -137,11 +177,11 @@
 <div class="footer-action-section">
   <div class="container">
 
-    <h4>Never again wake up at 4am for a problem that can be solved automatically</h4>
+    <h4>Put an end to on call rotation and start automating issue remediation</h4>
 
-    <a href="https://dash.runbook.io/signup" class="btn btn-action call-to-action">Get Started Now</a>
+    <a href="https://dash.runbook.io/signup" class="btn btn-action call-to-action">Get Started</a>
 
-    <h5>Runbook is <a href="https://github.com/Runbook" class="assembly-link" target="_blank">Open Source</a>, and <a href="https://assembly.com/runbook" class="assembly-link" target="_blank">built as a community</a>.</h5>
+    <h5>Runbook is <a href="https://github.com/Runbook" class="assembly-link" target="_blank">Open Source</a>! Check out our <a href="https://assembly.com/runbook" class="assembly-link" target="_blank">Changelog</a>.</h5>
 
   </div>
 </div>

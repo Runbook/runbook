@@ -57,11 +57,13 @@ body {
 
 /* Hero customizations */
 .hero-section {
-  height: 700px;
+  height: 800px;
   padding: 20px 0px;
   padding-top: 220px;
   margin-top: -95px;
   background-color: black;
+  background: url('/static/img/roadtoclouds.jpg');
+  background-size: cover;
 }
 
 .hero-section .hero-vp {
