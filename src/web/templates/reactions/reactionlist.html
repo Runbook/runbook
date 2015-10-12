@@ -16,7 +16,9 @@
           <tr><td colspan=2><h4 class="service">{{ data['reaction_list'][category][item]['service'] }} <small class="category pull-right">{{ category }}</small></h4></td></tr>
           <tr class="active"><td>
             <p class="description">{{ data['reaction_list'][category][item]['description'] }}</p>
+            {% if data['loggedin'] %}
             </td><td width="25%"><div class="pull-right"><a href="{{ data['reaction_list'][category][item]['create_link'] }}" class="btn btn-primary">Create</a></div>
+            {% endif %}
           </td></tr>
         </table>
       </div> 
