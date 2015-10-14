@@ -6,9 +6,9 @@ services:
   - redis-server
 
 install:
-  - pip install -r src/web/requirements.txt --use-mirrors
-  - pip install -r src/bridge/requirements.txt --use-mirrors
-  - pip install -r src/monitors/requirements.txt --use-mirrors
+  - pip install -r src/web/requirements.txt
+  - pip install -r src/bridge/requirements.txt
+  - pip install -r src/monitors/requirements.txt
   - pip install coverage
   - pip install coveralls
 #  - sudo add-apt-repository ppa:rethinkdb/ppa -y
