@@ -11,6 +11,6 @@ Werkzeug
 coverage
 itsdangerous
 requests
-rethinkd
+rethinkdb
 stripe
 wsgiref
