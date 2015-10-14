@@ -37,6 +37,7 @@ class BaseTestCase(TestCase):
 
             # Create test user
             user = User()
+            user.config = app.config
             user.createUser(userdata, g.rdb_conn)
 
         except RqlDriverError:
