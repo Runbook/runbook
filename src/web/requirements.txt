@@ -1,5 +1,4 @@
 Flask
-hashlib
 Flask-Mail
 Flask-Script
 Flask-Testing
