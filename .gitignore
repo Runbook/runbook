@@ -73,3 +73,6 @@ config.yml
 
 # Mac Junk
 *.DS_Store
+
+# vi swap files
+*.swp
