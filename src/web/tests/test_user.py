@@ -32,6 +32,7 @@ class TestUserRegistration(BaseTestCase):
             self.assertEqual(response.status_code, 200)
             self.assertIn('Runbooks', response.data)
             user = User()
+            user.config = app.config
             user = user.get('username', 'test@user.com', g.rdb_conn)
             self.assertTrue(user.email == 'test@user.com')
             self.assertTrue(user.status == 'active')
@@ -70,6 +71,7 @@ class TestUserRegistration(BaseTestCase):
     def test_check_password(self):
         # Ensure given password is correct after unhashing
         user = User()
+        user.config = app.config
         user = user.get('username', 'test@tester.com', g.rdb_conn)
         self.assertTrue(user.checkPass('password456', g.rdb_conn))
         self.assertFalse(user.checkPass('wrong!', g.rdb_conn))
@@ -85,6 +87,7 @@ class TestUserRegistration(BaseTestCase):
     def test_check_if_confirmed_before_confirming(self):
         # Ensure an "unconfimered" user is not "confirmed"
         user = User()
+        user.config = app.config
         user = user.get('username', 'test@tester.com', g.rdb_conn)
         self.assertFalse(user.is_confirmed('username', g.rdb_conn))
 
@@ -101,6 +104,7 @@ class TestUserRegistration(BaseTestCase):
                 request.cookies
             )
             user = User()
+            user.config = app.config
             user_id = user.getUID('test@tester.com', g.rdb_conn)
             self.assertTrue(logged_in_user_id == user_id)
 
@@ -116,13 +120,16 @@ class TestUserRegistration(BaseTestCase):
             ), follow_redirects=True)
             self.assertEqual(response.status_code, 200)
             user = User()
+            user.config = app.config
             user = user.get('username', 'test@tester.com', g.rdb_conn)
             self.assertTrue(user.creation_time)
 
     def test_password_hashing_is_random(self):
         # Ensure that a password salt/hash is random
         user_one = User()
+        user_one.config = app.config
         user_two = User()
+        user_two.config = app.config
         password_one = user_one.createPass("test")
         password_two = user_two.createPass("test")
         self.assertTrue(password_one != password_two)
@@ -130,6 +137,7 @@ class TestUserRegistration(BaseTestCase):
     def test_initial_permissions(self):
         # Ensure initial permissions are set correctly
         user = User()
+        user.config = app.config
         user_test = user.get('username', 'test@tester.com', g.rdb_conn)
         self.assertTrue(user_test.acttype == "lite-v2")
         self.assertFalse(user_test.acttype == "pro")
@@ -151,6 +159,7 @@ class TestUserLogin(BaseTestCase):
                 follow_redirects=True
             )
             user = User()
+            user.config = app.config
             user = user.get('username', 'test@tester.com', g.rdb_conn)
             active = user.is_active('test@tester.com', g.rdb_conn)
             self.assertTrue(user.email == "test@tester.com")
@@ -232,6 +241,7 @@ class TestUserConfirmation(BaseTestCase):
             response = self.client.get(
                 '/confirm/'+str(token), follow_redirects=True)
             user = User()
+            user.config = app.config
             user = user.get('username', 'test@tester.com', g.rdb_conn)
             self.assertTrue(user.confirmed)
             self.assertEqual(response.status_code, 200)
@@ -249,6 +259,7 @@ class TestUserConfirmation(BaseTestCase):
                 email='test@tester.com', password='password456'
             ), follow_redirects=True)
             user = User()
+            user.config = app.config
             user = user.get('username', 'test@tester.com', g.rdb_conn)
             r.table('users').get(user.uid).update(
                 {'confirmed': True}).run(g.rdb_conn)
@@ -271,6 +282,7 @@ class TestUserConfirmation(BaseTestCase):
             response = self.client.get(
                 '/confirm/'+str(token), follow_redirects=True)
             user = User()
+            user.config = app.config
             user = user.get('username', 'test@tester.com', g.rdb_conn)
             self.assertFalse(user.confirmed)
             self.assertEqual(response.status_code, 200)
@@ -287,6 +299,7 @@ class TestUserConfirmation(BaseTestCase):
             response = self.client.get(
                 '/confirm/incorrect', follow_redirects=True)
             user = User()
+            user.config = app.config
             user = user.get('username', 'test@tester.com', g.rdb_conn)
             self.assertFalse(user.confirmed)
             self.assertEqual(response.status_code, 200)

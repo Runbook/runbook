@@ -84,14 +84,18 @@ def signup():
 
             # Create user
             user = User()
+            user.config = app.config
             result = user.createUser(userdata, g.rdb_conn)
             # Check results for success or failure
             if result == "exists":
                 flash('User already exists.', 'danger')
             elif result is not False:
-                stathat.ez_count(
-                    app.config['STATHAT_EZ_KEY'],
-                    app.config['ENVNAME'] + ' User Signup', 1)
+                try:
+                    stathat.ez_count(
+                        app.config['STATHAT_EZ_KEY'],
+                        app.config['ENVNAME'] + ' User Signup', 1)
+                except:
+                    pass
                 print("/signup - New user created")
                 cdata = cookies.genCdata(result, app.config['SECRET_KEY'])
                 data['loggedin'] = True
@@ -136,6 +140,7 @@ def login_page():
 
             # Start user definition
             user = User()
+            user.config = app.config
             if user.get('username', email, g.rdb_conn):
                 result = user.checkPass(password, g.rdb_conn)
                 if result is True:

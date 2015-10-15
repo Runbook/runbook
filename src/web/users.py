@@ -5,6 +5,7 @@
 ######################################################################
 
 from werkzeug.security import generate_password_hash, check_password_hash
+import hashlib
 import rethinkdb as r
 import time
 from monitors import Monitor
@@ -36,6 +37,7 @@ class User(object):
         self.upgraded = False
         self.monitorCount = None
         self.reactionCount = None
+        self.config = None
 
     def createUser(self, userdata, rdb):
         '''
@@ -77,8 +79,15 @@ class User(object):
             else:
                 return False
 
+    def saltPass(self, password):
+        ''' Create a appsalt + user password hash (better than default) '''
+        salty_pass = self.config['PASSWORD_SALT'] + password
+        return hashlib.sha512(salty_pass).hexdigest()
+
+        
     def createPass(self, password):
         ''' Create a salted hashed password '''
+        password = self.saltPass(password)
         return generate_password_hash(password)
 
     def setPass(self, newpass, rdb):
@@ -144,7 +153,12 @@ class User(object):
         if not data:
             return "No data found"
         else:
-            return check_password_hash(data['password'], password)
+           if check_password_hash(data['password'], password):
+              self.setPass(password, rdb)
+              return True
+           else:
+              password = self.saltPass(password)
+              return check_password_hash(data['password'], password)
 
     def is_active(self, username, rdb):
         ''' Check if a user exists or not '''
