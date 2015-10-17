@@ -14,9 +14,26 @@ class BaseCheckForm(Form):
     ''' Class that creates an TCP Check form for the dashboard '''
     name = TextField(
         "Name",
-        validators=[DataRequired(message='Name is a required field')]
+        validators=[DataRequired(message='Name is a required field')],
+        description="""
+            A user defined name for the Runbook Monitor. Name can be alphanumeric and contain special characters.
+        """,
     )
-    reactions = SelectMultipleField("Reactions")
+    reactions = SelectMultipleField(
+        "Reactions",
+        description="""
+            Select the reaction or reactions you would like to execute with this monitor
+        """,
+    )
+
+    # Common placeholder values
+    placeholders = {
+        'name' : 'Name',
+        'email' : 'user@example.com',
+        'domain' : 'example.com',
+        'apikey' : 'API Key',
+        'threshold' : '10',
+    }
 
 if __name__ == '__main__':  # pragma: no cover
     pass                    # pragma: no cover

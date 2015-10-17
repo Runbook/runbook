@@ -1,0 +1,101 @@
+{% include 'base-header.html' %}
+
+
+<div class="container">
+  <div class="row">
+    <!-- content -->
+      <div class="page-header">
+      {% if data['edit'] %}
+        <h1><i class="fa fa-eye-slash fa-1x"></i> Manage Monitor</h1>
+      {% else %}
+        <h1><i class="fa fa-eye-slash fa-1x"></i> Add Monitor</h1>
+      {% endif %}
+      </div>
+
+      {% if data['error'] %}
+      <p class="alert alert-danger">{{ data['msg'] }}</p>
+      {% elif data['msg'] and data['error'] == False %}
+      <p class="alert alert-success">{{ data['msg'] }}</p>
+      {% endif %}
+      {% if form.errors %}
+      {% for field, error in form.errors.items() %}
+      {% for msg in error %}
+      <p class="alert alert-danger">{{msg}}</p>
+      {% endfor %}
+      {% endfor %}
+      {% endif %}
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+          <div class="panel-title">
+            {{ form.title }} 
+          </div>
+          </div>
+          <div class="panel-body">
+            <form action="{{ data['url'] }}" method="post" name="api-check" target="_self" class="form-horizontal" role="form">
+            {{ form.csrf_token }}
+
+            {% for field in form.__iter__() %}
+            <div class="form-group">
+                <label for="{{ field.label.text }}" class="col-sm-4 control-label">{{ field.label.text }}</label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <span class="input-group-btn">
+                  <button type="button" id="{{ field.name }}" class="btn btn-default" rel="popover" data-content="{{ field.description }}" title="{{ field.label.text }}"><i class="fa fa-question"></i></button>
+                </span>
+                {% if field.type == "SelectField" %}
+                {% set class = "select" %}
+                {% elif field.type == "SelectMultipleField" %}
+                {% set class = "multiselect" %}
+                {% else %}
+                {% set class = "form-control" %}
+                {% endif %}
+
+                {% if data['edit'] %}
+                    {{ field(class_=class, value=data['monitor']['data'][field.name]) }}
+                {% elif field.name in form.placeholders %}
+                    {{ field(class_=class, placeholder=form.placeholders[field.name]) }}
+                {% else %}
+                    {{ field(class_=class) }}
+                {% endif %}
+              </div>
+            </div>
+              </div>  
+            {% endfor %}
+              
+            
+                <p></p>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+          </div>
+        </div>
+    </div> <!-- md-8 -->
+    <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <div class="panel-title">
+            Monitor Description
+          </div>
+          </div>
+          <div class="panel-body">
+            {{ form.description }}
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <div class="panel-title">
+            Webhook Information
+          </div>
+          </div>
+          <div class="panel-body">
+            {% include form.webhook_include %}
+          </div>
+        </div>
+    </div>
+
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->
+{% include 'dash-footer.html' %}

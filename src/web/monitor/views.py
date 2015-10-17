@@ -59,8 +59,8 @@ def addcheck_page(cname):
         data = startData(user)
         data['active'] = 'dashboard'
         data['url'] = '/dashboard/monitors/' + cname
-        tmpl = 'monitors/' + cname + '.html'
-        data['js_bottom'] = ['monitors/monitorlist.js', 'monitors/base.js', 'monitors/' + cname + '.js']
+        tmpl = 'monitors/create.html'
+        data['js_bottom'] = ['monitors/monitorlist.js', 'monitors/base.js',]
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
@@ -171,9 +171,9 @@ def editcheck_page(cname, cid):
         data = startData(user)
         data['active'] = 'dashboard'
         data['url'] = '/dashboard/edit-monitors/' + cname + "/" + cid
-        tmpl = 'monitors/' + cname + '.html'
+        tmpl = 'monitors/create.html'
         data['edit'] = True
-        data['js_bottom'] = ['monitors/base.js', 'monitors/' + cname + '.js']
+        data['js_bottom'] = ['monitors/base.js',]
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'

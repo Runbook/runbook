@@ -22,7 +22,10 @@ class DatacenterCheckForm(TimerCheckForm):
     
 
     datacenter = SelectMultipleField(
-        "Datacenter",
+        "Data Center",
+        description="""
+            Select two or more Monitoring Zones where this monitor will be executed from
+        """,
         choices=dc_choices,
         default=defaults,
         validators=[DataRequired(
