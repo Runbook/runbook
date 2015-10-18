@@ -1,0 +1,12 @@
+            `<p>Users of Slack can define unique <a href="https://api.slack.com/outgoing-webhooks" target="_blank">Webhooks</a> or <a href="https://api.slack.com/slash-commands" target="_blank">Slack Commands</a> that call outside services such as Runbook. This monitor will create a unique webhook endpoint that you can configure Slack to call when triggered.</p>
+            {% if data['monitor'] %}
+            {% set apiid = data['monitor']['cid'] %}
+            {% set apikey = data['monitor']['url'] %}
+            <h5>URL</h5>
+            <pre>https://dash.runbook.io/api/slack-webhook/{{ apiid }}/{{ apikey }}</pre>
+            {% else %}
+            {% set apiid = "example-api-id" %}
+            {% set apikey = "example-api-key" %}
+            {% endif %}
+
+            <p>Within Slack you can specify whether the monitor is True or False by appending the string "True" or "False" to the trigger in chat. If neither is specified the monitor will default to True.</p>
