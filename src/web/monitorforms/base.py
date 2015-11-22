@@ -43,6 +43,29 @@ class BaseCheckForm(Form):
         'port' : '443',
     }
 
+    # Common description values
+    descriptions = {
+        'cloudflare' : {
+            'email' : "The email address used to identify your CloudFlare account",
+            'timespan' : "Select the time span to use for CloudFlare's traffic analytics. For example if you wish to compare the last 1 hour with the previous simply select 1 hour. Any time span less than 1 hour will require a CloudFlare Pro account or better",
+        },
+        'digitalocean' : {
+            'dropletid' : "Specify the ID number of the Droplet you wish to monitor. This ID can be obtained from the DigitalOcean administrative dashboard."
+        },
+        'heroku' : {
+            'appname' : "Specify the Heroku application name to monitor",
+            'dynoname' : "Specify the name of the Dyno/s you wish to monitor (i.e. Web, Worker)"
+        },
+        'email' : "Specify an email address to be used for this monitor",
+        'domain' : "Specify a the domain to be used with this monitor",
+        'apikey' : "API Key used to access the service API",
+        'url' : "Enter a URL such as https://10.0.0.1/login",
+        'host' : "The host header allows you to specify which domain the request will be made for. This is useful for addressing a domain that is different than that of the URL",
+        'http_codes' : "Select one or more HTTP Status Code that this monitor should expect as a result",
+        'extra_headers' : "Additional HTTP Headers. Headers can be specified as name:value, listed one per line",
+        'return_value' : "Specify whether this monitor is returned as True or False when defined conditions are found",
+    }
+
     webhook_include = "monitors/webhooks/general.html"
 
 
