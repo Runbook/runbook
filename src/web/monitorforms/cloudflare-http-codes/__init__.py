@@ -17,7 +17,7 @@ class CheckForm(DatacenterCheckForm):
     As zone analytics are determined by your CloudFlare plan, any time span less than 1 hour will require a CloudFlare Pro account or better.
     """
     webhook_include = "monitors/webhooks/general.html"
-
+    placeholders = DatacenterCheckForm.placeholders
 
     choices = [
         ("100", '100 - Continue'),

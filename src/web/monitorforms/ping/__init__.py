@@ -12,9 +12,16 @@ from ..datacenter import DatacenterCheckForm
 class CheckForm(DatacenterCheckForm):
 
     ''' Class that creates an Ping Health Check form for the dashboard '''
+    title = "ICMP Ping"
+    description = """
+    The ICMP Ping monitor will perform a simple network ping to the desired Host. If the ping results in no reply the monitor will be marked as False
+    """
+    placeholders = DatacenterCheckForm.placeholders
+
     pattern = "^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$"
     host = TextField(
-        "host",
+        "Host or IP",
+        description=DatacenterCheckForm.descriptions['hostorip'],
         validators=[
             DataRequired(message='Host is a required field and \
                                   should be a hostname or IP address'),
