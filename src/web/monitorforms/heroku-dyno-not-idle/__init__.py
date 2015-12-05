@@ -12,12 +12,23 @@ from ..datacenter import DatacenterCheckForm
 class CheckForm(DatacenterCheckForm):
 
     ''' Creates a wtforms form object for monitors '''
+    title = "Heroku: All Dynos Not Idle"
+    description = """
+    This monitor returns false if any Heroku Dynos associated with the specified Application Name are in an Idle state. This monitor can be used to identify when Heroku Dynos should be scaled down or restarted.
+    """
+    placeholders = DatacenterCheckForm.placeholders
+    placeholders.update({
+        'appname' : 'Application Name',
+    })
+
     apikey = TextField(
-        "API Key",
+        "API Key", 
+        description=DatacenterCheckForm.descriptions['apikey'],
         validators=[DataRequired(
             message='API Key is a required field')])
     appname = TextField(
         "Application Name",
+        description=DatacenterCheckForm.descriptions['heroku']['appname'],
         validators=[DataRequired(
             message='Application Name is a required field')])
 
