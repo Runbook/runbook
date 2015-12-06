@@ -12,7 +12,7 @@ from ..base import BaseReactForm
 class ReactForm(BaseReactForm):
 
     ''' Class that creates a CloudFlair Reaction form for the dashboard '''
-
+    deprecated = True
     send_choices = [
         ('False', 'No'),
         ('True', 'Yes')]
