@@ -51,6 +51,11 @@ class ReactForm(BaseReactForm):
         "API Key",
         description=BaseReactForm.descriptions['apikey'],
         validators=[DataRequired(message='API Key is a required field')])
+    rec_type = SelectField(    
+        "Record Type",   
+        description=BaseReactForm.descriptions['cloudflare']['recType'],
+        choices=type_of_recs,    
+        validators=[DataRequired(message='Record Type is a required field')])
     rec_name = TextField(
         "Record Name",
         description=BaseReactForm.descriptions['cloudflare']['recName']
