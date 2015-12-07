@@ -42,7 +42,7 @@ def actionPDTrigger(redata, jdata, logger):
             redata['data']['api_key'])
         try:
             service_key=redata['data']['service_key']
-            description=redata['data']['description']
+            description=redata['data']['incident_description']
             details=redata['data']['details']
             incident_key=redata['data']['incident_key']
 
