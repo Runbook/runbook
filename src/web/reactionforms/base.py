@@ -124,6 +124,11 @@ class BaseReactForm(Form):
             'extra_headers' : "Additional HTTP Headers. Headers can be specified as name:value, listed one per line",
             'payload' : "Define a payload to send with POST and PUT methods",
         },
+        'saltstack' : {
+            'secretkey' : "Provide a secret key to send for API authentication",
+            'tgt' : "This is a standard SaltStack targeting method, use this as you would use SaltStack from CLI",
+            'matcher' : "Select the Type of Targeting method being used",
+        },
     }
 
 if __name__ == '__main__':  # pragma: no cover
