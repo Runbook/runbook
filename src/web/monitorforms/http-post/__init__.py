@@ -26,6 +26,18 @@ class HeaderList(object):
 
 class CheckForm(DatacenterCheckForm):
 
+    ''' Form for creating the http post monitor '''
+    title = "HTTP: Post"
+    description = """
+        This monitor will perform an HTTP POST request and either validate the status code, headers or response content. This Monitor is a useful for monitoring other services and web applications.
+    """
+    placeholders = DatacenterCheckForm.placeholders
+    placeholders.update({
+        'payload' : 'POST Data',
+        'response_regex' : '.*[s|S]uccess.*',
+        'response_headers' : 'header:value',
+    })
+
     choices = [
         ("100", '100 - Continue'),
         ("101", '101 - Switching protocols'),
@@ -69,27 +81,48 @@ class CheckForm(DatacenterCheckForm):
     ]
 
     url = TextField(
-        'url',
+        'URL',
+        description="""
+            The web address you wish to send the POST request to
+        """,
         validators=[DataRequired(message='URL is a required field.'),
                     URL(message='Must be a url such as "https://127.0.0.1"')])
     host = TextField(
-        'host',
+        'Host Header',
+        description="""
+            The Host header used to address a specific domain even when the URL is to another domain or IP address
+        """,
         validators=[DataRequired(message='Host header is a required field')])
     payload = TextAreaField(
-        'payload',
+        'POST Data',
+        description="""
+            This section contains the POST data to be used when the monitor makes a request
+        """,
         validators=[Optional()])
     extra_headers = TextAreaField(
-        'extra_headers',
+        'Additional Headers',
+        description="""
+            Use this field to add additional HTTP headers. Values are in a : seperated Key:Value format.
+        """,
         validators=[HeaderList()])
     status_codes = SelectMultipleField(
-        'status_codes',
+        'HTTP Status Codes',
+        description="""
+            Select the desired HTTP Status Codes
+        """,
         choices=choices,
         validators=[Optional()])
     response_regex = TextField(
-        'response_regex',
+        'Keyword',
+        description="""
+            If defined this field will search for the specified keyword or regular expression
+        """,
         validators=[Optional()])
     response_headers = TextAreaField(
-        'response_headers',
+        'Response Headers',
+        description="""
+            Validate the specified headers are provided in the HTTP response
+        """,
         validators=[HeaderList()])
 
 
