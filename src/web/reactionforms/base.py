@@ -107,6 +107,12 @@ class BaseReactForm(Form):
         'http_codes' : "Select one or more HTTP Status Code that this reaction should expect as a result",
         'extra_headers' : "Additional HTTP Headers. Headers can be specified as name:value, listed one per line",
         'return_value' : "Specify whether this reaction is returned as True or False when defined conditions are found",
+        'username' : "Specify a username to provide to the service",
+        'rackspace' : {
+            'serverID' : "Specify the ID of the server in question",
+            'region' : "Specify the Rackspace Datacenter region this server resides in",
+            'resourceType' : "Select the type of Server this reaction is for",
+        },
         'linode' : {
             'linodeID' : "Specify the ID of the Node Server",
         },
