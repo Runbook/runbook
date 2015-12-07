@@ -107,6 +107,14 @@ class BaseReactForm(Form):
         'http_codes' : "Select one or more HTTP Status Code that this reaction should expect as a result",
         'extra_headers' : "Additional HTTP Headers. Headers can be specified as name:value, listed one per line",
         'return_value' : "Specify whether this reaction is returned as True or False when defined conditions are found",
+        'http' : {
+            'url' : "Enter a URL such as https://10.0.0.1/login",
+            'host' : "The host header allows you to specify which domain the request will be made for. This is useful for addressing a domain that is different than that of the URL",
+            'http_codes' : "Select one or more HTTP Status Code that this reaction should expect as a result",
+            'http_method' : "Select the desired HTTP Method to use for this request",
+            'extra_headers' : "Additional HTTP Headers. Headers can be specified as name:value, listed one per line",
+            'payload' : "Define a payload to send with POST and PUT methods",
+        },
     }
 
 if __name__ == '__main__':  # pragma: no cover
