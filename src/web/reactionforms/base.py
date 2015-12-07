@@ -86,7 +86,11 @@ class BaseReactForm(Form):
         },
         'heroku' : {
             'appname' : "Specify the Heroku application name to action",
-            'dynoname' : "Specify the name of the Dyno/s you wish to perform an action against (i.e. Web, Worker)"
+            'dynoname' : "Specify the name of the Dyno/s you wish to perform an action against (i.e. Web, Worker)",
+            'cmd' : "Specify the command to execute",
+            'attach' : "Specify whether to stream output or not",
+            'size' : "Select a desired Dyno Size",
+            'dynotype' : "Define the type of Dyno this reaction affects, this is generally the process name I.E. web, worker",
         },
         'aws' : {
             'region' : "Specify the AWS region this resources resides within",
