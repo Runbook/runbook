@@ -57,9 +57,9 @@
                 {% endif %}
 
                 {% if data['edit'] and field.type != "TextAreaField" %}
-                    {{ field(class_=class, value=data['monitor']['data'][field.name]) }}
+                    {{ field(class_=class, value=data['reaction']['data'][field.name]) }}
                 {% elif data['edit'] and field.type == "TextAreaField" %}
-                    {% set f = form[field.name].process_data(data['monitor']['data'][field.name]) %}
+                    {% set f = form[field.name].process_data(data['reaction']['data'][field.name]) %}
                     {{ field(class_=class) }}
                 {% elif field.name in form.placeholders %}
                     {{ field(class_=class, placeholder=form.placeholders[field.name]) }}
