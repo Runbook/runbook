@@ -15,6 +15,9 @@ class CheckForm(DatacenterCheckForm):
     description = """
     This monitor utilizes CloudFlare's zone analyitics to detect an increase in HTTP requests. This monitor can be used to detect changes to HTTP traffic and be combined with scaling reactions. The threshold setting allows you to define the percentage of change to trigger on. For example; if more than 50% of the web traffic increases trigger this monitor as True.
     """
+    placeholders = DatacenterCheckForm.placeholders
+
+
 
     return_choices = [
         ("true", "True"),

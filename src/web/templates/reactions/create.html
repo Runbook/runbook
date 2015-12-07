@@ -6,9 +6,9 @@
     <!-- content -->
       <div class="page-header">
       {% if data['edit'] %}
-        <h1><i class="fa fa-eye-slash fa-1x"></i> Manage Monitor</h1>
+        <h1><i class="fa fa-flask fa-1x"></i> Manage Reaction</h1>
       {% else %}
-        <h1><i class="fa fa-eye-slash fa-1x"></i> Add Monitor</h1>
+        <h1><i class="fa fa-flask fa-1x"></i> Add Reaction</h1>
       {% endif %}
       </div>
 
@@ -26,6 +26,9 @@
       {% endif %}
   </div>
   <div class="row">
+  {% if form.deprecated %}
+    <p class="alert alert-warning">This Reaction type has been deprecated, please update your Runbook by creating a new reaction using the currently available reactions.</p>
+  {% else %}
     <div class="col-md-6">
         <div class="panel panel-primary">
           <div class="panel-heading">
@@ -34,7 +37,7 @@
           </div>
           </div>
           <div class="panel-body">
-            <form action="{{ data['url'] }}" method="post" name="api-check" target="_self" class="form-horizontal" role="form">
+            <form action="{{ data['url'] }}" method="post" name="reactionCreate" target="_self" class="form-horizontal" role="form">
             {{ form.csrf_token }}
 
             {% for field in form.__iter__() %}
@@ -54,9 +57,9 @@
                 {% endif %}
 
                 {% if data['edit'] and field.type != "TextAreaField" %}
-                    {{ field(class_=class, value=data['monitor']['data'][field.name]) }}
+                    {{ field(class_=class, value=data['reaction']['data'][field.name]) }}
                 {% elif data['edit'] and field.type == "TextAreaField" %}
-                    {% set f = form[field.name].process_data(data['monitor']['data'][field.name]) %}
+                    {% set f = form[field.name].process_data(data['reaction']['data'][field.name]) %}
                     {{ field(class_=class) }}
                 {% elif field.name in form.placeholders %}
                     {{ field(class_=class, placeholder=form.placeholders[field.name]) }}
@@ -79,26 +82,17 @@
         <div class="panel panel-default">
           <div class="panel-heading">
           <div class="panel-title">
-            Monitor Description
+            Reaction Description
           </div>
           </div>
           <div class="panel-body">
             {{ form.description|safe }}
           </div>
         </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-          <div class="panel-title">
-            Webhook Information
-          </div>
-          </div>
-          <div class="panel-body">
-            {% include form.webhook_include %}
-          </div>
-        </div>
     </div>
 
     </div>
   </div> <!-- row -->
+{% endif %}
 </div> <!-- container -->
 {% include 'dash-footer.html' %}
