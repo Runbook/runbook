@@ -1,0 +1,28 @@
+            {% if data['monitor'] %}
+            {% set apiid = data['monitor']['cid'] %}
+            {% set apikey = data['monitor']['url'] %}
+            {% else %}
+            {% set apiid = "example-api-id" %}
+            {% set apikey = "example-api-key" %}
+            {% endif %}
+
+
+            {% if data['monitor'] %}
+            <p>
+            <h5>URL</h5>
+            <pre>https://dash.runbook.io/api/datadog-webhook/{{ apiid }}</pre>
+            </p>
+            <h4>Custom Payload</h4>
+
+            <p>When using Datadog's webhook integration you will need to specify a custom payload. This payload must include the <code>check_key</code> and <code>title</code> attributes at minimum. Additional details can be included however they are not used for processing the monitor data.</p>
+
+            <h5>Minimum Custom Payload</h5>
+            <pre>
+{
+"check_key": "{{ apikey }}",
+"title" : "$EVENT_TITLE"
+}
+            </pre>
+            {% else %}
+            <p class="text-warning">After monitor creation this section will contain details for integrating with Datadog Webhooks.</p>
+            {% endif %}

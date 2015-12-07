@@ -59,8 +59,8 @@ def addreaction_page(rname):
         data = startData(user)
         data['active'] = 'dashboard'
         data['url'] = '/dashboard/reactions/' + rname
-        tmpl = 'reactions/' + rname + '.html'
-        data['js_bottom'] = ['reactions/base.js', 'reactions/' + rname + '.js']
+        tmpl = 'reactions/create.html'
+        data['js_bottom'] = ['reactions/base.js']
         # Check Users Status
         if user.status != "active":
             data['url'] = '/dashboard/mod-subscription'
@@ -151,8 +151,8 @@ def editreact_page(rname, rid):
         data = startData(user)
         data['active'] = 'dashboard'
         data['url'] = '/dashboard/edit-reactions/' + rname + '/' + rid
-        tmpl = 'reactions/index.html'
-        data['js_bottom'] = ['reactions/base.js', 'reactions/' + rname + '.js']
+        tmpl = 'reactions/create.html'
+        data['js_bottom'] = ['reactions/base.js', ]
         data['edit'] = True
         # Check Users Status
         if user.status != "active":
@@ -181,7 +181,7 @@ def editreact_page(rname, rid):
                 if item.type == "SelectField" or \
                         item.type == "SelectMultipleField":
                     item.default = data['reaction']['data'][item.name]
-            tmpl = 'reactions/' + rname + '.html'
+            tmpl = 'reactions/create.html'
             if request.method == 'POST':
                 if form.validate():
                     reaction2 = Reaction()

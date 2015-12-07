@@ -30,6 +30,14 @@ class HeaderList(object):
 class CheckForm(DatacenterCheckForm):
 
     ''' Class that creates an HTTP Get Status Code form for the dashboard '''
+    title = "HTTP GET Status Code"
+    description = """
+    This monitor will perform an HTTP GET request to the specified URL and verify that the returned Status Code matches the defined list. If the returned code is not found in the "Status Code" list, this monitor will return False. You can use this monitor to detect issues with Web applications. With the "Host" header it is possible to setup this monitor for an IP rather than a DNS name. Allowing users to monitor servers without using DNS.
+    """
+    placeholders = DatacenterCheckForm.placeholders
+    placeholders.update({
+        'appname' : 'Application Name',
+    })
 
     choices = [
         ("100", '100 - Continue'),
@@ -75,16 +83,20 @@ class CheckForm(DatacenterCheckForm):
 
     url = TextField(
         "URL",
+        description=DatacenterCheckForm.descriptions['url'],
         validators=[URL(message='Must be a url such as "https://127.0.0.1"')])
     host = TextField(
-        "Host",
+        "Host Header",
+        description=DatacenterCheckForm.descriptions['host'],
         validators=[DataRequired(message='Host header is a required field')])
     codes = SelectMultipleField(
-        "Codes",
+        "HTTP Status Codes",
+        description=DatacenterCheckForm.descriptions['http_codes'],
         choices=choices,
         validators=[DataRequired(message='Codes is a required field')])
     extra_headers = TextAreaField(
-        'extra_headers',
+        'Extra HTTP Headers',
+        description=DatacenterCheckForm.descriptions['extra_headers'],
         validators=[HeaderList()])
 
 if __name__ == '__main__':

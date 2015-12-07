@@ -12,6 +12,8 @@ from ..base import BaseReactForm
 class ReactForm(BaseReactForm):
 
     ''' Class that creates a CloudFlair Reaction form for the dashboard '''
+    deprecated = True
+
     email = TextField(
         "Email",
         validators=[Email(message='Email address invalid')])

@@ -1,0 +1,14 @@
+            {% if data['monitor'] %}
+            {% set apiid = data['monitor']['cid'] %}
+            {% set apikey = data['monitor']['url'] %}
+            <b>Unique False URL:</b>
+            </p>
+             <pre>https://dash.runbook.io/api/cr-api/{{ apiid }}/{{ apikey }}/false</pre>
+
+            <p>
+            <b>Unique True URL:</b>
+            </p>
+             <pre>https://dash.runbook.io/api/cr-api/{{ apiid }}/{{ apikey }}/true</pre>
+            {% else %}
+            <p>Upon creation this section will contain a set of unique URLs that can be called to modify the status of this monitor. Each Monitor has it's own unique URL and these can be used in addition to a monitors normal functionality.</p>
+            {% endif %}
