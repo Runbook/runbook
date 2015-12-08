@@ -49,9 +49,25 @@ monitorbroker:
   ports:
     - 5879
     - 5878
-control:
+control30:
   build: src/monitors/
-  command: python /code/control.py /config/config-30sec.yml
+  command: python /code/control.py /config/control-30sec.yml
+  volumes:
+    - ./src/monitors:/code:ro
+  links:
+    - redis
+    - monitorbroker
+control1:
+  build: src/monitors/
+  command: python /code/control.py /config/control-1min.yml
+  volumes:
+    - ./src/monitors:/code:ro
+  links:
+    - redis
+    - monitorbroker
+control5:
+  build: src/monitors/
+  command: python /code/control.py /config/control-5min.yml
   volumes:
     - ./src/monitors:/code:ro
   links:

@@ -17,7 +17,7 @@ RUN rm -rf /var/lib/apt/lists/*
 
 # Create working directory
 RUN mkdir -p /code
-COPY config /
+COPY config/* /config/
 ADD requirements.txt /config/requirements.txt
 
 # Install requirements
