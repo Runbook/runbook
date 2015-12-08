@@ -1,4 +1,0 @@
-sink_ip: 0.0.0.0
-sink_port: 6000
-sink_worker_port: 6001
-use_syslog: False
