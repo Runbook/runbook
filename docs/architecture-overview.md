@@ -56,9 +56,11 @@ When the **Bridge** process receives a `create` task it will read the Monitor or
 
 **Note:** If an issue was to occur where a local Redis instance was destroyed and unrecoverable, a new Redis server can be repopulated using the `bridge/mgmtscripts/rebuild_redis.py` script. This script reads from RethinkDB and creates `edit` requests within each data center's `dc#queue`. This will cause a re-population of each Redis instance in each data center. This is a benign process as RethinkDB is designed to be the source of truth regarding Monitor and Reaction configurations.
 
-In addition to creation and deletion tasks, the **Web** process will also write Webhook Monitor events to the local `dc#queue`. If the **Web** instance is running in data center 1 it will write to the `dc1queue`. When the bridge process identifies a Monitor event it will forward an event JSON message to the `actions/broker.py` process. Again, acting as a bridge between the web application and the back-end monitoring application.
+In addition to creation and deletion tasks, the **Web** process will also write Webhook Monitor events to all of the `dc#queue` tables.
 
-Recovering from RethinkDB failures: when RethinkDB servers are experiencing issues, the RethinkDB instance may become read only until the other nodes are automatically recovered. During this time, Monitors and Reactions are unable to write historical logs of execution since the instance is read only. When the instance is read only, processes will write logs to Redis. When the bridge process is starting, it will read the Redis keys associated with these logs and process them and store this data into RethinkDB. This essentially becomes a write behind process.
+#### Recovering from RethinkDB failures
+
+When RethinkDB servers are experiencing issues, the RethinkDB instance may become read only until the offending node is automatically removed and other nodes are automatically recovered. During this time, Reactions are unable to write historical logs of execution since the instance is read only. When the instance is read only, processes will write logs to Redis. When the **Bridge** process is starting, it will read the Redis keys associated with these logs, process them and store this data into RethinkDB. This essentially becomes a write behind process.
 
 #### Monitor creation process
 
@@ -68,56 +70,59 @@ Recovering from RethinkDB failures: when RethinkDB servers are experiencing issu
 
 ![Reaction creation](/img/architecture/reaction-creation-multidc.png)
 
-### MONITORS - Runbook Availability Monitor
+### Runbook Monitors
 
-The Runbook Availability Monitor component is designed to perform the actual monitoring of remote systems. This is the monitoring part of the monitoring and reacting back-end application. This component is comprised of 3 major programs: `control.py`, `broker.py`, and `worker.py`.
+The **Runbook Monitors** component is designed to perform the actual monitoring of remote systems. This component is comprised of 3 major programs: `control.py`, `broker.py`, and `worker.py`.
 
 #### Control
 
-When the Runbook Bridge process adds Monitor details into Redis, it looks at the Monitor details and extracts the `interval` value. This `interval` key is a queue. The Monitor's ID number is added to this queue which is essentially a sorted list within Redis. The interval defines how often the Monitors should be executed. In production today there are 4 valid intervals.
+When the **Runbook Bridge** process adds Monitor details into Redis, it looks at the Monitor details and extracts the `interval` value. This `interval` key is a queue. The Monitor's ID number is added to this queue which is essentially a sorted list within Redis. The interval defines how often the Monitors should be executed.
 
-* `30mincheck`: this sorted list is for Monitors that run every 30 minutes
+Below are the `interval` queues deployed with a default instance of Runbook.
+
 * `5mincheck`: this sorted list is for Monitors that run every 5 minutes
-* `2mincheck`: this sorted list is for Monitors that run every 2 minutes
+* `1mincheck` : this sorted list is for Monitors that run every 1 minute
 * `30seccheck`: this sorted list is for Monitors that run every 30 seconds
+
+These instances are defined in both the `src/web/instance/web.cfg` and `src/monitors/config/control-*.yml` configuration files.
 
 The `monitors/control.py` program is a generic program that is designed to pull Monitor IDs from a defined sorted list in Redis (one of the intervals listed above). Once it has a list of Monitor IDs, it will loop through that list and look up the Monitor's details from Redis using the Monitor ID as a key. Once the Monitor's details are read, the `monitors/control.py` process will create a JSON message including the Monitor's details and send that message to `monitors/broker.py` using ZeroMQ.
 
-Each `monitors/control.py` process can only read from one sorted list. In order to have all sorted lists monitored, each sorted list must have its own `monitors/control.py` process. This is possible because the `monitors/control.py` process receives all of its Redis and timer configuration from a configuration file. In production, there are currently 4 `monitors/control.py` processes running in each data center.
+Each `monitors/control.py` process can only read from one sorted list. In order to have all sorted lists monitored, each sorted list must have its own `monitors/control.py` process. This is possible because the `monitors/control.py` process receives all of its Redis and timer configuration from a configuration file.
 
 #### Broker
 
-The `monitors/broker.py` or MONITORs Broker process is simply a ZeroMQ broker. The process binds two ports. One port is used to listen for ZeroMQ messages from the various `monitors/control.py` processes. The second port is used to send that received message to a `monitors/worker.py` process. In production, each data center currently has only 1 MONITORS Broker. However, this process is not limited to only one. When two servers are specified in an stunnel configuration, the stunnel service will send requests in a round robin algorithm. This allows the control messages to be sent to multiple brokers which then could be sent to multiple sets of workers.
+The `monitors/broker.py` or **Monitor Broker** process is simply a ZeroMQ broker. The process binds two ports. One port is used to listen for ZeroMQ messages from the various `monitors/control.py` processes. The second port is used to send that received message to a `monitors/worker.py` processes.
 
 #### Worker
 
-The `monitors/worker.py` or MONITORs Worker process is the actual process that performs the Monitor tasks. The code to perform an actual Monitor check is stored as modules within the `checks/` directory. For example, the TCP Port Monitor is the module `checks/tcp-check`. When the MONITORS worker process receives a health check message from the MONITORS Broker it decodes the JSON message and determines what type of check module should be loaded. It then loads the module and executes the `check()` function passing the Monitor-specific data to the function.
+The `monitors/worker.py` or **Monitor Worker** process is the process that performs the Monitor tasks. The code to perform an actual Monitor check is stored as modules within the `src/monitors/checks/` directory. For example, the TCP Port Monitor is the module `src/monitors/checks/tcp-check`. When the **Worker** process receives a health check message from the **Monitor Broker** it decodes the JSON message and determines what type of check module should be loaded. It then loads the module and executes the `check()` function passing the Monitor-specific data to the function.
 
-The `check()` function will return either `True` for true or `False` for false. With this result. the worker process will generate a JSON message which is then sent to the Runbook Action Service.
+The `check()` function will return either `True` or `False`. With this result, the worker process will generate a JSON message which is then sent to the **Runbook Action Broker**.
 
 #### Monitor execution process
 
 ![Monitor execution](/img/architecture/monitor-execution.png)
 
-The entire Runbook Availability Monitor design is built to scale. The Worker processes are design to run in large numbers. In production, each monitoring zone is currently running approximately 25 worker processes. The Broker facilitates this, and by having each Control process route though the Broker we are able to fully utilize each worker process and able to distribute Monitor executions efficiently. The Control processes are the only singleton, but these processes are unique for each monitoring zone. It is simple enough to add monitoring zones as needed. If the performance of the Control process is unable to keep up with demand the answer is to simply add additional monitoring zones.
+The entire **Runbook Monitor** application design is built to scale. The Worker processes are designed to run in large numbers. The Broker facilitates this, and by having each Control process route though the Broker each Worker is being fully utilized and able to distribute Monitor executions efficiently. The Control processes are the only singleton. While these processes are unique for each monitoring zone, It is simple enough to add monitoring zones as needed. If the performance of the Control process is unable to keep up with demand the answer is to simply add additional monitoring zones and influence which zones monitors are created against.
 
-### ACTIONS - Runbook Action Service
+### Runbook Actions
 
-The Runbook Action Service or ACTIONS is designed to perform the "Reaction" aspect of Runbook's Monitoring and Reacting. Like the MONITORS there are two main programs with ACTIONS, `actions/broker.py` or ACTIONS Broker and `actions/actioner.py` or ACTIONS Actioner.
+The **Runbook Actions** are designed to perform the "Reaction" aspect of Runbook's Monitoring and Reacting. Like the **Monitors** there are two main programs with **Actions**, `actions/broker.py` or **Action Broker** and `actions/actioner.py` or **Actioner**.
 
 #### Broker
 
-Like the MONITORS Broker the ACTIONS Broker simply receives JSON messages from the MONITORS Worker or BRIDGE Bridge processes and forwards them to a ACTIONS Actioner process. This facilitates the ability for multiple monitor results to be processed at the same time and from multiple machines. Similar to the MONITORS broker, this process is currently a single process in each data center although it does not necessarily require this. To scale the performance of Monitor result processing, multiple Brokers could be launched.
+Like the **Monitor Broker** the **Action Broker** simply receives JSON messages from the **Monitor Worker** or **Bridge** processes and forwards them to a **Actioner** process. This facilitates the ability for multiple monitor results to be processed at the same time and from multiple machines. To scale the performance of Monitor result processing, multiple **Action Brokers** can be launched.
 
 #### Actioner
 
-The ACTIONS Actioner process is the process that performs Reaction tasks. Like the MONITORS worker, the code to perform a Reaction is stored within modules in the `actions/` directory. An example of this would be the `actions/enotify` module which handles email notification Reactions.
+The **Actioner** process is the process that performs Reaction tasks. Like the **Monitor Worker**, the code to perform a Reaction is stored within modules in the `src/actions/actions/` directory. An example of this would be the `src/actions/actions/email-notification` module which handles email notification Reactions.
 
-When the ACTIONS Actioner process receives the JSON message from the MONITORS Worker process, it will first look-up the Monitor from Redis and then RethinkDB. If the RethinkDB request does not return a result due to a RethinkDB error, the Monitor is flagged as a `cache-only` Monitor. The idea behind this is that even if RethinkDB is down the Monitor should still be actioned to ensure that Runbook is providing its function of protecting user environments.
+When the **Actioner** process receives the JSON message from the **Monitor Worker** process, it will first look-up the Monitor from Redis and then RethinkDB. If the RethinkDB request does not return a result due to a RethinkDB error, the Monitor is flagged as a `cache-only` Monitor. The idea behind this method, is that even if RethinkDB is down the Monitor should still be actioned to ensure that Runbook is providing its function of protecting user environments.
 
 Each Monitor JSON message has a list of Reactions associated with that Monitor. After looking up the Monitor, the Actioner process will loop through these Reactions. The Actioner will look-up Reaction details first from Redis and secondly from RethinkDB, following the same process as the Monitor data look-ups. In this case, the Actioner will compare the `lastrun` time from both results and utilize the newest. This is to ensure that `frequency` settings within the Reaction are honored if the Reaction was executed from another data center.
 
-When the Actioner process has the Reaction data it then loads the appropriate `actions/` module and executes the appropriate method for performing the Reaction. When Reactions are executed, a set of "meta" Reactions are also executed. These "meta" Reactions are essentially Reactions of Reactions, and are used to update the RethinkDB and Redis datastores as well as update any Reaction-tracking logs.
+When the Actioner process has the Reaction data it then loads the appropriate `src/actions/actions/` module and executes the appropriate method for performing the Reaction. When Reactions are executed, a set of "meta" Reactions are also executed. These "meta" Reactions are essentially Reactions of Reactions, and are used to update the RethinkDB and Redis datastores as well as update any Reaction-tracking logs.
 
 After all user-defined Reactions have been executed, a list of default Reactions are executed for the Monitor. These Reactions are similar to the "meta" reactions, but are reacting on the Monitor itself rather than the Reaction.
 
@@ -139,6 +144,6 @@ This diagram depicts each component and its interactions as it is deployed in tw
 
 * [High availability and scalability deployment](/img/architecture/overview-scaledandredundant.png)
 
-This diagram shows each component deployed in a highly scaled out and redundant design. Components with multiples can be scaled beyond the number depicted as needed. Components without multiples such as the `control.py` processes can expanded by adding additional monitoring zones. In theory, the BRIDGE Bridge component could support running multiple copies. However, this is untested at this time.
+This diagram shows each component deployed in a highly scaled out and redundant design. Components with multiples can be scaled beyond the number depicted as needed. Components without multiples such as the `control.py` processes can expanded by adding additional monitoring zones. In theory, the **Bridge** component could support running multiple copies. However, this has only been used in ad-hoc cases for processing a backlog of requests.
 
 ---
