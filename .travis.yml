@@ -7,7 +7,8 @@ services:
 
 addons:
   hosts:
-    - rethinkdb 127.0.0.1
+    - rethinkdb
+    - redis
 
 install:
   - pip install -r src/web/requirements.txt
@@ -22,7 +23,6 @@ install:
   - sudo apt-get update -q
   - sudo apt-get install rethinkdb --force-yes
   - rethinkdb --version
-  - cat /etc/hosts
 
 before_script:
   - rethinkdb &
