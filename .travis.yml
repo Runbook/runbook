@@ -23,7 +23,7 @@ install:
   - sudo apt-get update -q
   - sudo apt-get install -y rethinkdb
   - rethinkdb --version
-  - echo "127.0.0.1" | sudo tee -a /etc/hosts
+  - echo "127.0.0.1 rethinkdb" | sudo tee -a /etc/hosts
 
 before_script:
   - rethinkdb --bind all &
