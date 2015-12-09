@@ -9,6 +9,7 @@ install:
   - pip install -r src/web/requirements.txt
   - pip install -r src/bridge/requirements.txt
   - pip install -r src/monitors/requirements.txt
+  - pip install -r src/actions/requirements.txt
   - pip install coverage
   - pip install coveralls
 #  - sudo add-apt-repository ppa:rethinkdb/ppa -y
@@ -27,6 +28,10 @@ before_script:
 script:
   - python src/web/tests.py
   - coverage run src/web/tests.py
+  - docker build -t web src/web/
+  - docker build -t monitors src/web/
+  - docker build -t actions src/web/
+  - docker build -t bridge src/web/
 
 after_success:
   coveralls
