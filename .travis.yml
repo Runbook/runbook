@@ -4,6 +4,8 @@ python:
 
 services:
   - redis-server
+  - rethinkdb
+  - docker
 
 addons:
   hosts:
@@ -18,15 +20,14 @@ install:
   - pip install coverage
   - pip install coveralls
 #  - sudo add-apt-repository ppa:rethinkdb/ppa -y
-  - echo "deb http://download.rethinkdb.com/apt `lsb_release -cs` main" | sudo tee /etc/apt/sources.list.d/rethinkdb.list
-  - wget -qO- http://download.rethinkdb.com/apt/pubkey.gpg | sudo apt-key add -
-  - sudo apt-get update -q
-  - sudo apt-get install rethinkdb --force-yes
+#  - echo "deb http://download.rethinkdb.com/apt `lsb_release -cs` main" | sudo tee /etc/apt/sources.list.d/rethinkdb.list
+#  - wget -qO- http://download.rethinkdb.com/apt/pubkey.gpg | sudo apt-key add -
+#  - sudo apt-get update -q
+#  - sudo apt-get install rethinkdb --force-yes
   - rethinkdb --version
 
 before_script:
-  - rethinkdb &
-  - find ./ -type f
+#  - rethinkdb &
   - python src/bridge/mgmtscripts/create_db.py src/bridge/config/config.yml
   - python src/web/web.py &
 
