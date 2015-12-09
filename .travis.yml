@@ -25,7 +25,7 @@ install:
   - rethinkdb --version
 
 before_script:
-  - rethinkdb &
+  - rethinkdb --bind all &
   - python src/bridge/mgmtscripts/create_db.py src/bridge/config/config.yml
   - python src/web/web.py &
 
