@@ -22,10 +22,11 @@ install:
   - sudo apt-get update -q
   - sudo apt-get install rethinkdb --force-yes
   - rethinkdb --version
+  - cat /etc/hosts
 
 before_script:
   - rethinkdb &
-  - python src/bridge/mgmtscripts/create_db.py src/bridge/config/config.yml.default --travis
+  - python src/bridge/mgmtscripts/create_db.py src/bridge/config/config.yml
   - python src/web/web.py &
 
 script:
