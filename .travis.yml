@@ -23,7 +23,8 @@ install:
   - sudo apt-get update -q
   - sudo apt-get install -y rethinkdb
   - rethinkdb --version
-  - echo "127.0.0.1 rethinkdb" | sudo tee -a /etc/hosts
+  - sed -i 's/rethinkdb/127.0.0.1/g' src/bridge/config/config.yml
+  - sed -i 's/rethinkdb/127.0.0.1/g' src/web/instance/web.cfg
 
 before_script:
   - rethinkdb --bind all &
