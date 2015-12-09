@@ -1,5 +1,4 @@
 # Project Specific
-web.cfg
 rethinkdb_data/
 tmp
 src/web/instance/web.cfg.example
