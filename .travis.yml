@@ -26,6 +26,7 @@ install:
 
 before_script:
   - rethinkdb &
+  - find ./ -type f
   - python src/bridge/mgmtscripts/create_db.py src/bridge/config/config.yml
   - python src/web/web.py &
 
