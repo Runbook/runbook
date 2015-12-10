@@ -16,7 +16,8 @@ RUN apt-get install -y libssl-dev libffi-dev
 RUN rm -rf /var/lib/apt/lists/*
 
 # Create working directory
-RUN mkdir -p /code /config
+RUN mkdir -p /code
+COPY config/* /config/
 ADD requirements.txt /config/requirements.txt
 
 # Install requirements

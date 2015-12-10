@@ -1,10 +1,9 @@
 ## Worker Configuration
-## zMQ
 broker_ip: 0.0.0.0
 broker_control_port: 5879
 broker_worker_port: 5878
 ## StatHat EZ Key
 stathat_ez_key: update_me!
-envname: [Alpha]
+envname: [Self Hosted]
 ## Logging
 use_syslog: False

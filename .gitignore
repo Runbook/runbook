@@ -1,5 +1,4 @@
 # Project Specific
-web.cfg
 rethinkdb_data/
 tmp
 src/web/instance/web.cfg.example
@@ -66,7 +65,7 @@ docs/_build/
 target/
 
 # Private config files
-config.yml
+#config.yml
 
 # Vagrant directory
 .vagrant/

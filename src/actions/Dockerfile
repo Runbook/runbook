@@ -17,11 +17,10 @@ RUN apt-get install -y python python-pip python-virtualenv wget unzip
 RUN rm -rf /var/lib/apt/lists/*
 
 # Create working directory
-RUN mkdir -p /code /config
+RUN mkdir -p /code
+COPY config /config
 ADD requirements.txt /config/requirements.txt
 
 # Install requirements
 RUN pip install -r /config/requirements.txt
 
-EXPOSE 6000
-EXPOSE 6001

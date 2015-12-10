@@ -1,103 +1,83 @@
-db:
+rethinkdb:
   image: rethinkdb:latest
   ports:
     - "8080:8080"
 redis:
   image: redis:latest
+  ports:
+    - "6379:6379"
 web:
   build: src/web/
-  command: bash /code/bootstrap.sh
   volumes:
-    - src/web:code:ro
+    - ./src/web:/code:ro
   ports:
     - "80:8000"
   links:
-    - db
+    - rethinkdb
     - bridge
 bridge:
   build: src/bridge/
-  command: bash /code/bootstrap.sh
   volumes:
-    - src/bridge:code:ro
+    - ./src/bridge:/code:ro
   links:
     - redis
-    - db
+    - rethinkdb
     - actionbroker
 actionbroker:
   build: src/actions/
-  command: bash /code/bootstrap-broker.sh
+  command: python /code/broker.py /config/actionBroker.yml
   volumes:
-    - src/actions:code:ro
+    - ./src/actions:/code:ro
   ports:
     - 6000
     - 6001
 actioner:
   build: src/actions/
-  command: bash /code/bootstrap-actioner.sh
+  command: python /code/actioner.py /config/config.yml
   volumes:
-    - src/actions:code:ro
+    - ./src/actions:/code:ro
   links:
     - redis
-    - db
+    - rethinkdb
     - actionbroker
     - bridge
 monitorbroker:
   build: src/monitors/
-  command: bash /code/bootstrap-broker.sh
+  command: python /code/broker.py /config/broker.yml
   volumes:
-    - src/monitors:code:ro
+    - ./src/monitors:/code:ro
   ports:
     - 5879
     - 5878
-monitor5min:
+control30:
   build: src/monitors/
-  command: bash /code/bootstrap-control.sh
+  command: python /code/control.py /config/control-30sec.yml
   volumes:
-    - src/monitors:code:ro
+    - ./src/monitors:/code:ro
   links:
     - redis
     - monitorbroker
-  environment:
-    MONITORINTERVAL: 5mincheck
-    SLEEPTIMER: 300
-monitor30min:
+control1:
   build: src/monitors/
-  command: bash /code/bootstrap-control.sh
+  command: python /code/control.py /config/control-1min.yml
   volumes:
-    - src/monitors:code:ro
+    - ./src/monitors:/code:ro
   links:
     - redis
     - monitorbroker
-  environment:
-    MONITORINTERVAL: 30mincheck
-    SLEEPTIMER: 1800
-monitor2min:
+control5:
   build: src/monitors/
-  command: bash /code/bootstrap-control.sh
+  command: python /code/control.py /config/control-5min.yml
   volumes:
-    - src/monitors:code:ro
+    - ./src/monitors:/code:ro
   links:
     - redis
     - monitorbroker
-  environment:
-    MONITORINTERVAL: 2mincheck
-    SLEEPTIMER: 120
-monitor30sec:
-  build: src/monitors/
-  command: bash /code/bootstrap-control.sh
-  volumes:
-    - src/monitors:code:ro
-  links:
-    - redis
-    - monitorbroker
-  environment:
-    MONITORINTERVAL: 30seccheck
-    SLEEPTIMER: 30
 monitorworker:
   build: src/monitors/
-  command: bash /code/bootstrap-worker.sh
+  command: python /code/worker.py /config/worker.yml
   volumes:
-    - src/monitors:code:ro
+    - ./src/monitors:/code:ro
   links:
     - monitorbroker
     - actionbroker
