@@ -35,9 +35,9 @@ script:
   - python src/web/tests.py
   - coverage run src/web/tests.py
   - docker build -t web src/web/
-  - docker build -t monitors src/web/
-  - docker build -t actions src/web/
-  - docker build -t bridge src/web/
+  - docker build -t monitors src/monitors
+  - docker build -t actions src/actions
+  - docker build -t bridge src/bridge
 
 after_success:
   coveralls
