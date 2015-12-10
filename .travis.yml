@@ -27,7 +27,7 @@ install:
   - sed -i 's/rethinkdb/localhost/g' src/web/instance/web.cfg
 
 before_script:
-  - rethinkdb &
+  - rethinkdb --bind 127.0.0.1
   - netstat -nap
   - python src/bridge/mgmtscripts/create_db.py src/bridge/config/config.yml --travis
   - python src/web/web.py &
