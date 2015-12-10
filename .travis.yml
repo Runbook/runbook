@@ -38,6 +38,7 @@ script:
   - docker build -t monitors src/monitors
   - docker build -t actions src/actions
   - docker build -t bridge src/bridge
+  - docker build -t runbook ./
 
 after_success:
   coveralls
