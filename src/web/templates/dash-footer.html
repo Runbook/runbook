@@ -2,7 +2,7 @@
     <div class="row">
      <div class="col-lg-12">
       <hr>
-      <p class="text-muted credit text-right">Powered by <a href="https://github.com/Runbook" target="_blank">Runbook</a>. All Rights Reserved.</p>
+      <p class="text-muted credit text-right">Powered by <a href="https://github.com/Runbook" target="_blank">Runbook</a>.</p>
     </div>
    </div>
   </div>
@@ -44,5 +44,19 @@
     {% include item %}
   {% endfor %}
   {% block js %}{% endblock %}
+  <script type="text/javascript">
+    $(document).ready(function(){
+  $('.slick').slick({
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 2000,
+  arrows: false,
+  fade: true,
+  });
+});
+        
+        
+  </script>
   </body>
 </html>

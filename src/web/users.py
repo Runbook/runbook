@@ -29,8 +29,8 @@ class User(object):
         self.stripe = None
         self.stripeid = None
         self.subplans = 2
-        self.subscription = 'Free'
-        self.payments = 'Stripe'
+        self.subscription = None
+        self.payments = None
         self.subscribed_to_newsletter = False
         self.confirmed = False
         self.confirmed_on = None
@@ -59,13 +59,13 @@ class User(object):
         jsondata['email'] = userdata['email']
         jsondata['status'] = 'active'
         jsondata['company'] = userdata['company']
-        jsondata['acttype'] = 'lite-v2'
+        jsondata['acttype'] = self.config['DEFAULT_PACKAGE']
         jsondata['contact'] = userdata['contact']
         jsondata['stripe'] = self.stripe
         jsondata['stripeid'] = self.stripeid
         jsondata['subplans'] = self.subplans
-        jsondata['payments'] = self.payments
-        jsondata['subscription'] = self.subscription
+        jsondata['payments'] = self.config['DEFAULT_PAYMENTS']
+        jsondata['subscription'] = self.config['PACKAGES'][self.config['DEFAULT_PACKAGE']]['subscription']
         jsondata['subscribed_to_newsletter'] = self.subscribed_to_newsletter
         jsondata['creation_time'] = time.time()
         jsondata['confirmed'] = False
