@@ -1,6 +1,18 @@
 Runbook
 ===========
 
+## What is Runbook
+
+[Runbook](https://runbook.io) is an OpenSaaS (Apache 2.0) monitoring service that allows you to perform automated "reactions" when issues are detected. Giving you the ability to automatically resolve DevOps alerts with zero human interaction.
+
+Simply put, Runbook is what you would get if Nagios and IFTTT had a baby.
+
+## Documentation
+
+Developer and User docs can be found in the [docs](docs/) directory and on [ReadTheDocs](https://runbook.readthedocs.org). Checkout our [Quick Start](http://runbook.readthedocs.org/en/latest/quick-start/) guide for information on deploying a self hosted instance of Runbook.
+
+## Build Status
+
 **Develop:**
 
 [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=develop)](https://travis-ci.org/Runbook/runbook) [![Coverage Status](https://coveralls.io/repos/Runbook/runbook/badge.svg?branch=develop&service=github)](https://coveralls.io/github/Runbook/runbook?branch=develop)
@@ -9,23 +21,10 @@ Runbook
 
 [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=master)](https://travis-ci.org/Runbook/runbook) [![Coverage Status](https://coveralls.io/repos/Runbook/runbook/badge.svg?branch=master&service=github)](https://coveralls.io/github/Runbook/runbook?branch=master)
 
-[![Join the chat at https://gitter.im/Runbook/runbook](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Runbook/runbook?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Stories in Ready](https://badge.waffle.io/Runbook/runbook.svg?label=ready&title=Ready)](http://waffle.io/Runbook/runbook)
-
-## What is Runbook
-
-[Runbook](https://runbook.io) is an OpenSaaS monitoring service that allows you to perform automated "reactions" when issues are detected. Giving you the ability to automatically resolve DevOps alerts with zero human interaction.
-
-Simply put, Runbook is what you would get if Nagios and IFTTT had a baby.
-
-## Documentation
-
-Developer and User docs can be found in the [docs](docs/) directory and on [ReadTheDocs](https://runbook.readthedocs.org). Checkout our [Quick Start](http://runbook.readthedocs.org/en/latest/quick-start/) guide for information on deploying a self hosted instance of Runbook.
-
-## Open Source
-
-Runbook is 100% Open Source and licensed under the Apache 2.0 license.
 
 ## Contributing
+
+[![Join the chat at https://gitter.im/Runbook/runbook](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Runbook/runbook?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Stories in Ready](https://badge.waffle.io/Runbook/runbook.svg?label=ready&title=Ready)](http://waffle.io/Runbook/runbook)
 
 At Runbook we follow the [GitHub Flow](https://guides.github.com/introduction/flow/index.html), while it is not required that you create feature branches it does help keep code organized. Below are the basic getting started steps for setting up a repo to contribute.
 
