@@ -1,13 +1,13 @@
 ## Worker Configuration
 ## zMQ
-broker_ip: broker_host
+broker_ip: monitorbroker
 broker_control_port: 5879
 broker_worker_port: 5878
 ## Sink Config
-sink_ip: sink_host
+sink_ip: actionbroker
 sink_port: 6000
 ## StatHat EZ Key
 stathat_ez_key: update_me!
-envname: [Alpha]
+envname: "[Self Hosted]"
 ## Logging
 use_syslog: False

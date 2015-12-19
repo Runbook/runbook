@@ -9,25 +9,25 @@ Runbook
 
 [![Build Status](https://travis-ci.org/Runbook/runbook.svg?branch=master)](https://travis-ci.org/Runbook/runbook) [![Coverage Status](https://coveralls.io/repos/Runbook/runbook/badge.svg?branch=master&service=github)](https://coveralls.io/github/Runbook/runbook?branch=master)
 
-[![Join the chat at https://gitter.im/Runbook/runbook](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Runbook/runbook?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/Runbook/runbook](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Runbook/runbook?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Stories in Ready](https://badge.waffle.io/Runbook/runbook.svg?label=ready&title=Ready)](http://waffle.io/Runbook/runbook)
 
 ## What is Runbook
 
-[Runbook](https://runbook.io) is an open source monitoring service that allows you to perform automated "reactions" when issues are detected. Giving you the ability to automatically resolve DevOps alerts with zero human interaction.
+[Runbook](https://runbook.io) is an OpenSaaS monitoring service that allows you to perform automated "reactions" when issues are detected. Giving you the ability to automatically resolve DevOps alerts with zero human interaction.
 
 Simply put, Runbook is what you would get if Nagios and IFTTT had a baby.
 
 ## Documentation
 
-Developer and User docs can be found in the [docs](docs/) directory and on [ReadTheDocs](https://runbook.readthedocs.org).
+Developer and User docs can be found in the [docs](docs/) directory and on [ReadTheDocs](https://runbook.readthedocs.org). Checkout our [Quick Start](http://runbook.readthedocs.org/en/latest/quick-start/) guide for information on deploying a self hosted instance of Runbook.
 
 ## Open Source
 
-Runbook is 100% Open Source. Currently the license is AGPL which essentially means you can run your own copy of Runbook but you can't run it as a service without open sourcing any changes you make.
+Runbook is 100% Open Source and licensed under the Apache 2.0 license.
 
 ## Contributing
 
-At Runbook we follow the [GitHub Flow](https://guides.github.com/introduction/flow/index.html), while it is not necessarily manditory that you create feature branches it does help keep code organized. Below are the basic getting started steps for setting up a repo to contribute.
+At Runbook we follow the [GitHub Flow](https://guides.github.com/introduction/flow/index.html), while it is not required that you create feature branches it does help keep code organized. Below are the basic getting started steps for setting up a repo to contribute.
 
 ### Setting up your Repo
 
@@ -44,7 +44,7 @@ To pull the repository to your local machine simply run the following.
 
 `devhelpers/` provides you with helper tools to ease your development effort.
 
-It is advisable to get a custom Python `virtualenv` setup for your runbook development.
+It is advisable to get a custom Python `virtualenv` setup for your Runbook development.
 
 To install the `devhelpers/` tools, run the following
 

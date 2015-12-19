@@ -14,9 +14,12 @@ RUN apt-get upgrade -y
 RUN apt-get install -y python python-dev python-pip python-virtualenv wget unzip
 RUN rm -rf /var/lib/apt/lists/*
 
+
 # Create working directory
 RUN mkdir -p /code/instance /config
 ADD requirements.txt /config/requirements.txt
-
+ADD instance/web.cfg /config/web.cfg
 # Install requirements
 RUN pip install -r /config/requirements.txt
+
+CMD python /code/web.py /config/web.cfg 

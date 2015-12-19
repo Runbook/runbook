@@ -1,20 +1,20 @@
 ## Bridge Configuration
 stathat_key: "update_me"
-envname: "[Dev-Fork]"
+envname: "[Self Hosted]"
 dbqueue: dc1queue
 sleep: 30
 ## Redis Config
-redis_host: redis_ip
-redis_port: 3679
+redis_host: redis
+redis_port: 6379
 redis_db: 0
 redis_password: False
 ## Rethink Config
-rethink_host: rethink_host
+rethink_host: rethinkdb
 rethink_port: 28015
 rethink_authkey: False
 rethink_db: "crdb"
 ## Sink Config
-sink_ip: sink_host
+sink_ip: actionbroker
 sink_port: 6000
 sink_worker_port: 6001
 ## Maximum time for monitor execution

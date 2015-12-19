@@ -16,9 +16,12 @@ class DatacenterCheckForm(TimerCheckForm):
     dc_choices = app.config['DATACENTERS']['choices']
 
     defaults = []
-    sampling = sample(dc_choices, 2)
-    for item in sampling:
-        defaults.append(item[0])
+    if len(dc_choices) > 1:
+        sampling = sample(dc_choices, 2)
+        for item in sampling:
+            defaults.append(item[0])
+    else:
+        defaults.append(dc_choices)
     
 
     datacenter = SelectMultipleField(
