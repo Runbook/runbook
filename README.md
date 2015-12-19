@@ -9,7 +9,32 @@ Simply put, Runbook is what you would get if Nagios and IFTTT had a baby.
 
 ## Documentation
 
-Developer and User docs can be found in the [docs](docs/) directory and on [ReadTheDocs](https://runbook.readthedocs.org). Checkout our [Quick Start](http://runbook.readthedocs.org/en/latest/quick-start/) guide for information on deploying a self hosted instance of Runbook.
+Developer and User docs can be found in the [docs](docs/) directory and on [ReadTheDocs](https://runbook.readthedocs.org).
+
+### 3 Step Deployment
+
+You can easily deploy Runbook within a Docker container with 3 simple steps. This deployment should work for small environments, for larger environments checkout our [Installation Guide](http://runbook.readthedocs.org/en/latest/install/).
+
+* Start a RethinkDB Container
+
+```sh
+$ sudo docker run -d --name rethinkdb rethinkdb
+```
+* Start a Redis Container
+
+```sh
+$ sudo docker run -d --name redis redis
+```
+* Start a Runbook Container (linking to Redis and RethinkDB)
+
+```sh
+$ docker run -d --name runbook -p 8000:8000 --link rethinkdb:rethinkdb --link redis:redis runbook/runbook
+```
+
+Once launched simply navigate to `http://<serverip>:8000`.
+
+
+[![Docker Pulls](https://img.shields.io/docker/pulls/runbook/runbook.svg)](https://hub.docker.com/r/runbook/runbook/)
 
 ## Build Status
 
@@ -37,19 +62,6 @@ The first step in getting ready to contribute is forking our repository on githu
 To pull the repository to your local machine simply run the following.
 
     $ git clone <url of your repo>
-
-
-### Setting up your development environment
-
-`devhelpers/` provides you with helper tools to ease your development effort.
-
-It is advisable to get a custom Python `virtualenv` setup for your Runbook development.
-
-To install the `devhelpers/` tools, run the following
-
-
-    $ cd devhelper
-    $ make dev-env
 
 #### Creating a feature branch
 
