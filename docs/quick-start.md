@@ -9,21 +9,21 @@ Deployment of a single self hosted instance of Runbook can be performed in 3 ste
 ## Deploy a RethinkDB instance
 
 ```sh
-$ docker run -d --name rethinkdb rethinkdb
+$ sudo docker run -d --name rethinkdb rethinkdb
 ```
 
 ## Deploy a Redis instance
 
 ```sh
-$ docker run -d --name redis redis
+$ sudo docker run -d --name redis redis
 ```
 
 ## Deploy a Runbook instance
 
 ```sh
-$ docker run -d --name runbook -p 8000:8000 --link rethinkdb:rethinkdb --link redis:redis runbook/runbook
+$ sudo docker run -d --name runbook -p 8000:8000 --link rethinkdb:rethinkdb --link redis:redis runbook/runbook
 ```
 
-Once launched simply navigate to `https://<serverip>:8000`.
+Once launched simply navigate to `http://<serverip>:8000`.
 
 ---
