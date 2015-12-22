@@ -49,7 +49,7 @@ def chlastrun(rid, rdb, r_server, logger):
 
     # Then set redis cache
     try:
-        r_server.hset("reaction:" + rid, 'lastrun', lastrun)
+        r_server.set("reaction:" + rid + ':lastrun', lastrun)
         line = "update-lastrun: Redis lastrun for %s is now set to: %r" % (
             rid, lastrun)
         logger.info(line)

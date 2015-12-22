@@ -30,7 +30,9 @@ import zmq
 import json
 import time
 import importlib
+from cryptography.fernet import Fernet
 from actions import BaseReaction
+
 
 # Load Configuration
 # ------------------------------------------------------------------
@@ -164,27 +166,19 @@ def runAction(**kwargs):
 
 def lookupRedis(itemkey, itemid):
     ''' Lookup a redis hash '''
-    results = {'id': itemid}
     cachekey = itemkey + ":" + itemid
-    for key in r_server.hkeys(cachekey):
-        value = r_server.hget(cachekey, key)
-        if value == "slist":
-            results[key] = []
-            listkey = cachekey + ":" + key
-            for entry in r_server.smembers(listkey):
-                results[key].append(entry)
-        else:
-            results[key] = value
-    cachekey = itemkey + ":" + itemid + ":data"
-    for key in r_server.hkeys(cachekey):
-        value = r_server.hget(cachekey, key)
-        if value == "slist":
-            results[key] = []
-            listkey = cachekey + ":" + key
-            for entry in r_server.smembers(listkey):
-                results[key].append(entry)
-        else:
-            results[key] = value
+    results = json.loads(r_server.get(cachekey))
+    results['id'] = itemid
+    if "encrypted" in results:
+        if results['encrypted'] is True:
+            crypto = Fernet(config['crypto_key'])
+            results['data'] = json.loads(crypto.decrypt(bytes(results['data'])))
+    if "status" in results:
+        results['status'] = r_server.get(cachekey + ":status")
+    if "failcount" in results:
+        results['failcount'] = r_server.get(cachekey + ":failcount")
+    if "lastrun" in results:
+        results['lastrun'] = r_server.get(cachekey + ":lastrun")
     return results
 
 
@@ -199,6 +193,10 @@ def getMonitor(cid):
         results['cacheonly'] = False
         if int(cache['failcount']) > results['failcount']:
             results['failcount'] = int(cache['failcount'])
+        if "encrypted" in results:
+            if results['encrypted'] is True:
+                crypto = Fernet(config['crypto_key'])
+                results['data'] = json.loads(crypto.decrypt(bytes(results['data'])))
     except (RqlDriverError, RqlRuntimeError, socket.error) as e:
         results = cache
         results['cacheonly'] = True
@@ -229,6 +227,10 @@ def getReaction(rid):
             results['trigger'] = int(cache['trigger'])
         if float(cache['lastrun']) > float(results['lastrun']):
             results['lastrun'] = float(cache['lastrun'])
+        if "encrypted" in results:
+            if results['encrypted'] is True:
+                crypto = Fernet(config['crypto_key'])
+                results['data'] = json.loads(crypto.decrypt(bytes(results['data'])))
     except (RqlDriverError, RqlRuntimeError, socket.error) as e:
         results = cache
         results['cacheonly'] = True
@@ -245,6 +247,12 @@ while True:
 
     jdata = json.loads(msg)
     logger.info("Got message for health check: %s" % jdata['cid'])
+    ## Decrypt Message
+    if "encrypted" in jdata:
+        if jdata['encrypted'] is True:
+            crypto = Fernet(config['crypto_key'])
+            jdata['data'] = json.loads(crypto.decrypt(bytes(jdata['data'])))
+    
 
     checktime = time.time() - jdata['time_tracking']['control']
     if checktime > float(config['max_monitor_time']):

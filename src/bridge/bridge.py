@@ -29,6 +29,7 @@ import logconfig
 import time
 import zmq
 import json
+from cryptography.fernet import Fernet
 
 
 # Load Configuration
@@ -80,12 +81,15 @@ except RqlDriverError:
     logger.error("Cannot connect to rethinkdb, shutting down")
     sys.exit(1)
 
-# Sink
+# ZeroMQ Sink Details
 context = zmq.Context()
 zsend = context.socket(zmq.PUSH)
 connectline = "tcp://%s:%d" % (config['sink_ip'], config['sink_port'])
 logger.info("Connecting to Sink at %s" % connectline)
 zsend.connect(connectline)
+
+# Crypto
+crypto = Fernet(config['crypto_key'])
 
 
 # Handle Kill Signals Cleanly
@@ -108,48 +112,44 @@ def populateRedis(itemkey, item, local=False):
     '''
     This will parse out a dictionary and return lists keys and dict values
     '''
-    for entry in item.keys():
-        if entry == "data":
-            for key in item['data'].keys():
-                if key == "timer" and local is True:
-                    r_server.sadd(item['data'][key], item['cid'])
-                if type(item['data'][key]) is list:
-                    r_server.hset(itemkey + ":data", key, "slist")
-                    sid = "%s:data:%s" % (itemkey, key)
-                    for entry in item['data'][key]:
-                        r_server.sadd(sid, entry)
-                else:
-                    r_server.hset(itemkey + ":data", key, item['data'][key])
-        else:
-            r_server.hset(itemkey, entry, item[entry])
+    if local is True:
+        r_server.sadd(item['data']["timer"], item['cid'])
+    if 'failcount' in item:
+        r_server.set(itemkey + ":failcount", item['failcount'])
+    if 'lastrun' in item:
+        r_server.set(itemkey + ":lastrun", item['lastrun'])
+    ## Encrypt data going to redis
+    if "encrypted" in item:
+        if item['encrypted'] is True:
+            item['data'] = crypto.encrypt(json.dumps(item['data']))
+    redis_data = json.dumps(item)
+    try:
+        r_server.set(itemkey, redis_data)
+    except:
+        return False
     return True
+
 
 
 def decimateRedis(itemkey, item):
     ''' This will parse out a dictionary and kill the redis data '''
     if "timer" in item['data']:
-        r_server.srem(item['data']['timer'], item['cid'])
-    keys = r_server.hkeys(itemkey)
-    for key in keys:
-        value = r_server.hget(itemkey, key)
-        if value == "slist":
-            skey = itemkey + ":" + key
-            for member in r_server.smembers(skey):
-                r_server.srem(skey, member)
-        r_server.hdel(itemkey, key)
-    keys = r_server.hkeys(itemkey + ":data")
-    for key in keys:
-        value = r_server.hget(itemkey + ":data", key)
-        if value == "slist":
-            skey = itemkey + ":data:" + key
-            for member in r_server.smembers(skey):
-                r_server.srem(skey, member)
-        r_server.hdel(itemkey + ":data", key)
+        try:
+            r_server.srem(item['data']['timer'], item['cid'])
+        except:
+            pass
+    try:
+        r_server.delete(itemkey)
+    except:
+        pass
     return True
 
 
 def sendtoSink(item):
     ''' This will send a manual action to the sink '''
+    if "encrypted" in item:
+        if item['encrypted'] is True:
+            item['data'] = crypto.encrypt(json.dumps(item['data']))
     msg = item
     msg['time_tracking'] = {
         'control': time.time(),
@@ -177,7 +177,7 @@ for item in r_server.smembers("history"):
     if success:
         r_server.srem("history", item)
         recount = recount + 1
-logger.info("Imported %d history records from cache to rethinkDB" % recount)
+logger.info("Imported %d history records from cache to RethinkDB" % recount)
 
 # On Startup Synchronize event logs
 recount = 0
@@ -192,7 +192,7 @@ for item in r_server.smembers("events"):
     if success:
         r_server.srem("events", item)
         recount = recount + 1
-logger.info("Imported %d events records from cache to rethinkDB" % recount)
+logger.info("Imported %d events records from cache to RethinkDB" % recount)
 
 # Run the queue watcher
 while True:
@@ -200,6 +200,12 @@ while True:
 
     for qitem in results:
         logger.debug("Starting to work on queue item %s" % qitem['id'])
+
+        ## Decrypt message
+        if "encrypted" in qitem['item']:
+            if qitem['item']['encrypted'] is True:
+                qitem['item']['data'] = json.loads(crypto.decrypt(bytes(qitem['item']['data'])))
+
         if qitem['type'] == "monitor":
             keyid = "monitor:" + qitem['item']['cid']
 
@@ -223,7 +229,7 @@ while True:
             if qitem['action'] == "create" or qitem['action'] == "edit":
                 if "datacenter" not in qitem['item']['data']:
                     msg_format = "Initiating Monitor creation for monitor id: %s - no datacenter"
-                    result = populateRedis(keyid, qitem['item'])
+                    result = populateRedis(keyid, qitem['item'], local=False)
                 else:
                     if config['dbqueue'] in qitem['item']['data']['datacenter']:
                         msg_format = "Initiating Monitor creation for monitor id: %s - local"
@@ -231,7 +237,7 @@ while True:
                             keyid, qitem['item'], local=True)
                     else:
                         msg_format = "Initiating Monitor creation for monitor id: %s - notify"
-                        result = populateRedis(keyid, qitem['item'])
+                        result = populateRedis(keyid, qitem['item'], local=False)
                 logger.debug(msg_format % qitem['item']['cid'])
                 if result:
                     logger.info("Monitor %s added to redis queue" % qitem[
@@ -286,7 +292,7 @@ while True:
             # if Edit this will create
             if qitem['action'] == "create" or qitem['action'] == "edit":
                 logger.debug("Initiating Reaction creation for reaction id: %s" % qitem['item']['rid'])
-                result = populateRedis(keyid, qitem['item'])
+                result = populateRedis(keyid, qitem['item'], local=False)
                 if result:
                     logger.info("Reaction %s added to redis" % qitem['item']['rid'])
                     delete = r.table(config['dbqueue']).get(

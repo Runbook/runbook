@@ -11,6 +11,7 @@ from flask import g, Blueprint, render_template, request, \
 import stathat
 from monitors import Monitor
 from users import User
+import json
 
 monitor_blueprint = Blueprint('monitor', __name__,)
 
@@ -55,6 +56,7 @@ def addcheck_page(cname):
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         data = startData(user)
         data['active'] = 'dashboard'
@@ -83,6 +85,7 @@ def addcheck_page(cname):
             if request.method == 'POST':
                 if form.validate():
                     monitor = Monitor()
+                    monitor.config = app.config
                     monitor.name = form.name.data
                     monitor.ctype = cname
                     monitor.uid = user.uid
@@ -138,6 +141,7 @@ def addcheck_page(cname):
                         flash('Monitor "{0}" successfully added.'.format(
                             monitor.name), 'success')
                         newmonitor = Monitor()
+                        newmonitor.config = app.config
                         newmonitor.get(results, g.rdb_conn)
                         if newmonitor.uid == user.uid:
                             data['monitor'] = {
@@ -167,6 +171,7 @@ def editcheck_page(cname, cid):
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         data = startData(user)
         data['active'] = 'dashboard'
@@ -186,6 +191,7 @@ def editcheck_page(cname, cid):
                 "monitorforms." + cname, globals(), locals(), ['CheckForm'], -1)
             form = cform.CheckForm(request.form)
             oldmonitor = Monitor()
+            oldmonitor.config = app.config
             oldmonitor.get(cid, g.rdb_conn)
             if oldmonitor.uid == user.uid:
                 data['monitor'] = {
@@ -217,6 +223,7 @@ def editcheck_page(cname, cid):
             if request.method == 'POST':
                 if form.validate():
                     monitor = Monitor()
+                    monitor.config = app.config
                     monitor.cid = cid
                     monitor.name = form.name.data
                     monitor.ctype = cname
@@ -301,6 +308,7 @@ def monitors_page():
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         data = startData(user)
         data['active'] = 'dashboard'
@@ -350,6 +358,7 @@ def checkaction_page(cid, action):
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         if user.status != "active":
             pass
@@ -357,6 +366,7 @@ def checkaction_page(cid, action):
 
             # Update the Monitor
             monitor = Monitor(cid)
+            monitor.config = app.config
             monitor.get(cid, g.rdb_conn)
             if user.uid == monitor.uid:
                 if action == "false":
@@ -394,6 +404,7 @@ def delcheck_page(cid):
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         if user.status != "active":
             pass
@@ -401,6 +412,7 @@ def delcheck_page(cid):
 
             # Delete the Monitor
             monitor = Monitor(cid)
+            monitor.config = app.config
             monitor.get(cid, g.rdb_conn)
             result = monitor.deleteMonitor(user.uid, cid, g.rdb_conn)
             if result:
@@ -414,26 +426,29 @@ def delcheck_page(cid):
 
 # Web Checks
 @monitor_blueprint.route(
-    '/api/<atype>/<cid>', methods=['POST'],
+    '/api/<atype>/<cid>', methods=['GET', 'POST'],
     defaults={'check_key': None, 'action': None})
 @monitor_blueprint.route(
     '/api/<atype>/<cid>/<check_key>',
-    methods=['POST'], defaults={'action': None})
+    methods=['GET', 'POST'], defaults={'action': None})
 @monitor_blueprint.route(
-    '/api/<atype>/<cid>/<check_key>/<action>', methods=['POST'])
+    '/api/<atype>/<cid>/<check_key>/<action>', methods=['GET', 'POST'])
 def checkapi_page(atype, cid, check_key, action):
     ''' Web based API for various health checks '''
     monitor = Monitor(cid)
+    monitor.config = app.config
     urldata = {
         'cid': cid,
         'atype': atype,
         'check_key': check_key,
         'action': action
     }
+    app.logger.debug("Got new API request with these details: %s" % json.dumps(urldata))
     try:
         webapi = __import__(
             "monitorapis." + atype, globals(), locals(), ['webCheck'], -1)
         replydata = webapi.webCheck(request, monitor, urldata, g.rdb_conn)
+        print("Reply Data: " + replydata)
     except Exception as e:
         print("/api/%s - webCheck action failed - %s") % (atype, e.message)
         replydata = {
@@ -455,6 +470,7 @@ def viewhistory_page(cid, start, limit):
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         data = startData(user)
         data['active'] = 'dashboard'
@@ -466,6 +482,7 @@ def viewhistory_page(cid, start, limit):
             tmpl = 'member/mod-subscription.html'
         else:
             monitor = Monitor()
+            monitor.config = app.config
             monitor.get(cid, g.rdb_conn)
             if monitor.uid == user.uid:
                 data['monitor'] = {
@@ -504,6 +521,7 @@ def detailhistory_page(cid, hid):
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         data = startData(user)
         data['active'] = 'dashboard'
@@ -515,6 +533,7 @@ def detailhistory_page(cid, hid):
             tmpl = 'member/mod-subscription.html'
         else:
             monitor = Monitor()
+            monitor.config = app.config
             monitor.get(cid, g.rdb_conn)
             if monitor.uid == user.uid:
                 data['monitor'] = {
