@@ -448,9 +448,8 @@ def checkapi_page(atype, cid, check_key, action):
         webapi = __import__(
             "monitorapis." + atype, globals(), locals(), ['webCheck'], -1)
         replydata = webapi.webCheck(request, monitor, urldata, g.rdb_conn)
-        print("Reply Data: " + replydata)
     except Exception as e:
-        print("/api/%s - webCheck action failed - %s") % (atype, e.message)
+        app.logger.error("/api/%s - webCheck action failed - %s" % (atype, e.message))
         replydata = {
             'headers': {'Content-type': 'application/json'},
             'data': "{ 'results' : 'fatal error'  }"
