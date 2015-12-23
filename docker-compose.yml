@@ -10,6 +10,7 @@ web:
   build: src/web/
   volumes:
     - ./src/web:/code:ro
+    - ./src/web/instance:/config:ro
   ports:
     - "80:8000"
   links:

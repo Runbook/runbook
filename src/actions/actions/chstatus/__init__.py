@@ -54,7 +54,7 @@ def chStatus(cid, status, rdb, r_server, logger):
 
     # Then set redis cache
     try:
-        r_server.hset("monitor:" + cid, 'status', status)
+        r_server.set("monitor:" + cid + ':status', status)
         success = True
     except:
         line = "chstatus: Redis is inaccessible cannot change status for %s" % cid
@@ -89,7 +89,7 @@ def resetFailcount(cid, rdb, r_server, logger):
 
     # Then set redis cache
     try:
-        r_server.hset("monitor:" + cid, 'failcount', failcount)
+        r_server.set("monitor:" + cid + ':failcount', failcount)
         success = True
     except:
         line = "chstatus: Redis is inaccessible cannot change failcount for %s" % cid
@@ -124,7 +124,7 @@ def incFailcount(cid, failcount, rdb, r_server, logger):
 
     # Then set redis cache
     try:
-        r_server.hset("monitor:" + cid, 'failcount', failcount)
+        r_server.set("monitor:" + cid + ':failcount', failcount)
         success = True
     except:
         line = "chstatus: Redis is inaccessible cannot change failcount for %s" % cid

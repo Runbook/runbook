@@ -6,7 +6,9 @@
 
 import rethinkdb as r
 from itsdangerous import URLSafeSerializer
+from cryptography.fernet import Fernet
 import datetime
+import json
 
 
 class Monitor(object):
@@ -21,6 +23,7 @@ class Monitor(object):
         self.failcount = None
         self.url = None
         self.healthcheck = None
+        self.encrypted = False
         self.data = {}
 
     def genURL(self, cid, rdb):
@@ -41,6 +44,13 @@ class Monitor(object):
         This will create a health check with
         the supplied domain information
         '''
+        if self.config['CRYPTO_ENABLED'] is True:
+            crypto = Fernet(self.config['CRYPTO_KEY'])
+            try:
+                self.data = crypto.encrypt(json.dumps(self.data))
+            except:
+                return False
+            self.encrypted = True
         mondata = {
             'name': self.name,
             'ctype': self.ctype,
@@ -48,7 +58,9 @@ class Monitor(object):
             'url': self.url,
             'failcount': 0,
             'status': self.status,
-            'data': self.data}
+            'data': self.data,
+            'encrypted' : self.encrypted
+        }
         if self.exists(mondata['name'], mondata['uid'], rdb):
             return 'exists'
         else:
@@ -72,6 +84,13 @@ class Monitor(object):
 
     def editMonitor(self, rdb):
         ''' This will edit a health check with the supplied information '''
+        if self.config['CRYPTO_ENABLED'] is True:
+            crypto = Fernet(self.config['CRYPTO_KEY'])
+            try:
+                self.data = crypto.encrypt(json.dumps(self.data))
+            except:
+                return False
+            self.encrypted = True
         mondata = {
             'name': self.name,
             'ctype': self.ctype,
@@ -79,7 +98,9 @@ class Monitor(object):
             'url': self.url,
             'failcount': 0,
             'status': self.status,
-            'data': self.data}
+            'data': self.data,
+            'encrypted' : self.encrypted
+        }
         results = r.table('monitors').get(self.cid).update(mondata).run(rdb)
         if results['replaced'] == 1:
             qdata = {}
@@ -199,6 +220,11 @@ class Monitor(object):
             self.failcount = results['failcount']
             self.data = results['data']
             self.status = results['status']
+            if "encrypted" in results:
+                self.encrypted = results['encrypted']
+            if self.encrypted:
+                crypto = Fernet(self.config['CRYPTO_KEY'])
+                self.data = json.loads(crypto.decrypt(bytes(self.data)))
             return self
         else:
             return False

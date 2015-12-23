@@ -10,6 +10,7 @@ from flask import g, Blueprint, render_template, request, \
 import stathat
 from reactions import Reaction
 from users import User
+from monitors import Monitor
 
 reaction_blueprint = Blueprint('reaction', __name__,)
 
@@ -55,6 +56,7 @@ def addreaction_page(rname):
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         data = startData(user)
         data['active'] = 'dashboard'
@@ -74,6 +76,7 @@ def addreaction_page(rname):
             if request.method == 'POST':
                 if form.validate():
                     reaction = Reaction()
+                    reaction.config = app.config
                     reaction.name = form.name.data
                     reaction.trigger = form.trigger.data
                     reaction.frequency = form.frequency.data
@@ -147,6 +150,7 @@ def editreact_page(rname, rid):
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         data = startData(user)
         data['active'] = 'dashboard'
@@ -164,6 +168,7 @@ def editreact_page(rname, rid):
                 locals(), ['ReactForm'], -1)
             form = reform.ReactForm(request.form)
             reaction = Reaction()
+            reaction.config = app.config
             # If Edit get information
             reaction.get("rid", rid, g.rdb_conn)
             if reaction.uid == user.uid:
@@ -185,6 +190,7 @@ def editreact_page(rname, rid):
             if request.method == 'POST':
                 if form.validate():
                     reaction2 = Reaction()
+                    reaction2.config = app.config
                     reaction2.rid = reaction.rid
                     reaction2.name = form.name.data
                     reaction2.trigger = form.trigger.data
@@ -266,6 +272,7 @@ def reactions_page():
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         data = startData(user)
         data['active'] = 'dashboard'
@@ -298,6 +305,7 @@ def managereactions_page():
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         data = startData(user)
         data['active'] = 'dashboard'
@@ -333,6 +341,7 @@ def delreaction_page(rid):
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         if user.status != "active":
             pass
@@ -342,12 +351,17 @@ def delreaction_page(rid):
             results = r.table('monitors').filter(
                 {'uid': user.uid}).run(g.rdb_conn)
             for x in results:
-                if rid in x['data']['reactions']:
+                monitor = Monitor()
+                monitor.config = app.config
+                monitor.get(x['id'], g.rdb_conn)
+                mondata = monitor.data
+                if rid in mondata['reactions']:
                     appliedcount = appliedcount + 1
 
             if appliedcount < 1:
                 # Delete the Reaction
                 reaction = Reaction(rid)
+                reaction.config = app.config
                 result = reaction.deleteReaction(user.uid, rid, g.rdb_conn)
                 if result:
                     flash('Reaction was successfully deleted.', 'success')
