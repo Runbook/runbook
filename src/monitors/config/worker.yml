@@ -11,3 +11,5 @@ stathat_ez_key: update_me!
 envname: "[Self Hosted]"
 ## Logging
 use_syslog: False
+## Cryptography
+crypto_key: "IguaOorhzw8VRotv7fznbQN5MtlI6X-AFUQ8K90cNZ4="

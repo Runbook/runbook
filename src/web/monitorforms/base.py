@@ -43,6 +43,12 @@ class BaseCheckForm(Form):
         'extra_headers' : 'header:value',
         'port' : '443',
         'ip' : '10.0.0.1',
+        'host_string' : 'example.com:22',
+        'gateway' : 'example.com:22',
+        'username' : 'root',
+        'password' : 'password',
+        'sshkey' : 'SSH Private Key',
+        'cmd' : 'grep -q "Out of Mem" /var/log/syslog',
     }
 
     # Common description values
@@ -60,6 +66,14 @@ class BaseCheckForm(Form):
         },
         'linode' : {
             'linodeid' : "Specify the ID number of the Node Server you wish to monitor. This ID can be obtained from the Linode administrative dashboard."
+        },
+        'ssh' : {
+            'gateway' : "If specified the monitor will use the gateway server as a jump host",
+            'host_string' : "Target host information in the format of hostname:port",
+            'password' : "Password to use for password based authentication",
+            'sshkey' : "SSH Private key to use for key based authentication",
+            'cmd' : "Command you wish to execute on the target server",
+            'username' : "Username to use during login",
         },
         'email' : "Specify an email address to be used for this monitor",
         'domain' : "Specify a the domain to be used with this monitor",

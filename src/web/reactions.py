@@ -5,6 +5,8 @@
 ######################################################################
 
 import rethinkdb as r
+import json
+from cryptography.fernet import Fernet
 
 
 class Reaction(object):
@@ -19,9 +21,20 @@ class Reaction(object):
         self.lastrun = None
         self.frequency = None
         self.data = {}
+        self.config = None
+        self.encrypted = False
 
     def createReaction(self, rdb):
         ''' This will create a reaction with the supplied information '''
+        # Encrypt User Input
+        if self.config['CRYPTO_ENABLED']:
+            crypto = Fernet(self.config['CRYPTO_KEY'])
+            try:
+                self.data = crypto.encrypt(json.dumps(self.data))
+            except:
+                return False
+            self.encrypted = True
+
         reactdata = {
             'name': self.name,
             'rtype': self.rtype,
@@ -29,7 +42,9 @@ class Reaction(object):
             'trigger': self.trigger,
             'frequency': self.frequency,
             'lastrun': 0,
-            'data': self.data}
+            'data': self.data,
+            'encrypted': self.encrypted
+        }
         if self.exists(reactdata['name'], reactdata['uid'], rdb):
             return 'exists'
         else:
@@ -48,6 +63,15 @@ class Reaction(object):
 
     def editReaction(self, rdb):
         ''' This will edit a reaction with the supplied information '''
+        # Encrypt User Input
+        if self.config['CRYPTO_ENABLED']:
+            crypto = Fernet(self.config['CRYPTO_KEY'])
+            try:
+                self.data = crypto.encrypt(json.dumps(self.data))
+            except:
+                return False
+            self.encrypted = True
+
         reactdata = {
             'name': self.name,
             'rtype': self.rtype,
@@ -55,7 +79,9 @@ class Reaction(object):
             'trigger': self.trigger,
             'frequency': self.frequency,
             'lastrun': self.lastrun,
-            'data': self.data}
+            'data': self.data,
+            'encrypted' : self.encrypted
+        }
         results = r.table('reactions').get(self.rid).update(reactdata).run(rdb)
         if results['replaced'] == 1:
             qdata = {}
@@ -133,6 +159,11 @@ class Reaction(object):
             self.frequency = results['frequency']
             self.lastrun = results['lastrun']
             self.data = results['data']
+            if "encrypted" in results:
+                self.encrypted = results['encrypted']
+            if self.encrypted:
+                crypto = Fernet(self.config['CRYPTO_KEY'])
+                self.data = json.loads(crypto.decrypt(bytes(self.data)))
             return self
         else:
             return False

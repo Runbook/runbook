@@ -11,3 +11,5 @@ mandrill
 pyOpenSSL
 ndg-httpsclient
 pyasn1
+cryptography
+fabric

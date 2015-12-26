@@ -28,6 +28,7 @@ import yaml
 import signal
 import json
 import time
+from cryptography.fernet import Fernet
 
 # Load Configuration
 # ------------------------------------------------------------------
@@ -86,7 +87,6 @@ def getTime():
     now = datetime.now()
     return now.strftime("%H:%M:%S.%f")
 
-
 # Do the work
 # ------------------------------------------------------------------
 
@@ -99,10 +99,18 @@ while True:
     stat = "[%s] Checks received by workers" % config['envname']
     stathat.ez_count(config['stathat_ez_key'], stat, 1)
     logger.debug("Got message for monitor %s from broker" % jdata['cid'])
+    
+    check_data = jdata.copy()
+    # If encrypted decrypt and send to check module
+    if "encrypted" in check_data:
+        if check_data['encrypted'] is True:
+            crypto = Fernet(config['crypto_key'])
+            check_data['data'] = json.loads(crypto.decrypt(bytes(check_data['data'])))
+
     # Load health check module and run it
     monitor = __import__(
         "checks." + jdata['ctype'], globals(), locals(), ['check'], -1)
-    result = monitor.check(jdata=jdata, logger=logger)
+    result = monitor.check(jdata=check_data, logger=logger)
     if result is True:
         # Log it
         stat = "[%s] True Checks" % config['envname']
@@ -131,6 +139,7 @@ while True:
 
     # Send data to sink and log it
     if ztext is not None:
+        logger.debug("Sending JSON message to sink: %s" % ztext)
         zsend.send(ztext)
         stat = "[%s] Checks sent to sink from workers" % config['envname']
         stathat.ez_count(config['stathat_ez_key'], stat, 1)
