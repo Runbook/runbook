@@ -8,8 +8,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import hashlib
 import rethinkdb as r
 import time
+import json
 from monitors import Monitor
 from reactions import Reaction
+from cryptography.fernet import Fernet
 
 
 class User(object):
@@ -195,17 +197,26 @@ class User(object):
             {'uid': self.uid}).order_by('name').run(rdb)
         reactions = {}
         for x in results:
+            if "encrypted" in x:
+                if x['encrypted'] is True:
+                    crypto = Fernet(self.config['CRYPTO_KEY'])
+                    x['data'] = json.loads(crypto.decrypt(bytes(x['data'])))
             reactions[x['id']] = x
         self.reactions = reactions
         return self.reactions
 
     def getMonitors(self, rdb):
         ''' Returns a list of monitor id's that this user owns '''
+        from monitors import Monitor
         # Get Monitors
         results = r.table('monitors').filter(
             {'uid': self.uid}).order_by('name').run(rdb)
         monitors = {}
         for x in results:
+            if "encrypted" in x:
+                if x['encrypted'] is True:
+                    crypto = Fernet(self.config['CRYPTO_KEY'])
+                    x['data'] = json.loads(crypto.decrypt(bytes(x['data'])))
             monitors[x['id']] = x
         self.monitors = monitors
         return self.monitors

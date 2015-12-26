@@ -190,6 +190,7 @@ def confirm_email(token):
         app.config['SECRET_KEY'], app.config['COOKIE_TIMEOUT'], request.cookies)
     if verify:
         user = User()
+        user.config = app.config
         user.get('uid', verify, g.rdb_conn)
         if user.confirmed:
             flash('Account already confirmed. Thank you.', 'success')

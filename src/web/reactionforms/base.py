@@ -52,6 +52,12 @@ class BaseReactForm(Form):
         'port' : '443',
         'trigger' : '0',
         'frequency' : '120',
+        'host_string' : 'example.com:22',
+        'gateway' : 'example.com:22',
+        'username' : 'root',
+        'password' : 'password',
+        'sshkey' : 'SSH Private Key',
+        'cmd' : 'service httpd restart',
     }
 
     # Common description values
@@ -97,6 +103,14 @@ class BaseReactForm(Form):
             'accessKey' : "Specify your AWS Access Key",
             'accessSecretKey' : "Specify your AWS Secret Access Key",
             'instanceID' : "Specify the ID of the instance this reaction should execute against.",
+        },
+        'ssh' : {
+            'gateway' : "If specified the reaction will use the gateway server as a jump host",
+            'host_string' : "Target host information in the format of hostname:port",
+            'password' : "Password to use for password based authentication",
+            'sshkey' : "SSH Private key to use for key based authentication",
+            'cmd' : "Command you wish to execute on the target server",
+            'username' : "Username to use during login",
         },
         'callon' : "Define whether this reaction should execute on True or False monitors",
         'email' : "Specify an email address to be used for this reaction",

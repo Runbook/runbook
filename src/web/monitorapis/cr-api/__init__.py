@@ -5,6 +5,7 @@
 ######################################################################
 
 import json
+from web import app
 
 
 def webCheck(request, monitor, urldata, rdb):
@@ -14,6 +15,8 @@ def webCheck(request, monitor, urldata, rdb):
     }
     rdata = {}
     jdata = request.json
+    if jdata is None:
+        jdata = urldata.copy()
 
     # Adding this because i'm lazy and didn't feel like modifying all the
     # references
@@ -21,30 +24,30 @@ def webCheck(request, monitor, urldata, rdb):
     atype = urldata['atype']
 
     # Process API Request
-    print("cr-api: looking up monitor id %s") % cid
+    app.logger.debug("cr-api: looking up monitor id %s" % cid)
     monitor.get(cid, rdb)
-    print("cr-api: Monitor %s is - %s") % (cid, monitor.name)
+    app.logger.info("cr-api: Monitor %s is - %s" % (cid, monitor.name))
     if jdata['check_key'] == monitor.url:
-        print("cr-api: monitor %s check_key is valid") % cid
+        app.logger.info("cr-api: monitor %s check_key is valid" % cid)
         if jdata['action'] == "false" or jdata['action'] == "failed":
             monitor.healthcheck = "false"
             result = monitor.webCheck(rdb)
             if result:
-                print("cr-api: change of webCheck for \
+                app.logger.info("cr-api: change of webCheck for \
                       monitor {0} was successful".format(cid))
                 rdata['result'] = "success"
             else:
-                print("cr-api: could not set webCheck for monitor %s") % cid
+                app.logger.info("cr-api: could not set webCheck for monitor %s" % cid)
                 rdata['result'] = "failed"
         elif jdata['action'] == "true" or jdata['action'] == "healthy":
             monitor.healthcheck = "true"
             result = monitor.webCheck(rdb)
             if result:
-                print("cr-api: change of webCheck for \
+                app.logger.info("cr-api: change of webCheck for \
                       monitor {0} was successful".format(cid))
                 rdata['result'] = "success"
             else:
-                print("cr-api: could not set webCheck for monitor %s") % cid
+                app.logger.info("cr-api: could not set webCheck for monitor %s" % cid)
                 rdata['result'] = "failed"
         elif jdata['action'] == "status":
             rdata['result'] = "success"
@@ -56,12 +59,13 @@ def webCheck(request, monitor, urldata, rdb):
                 rdata['status'] = monitor.status
             rdata['failcount'] = monitor.failcount
         else:
-            print("cr-api: Got an unknown action %s") % jdata['action']
+            app.logger.info("cr-api: Got an unknown action %s" % jdata['action'])
             rdata['result'] = "unkown action"
     else:
-        print("cr-api: monitor check_key is invalid")
+        app.logger.info("cr-api: monitor check_key is invalid")
         rdata['result'] = "invalid key"
 
     replydata['data'] = json.dumps(rdata)
+    app.logger.debug("Returning API results: {0}".format(replydata['data']))
 
     return replydata

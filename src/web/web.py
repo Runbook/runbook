@@ -23,7 +23,7 @@
 import os
 import sys
 import cookies
-import md5
+import hashlib
 
 # Flask modules
 from flask import Flask
@@ -77,7 +77,7 @@ def startData(user=None):
         data['stripe_pubkey'] = app.config['STRIPE_PUBKEY']
         data['subplans'] = user.subplans
         data['subscription'] = user.subscription
-        data['email_digest'] = md5.new(user.email).hexdigest()
+        data['email_digest'] = hashlib.md5(user.email).hexdigest()
     data['js_bottom'] = []
     data['js_header'] = []
     return data

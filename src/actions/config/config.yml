@@ -38,3 +38,5 @@ mandrill_api_url: "https://mandrillapp.com/api/1.0/"
 mandrill_api_key: "update_me!"
 ## Logging
 use_syslog: False
+## Cryptography
+crypto_key: "IguaOorhzw8VRotv7fznbQN5MtlI6X-AFUQ8K90cNZ4="

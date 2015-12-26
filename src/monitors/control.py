@@ -90,29 +90,10 @@ while True:
     count = 0
     # Get list of members to check from queue
     for check in r_server.smembers(config['queue']):
-        checkdata = {'cid': check, 'data': {}}
-        # Non-Data Keys
         monkey = "monitor:" + check
-        for key in r_server.hkeys(monkey):
-            value = r_server.hget(monkey, key)
-            if value == "slist":
-                checkdata[key] = []
-                listkey = monkey + ":" + key
-                for entry in r_server.smembers(listkey):
-                    checkdata[key].append(entry)
-            else:
-                checkdata[key] = value
-        # Data Keys
-        monkey = "monitor:" + check + ":data"
-        for key in r_server.hkeys(monkey):
-            value = r_server.hget(monkey, key)
-            if value == "slist":
-                checkdata['data'][key] = []
-                listkey = monkey + ":" + key
-                for entry in r_server.smembers(listkey):
-                    checkdata['data'][key].append(entry)
-            else:
-                checkdata['data'][key] = value
+        data = r_server.get(monkey)
+        checkdata = json.loads(data)
+        checkdata['cid'] = check
         checkdata['time_tracking'] = {'control': time.time(),
                                       'ez_key': config['stathat_key'],
                                       'env': str(config['envname'])}
