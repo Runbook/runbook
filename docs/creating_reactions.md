@@ -1,182 +1,95 @@
-# Creating Reactions
+# Introduction
 
-## Introduction
+Runbook is designed to keep the creation of Monitors and Reactions as simple as possible by making everything modular. In order to create a new Reaction you do not have to touch any existing code. Instead, you simply create several new files that are dynamically loaded by the application.
 
-With Runbook, we have kept the creation of Reactions as simple as possible by making the Reactions modular. Creating a new Reaction doesn't require you to edit the main `web.py` file. Instead, you create several new files that are dynamically loaded into the application.
+## Defining a "short-name"
 
-When creating a new Reaction, it is important to define a **short-name** for the Reaction. This short-name will be used to uniquely identify the Reaction throughout the various modules you create.
+Before creating a new reaction, it is important to first define a **short-name** for the reaction. This short-name will be used to identify the Reaction throughout the various components of Runbook. The short-name will be used as a module name for the `actions` component and in the URL for the `web` component. Since this name is used within the URL for the Runbook web interface it is important to select a "web-safe" name.
 
-**Example:** We have recently deployed a Reaction for re-starting AWS EC2 instances into production. The short-name for this Reaction is `aws-ec2restart`. This short-name is unique for this type of Reaction and all files created for this reaction reference this short-name.
+Currently reactions follow a convention of all lowercase with words separated by a `-` (e.g. `execute-shell-command`, `cloudflare-dns-failover`).
 
-In this guide, we will use the `aws-ec2restart` Reaction as a reference.
+# Creating a new Reaction
 
-## Creating a new Reaction
+## Step 1: Reaction web form
 
-### Step 1: The Reaction web form
+The first step in creating a new reaction is to define a web form. This web form will be used by end users to create their reaction, as such the form should have fields for all of the information required to perform the reaction's action.
 
-Runbook is written using the [Flask](http://flask.pocoo.org/) framework. A common utility for creating web forms within flask is [wtforms](https://wtforms.readthedocs.org/en/latest/). We utilize wtforms for all web forms within the Runbook GUI, including the forms that create Reactions.
+Runbook's web interface is written using the [Flask](http://flask.pocoo.org/) framework and all web forms within the web application are created with [wtforms](https://wtforms.readthedocs.org/en/latest/). Familiarity with these two components will help in the development of the web form but are not required.
 
-For this document, we will create a new Reaction named `some-reaction`. The first step of creating a Reaction is to create the web form needed for users. To start the web form we will create a directory in `web/reactions` called `some-reaction`. Within that directory we will create a `__init__.py` file containing a class that defines the form fields required.
+Creating a new reaction web form is as simple as creating a new directory within `src/web/reactionforms` and creating an `__init__.py` file within that new directory.
 
-    $ mkdir web/reactionforms/some-reaction
-    $ vi web/reactionforms/some-reaction/__init__.py
+    $ mkdir src/web/reactionforms/some-reaction
+    $ vi src/web/reactionforms/some-reaction/__init__.py
 
-Within this file is the actual wtforms code. You can use the [aws-ec2restart](https://github.com/asm-products/cloudroutes-service/blob/master/web/reactionforms/aws-ec2restart/__init__.py) Reaction as an example.
+Once the file exists simply start by creating a new **wtforms** form with a class name of `ReactForm`. Below is an example of the `execute-shell-command` reaction's web form.
 
-There are a couple of guidelines when creating a web form for Reactions.
+```
+from wtforms import SelectField, TextAreaField, TextField
+from wtforms.validators import DataRequired, Optional
+from ..base import BaseReactForm
 
-* The class must be named ReactForm
 
-When the main web component loads the form it will dynamically load the ReactForm class. This dynamic loading relies on the short-name and is pulled from the URL the user navigates to.
+class ReactForm(BaseReactForm):
 
-* The class should inherit BaseReactForm
+    ''' Class that creates an form for the reaction Execute Shell Command '''
+    title = "Execute Shell Command"
+    description = """
+    <p>This reaction provides a method of executing an arbitrary shell command, script or series of commands on a remote host over SSH.</p>
+    <p>The SSH connection is authenticated by an SSH key; it is recommended that you generate a unique SSH public/private key pair for this purpose. The <code>Gateway</code> field can be used to specify a bastion or "jump" host; this setting will cause the reaction to first SSH to the specified <code>Gateway</code> host and then SSH to the specified target host.</p>
+    """
+    placeholders = BaseReactForm.placeholders
+    field_descriptions = BaseReactForm.descriptions
 
-The BaseReactForm contains base fields that every Reaction should contain. You should inherit this class to ensure you have at least the base Reaction requirements. You can import this class with the following.
+    host_string = TextField(
+        "Target Host",
+        description=field_descriptions['ssh']['host_string'],
+        validators=[DataRequired(message='Target Host is a required field')])
+    gateway = TextField(
+        "Gateway Host",
+        description=field_descriptions['ssh']['gateway'],
+        validators=[Optional()])
+    username = TextField(
+        "Username",
+        description=field_descriptions['ssh']['username'],
+        validators=[DataRequired(message="Username is a required field")])
+    sshkey = TextAreaField(
+        "SSH Private Key",
+        description=field_descriptions['ssh']['sshkey'],
+        validators=[DataRequired(message='SSH Key is a required field')])
+    cmd = TextAreaField(
+        "Command",
+        description=field_descriptions['ssh']['cmd'],
+        validators=[DataRequired(message='Command is a required field')])
+    call_on = SelectField(
+        'Call On',
+        description=field_descriptions['callon'],
+        choices=[('false', 'False Monitors'), ('true', 'True Monitors')],
+        validators=[DataRequired(message='Call on is a required field.')])
+```
 
-    from ..base import BaseReactForm
+In the code above the `ReactForm` class inherits the `BaseReactForm` class. This is important as this base class creates several basic form fields such as `name`, `trigger`, and `frequency`. The base class also contains a `placeholders` object and `field_descriptions` object which is used for form rendering.
 
-#### Example Reaction form
+The `placeholders` object defines placeholder text to be shown when the web form renders. This text is selected based on the forms name. Within the `src/web/reactionforms/base.py` file there exists a set of base placeholder values. When creating a custom reaction you can append new values or update existing values using `placeholders.update({ 'newfield' : 'placeholder text'})` within the custom reaction. If the placeholder being created will be reused often than it is best to place this new definition in the `src/web/reactionforms/base.py` file.
 
-The simplest example can be seen below.
+The `field_descriptions` object defines help text to be shown as a popover when the web form renders. Like the `placeholders` object this is populated from the `src/web/reactionforms/base.py` module. Common descriptions already exist such as the ones shown above, however when creating a new reaction you can either update the object or for each field specify a description manually. Either option is accepted however do try to follow the DRY (Don't Repeat Yourself) methodology as much as possible.
 
-    from wtforms import Form, TextField
-    from wtforms.validators import DataRequired
-    from ..base import BaseReactForm
+In addition to field descriptions the `ReactForm` class also requires a `description` and `title` to be defined. These are used during page rendering to provide users with information on how a reaction works and is to be used. Our overall documentation does not document each and every reaction as the `description` is the place for that functionality. The `description` object is the only one at this time designated as HTML Safe. HTML should only be used with the `description` object.
 
-    class ReactForm(BaseReactForm):
-      ''' Class that creates a Reaction form for the dashboard '''
-      example_field = TextField("Example Field", validators=[DataRequired(message="Example Field is a required field")])
+## Step 2: Reaction module
 
-    if __name__ == '__main__':
-      pass
 
-The above will create a form object that has all of the base required fields and a new field named `example_field`. To add more fields simply add them to the class.
+Once a web form has been created the next task is to create the reaction module itself. Reaction modules contain the logic for performing the reaction. These modules exist within the `src/actions/actions/` directory. To create a new one the first step is similar to the web form, simply create a new directory and within that directory a `__init__.py` file.
 
-As an example, the below class would create a form that had all of the base fields and two additional fields, one for an API key and another for a Resource ID.
+    $ mkdir src/actions/actions/some-reaction
+    $ vi src/actions/actions/some-reaction/__init__.py
 
-    class ReactForm(BaseReactForm):
-        ''' Class that creates a Reaction form for the dashboard '''
-        api_key = TextField("API Key", validators=[DataRequired(message="API Key is a required field")])
-        resource_id = TextField("Resource ID", validators[DataRequired(message="Resource ID is a required field")])
+When the reaction actioner process (`src/actions/actioner.py`) receives a request to perform a reaction action it will import the `action()` method from the `src/actions/action/<short-name>` module. As such all reactions require a `action()` method to be defined. This method will be called with `kwargs` of `jdata`, `redata`, `rdb`, `r_server`, `config` and `logger`.
 
-### Step 2: Reaction form HTML
+The `rdb` object is a object for interacting with RethinkDB, `r_server` is used for interacting with the Redis cache and `logger` is for writing logs.
 
-Where step #1 created the web form object for Flask, step #2 is about creating the HTML and [Jinja2](http://jinja.pocoo.org/) template files that render the web form. The easiest way to create a new template is to simply copy an existing one. A good example template is the [aws-ec2restart.html](https://github.com/asm-products/cloudroutes-service/blob/master/static/templates/reactions/aws-ec2restart.html) Reaction.
+### Sample `redata` Object
 
-The majority of the `aws-ec2restart.html` file is a basic page structure; for the most part the structure of each Reaction page does not change from Reaction to Reaction. The main components that change are the form fields themselves.
-
-#### Example form field
-
-Below is an example of an input field written in HTML and Jinja2.
-
-    <div class="form-group">
-      <label for="AWS Access Key" class="col-sm-4 control-label">AWS Access Key</label>
-      <div class="col-sm-8">
-        <div class="input-group">
-          <span class="input-group-btn">
-            <button type="button" id="aws-access-key" class="btn btn-default" rel="popover" data-content="This field should contain your AWS Access Key, which can be obtained from the AWS Management Console." title="AWS Access Key"><i class="fa fa-question"></i></button>
-          </span>
-          {% if data['edit'] %}
-            {{ form.aws_access_key(class_="form-control", value=data['reaction']['data']['aws_access_key']) }}
-          {% else %}
-            {{ form.aws_access_key(class_="form-control", placeholder="AWS Access Key") }}
-          {% endif %}
-        </div>
-      </div>
-    </div>
-
-As you can see Jinja2 accepts if statements. In this example, if the page is in edit mode the value of `data['edit']` will be `True`. As per the template if `data['edit']` is `True`, the web form field `aws_access_key` will be created and pre-populated with the value of `data['reaction']['data']['aws_access_key']`. If the value of `data['edit']` is `False` the form field will be created and the placeholder value will be displayed.
-
-This HTML is an example of how the templates above render.
-
-    <div class="form-group">
-    <label for="AWS Access Key" class="col-sm-4 control-label">AWS Access Key</label>
-    <div class="col-sm-8">
-    <div class="input-group">
-    <span class="input-group-btn">
-    <button type="button" id="aws-access-key" class="btn btn-default" rel="popover" data-content="This field should contain your AWS Access Key, which can be obtained from the AWS Management Console." title="AWS Access Key"><i class="fa fa-question"></i></button>
-    </span>
-    <input class="form-control" id="aws_access_key" name="aws_access_key" placeholder="AWS Access Key" type="text" value="">
-    </div>
-    </div>
-    </div>
-
-##### Classes for form fields
-
-If you look at the Jinja2 code in the template you will notice the `class_="form-control"` was translated to `class="form-control"` in the HTML. The Runbook GUI has several form classes that should be used depending on the form type. The list below details the classes and what they are used for.
-
-* form-control: general purpose bootstrap form field class
-* select: used for `SelectField` form fields and provided by `bootstrap-multiselect.css`
-* multiselect: used for `MultiSelectField` form fields and provided by `bootstrap-multiselect.css`
-
-It is important to utilize the appropriate class to ensure a consistent visual appearance on the Runbook dashboard.
-
-#### some-reaction.js
-
-When the Reaction page is loaded via the main `web.py`, a `.js` file of the same name is also loaded. This file is used for the JavaScript required to activate popover help text. However, it should also be utilized for any other JavaScript-related code that needs to be imported at the footer of the page.
-
-Even if popover text or any other JavaScript code is not utilized for this Reaction it is required that a `.js` file is present. You can simply create a blank file if necessary.
-
-    $ touch static/templates/reactions/some-reaction.js
-
-#### Processing the form
-
-As a development team, our goal is to ensure that everything is modular. When you create a new Reaction you do not need to create code to process the web form inputs. This is done automatically via the web application. It is important, however, to understand how this processing takes place.
-
-When the web app processes the new Reaction the details will be stored into the `reactions` table in RethinkDB, which is a JSON-based database. When you edit a Reaction the web application will query RethinkDB and store details about that Reaction into `data['reaction']`. Below is an example of the structure of both the database and `data['reaction']`.
-
-    data['reaction'] = {
-      "data": {
-        "apikey":  "dslfjalskdj32432lajfs233432fcaewrq11c",
-        "domain":  "example.com",
-        "email": "example@example.com",
-        "ip":  "10.0.3.1",
-        "name":  "Remove: example.com - 10.0.3.1"
-      } ,
-      "frequency": 0,
-      "id":  "kasdkldj2342-23faew-234fs-a39d519f78",
-      "lastrun": 1411916840.440264,
-      "name":  "Remove: example.com - 10.0.3.1",
-      "rtype":  "cloudflare-ip-remove",
-      "trigger": 0,
-      "uid":  "kasldflksajl-asfw-1337-1337-asdfa213"
-    }
-
-The above example is a Reaction entry from a `cloudflare-ip-remove` Reaction. When the web application processes the creation form it will place the `name`, `frequency`, and `trigger` fields under the `data['reaction']` dictionary. All other fields are placed into the `data['reaction']['data']` dictionary. This is a similar format to what the actual Reaction code will see as well.
-
-### Step 3: Creating the actual Reaction code
-
-Steps #1 and #2 were specifically related to creating the web elements of a Reaction. Step #3 is the creation of the Reaction module itself.
-
-#### Creating a new Reaction
-
-Reactions are essentially python modules that are called by another process. To create a new Reaction you will first need to create a directory using the short-name in the `actions/actions` directory, then create a `__init__.py` file that contains the Reaction code.
-
-Reactions are essentially Python modules that are called by another process. To create a new Reaction you will first need to create a directory using the short-name in the `actions/actions` directory, then create a `__init__.py` file that contains the Reaction code.
-
-    $ mkdir actions/actions/some-reaction
-    $ vi actions/actions/some-reaction/__init__.py
-
-A good reference file would be the [aws-ec2restart](https://github.com/asm-products/cloudroutes-service/blob/master/actions/actions/aws-ec2restart/__init__.py) Reaction.
-
-#### How Reactions are called
-
-After a Monitor process has finished performing its tasks, the Monitor will send the results in JSON format to a process called "the sink". This process is a broker process which receives the messages and then forwards them to an [actioning worker](https://github.com/asm-products/cloudroutes-service/blob/develop/src/actions/actioner.py). This process will read the JSON message and determine which Reactions it should process. The JSON message contains a list of Reaction IDs, and when the actioner processes this list it will first look up the details of the Reaction from Redis and RethinkDB. If the RethinkDB cluster is unavailable for that read request the actioner will utilize the Redis cache for any Reaction details it needs. This cache may not be the latest and greatest information, but it will allow the system to perform the necessary steps if the RethinkDB cluster is down.
-
-All Reactions are modules to the actioning system, located in `actions/`. After looking up the details of a Reaction, the actioner will import the module specified by the `short-name` defined. For example, the Cloudflare Remove IP Reaction is loaded by importing `actions.cloudflare-ip-remove`. After importing the module the actioner will call the `action()` method defined in that module. The `action()` method is a keyword arguments defined method. When the actioner calls this method it specifies values for `redata`, `jdata, `rdb_server`, `r_server` and `config`.
-
-    try:
-        react = reaction.action(redata=kwargs['redata'], jdata=kwargs['jdata'],
-            rdb=kwargs['rdb'], r_server=kwargs['r_server'], config=kwargs['config'])
-    except Exception as e:
-        logger.error("Got error when attempting to run reaction %s for monitor %s" % (
-            redata['rtype'], jdata['cid']))
-
-The `redata` object contains a dictionary of the specific Reaction pulled from the database/cache. The `jdata` object contains a dictionary of the JSON message received with some additional fields required for executing Reactions. The `rdb_server` is an object required for the connection to the RethinkDB instance. The `r_server` is an object required for the connection to the Redis instance. The `config` object is a dictionary that contains values loaded on start from the actioner's configuration file.
-
-Below are examples of the `redata` and `jdata` dictionaries.
-
-##### redata
+The below is an example of the `redata` object. This object is used to contain information about the reaction being executed. The data is essentially the full database contents of the specific reaction.
 
     redata = {
       "data": {
@@ -195,9 +108,10 @@ Below are examples of the `redata` and `jdata` dictionaries.
       "uid":  "kasldflksajl-asfw-1337-1337-asdfa213"
     }
 
-As you can see this is exactly what was queried from the database store.
 
-##### jdata
+### Sample `jdata` Object
+
+The below `jdata` object is essentially the same as the `jdata` object used for monitors. This object contains the monitor specific information pulled from the database. However, the `actioner.py` process does pull some additional data from the database that the monitor processes do not receive.
 
     jdata = {
       "status": "false",
@@ -238,63 +152,79 @@ As you can see this is exactly what was queried from the database store.
       "name": "Some Monitor"
     }
 
-Depending on the type of Monitor the `data` key may contain different keys and values but all other fields from the above example will exist.
+For both the `jdata` and `redata` objects the `data` key contains user supplied information to be used during the reaction process.
 
-#### Processing Reactions
+### Example Module
 
-Once `actioner.py` invokes the `action` method from a Reaction, it is up to the Reaction itself to determine what it should do. The decision on whether the Reaction should actually be executed or not depends on the configuration of each action and is placed solely on the Reaction's code. While this does vary from Reaction to Reaction, there are a couple of set rules for processing Reactions.
+The below is an example reaction module based on the `execute-shell-command` reaction.
 
-1) The Reaction must honor trigger and frequency settings
+```
+from fabric.api import env, run, hide
+from ..utils import ShouldRun
 
-In Runbook, we have implemented a feature called `trigger` and `frequency`. These two settings allow users to define the number of `true` or `false` checks that must be returned before Reaction execution and the frequency between Reaction executions.
+def __action(**kwargs):
+    redata = kwargs['redata']
+    jdata = kwargs['jdata']
+    if ShouldRun(redata, jdata):
+        env.gateway = redata['data']['gateway']
+        env.host_string = redata['data']['host_string']
+        env.user = redata['data']['username']
+        env.key = redata['data']['sshkey']
+        env.disable_known_hosts = True
+        env.warn_only = True
+        env.aport_on_prompts = True
+        try:
+            results = run_cmd(redata['data']['cmd'])
+            if results.succeeded:
+                return True
+            else:
+                raise Exception(
+                    'Command Execution Failed: {0} - {1}'.format(results.return_code, results))
+        except:
+            raise Exception(
+                'Command failed to execute')
+    else:
+        return None  
 
-The trigger value is stored in `redata['trigger']` and can be compared with `jdata['failcount']`. The frequency value is the number of seconds between executions, is stored in `redata['frequency']`, and can be compared with `jdata['lastrun']` which is a timestamp of when the Reaction was last executed.
+def run_cmd(cmd):
+    with hide('output', 'warnings'):
+        return run(cmd, timeout=1200)
 
-Some Reactions may require additional processing rules. Each Reaction is free to define additional fields in the web form that only have the purpose of determining whether the Reaction should be executed. An example of this is the `jdata['data']['call_on']` field in the `aws-ec2restart` Reaction. This field allows users to define whether the restart should happen on `true` or `false` monitors.
 
-This example is an excerpt of the [aws-ec2restart](https://github.com/asm-products/cloudroutes-service/blob/master/actions/actions/aws-ec2restart/__init__.py) Reaction, a simple example of how to perform the above processing rules.
-
-    def action(**kwargs):
-        ''' This method is called to action a reaction '''
+def action(**kwargs):
+    try:
+        return __action(**kwargs)
+    except Exception, e:  #pylint: disable=broad-except
         redata = kwargs['redata']
-        jdata = kwargs['jdata']
-        run = True
-        # Check for Trigger
-        if redata['trigger'] > jdata['failcount']:
-            run = False
+        logger = kwargs['logger']
+        logger.warning(
+            'execute-shell-command: Reaction {id} failed: {message}'.format(
+                id=redata['id'], message=e.message))
+        return False
+```
 
-        # Check for lastrun
-        checktime = time.time() - float(redata['lastrun'])
-        if checktime < redata['frequency']:
-            run = False
+#### ShouldRun
 
-        if redata['data']['call_on'] not in jdata['check']['status']:
-            run = False
+Reactions are called after every monitor check, it is up to each individual reaction to determine if it should actually perform the action or not. In order to make this easier you can simply import the `ShouldRun` method from the `..utils` module. This method will identify if the reaction should actually be executed or not. If we look at the code above we can see that all of the execution steps are within an `if ShouldRun(redata, jdata):` statement.
 
-        if run:
-            return actionEC2(redata, jdata)
-        else:
-            return None
+After a successful execution the reaction should return a `True` value. If the reaction is unable to execute because of an error the return value should be `False`. The `None` return value is used to specify that the reaction was not executed for expected reasons such as the `ShouldRun()` method returning `False`.
 
-2) The return code is important
+## Step 3: Enabling the reaction
 
-After a Reaction has executed, it is important that an appropriate return code is used. The `actioner.py` process is expecting either a `True`, `False`, or `None` return. The state of the Reaction's execution will be determined based on which value is returned. The list below details the return values and what each value means to `actioner.py`.
+By default any reaction that exists within the `reactionforms/` directory can be accessed via the Web UI. Available reactions are defined within the `src/web/instance/reactions.cfg` file. This file contains a Python dictionary with the defined reactions. To enable a reaction simply append the appropriate details within this configuration file.
 
-* `True`: Reaction was processed successfully
-* `False`: Reaction attempted to process but false
-* `None`: Reaction processing was skipped
+Below is an example of the Slack Webhook Reaction.
 
-If we review the sample code above, we can see that the return value is set to `None` if the Reaction's function `actionEC2` was not executed. This tells the `actioner.py` process that the Reaction was not executed.
+```
+    'Chat Services' : {
+        'Slack Webhooks' : {
+            'description' : 'The Slack Webhooks Reaction allows you to integrate Runbook monitors with Slack. This reaction uses Slacks incoming webhooks to post to channels or users.',
+            'create_link' : '/dashboard/reactions/slack-webhook',
+            'service' : 'Slack',
+        },
+    },
+```
 
-      if run:
-        return actionEC2(redata, jdata)
-      else:
-        return None
+# Getting help
 
-The return value to the `actioner.py` is important as it is used to determine whether the `lastrun` value of the Reaction should be updated. It is also used for historical tracking of Monitors and Reactions, and tells users when Reactions were executed or not.
-
-## Getting help
-
-Runbook is developed as part of [Assembly](https://assembly.com/). If you have any questions while developing a new Monitor or Reaction, feel free to drop by our [chat](https://assembly.com/chat/runbook) page.
-
----
+If you need help while developing a new reaction or modifying an existing reaction you can find help on Runbook's [Gitter Chat](https://gitter.im/Runbook/runbook). For a list of reactions to be created checkout our [Waffle.io Board](https://waffle.io/Runbook/runbook).
