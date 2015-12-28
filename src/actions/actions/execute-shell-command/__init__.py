@@ -13,7 +13,8 @@ def __action(**kwargs):
         env.key = redata['data']['sshkey']
         env.disable_known_hosts = True
         env.warn_only = True
-        env.aport_on_prompts = True
+        env.abort_on_prompts = True
+        env.shell = "/bin/sh -c"
         try:
             results = run_cmd(redata['data']['cmd'])
             if results.succeeded:
