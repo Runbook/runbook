@@ -6,13 +6,13 @@ Runbook is designed to keep the creation of Monitors as simple as possible by ma
 
 Before creating a new monitor, it is important to first define a **short-name** for the monitor. This short-name will be used to identify the Monitor throughout the various components of Runbook. The short-name will be used as a module name for the `monitors` component and in the URL for the `web` component. Since this name is used within the URL for the Runbook web interface it is important to select a "web-safe" name.
 
-Currently monitors follow a convention of all lowercase with words separated by a `-` (e.g. `execute-shell-command`, `http-request`).
+Currently monitors follow a convention of all lowercase with words separated by an `-` (e.g. `execute-shell-command`, `http-request`).
 
 # Creating a new Monitor
 
 ## Step 1: Monitor web form
 
-The first step in creating a new monitor is to define a web form. This web form will be used by end users to create the monitor, as such the form should have fields for all of the information required to perform the monitor check.
+The first step in creating a new monitor is to define a web form. This web form will be used by end users to create the monitor, as such the form should have fields for all the information required to perform the monitor check.
 
 Runbook's web interface is written using the [Flask](http://flask.pocoo.org/) framework and all web forms within the web application are created with [wtforms](https://wtforms.readthedocs.org/en/latest/). Familiarity with these two components will help in the development of the web form but are not required.
 
@@ -64,7 +64,7 @@ class CheckForm(DatacenterCheckForm):
 
 In the code above the `CheckForm` class inherits the `DatacenterCheckForm` class. This is important as this base class creates several basic form fields such as `name`, `reactions`, and `interval`. The base class also contains a `placeholders` object and `field_descriptions` object which is used for form rendering.
 
-The `placeholders` object defines placeholder text to be shown when the web form renders. This text is selected based on the forms name. Within the `src/web/monitorforms/base.py` file there exists a set of base placeholder values. When creating a custom monitor you can append new values or update existing values using `placeholders.update({ 'newfield' : 'placeholder text'})` within the custom monitor. If the placeholder being created will be reused often than it is best to place this new definition in the `src/web/monitorforms/base.py` file.
+The `placeholders` object defines placeholder text to be shown when the web form renders. This text is selected based on the forms name. Within the `src/web/monitorforms/base.py` file there exists a set of base placeholder values. When creating a custom monitor you can append new values or update existing values using `placeholders.update({ 'newfield' : 'placeholder text'})` within the custom monitor. If the placeholder being created will often be reused than it is best to place this new definition in the `src/web/monitorforms/base.py` file.
 
 The `field_descriptions` object defines help text to be shown as a popover when the web form renders. Like the `placeholders` object this is populated from the `src/web/monitorforms/base.py` module. Common descriptions already exist such as the ones shown above, however when creating a new monitor you can either update the object or for each field specify a description manually. Either option is accepted however do try to follow the DRY (Don't Repeat Yourself) methodology as much as possible.
 
@@ -73,7 +73,7 @@ In addition to field descriptions the `CheckForm` class also requires a `descrip
 
 ## Step 2: Monitor module
 
-Once a web form has been created the next task is to create the monitor module itself. Monitor modules contain the logic for performing the monitor and return either a `True`, `False` or `None` value. These modules exist within the `src/monitors/checks/` directory. To create a new one the first step is similar to the web form, simply create a new directory and within that directory a `__init__.py` file.
+Once a web form has been created the next task is to create the monitor module itself. Monitor modules contain the logic for performing the monitor and return either a `True`, `False` or `None` value. These modules exist within the `src/monitors/checks/` directory. To create a new one the first step is similar to the web form, simply create a new directory and within that directory an `__init__.py` file.
 
     $ mkdir src/monitors/checks/some-monitor
     $ vi src/monitors/checks/some-monitor/__init__.py
@@ -161,7 +161,7 @@ As stated above the primary key to utilize when developing a new monitor module 
 
 # Step 3: Enabling the monitor
 
-By default any monitor that exists within the `monitorforms/` directory can be accessed via the Web UI. Available monitors are defined within the `src/web/instance/monitors.cfg` file. This file contains a Python dictionary with the defined monitors. To enable the monitor simply append the appropriate details within this configuration file. 
+By default, any monitor that exists within the `monitorforms/` directory can be accessed via the Web UI. Available monitors are defined within the `src/web/instance/monitors.cfg` file. This file contains a Python dictionary with the defined monitors. To enable the monitor simply append the appropriate details within this configuration file. 
 
 Below is an example of the **Slack Webhook** monitor.
 

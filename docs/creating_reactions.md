@@ -6,13 +6,13 @@ Runbook is designed to keep the creation of Monitors and Reactions as simple as 
 
 Before creating a new reaction, it is important to first define a **short-name** for the reaction. This short-name will be used to identify the Reaction throughout the various components of Runbook. The short-name will be used as a module name for the `actions` component and in the URL for the `web` component. Since this name is used within the URL for the Runbook web interface it is important to select a "web-safe" name.
 
-Currently reactions follow a convention of all lowercase with words separated by a `-` (e.g. `execute-shell-command`, `cloudflare-dns-failover`).
+Currently reactions follow a convention of all lowercase with words separated by an `-` (e.g. `execute-shell-command`, `cloudflare-dns-failover`).
 
 # Creating a new Reaction
 
 ## Step 1: Reaction web form
 
-The first step in creating a new reaction is to define a web form. This web form will be used by end users to create their reaction, as such the form should have fields for all of the information required to perform the reaction's action.
+The first step in creating a new reaction is to define a web form. This web form will be used by end users to create their reaction, as such the form should have fields for all the information required to perform the reaction's action.
 
 Runbook's web interface is written using the [Flask](http://flask.pocoo.org/) framework and all web forms within the web application are created with [wtforms](https://wtforms.readthedocs.org/en/latest/). Familiarity with these two components will help in the development of the web form but are not required.
 
@@ -69,7 +69,7 @@ class ReactForm(BaseReactForm):
 
 In the code above the `ReactForm` class inherits the `BaseReactForm` class. This is important as this base class creates several basic form fields such as `name`, `trigger`, and `frequency`. The base class also contains a `placeholders` object and `field_descriptions` object which is used for form rendering.
 
-The `placeholders` object defines placeholder text to be shown when the web form renders. This text is selected based on the forms name. Within the `src/web/reactionforms/base.py` file there exists a set of base placeholder values. When creating a custom reaction you can append new values or update existing values using `placeholders.update({ 'newfield' : 'placeholder text'})` within the custom reaction. If the placeholder being created will be reused often than it is best to place this new definition in the `src/web/reactionforms/base.py` file.
+The `placeholders` object defines placeholder text to be shown when the web form renders. This text is selected based on the forms name. Within the `src/web/reactionforms/base.py` file there exists a set of base placeholder values. When creating a custom reaction you can append new values or update existing values using `placeholders.update({ 'newfield' : 'placeholder text'})` within the custom reaction. If the placeholder being created will often be reused, than it is best to place this new definition in the `src/web/reactionforms/base.py` file.
 
 The `field_descriptions` object defines help text to be shown as a popover when the web form renders. Like the `placeholders` object this is populated from the `src/web/reactionforms/base.py` module. Common descriptions already exist such as the ones shown above, however when creating a new reaction you can either update the object or for each field specify a description manually. Either option is accepted however do try to follow the DRY (Don't Repeat Yourself) methodology as much as possible.
 
@@ -78,7 +78,7 @@ In addition to field descriptions the `ReactForm` class also requires a `descrip
 ## Step 2: Reaction module
 
 
-Once a web form has been created the next task is to create the reaction module itself. Reaction modules contain the logic for performing the reaction. These modules exist within the `src/actions/actions/` directory. To create a new one the first step is similar to the web form, simply create a new directory and within that directory a `__init__.py` file.
+Once a web form has been created the next task is to create the reaction module itself. Reaction modules contain the logic for performing the reaction. These modules exist within the `src/actions/actions/` directory. To create a new one the first step is similar to the web form, simply create a new directory and within that directory an `__init__.py` file.
 
     $ mkdir src/actions/actions/some-reaction
     $ vi src/actions/actions/some-reaction/__init__.py
@@ -205,15 +205,15 @@ def action(**kwargs):
 
 #### ShouldRun
 
-Reactions are called after every monitor check, it is up to each individual reaction to determine if it should actually perform the action or not. In order to make this easier you can simply import the `ShouldRun` method from the `..utils` module. This method will identify if the reaction should actually be executed or not. If we look at the code above we can see that all of the execution steps are within an `if ShouldRun(redata, jdata):` statement.
+Reactions are called after every monitor check, it is up to each individual reaction to determine if it should actually perform the action or not. In order to make this easier you can simply import the `ShouldRun` method from the `..utils` module. This method will identify if the reaction should actually be executed or not. If we look at the code above we can see that all the execution steps are within an `if ShouldRun(redata, jdata):` statement.
 
 After a successful execution the reaction should return a `True` value. If the reaction is unable to execute because of an error the return value should be `False`. The `None` return value is used to specify that the reaction was not executed for expected reasons such as the `ShouldRun()` method returning `False`.
 
 ## Step 3: Enabling the reaction
 
-By default any reaction that exists within the `reactionforms/` directory can be accessed via the Web UI. Available reactions are defined within the `src/web/instance/reactions.cfg` file. This file contains a Python dictionary with the defined reactions. To enable a reaction simply append the appropriate details within this configuration file.
+By default, any reaction that exists within the `reactionforms/` directory can be accessed via the Web UI. Available reactions are defined within the `src/web/instance/reactions.cfg` file. This file contains a Python dictionary with the defined reactions. To enable a reaction simply append the appropriate details within this configuration file.
 
-Below is an example of the Slack Webhook Reaction.
+Below is an example of the **Slack Webhook** Reaction.
 
 ```
     'Chat Services' : {
