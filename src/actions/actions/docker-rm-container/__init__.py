@@ -1,5 +1,3 @@
-"""Email notification reaction."""
-
 from fabric.api import env, run, hide
 from ..utils import ShouldRun
 
@@ -15,8 +13,12 @@ def __action(**kwargs):
         env.warn_only = True
         env.abort_on_prompts = True
         env.shell = "/bin/sh -c"
+        cmd = ""
+        if redata['data']['use_sudo'] == "true":
+            cmd = "sudo "
+        cmd = cmd + "docker rm --force=True {0}".format(redata['data']['container_name'])
         try:
-            results = run_cmd(redata['data']['cmd'])
+            results = run_cmd(cmd)
             if results.succeeded:
                 return True
             else:
@@ -38,6 +40,6 @@ def action(**kwargs):
         redata = kwargs['redata']
         logger = kwargs['logger']
         logger.warning(
-            'execute-shell-command: Reaction {id} failed: {message}'.format(
+            'docker-rm-container: Reaction {id} failed: {message}'.format(
                 id=redata['id'], message=e.message))
         return False
