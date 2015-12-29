@@ -2,7 +2,7 @@ from fabric.api import hide, run, env
 import time
 
 def run_cmd(cmd):
-    with hide('output', 'warnings'):
+    with hide('output', 'running', 'warnings'):
         return run(cmd, timeout=1200)
 
 def check(**kwargs):
@@ -14,9 +14,10 @@ def check(**kwargs):
     env.host_string = jdata['data']['host_string']
     env.user = jdata['data']['username']
     env.key = jdata['data']['sshkey']
+    env.shell = "/bin/sh -c"
     env.disable_known_hosts = True
     env.warn_only = True
-    env.aport_on_prompts = True
+    env.abort_on_prompts = True
     try:
         results = run_cmd(jdata['data']['cmd'])
         logger.debug("execute-shell-command: requested command" +

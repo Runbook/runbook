@@ -1,205 +1,128 @@
-# Creating Monitors
+# Introduction
 
-## Introduction
+Runbook is designed to keep the creation of Monitors as simple as possible by making everything modular. In order to create a new Monitor you do not have to touch any existing code. Instead, you simply create several new files that are dynamically loaded by the application.
 
-With Runbook, we have kept the creation of Monitors as simple as possible by making the Monitors modular. Creating a new Monitor doesn't require you to edit the main `web.py` file. Instead, you create several new files that are dynamically loaded into the application.
+## Defining a "short-name"
 
-When creating a new Monitor, it is important to define a **short-name** for the Monitor. This short-name will be used to uniquely identify the Monitor throughout the various modules you create.
+Before creating a new monitor, it is important to first define a **short-name** for the monitor. This short-name will be used to identify the Monitor throughout the various components of Runbook. The short-name will be used as a module name for the `monitors` component and in the URL for the `web` component. Since this name is used within the URL for the Runbook web interface it is important to select a "web-safe" name.
 
-**Example:** An HTTP GET-based Monitor that searches for a specific keyword has a short-name of `http-keyword`. This short-name is unique for this type of Monitor and all files created for this Monitor reference the short-name.
+Currently monitors follow a convention of all lowercase with words separated by an `-` (e.g. `execute-shell-command`, `http-request`).
 
-In this guide, we will use the `http-keyword` Monitor as a reference. This Monitor is a non Webhook-based Monitor and is a good example of how simple it is to create a Monitor.
+# Creating a new Monitor
 
-## Creating a new Monitor
+## Step 1: Monitor web form
 
-### Step 1: The Monitor web form
+The first step in creating a new monitor is to define a web form. This web form will be used by end users to create the monitor, as such the form should have fields for all the information required to perform the monitor check.
 
-Runbook is written using the [Flask](http://flask.pocoo.org/) framework. A common utility for creating web forms within Flask is [wtforms](https://wtforms.readthedocs.org/en/latest/). We utilize wtforms for all web forms within the Runbook GUI, including the forms that create Monitors.
+Runbook's web interface is written using the [Flask](http://flask.pocoo.org/) framework and all web forms within the web application are created with [wtforms](https://wtforms.readthedocs.org/en/latest/). Familiarity with these two components will help in the development of the web form but are not required.
 
-For this document, we will create a new Monitor named `some-monitor`; the first step of creating a Monitor is to create the web form needed for users. To start the web form we will create a directory in `web/monitorforms/` called `some-monitor`. Within that directory we will create a `__init__.py` file containing a class that defines the required form fields.
+Creating a new monitor web form is as simple as creating a new directory within `src/web/monitorforms` and creating an `__init__.py` file within that new directory.
 
     $ mkdir src/web/monitorforms/some-monitor
     $ vi src/web/monitorforms/some-monitor/__init__.py
 
-Within this file is the actual wtforms code. You can use the [http-keyword](https://github.com/asm-products/cloudroutes-service/blob/master/src/web/monitorforms/http-keyword/__init__.py) Monitor as an example.
+Once the file exists simply start by creating a new **wtforms** form with a class name of `CheckForm`. Below is an example of the `execute-shell-command` monitor's web form.
 
-There are a couple of guidelines when creating a web form for Monitors.
+```
+from wtforms import TextField, TextAreaField
+from wtforms.validators import DataRequired, Optional
+from ..datacenter import DatacenterCheckForm
 
-* The class must be named CheckForm
+class CheckForm(DatacenterCheckForm):
 
-When the main web component loads the form it will dynamically load the CheckForm class. This dynamic loading relies on the short-name and is pulled from the URL the user navigates to.
+    ''' Class that creates an form for the monitor Execute Shell Command '''
+    title = "Execute Shell Command"
+    description = """
+    <p>This monitor provides a method of executing an arbitrary shell command, script or series of commands on a remote host over SSH.</p>
+    <p>The SSH connection is authenticated by an SSH key; it is recommended that you generate a unique SSH public/private key pair for this purpose. The <code>Gateway</code> field can be used to specify a bastion or "jump" host; this setting will cause the monitor to first SSH to the specified <code>Gateway</code> host and then SSH to the specified target host.</p>
+    <p>Success and Failure are determined by the ability to connect to the remote host, and the exit code provided from the commands executed. An exit code of 0 is a success, and any other exit code is a failure</p>
+    """
+    placeholders = DatacenterCheckForm.placeholders
+    field_descriptions = DatacenterCheckForm.descriptions
 
-* The class should inherit either DatacenterCheckForm or BaseCheckForm
+    host_string = TextField(
+        "Target Host",
+        description=field_descriptions['ssh']['host_string'],
+        validators=[DataRequired(message='Target Host is a required field')])
+    gateway = TextField(
+        "Gateway Host",
+        description=field_descriptions['ssh']['gateway'],
+        validators=[Optional()])
+    username = TextField(
+        "Username",
+        description=field_descriptions['ssh']['username'],
+        validators=[DataRequired(message="Username is a required field")])
+    sshkey = TextAreaField(
+        "SSH Private Key",
+        description=field_descriptions['ssh']['sshkey'],
+        validators=[DataRequired(message='SSH Key is a required field')])
+    cmd = TextAreaField(
+        "Command",
+        description=field_descriptions['ssh']['cmd'],
+        validators=[DataRequired(message='Command is a required field')])
+```
 
-When creating a web form the CheckForm should inherit either the BaseCheckForm or the DatacenterCheckForm classes. You can import these classes with the following commands.
+In the code above the `CheckForm` class inherits the `DatacenterCheckForm` class. This is important as this base class creates several basic form fields such as `name`, `reactions`, and `interval`. The base class also contains a `placeholders` object and `field_descriptions` object which is used for form rendering.
 
-**BaseCheckForm**
+The `placeholders` object defines placeholder text to be shown when the web form renders. This text is selected based on the forms name. Within the `src/web/monitorforms/base.py` file there exists a set of base placeholder values. When creating a custom monitor you can append new values or update existing values using `placeholders.update({ 'newfield' : 'placeholder text'})` within the custom monitor. If the placeholder being created will often be reused than it is best to place this new definition in the `src/web/monitorforms/base.py` file.
 
-    from ..base import BaseCheckForm
+The `field_descriptions` object defines help text to be shown as a popover when the web form renders. Like the `placeholders` object this is populated from the `src/web/monitorforms/base.py` module. Common descriptions already exist such as the ones shown above, however when creating a new monitor you can either update the object or for each field specify a description manually. Either option is accepted however do try to follow the DRY (Don't Repeat Yourself) methodology as much as possible.
 
-**DatacenterCheckForm**
+In addition to field descriptions the `CheckForm` class also requires a `description` and `title` to be defined. These are used during page rendering to provide users with information on how a monitor works and is to be used. Our overall documentation does not document each and every monitor as the `description` is the place for that functionality. The `description` object is the only one at this time designated as HTML Safe. HTML should only be used with the `description` object.
 
-    from ..datacenter import DatacenterCheckForm
 
-The BaseCheckForm class contains the `name` form field and is the lowest level of wtform classes that should be used with Monitor forms.
+## Step 2: Monitor module
 
-The DatacenterCheckForm class imports the TimerCheckForm which also imports the BaseCheckForm. If you import the DatacenterCheckForm class you will inherit the `name`, `timer`, and `datacenter` fields.
+Once a web form has been created the next task is to create the monitor module itself. Monitor modules contain the logic for performing the monitor and return either a `True`, `False` or `None` value. These modules exist within the `src/monitors/checks/` directory. To create a new one the first step is similar to the web form, simply create a new directory and within that directory an `__init__.py` file.
 
-Most Monitors should inherit the DatacenterCheckForm. Only Monitors that do not run in an interval such as Webhook Monitors should inherit the BaseCheckForm directly.
+    $ mkdir src/monitors/checks/some-monitor
+    $ vi src/monitors/checks/some-monitor/__init__.py
 
-#### Example Monitor form
+When the monitor worker process (`src/monitors/worker.py`) receives a request to perform a monitor check it will import the `check()` method from the `src/monitors/check/<short-name>` module. As such all monitors require a `check()` method to be defined. This method will be called with `kwargs` of `jdata` and `logger`. When called the `check()` method should return `True` for monitors that are True (or healthy), `False` for monitors that are False (or unhealthy) and `None` for monitors that experience and error during execution.
 
-The below example will show a Monitor form class that has two fields, one for an IP and one for a Port.
+### Example monitor module
 
-    from wtforms import Form, TextField
-    from wtforms.validators import DataRequired, IPAddress, NumberRange
-    from ..datacenter import DatacenterCheckForm
+The below is the `execute-shell-command` module which is used to execute shell commands over SSH on user systems.
 
-    class CheckForm(DatacenterCheckForm):
-      ''' Class that creates a Check form for the dashboard '''
-      ip = TextField("IP", validators=[IPAddress(message='Does not match IP address format')])
-      port = TextField("Port", validators=[NumberRange(message='Port must be a number between 1 and 65535')])
+```
+from fabric.api import hide, run, env
+import time
 
-    if __name__ == '__main__':
-      pass
+def run_cmd(cmd):
+    with hide('output', 'warnings'):
+        return run(cmd, timeout=1200)
 
-If we wanted to add a second field that contains a `hostname` we could add it by just adding another `TextField` object to the class.
+def check(**kwargs):
+    ''' Login over SSH and execute shell command '''
+    jdata = kwargs['jdata']
+    logger = kwargs['logger']
 
-    class CheckForm(DatacenterCheckForm):
-      ''' Class that creates a Check form for the dashboard '''
-      ip = TextField("IP", validators=[IPAddress(message='Does not match IP address format')])
-      port = TextField("Port", validators=[NumberRange(message='Port must be a number between 1 and 65535')])
-      hostname = TextField("Hostname", validators=[DataRequired(message='Hostname is a required field')])
+    env.gateway = jdata['data']['gateway']
+    env.host_string = jdata['data']['host_string']
+    env.user = jdata['data']['username']
+    env.key = jdata['data']['sshkey']
+    env.disable_known_hosts = True
+    env.warn_only = True
+    env.aport_on_prompts = True
+    try:
+        results = run_cmd(jdata['data']['cmd'])
+        logger.debug("execute-shell-command: requested command" +
+                     " returned with exit code {0}".format(results.return_code))
+        if results.succeeded:
+            return True
+        else:
+            return False
+    except:
+        return None
+```
 
-### Step 2: The Monitor form HTML
+In the above we can see that the `jdata` object contains information submitted from the webform within the `data` key. All web form details are saved into `jdata['data']` as a dictionary.
 
-Step #1 defines what fields should be present in the form. Step #2 actually renders the web form page. The easiest way to create a new web form page is to simply copy an existing template and modify the input fields; a good reference would be the [http-keyword](https://github.com/asm-products/cloudroutes-static/blob/master/templates/monitors/http-keyword.html) template.
+### Example `jdata` object
 
-#### Example form field
+The `jdata` object is very important as it is used as the source of information for monitors within the monitoring and actioning code. In fact this object is essentially the monitors definition as it is defined within the RethinkDB database. 
 
-The below is an example form input field written in HTML and [Jinja2](http://jinja.pocoo.org/). Jinja2 is the templating language used in Flask.
-
-    <div class="form-group">
-    <label for="Host" class="col-sm-4 control-label">Domain to request</label>
-      <div class="col-sm-8">
-      {% if data['edit'] %}
-      {{ form.host(class_="form-control", value=data['monitor']['data']['host']) }}
-      {% else %}
-      {{ form.host(class_="form-control", placeholder="example.com") }}
-      {% endif %}
-      </div>
-    </div>
-
-As you can see Jinja2 offers the ability to use if statements within the template. In the above example, if the page is in edit mode the value of `data['edit']` will be `True` and the form will be pre-filled with the value of `data['monitor']['data']['host']`. If the value of `data['edit']` is `False` the form field will be created and the placeholder value will be displayed.
-
-This HTML is an example of how the templates above render when `data['edit']` is `False`.
-
-    <div class="form-group">
-    <label for="Host" class="col-sm-4 control-label">Domain to request</label>
-    <div class="col-sm-8">
-    <input class="form-control" id="host" name="host" placeholder="example.com" type="text" value="">
-    </div>
-    </div>
-
-#### some-monitor.js
-
-When the Monitor page is loaded via the main `web.py`, a `.js` file of the same name is also loaded. This file is used for the JavaScript required to activate popover help text. However, it should also be utilized for any other JavaScript-related code that needs to be imported at the footer of the Monitor page.
-
-Even if popover text or any other JavaScript code is not utilized for this Monitor, it is required that a `.js` file is present. You can simply create a blank file if necessary.
-
-    $ touch static/templates/monitors/some-monitor.js
-
-#### Processing the form
-
-As a development team, our goal is to ensure that everything is modular. When you create a new Monitor you do not need to create code to process the web form inputs. This is done automatically via the web application. It is important, however, to understand how this processing takes place.
-
-When the web app processes the new Monitor, the details will be stored into the `monitors` table in RethinkDB, which is a JSON-based database. When you edit a Monitor the web application will query RethinkDB and store the details of that Monitor into `data['monitor']`. Below is an example of the structure of both the database and `data['monitor']`.
-
-    data['monitor'] = {
-      "ctype":  "http-keyword" ,
-      "data": {
-        "datacenter": [
-          "dc1queue" ,
-          "dc2queue"
-        ] ,
-        "host":  "example.com" ,
-        "keyword":  "Test" ,
-        "name":  "Status Check" ,
-        "present":  "True" ,
-        "reactions": [
-          "c1c0240e-1333-1333-1333-122131112" ,
-          "c107250a-1333-1333-13313-abcdefghi73"
-        ] ,
-        "regex":  "True" ,
-        "timer":  "5mincheck" ,
-        "url": "http://127.0.0.1/blah.html",
-      } ,
-      "failcount": 1583 ,
-      "id":  "adfasdlkjfsdkljasdf98f0-1a2dbdea2675" ,
-      "name":  "Example HTTP" ,
-      "status":  "true" ,
-      "uid":  "sdfsaasdfjlaksdfaskj369-15888dd98382" ,
-      "url":  "asdfweqrue0rj2302309rur20cdsa09dafw09iacs09caswekflkwjqfklwejfjf.qwerzPHUz7heZ6VxA"
-    }
-
-When a Monitor form is submitted, the web application will process the form and define the `ctype`, `name`, `failcount`, `status`, `uid`, and `url` keys. The application will then take all of the form's inputs and put them into a dictionary under the `data` key. This system gives us the ability to create new Monitors without having to redefine or customize anything outside of the web form itself.
-
-In simpler terms, the data key can change between Monitor types. The other fields in `data['monitor']` are meta fields that exist for every monitor.
-
-### Step 3: Creating the actual Monitor code
-
-Steps #1 and #2 were specifically related to creating the web elements of a Monitor. Step #3 is the creation of the actual Monitor module itself. There are two main types of Monitors in Runbook, Webhook-based Monitors and non Webhook-based Monitors.
-
-#### Webhook-based Monitors
-
-An example of an Webhook-based Monitor would be the [datadog-webhook](https://github.com/asm-products/cloudroutes-service/blob/master/src/web/monitorapis/datadog-webhook/__init__.py) Monitor. The end point for Webhook-based Monitors is `/api/<short-name>/<monitor id>`. The short-name in our example would be `some-monitor` and the ID would be the `id` key for the Monitor in the database. When this end point is called, the web application will try to load a python module `monitorapis/<short-name>`. If the module does not exist there is an error, if the module does exist then the web application will call the `webCheck` method from that module.
-
-#### Example Webhook Monitor
-
-The following is an example of a simple Webhook-based Monitor that always marks the Monitor false when called.
-
-    def webCheck(request, monitor, urldata, rdb):
-      ''' Process the webbased api call '''
-      replydata = {
-        'headers': { 'Content-type' : 'application/json' }
-        }
-      jdata = request.json
-
-      ## Delete the Monitor
-      monitor.get(urldata['cid'], rdb)
-      if jdata['check_key'] == monitor.url and urldata['atype'] == monitor.ctype:
-        monitor.healthcheck = "false"
-        result = monitor.webCheck(rdb)
-      replydata['data'] = "{'success':'True'}"
-      return replydata
-
-When the `webCheck` method is called it will be given 4 arguments; `request`, `monitor`, `urldata` and `rdb`. The `request` argument is the full `request` object from Flask. This contains all POST data and headers of the Webhook request. The `monitor` argument is an object for the `Monitor` class. In the example above we use the `get`, `healthcheck` and `webCheck` methods from this class.
-
-The `urldata` argument is a dictionary that contains data from the URL making the request. The dictionary contains `cid`, `atype`, `check_key` and `action`. The `cid` is the Monitor ID value passed from the URL, this is not a validated ID and should be treated the same as any user input. The `atype` value is the type of Webhook being requested, this is essentially the `ctype` key in the Monitor's meta data. The `check_key` is an optional URL parameter. If it exists in the URL it can be compared with `monitor.url` as a validator, this is essentually an API Key. The `action` key is also an optional URL parameter, and is used in webhook requests to specify false or true requests.
-
-The `rdb` object is a connection object to the RethinkDB database store.
-
-If the POST data in the above example contains a JSON string that has a key `check_key` and that key is the same as the `monitor.url` objects value, and the `atype` value is the same as the `monitor.cytype` objects value, then the `monitor.healthcheck` object will be set to `false` and the `monitor.webCheck` method will be called. This method will send a health check message to the backend [bridge](https://github.com/asm-products/cloudroutes-service/tree/master/src/bridge) process. This process will process the false Monitor and perform necessary Reactions.
-
-To get started with a new Webhook-based Monitor you will first need to create a new directory with the short-name under the `web/monitorapis` directory and then create an `__init__.py` file that contains the Webhook processing code.
-
-    $ mkdir web/monitorapis/some-monitor
-    $ vi web/monitorapis/some-monitor/__init__.py
-
-#### Non Webhook-based Monitors
-
-Non Webhook-based Monitors are Monitors that are run via [monitors](https://github.com/asm-products/cloudroutes-service/tree/master/src/monitors). These Monitors are executed from Runbook. You can think of these as external Monitors. At the moment of this writing, most of these have to do with checking a server/application externally. Using the [http-keyword](https://github.com/asm-products/cloudroutes-service/tree/master/src/cram/checks/http-keyword) Monitor as an example is the best place to start. All Monitors that run through `monitors` are Python modules placed into the `checks/` directory.
-
-Much like using the wtforms module in step #1 to create a new Monitor, simply create a directory with the short-name and a `__init__.py` file.
-
-    $ mkdir monitors/checks/some-monitor
-    $ vi monitors/checks/some-monitor/__init__.py
-
-The only requirement for this Monitor is to have a single method called `check()` defined. The `check()` method is a keyword arguments defined method. When `src/monitors/worker.py` calls the `check()` method, it specifies values for `jdata` and `logger`.
-
-#### Example of `jdata`
-
-Below is an example of what the `jdata` dictionary contains.
+Below is an example of what the `jdata` dictionary could contain when the `worker.py` process receives it.
 
     jdata = {
       "status": "false",
@@ -234,53 +157,27 @@ Below is an example of what the `jdata` dictionary contains.
       "name": "Some Monitor"
     }
 
-The key item of this Monitor is the `jdata['data']` dictionary. The `jdata['data']` dictionary holds all of the form values from steps #1 and #2. For most Monitors, the details are located in this dictionary.
+As stated above the primary key to utilize when developing a new monitor module is the `jdata['data']` key, as this key holds all user input.
 
-#### What to do after the health check is performed
+# Step 3: Enabling the monitor
 
-The actual code to perform the health check really depends on the health check itself, but once you determine if the check was "true" the check function should return `True`. If the monitor is determined "false" the return value should be `False`.
+By default, any monitor that exists within the `monitorforms/` directory can be accessed via the Web UI. Available monitors are defined within the `src/web/instance/monitors.cfg` file. This file contains a Python dictionary with the defined monitors. To enable the monitor simply append the appropriate details within this configuration file. 
 
-#### Example Health Check: http-get-statuscode
+Below is an example of the **Slack Webhook** monitor.
 
-The following Monitor code is from the `http-get-statuscode` Monitor and can be used as a guide on how to write a `monitors`-based Monitor.
+```
+  'Chat Services' : {
+      'Slack Webhook' : {
+            'description' : 'Integrate your Slack channels with Runbook via Slack outgoing webhooks or Slack commands. When calling these monitors from Slack you will receive a response validating that we have recieved it.',
+            'create_link' : '/dashboard/monitors/slack-webhook',
+      },
+  },
+```
 
-    def check(**kwargs):
-        """ Perform a http get request and validate the return code """
-        jdata = kwargs['jdata']
-        logger = kwargs['logger']
-        headers = {'host': jdata['data']['host']}
-        timeout = 3.00
-        url = jdata['data']['url']
-        try:
-            result = requests.get(
-                url, timeout=timeout, headers=headers, verify=False)
-        except Exception as e:
-            line = 'http-get-statuscode: Reqeust to {0} sent for monitor {1} - ' \
-                   'had an exception: {2}'.format(url, jdata['cid'], e)
-            logger.error(line)
-            return False
-        rcode = str(result.status_code)
-        if rcode in jdata['data']['codes']:
-            line = 'http-get-statuscode: Reqeust to {0} sent for monitor {1} - ' \
-                   'Successful'.format(url, jdata['cid'])
-            logger.info(line)
-            return True
-        else:
-            line = 'http-get-statuscode: Reqeust to {0} sent for monitor {1} - ' \
-                   'Failure'.format(url, jdata['cid'])
-            logger.info(line)
-            return False
+# Webhook Monitors
 
-###### Example Health Check: always-true
+Webhook monitors differ quite a bit compared to a non-webhook monitor. At this time this document is out of scope for webhook monitors but a good example can be found within `src/web/monitorforms/slack-webhook` and `src/web/monitorapis/slack-webhook`.
 
-The following Monitor code will always return `True`, which means the Monitor itself will always be `true`.
+# Getting help
 
-    def check(**kwargs):
-      ''' Always return true '''
-      return True
-
-#### Getting help
-
-At this point you should at least have a Monitor that mostly works. If you're stuck and need some help, feel free to drop by our [chat](https://assembly.com/chat/runbook) page.
-
----
+If you need help while developing a new monitor or modifying an existing monitor you can find help on Runbook's [Gitter Chat](https://gitter.im/Runbook/runbook). For a list of monitors to be created checkout our [Waffle.io Board](https://waffle.io/Runbook/runbook).
