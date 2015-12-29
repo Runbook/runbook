@@ -27,7 +27,7 @@ def __action(**kwargs):
                 'Command failed to execute')
 
 def run_cmd(cmd):
-    with hide('output', 'warnings'):
+    with hide('output', 'running', 'warnings'):
         return run(cmd, timeout=1200)
 
 

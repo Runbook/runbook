@@ -3,7 +3,7 @@ import time
 import json
 
 def run_cmd(cmd):
-    with hide('output', 'warnings'):
+    with hide('output', 'running', 'warnings'):
         return run(cmd, timeout=1200)
 
 def check(**kwargs):
@@ -31,6 +31,8 @@ def check(**kwargs):
                  " returned with exit code {0}".format(results.return_code))
     if results.succeeded:
         container_data = json.loads(results)
+        if "State" not in container_data[0]:
+            return False
         logger.debug("docker-container-running: container state" +
                      " returned running {0}".format(container_data[0]['State']['Running']))
         if container_data[0]['State']['Running']:

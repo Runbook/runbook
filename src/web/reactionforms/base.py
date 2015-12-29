@@ -58,6 +58,7 @@ class BaseReactForm(Form):
         'password' : 'password',
         'sshkey' : 'SSH Private Key',
         'cmd' : 'service httpd restart',
+        'container_name' : 'web',
     }
 
     # Common description values
@@ -111,6 +112,12 @@ class BaseReactForm(Form):
             'sshkey' : "SSH Private key to use for key based authentication",
             'cmd' : "Command you wish to execute on the target server",
             'username' : "Username to use during login",
+            'use_sudo' : "Define whether or not the commands require sudo privileges to run",
+        },
+        'docker' : {
+            'container_name' : "Specify the name of the container to perform the action against.",
+            'image' : "Specify the Docker image to use with this action, e.g. Runbook/runbook:latest",
+            'add_options' : "Additional options for the Docker command being executed.",
         },
         'callon' : "Define whether this reaction should execute on True or False monitors",
         'email' : "Specify an email address to be used for this reaction",
