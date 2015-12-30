@@ -64,3 +64,6 @@ keys = r_server.keys("*")
 for key in keys:
     print("Removing key: %s") % key
     r_server.delete(key)
+
+## Extra good measure
+r_server.flushdb()

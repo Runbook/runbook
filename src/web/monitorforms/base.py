@@ -49,16 +49,20 @@ class BaseCheckForm(Form):
         'password' : 'password',
         'sshkey' : 'SSH Private Key',
         'cmd' : 'grep -q "Out of Mem" /var/log/syslog',
+        'container_name' : 'web',
     }
 
     # Common description values
     descriptions = {
         'cloudflare' : {
             'email' : "The email address used to identify your CloudFlare account",
-            'timespan' : "Select the time span to use for CloudFlare's traffic analytics. For example if you wish to compare the last 1 hour with the previous simply select 1 hour. Any time span less than 1 hour will require a CloudFlare Pro account or better",
+            'timespan' : "Select the time span to use for CloudFlare's traffic analytics. For example if you wish to compare the last 1 hour with the previous simply select 1 hour. Any time span less than 1 hour will require a CloudFlare Pro account or better.",
         },
         'digitalocean' : {
             'dropletid' : "Specify the ID number of the Droplet you wish to monitor. This ID can be obtained from the DigitalOcean administrative dashboard."
+        },
+        'docker' : {
+            'container_name' : "Specify the name of the container to perform the action against.",
         },
         'heroku' : {
             'appname' : "Specify the Heroku application name to monitor",
@@ -74,6 +78,7 @@ class BaseCheckForm(Form):
             'sshkey' : "SSH Private key to use for key based authentication",
             'cmd' : "Command you wish to execute on the target server",
             'username' : "Username to use during login",
+            'use_sudo' : "Define whether or not the commands require sudo privileges to run",
         },
         'email' : "Specify an email address to be used for this monitor",
         'domain' : "Specify a the domain to be used with this monitor",
