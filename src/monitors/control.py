@@ -92,15 +92,20 @@ while True:
     for check in r_server.smembers(config['queue']):
         monkey = "monitor:" + check
         data = r_server.get(monkey)
-        checkdata = json.loads(data)
-        checkdata['cid'] = check
-        checkdata['time_tracking'] = {'control': time.time(),
-                                      'ez_key': config['stathat_key'],
-                                      'env': str(config['envname'])}
-        checkdata['zone'] = config['zone']
-        jdata = json.dumps(checkdata)
-        zsend.send(jdata)
-        count = count + 1
+        try:
+            checkdata = json.loads(data)
+        except:
+            checkdata = None
+
+        if checkdata:
+            checkdata['cid'] = check
+            checkdata['time_tracking'] = {'control': time.time(),
+                                          'ez_key': config['stathat_key'],
+                                          'env': str(config['envname'])}
+            checkdata['zone'] = config['zone']
+            jdata = json.dumps(checkdata)
+            zsend.send(jdata)
+            count = count + 1
 
     logger.debug(
         "Sent %d health checks from queue %s" % (count, config['queue']))
