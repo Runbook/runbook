@@ -76,7 +76,7 @@ control5:
     - monitorbroker
 monitorworker:
   build: src/monitors/
-  command: python /code/worker.py /config/worker.yml
+  command: bash -c "while [ 1 -eq 1 ]; do python /code/worker.py /config/worker.yml; done"
   volumes:
     - ./src/monitors:/code:ro
   links:
