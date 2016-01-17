@@ -26,7 +26,7 @@ bridge:
     - actionbroker
 actionbroker:
   build: src/actions/
-  command: python /code/broker.py /config/actionBroker.yml
+  command: python -B /code/broker.py /config/actionBroker.yml
   volumes:
     - ./src/actions:/code:ro
   ports:
@@ -34,7 +34,7 @@ actionbroker:
     - 6001
 actioner:
   build: src/actions/
-  command: python /code/actioner.py /config/config.yml
+  command: python -B /code/actioner.py /config/config.yml
   volumes:
     - ./src/actions:/code:ro
   links:
@@ -44,7 +44,7 @@ actioner:
     - bridge
 monitorbroker:
   build: src/monitors/
-  command: python /code/broker.py /config/broker.yml
+  command: python -B /code/broker.py /config/broker.yml
   volumes:
     - ./src/monitors:/code:ro
   ports:
@@ -52,7 +52,7 @@ monitorbroker:
     - 5878
 control30:
   build: src/monitors/
-  command: python /code/control.py /config/control-30sec.yml
+  command: python -B /code/control.py /config/control-30sec.yml
   volumes:
     - ./src/monitors:/code:ro
   links:
@@ -60,7 +60,7 @@ control30:
     - monitorbroker
 control1:
   build: src/monitors/
-  command: python /code/control.py /config/control-1min.yml
+  command: python -B /code/control.py /config/control-1min.yml
   volumes:
     - ./src/monitors:/code:ro
   links:
@@ -68,7 +68,7 @@ control1:
     - monitorbroker
 control5:
   build: src/monitors/
-  command: python /code/control.py /config/control-5min.yml
+  command: python -B /code/control.py /config/control-5min.yml
   volumes:
     - ./src/monitors:/code:ro
   links:
@@ -76,7 +76,7 @@ control5:
     - monitorbroker
 monitorworker:
   build: src/monitors/
-  command: bash -c "while [ 1 -eq 1 ]; do python /code/worker.py /config/worker.yml; done"
+  command: bash -c "while [ 1 -eq 1 ]; do python -B /code/worker.py /config/worker.yml; done"
   volumes:
     - ./src/monitors:/code:ro
   links:
