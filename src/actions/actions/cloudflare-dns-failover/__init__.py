@@ -100,15 +100,16 @@ def run_reaction(redata, jdata, logger, r_server):
     names = {}
     queued = {}
     for rec in recs.keys():
-        if recs[rec]['name'] in names:
-            names[recs[rec]['name']].append(rec)
+        name = recs[rec]['name'] + "-" + recs[rec]['type']
+        if name in names:
+            names[name].append(rec)
         else:
-            names[recs[rec]['name']] = [rec]
-        if (recs[rec]['name'] in queued and
+            names[name] = [rec]
+        if (name in queued and
                 recs[rec]['content'] == redata['data']['content']):
-            queued[recs[rec]['name']].append(rec)
+            queued[name].append(rec)
         elif recs[rec]['content'] == redata['data']['content']:
-            queued[recs[rec]['name']] = [rec]
+            queued[name] = [rec]
 
     for name in names.keys():
         if len(names[name]) > 1 and name in queued:
