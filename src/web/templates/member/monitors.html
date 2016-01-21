@@ -57,7 +57,7 @@
               {%- endif -%}
                 <ul class="dropdown-menu" role="menu">
                 <li><a href="/dashboard/edit-monitors/{{ monitor['ctype'] }}/{{ cid }}"><i class="fa fa-edit"></i> Edit</a></li>
-                <li><a href="/dashboard/delete-checks/{{ cid }}"><i class="fa fa-trash-o"></i> Delete</a></li>
+                <li><a href="/dashboard/delete-checks/{{ cid }}" class="btn-delete-monitor" data="{{ monitor['name'] }}"><i class="fa fa-trash-o"></i> Delete</a></li>
                 <li class="divider"></li>
                 {%- if "true" in monitor['status'] or "monitored" in monitor['status'] %}
                 <li><a href="/dashboard/action-checks/{{ cid }}/false"><i class="fa fa-exclamation-triangle"></i> Mark False</a></li>
