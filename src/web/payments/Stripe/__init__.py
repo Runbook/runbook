@@ -50,7 +50,7 @@ class Payments(BasePayments):
                 self.user.stripeid = result
                 self.user.stripe = form_data['stripe_token']
                 self.user.subscription = form_data['plan']
-                if "pro_plus" in form_data['plan']:
+                if "pro_plus" in form_data['plan'] or "proplus" in form_data['plan']:
                     self.user.acttype = "proplus"
                 else:
                     self.user.acttype = "pro"
