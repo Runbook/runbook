@@ -17,20 +17,10 @@ def check(**kwargs):
     if not metrics:
         return None
     time_pattern = "%Y-%m-%dT%H:%M:%SZ"
-    last_time = int(time.mktime(time.strptime(metrics['query']['until'], time_pattern)))
     time_delta = metrics['query']['time_delta'] * 60
-    previous_end_time = last_time - time_delta
 
-    previous_interval = {}
-    current_interval = {}
-
-    # Grab previous interval from metrics
-    for stats in metrics['result']['timeseries']:
-        stats_end_time = int(time.mktime(time.strptime(stats['until'], time_pattern)))
-        if stats_end_time == previous_end_time:
-            previous_interval = stats
-        elif stats_end_time == last_time:
-            current_interval = stats
+    previous_interval = metrics['result']['timeseries'][-2]
+    current_interval = metrics['result']['timeseries'][-1]
 
     # Verify necessary keys exist
     if "http_status" in current_interval['requests']:
