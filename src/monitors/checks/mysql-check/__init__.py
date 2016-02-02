@@ -7,11 +7,15 @@ def check(**kwargs):
     logger = kwargs['logger']
 
     status = {}
-    # Connect to DB Instance
-    db = pymysql.connect(host=jdata['data']['server'],
-                        user=jdata['data']['user'],
-                        password=jdata['data']['password'],
-                        cursorclass=pymysql.cursors.DictCursor)
+    try:
+        # Connect to DB Instance
+        db = pymysql.connect(host=jdata['data']['server'],
+                            user=jdata['data']['user'],
+                            password=jdata['data']['password'],
+                            cursorclass=pymysql.cursors.DictCursor)
+    except: #pylint disable=broad-except
+        logger.debug("mysql-check: Failed to connect to db service")
+        return False
 
     try:
         with db.cursor() as cursor:
