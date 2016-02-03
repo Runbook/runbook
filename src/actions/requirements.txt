@@ -13,3 +13,4 @@ ndg-httpsclient
 pyasn1
 cryptography
 fabric
+pymysql
