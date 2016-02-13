@@ -58,7 +58,14 @@ class CheckForm(DatacenterCheckForm):
         ("502", '502 - Bad gateway'),
         ("503", '503 - Service unavailable'),
         ("504", '504 - Gateway timeout'),
-        ("505", '505 - HTTP version not supported')
+        ("505", '505 - HTTP version not supported'),
+        ("520", '520 - Web server is returning an unknown error'),
+        ("521", '521 - Web server is down'),
+        ("522", '522 - Connection timed out'),
+        ("523", '523 - Origin is unreachable'),
+        ("524", '524 - A timeout occurred'),
+        ("525", '525 - SSL handshake failed'),
+        ("526", '526 - Invalid SSL certificate')
     ]
 
     return_choices = [
