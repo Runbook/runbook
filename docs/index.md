@@ -15,4 +15,7 @@ The Below links will get you started with deploying and contributing to Runbook.
 * [Quick Start](quick-start.md)
 * [Architecture Overview](architecture-overview.md)
 * [Deployment with Docker Compose](install_docker_compose.md)
----
+
+## Looking for Runbook SaaS?
+
+Runbook's SaaS platform is shutting down on 07/01/2016, existing users can still login to the [dashboard](https://dash.runbook.io/login) to manage their account until that time.
