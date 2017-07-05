@@ -7,6 +7,10 @@ Runbook
 
 Simply put, Runbook is what you would get if Nagios and IFTTT had a baby.
 
+## Status
+
+Runbook is primarily in maintenance mode, pull requests will be reviewed and merged but this project is not currently under active development. It is suggested that newer users check out [Automatron](https://automatron.io) as an alternative.
+
 ## Documentation
 
 Developer and User docs can be found in the [docs](docs/) directory and on [ReadTheDocs](https://runbook.readthedocs.org).
